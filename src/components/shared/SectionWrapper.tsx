@@ -16,13 +16,13 @@ export function SectionWrapper({
   children,
 }: SectionWrapperProps) {
   return (
-    <section id={id} className="scroll-mt-20 pb-12">
+    <section id={id}>
       <div className={`border-l-4 ${accentColor} pl-4 mb-6`}>
         <div className="flex items-center gap-2 mb-1">
-          <span className="text-slate-500">{icon}</span>
-          <h2 className="text-xl font-semibold text-slate-900">{title}</h2>
+          <span className="text-slate-400">{icon}</span>
+          <h2 className="text-xl font-semibold text-white">{title}</h2>
         </div>
-        <p className="text-sm text-slate-500">{subtitle}</p>
+        <p className="text-sm text-slate-400">{subtitle}</p>
       </div>
       {children}
     </section>

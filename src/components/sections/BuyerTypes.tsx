@@ -12,7 +12,6 @@ import {
 } from 'lucide-react'
 import { SectionWrapper } from '../shared/SectionWrapper'
 import { ExpandableCard } from '../shared/ExpandableCard'
-import { Badge } from '../shared/Badge'
 import { buyerTypes, buyerTypesIntro } from '../../data/buyerTypesData'
 
 const iconMap: Record<string, React.ReactNode> = {
@@ -34,10 +33,10 @@ export function BuyerTypes() {
       id="buyer-types"
       title="Who Our Buyers Are"
       subtitle="8 buyer archetypes — each with distinct needs and decision drivers"
-      accentColor="border-sky-600"
+      accentColor="border-sky-500"
       icon={<Users className="w-5 h-5" />}
     >
-      <p className="text-sm text-slate-600 mb-6">{buyerTypesIntro}</p>
+      <p className="text-sm text-slate-300 mb-6">{buyerTypesIntro}</p>
 
       <div className="space-y-3">
         {buyerTypes.map((buyer) => (
@@ -46,11 +45,6 @@ export function BuyerTypes() {
             title={buyer.name}
             subtitle={buyer.shortDescription}
             icon={iconMap[buyer.icon]}
-            badge={
-              buyer.typicalOrderSize ? (
-                <Badge text={buyer.typicalOrderSize} color="sky" />
-              ) : undefined
-            }
             isExpanded={expandedId === buyer.id}
             onToggle={() =>
               setExpandedId(expandedId === buyer.id ? null : buyer.id)
@@ -59,7 +53,7 @@ export function BuyerTypes() {
           >
             <div className="space-y-4">
               <div>
-                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">
+                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-2">
                   What They Care About
                 </p>
                 <ul className="space-y-1">
@@ -72,7 +66,7 @@ export function BuyerTypes() {
                 </ul>
               </div>
               <div>
-                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">
+                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-2">
                   How to Spot Them
                 </p>
                 <ul className="space-y-1">

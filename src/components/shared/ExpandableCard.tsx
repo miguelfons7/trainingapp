@@ -19,12 +19,12 @@ export function ExpandableCard({
   icon,
   isExpanded,
   onToggle,
-  accentColor = 'border-slate-200',
+  accentColor = 'border-via-border',
   children,
 }: ExpandableCardProps) {
   return (
     <div
-      className={`bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow duration-200 ${
+      className={`bg-via-card rounded-xl border border-via-border hover:bg-via-card-hover transition-colors duration-200 ${
         isExpanded ? `border-l-4 ${accentColor}` : ''
       }`}
     >
@@ -33,18 +33,18 @@ export function ExpandableCard({
         aria-expanded={isExpanded}
         className="w-full flex items-center gap-3 p-5 text-left cursor-pointer"
       >
-        {icon && <span className="shrink-0 text-slate-500">{icon}</span>}
+        {icon && <span className="shrink-0 text-slate-400">{icon}</span>}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-base font-semibold text-slate-800">{title}</span>
+            <span className="text-base font-semibold text-white">{title}</span>
             {badge}
           </div>
           {subtitle && (
-            <p className="text-sm text-slate-500 mt-0.5 truncate">{subtitle}</p>
+            <p className="text-sm text-slate-400 mt-0.5 truncate">{subtitle}</p>
           )}
         </div>
         <ChevronDown
-          className={`w-5 h-5 text-slate-400 shrink-0 transition-transform duration-200 ${
+          className={`w-5 h-5 text-slate-500 shrink-0 transition-transform duration-200 ${
             isExpanded ? 'rotate-180' : ''
           }`}
         />
@@ -58,7 +58,7 @@ export function ExpandableCard({
             transition={{ duration: 0.25, ease: 'easeInOut' }}
             className="overflow-hidden"
           >
-            <div className="px-5 pb-5 pt-0 text-sm text-slate-600 leading-relaxed">
+            <div className="px-5 pb-5 pt-0 text-sm text-slate-300 leading-relaxed">
               {children}
             </div>
           </motion.div>

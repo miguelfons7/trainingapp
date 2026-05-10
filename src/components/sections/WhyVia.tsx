@@ -40,10 +40,10 @@ export function WhyVia() {
       id="why-via"
       title="Why Buyers Choose Via"
       subtitle="7 competitive advantages that directly affect a buyer's bottom line"
-      accentColor="border-violet-600"
+      accentColor="border-violet-500"
       icon={<Star className="w-5 h-5" />}
     >
-      <p className="text-sm text-slate-600 mb-6">{advantagesIntro}</p>
+      <p className="text-sm text-slate-300 mb-6">{advantagesIntro}</p>
 
       <div className="space-y-3">
         {advantages.map((advantage) => (
@@ -61,9 +61,9 @@ export function WhyVia() {
         ))}
       </div>
 
-      <div className="bg-violet-50 rounded-lg border border-violet-200 p-4 mt-6">
-        <p className="text-sm text-violet-800 font-medium mb-1">In Competitive Conversations</p>
-        <p className="text-sm text-violet-700">
+      <div className="bg-violet-900/30 rounded-lg border border-violet-800 p-4 mt-6">
+        <p className="text-sm text-violet-400 font-medium mb-1">In Competitive Conversations</p>
+        <p className="text-sm text-violet-300">
           Position Via based on advantages, not by trashing competitors. Many buyers work with
           multiple suppliers — Via often becomes their primary because of pricing and the AM
           relationship.

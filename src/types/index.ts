@@ -39,7 +39,6 @@ export interface BuyerType {
   icon: string
   shortDescription: string
   whatTheyCareAbout: string[]
-  typicalOrderSize?: string
   identifyingSignals: string[]
   searchTerms: string[]
 }

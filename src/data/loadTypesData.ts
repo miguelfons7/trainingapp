@@ -4,7 +4,7 @@ export const loadTypesIntro =
   'Liquidation merchandise is sold in standard lot sizes. These terms come up in every sales conversation, so know them cold.'
 
 export const loadTypeInsight =
-  "A buyer's preferred load size tells you a lot about their business. Case buyers are often just starting out. Pallet buyers are established but small. Truckload buyers have warehouse space, working capital, and proven sales channels."
+  'Understanding load types helps you match the right product format to what the buyer needs. Any buyer can purchase at any level — from a single case to full truckloads.'
 
 export const loadTypes: LoadType[] = [
   {
@@ -13,7 +13,7 @@ export const loadTypes: LoadType[] = [
     description:
       'The smallest standard purchase unit. A case contains a set number of individual items, usually within a single category.',
     details:
-      'Good for buyers who are testing a category or have limited storage space. Low commitment, low risk entry point.',
+      'Cases are a low-commitment way to test a category or supplement existing inventory. Available across all product conditions and categories.',
     icon: 'Package',
     searchTerms: ['case', 'case pack', 'small lot', 'individual', 'single category'],
   },
@@ -23,28 +23,28 @@ export const loadTypes: LoadType[] = [
     description:
       'A wooden structure (standard 48" x 48" base) loaded with merchandise, typically stacked 6-7 feet high.',
     details:
-      'Can contain assorted merchandise across categories or be category-specific. This is the most common entry point for new buyers.',
+      'Can contain assorted merchandise across categories or be category-specific. Pallets are a versatile format that works for a wide range of buyers.',
     icon: 'LayoutGrid',
-    searchTerms: ['pallet', '48x48', 'wooden', 'standard', 'entry point'],
+    searchTerms: ['pallet', '48x48', 'wooden', 'standard'],
   },
   {
-    id: 'multi-pallet',
-    name: 'Multi-Pallet Lot',
+    id: 'ltl',
+    name: 'LTL (Less Than Truckload)',
     description:
-      'A purchase of several pallets, often offered at a discount compared to single-pallet pricing.',
+      'A shipment of multiple pallets that does not fill an entire trailer. LTL shipments typically range up to 12 pallets.',
     details:
-      'Common for buyers who have validated a category and are ready to scale up. Better per-unit economics.',
+      'LTL is a common shipping method when a buyer needs more than a few pallets but not a full truckload. Freight is shared with other shipments on the same trailer.',
     icon: 'Layers',
-    searchTerms: ['multi-pallet', 'multiple pallets', 'lot', 'bulk', 'discount'],
+    searchTerms: ['LTL', 'less than truckload', 'partial', 'multi-pallet', 'freight'],
   },
   {
     id: 'truckload',
-    name: 'Truckload',
+    name: 'Truckload / Container',
     description:
-      'A full trailer of palleted merchandise. 26-foot trailers hold ~12 pallets. 53-foot trailers hold ~24 pallets.',
+      'A full trailer of merchandise. At Via Trading, truckloads use 53-foot trailers carrying 12 to 24-30 pallets depending on how the inventory is condensed.',
     details:
-      'Highest volume = lowest per-unit cost. Some truckloads are hand-stacked (no pallets), which is common for bulky items like furniture.',
+      'Containers are similar but use shipping containers (up to 48 feet in length) and typically carry fewer pallets than a 53-foot trailer. Containers are common for export shipments.',
     icon: 'Truck',
-    searchTerms: ['truckload', 'TL', 'trailer', '26-foot', '53-foot', '12 pallets', '24 pallets', 'hand-stacked'],
+    searchTerms: ['truckload', 'TL', 'trailer', '53-foot', 'container', '48-foot', 'full load', 'FTL'],
   },
 ]

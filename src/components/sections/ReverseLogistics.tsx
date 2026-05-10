@@ -14,10 +14,10 @@ export function ReverseLogistics() {
       id="reverse-logistics"
       title="Reverse Logistics: How Goods Flow"
       subtitle="Understanding the journey from retailer shelf to liquidation"
-      accentColor="border-indigo-600"
+      accentColor="border-indigo-500"
       icon={<ArrowLeftRight className="w-5 h-5" />}
     >
-      <div className="bg-white rounded-xl border border-slate-200 p-6 mb-6">
+      <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6">
         <FlowDiagram
           steps={forwardPath}
           label="Forward Logistics (Normal Path)"
@@ -31,7 +31,7 @@ export function ReverseLogistics() {
         />
       </div>
 
-      <h3 className="text-sm font-semibold text-slate-700 uppercase tracking-wide mb-3">
+      <h3 className="text-sm font-semibold text-slate-300 uppercase tracking-wide mb-3">
         The Dealer Levels
       </h3>
       <div className="space-y-3 mb-6">
@@ -49,16 +49,16 @@ export function ReverseLogistics() {
             onToggle={() =>
               setExpandedLevel(expandedLevel === level.level ? null : level.level)
             }
-            accentColor="border-indigo-600"
+            accentColor="border-indigo-500"
           >
             <p>{level.description}</p>
           </ExpandableCard>
         ))}
       </div>
 
-      <div className="bg-indigo-50 rounded-lg border border-indigo-200 p-4">
-        <p className="text-sm text-indigo-800 font-medium mb-1">Key Sales Insight</p>
-        <p className="text-sm text-indigo-700">{keyInsight}</p>
+      <div className="bg-indigo-900/30 rounded-lg border border-indigo-800 p-4">
+        <p className="text-sm text-indigo-400 font-medium mb-1">Key Sales Insight</p>
+        <p className="text-sm text-indigo-300">{keyInsight}</p>
       </div>
     </SectionWrapper>
   )

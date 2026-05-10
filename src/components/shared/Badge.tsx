@@ -1,16 +1,16 @@
 const colorMap: Record<string, string> = {
-  emerald: 'bg-emerald-100 text-emerald-800',
-  amber: 'bg-amber-100 text-amber-800',
-  sky: 'bg-sky-100 text-sky-800',
-  slate: 'bg-slate-100 text-slate-800',
-  red: 'bg-red-100 text-red-800',
-  orange: 'bg-orange-100 text-orange-800',
-  teal: 'bg-teal-100 text-teal-800',
-  purple: 'bg-purple-100 text-purple-800',
-  blue: 'bg-blue-100 text-blue-800',
-  indigo: 'bg-indigo-100 text-indigo-800',
-  violet: 'bg-violet-100 text-violet-800',
-  rose: 'bg-rose-100 text-rose-800',
+  emerald: 'bg-emerald-900/50 text-emerald-300 border border-emerald-700',
+  amber: 'bg-amber-900/50 text-amber-300 border border-amber-700',
+  sky: 'bg-sky-900/50 text-sky-300 border border-sky-700',
+  slate: 'bg-slate-700/50 text-slate-300 border border-slate-600',
+  red: 'bg-red-900/50 text-red-300 border border-red-700',
+  orange: 'bg-orange-900/50 text-orange-300 border border-orange-700',
+  teal: 'bg-teal-900/50 text-teal-300 border border-teal-700',
+  purple: 'bg-purple-900/50 text-purple-300 border border-purple-700',
+  blue: 'bg-blue-900/50 text-blue-300 border border-blue-700',
+  indigo: 'bg-indigo-900/50 text-indigo-300 border border-indigo-700',
+  violet: 'bg-violet-900/50 text-violet-300 border border-violet-700',
+  rose: 'bg-rose-900/50 text-rose-300 border border-rose-700',
 }
 
 interface BadgeProps {

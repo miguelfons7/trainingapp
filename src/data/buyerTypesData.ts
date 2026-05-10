@@ -15,7 +15,6 @@ export const buyerTypes: BuyerType[] = [
       'Product condition and grading accuracy',
       'Manifested loads to evaluate items before purchasing',
     ],
-    typicalOrderSize: '2-5 pallets per order',
     identifyingSignals: [
       'Mentions eBay, Amazon, or Shopify',
       'Asks about condition and grading',
@@ -34,7 +33,6 @@ export const buyerTypes: BuyerType[] = [
       'Local pickup options when possible',
       'Knowing product condition upfront',
     ],
-    typicalOrderSize: '2-4 pallets per order',
     identifyingSignals: [
       'Mentions store location or square footage',
       'Asks about "popular items"',
@@ -53,7 +51,6 @@ export const buyerTypes: BuyerType[] = [
       'Product density and quantity per pallet',
       'Competitive pricing for thin margins',
     ],
-    typicalOrderSize: '3-6 pallets or truckloads',
     identifyingSignals: [
       'Mentions "bin store" or "discount model"',
       'Asks about product assortment',
@@ -72,7 +69,6 @@ export const buyerTypes: BuyerType[] = [
       'Ability to test different categories',
       'Local convenience and pickup options',
     ],
-    typicalOrderSize: 'Cases to pallets (start small, grow over time)',
     identifyingSignals: [
       'Mentions flea market, swap meet, or booth',
       'Asks about smaller lot sizes',
@@ -91,7 +87,6 @@ export const buyerTypes: BuyerType[] = [
       'Competitive pricing at scale',
       'Shipping logistics and FOB options',
     ],
-    typicalOrderSize: '5-20+ pallets or truckloads',
     identifyingSignals: [
       'Mentions international shipping or specific countries',
       'Asks about container loading',
@@ -110,7 +105,6 @@ export const buyerTypes: BuyerType[] = [
       'Product diversity for their downstream buyers',
       'Fast fulfillment and reliable logistics',
     ],
-    typicalOrderSize: 'Truckloads (become Level 2 dealers)',
     identifyingSignals: [
       'Mentions reselling to other businesses',
       'Asks about bulk pricing and volume discounts',
@@ -129,7 +123,6 @@ export const buyerTypes: BuyerType[] = [
       'Variety within each lot for auction excitement',
       'Consistent supply to maintain auction schedule',
     ],
-    typicalOrderSize: 'Pallets to truckloads',
     identifyingSignals: [
       'Mentions auction platform or live events',
       'Asks about brand diversity in loads',
@@ -148,7 +141,6 @@ export const buyerTypes: BuyerType[] = [
       'Reasonable minimums to test with low risk',
       'Responsive support when questions arise',
     ],
-    typicalOrderSize: '1-3 pallets (testing)',
     identifyingSignals: [
       'New business with limited history',
       'Asking basic process questions',

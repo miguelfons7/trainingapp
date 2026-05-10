@@ -34,7 +34,7 @@ export function Glossary() {
       id="glossary"
       title="Key Terminology"
       subtitle="Searchable glossary of liquidation industry terms"
-      accentColor="border-rose-600"
+      accentColor="border-rose-500"
       icon={<BookOpen className="w-5 h-5" />}
     >
       <SearchBar
@@ -50,7 +50,7 @@ export function Glossary() {
 
         return (
           <div key={category} className="mb-6">
-            <h3 className="text-sm font-semibold text-slate-700 uppercase tracking-wide mb-3">
+            <h3 className="text-sm font-semibold text-slate-300 uppercase tracking-wide mb-3">
               {category}
             </h3>
             <div className="space-y-2">
@@ -70,7 +70,7 @@ export function Glossary() {
                 >
                   <p className="mb-2">{term.definition}</p>
                   {term.details && (
-                    <p className="text-slate-500 text-xs mt-1">{term.details}</p>
+                    <p className="text-slate-400 text-xs mt-1">{term.details}</p>
                   )}
                 </ExpandableCard>
               ))}
@@ -80,11 +80,11 @@ export function Glossary() {
       })}
 
       {hasQuery && totalResults === 0 && (
-        <div className="text-center py-8 text-slate-500">
+        <div className="text-center py-8 text-slate-400">
           <p className="text-sm">No terms found matching "{searchQuery}"</p>
           <button
             onClick={() => setSearchQuery('')}
-            className="text-rose-600 text-sm mt-2 hover:underline cursor-pointer"
+            className="text-via-orange text-sm mt-2 hover:underline cursor-pointer"
           >
             Clear search
           </button>

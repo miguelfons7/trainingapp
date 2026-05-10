@@ -17,9 +17,6 @@ export function ProductConditions() {
     })
   }
 
-  const emphasized = productConditions.filter((c) => c.emphasized)
-  const others = productConditions.filter((c) => !c.emphasized)
-
   return (
     <SectionWrapper
       id="product-conditions"
@@ -28,63 +25,29 @@ export function ProductConditions() {
       accentColor="border-amber-600"
       icon={<Tags className="w-5 h-5" />}
     >
-      <p className="text-sm text-slate-600 mb-6">{conditionsIntro}</p>
+      <p className="text-sm text-slate-300 mb-6">{conditionsIntro}</p>
 
-      <h3 className="text-sm font-semibold text-slate-700 uppercase tracking-wide mb-3">
-        Core Conditions (Majority of Inventory)
-      </h3>
-      <div className="space-y-3 mb-6">
-        {emphasized.map((condition) => (
-          <ExpandableCard
-            key={condition.id}
-            title={condition.name}
-            badge={<Badge text="High Volume" color={condition.colorClass} />}
-            isExpanded={expandedIds.has(condition.id)}
-            onToggle={() => toggle(condition.id)}
-            accentColor="border-amber-500"
-          >
-            <div className="space-y-3">
-              <div>
-                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">Definition</p>
-                <p>{condition.definition}</p>
-              </div>
-              <div>
-                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">What to Expect</p>
-                <p>{condition.whatToExpect}</p>
-              </div>
-              <div>
-                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">Buyer Appeal</p>
-                <p>{condition.buyerAppeal}</p>
-              </div>
-            </div>
-          </ExpandableCard>
-        ))}
-      </div>
-
-      <h3 className="text-sm font-semibold text-slate-700 uppercase tracking-wide mb-3">
-        Additional Conditions
-      </h3>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        {others.map((condition) => (
+      <div className="space-y-3">
+        {productConditions.map((condition) => (
           <ExpandableCard
             key={condition.id}
             title={condition.name}
             badge={<Badge text={condition.name} color={condition.colorClass} />}
             isExpanded={expandedIds.has(condition.id)}
             onToggle={() => toggle(condition.id)}
-            accentColor="border-amber-400"
+            accentColor="border-amber-500"
           >
             <div className="space-y-3">
               <div>
-                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">Definition</p>
+                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-1">Definition</p>
                 <p>{condition.definition}</p>
               </div>
               <div>
-                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">What to Expect</p>
+                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-1">What to Expect</p>
                 <p>{condition.whatToExpect}</p>
               </div>
               <div>
-                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">Buyer Appeal</p>
+                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-1">Buyer Appeal</p>
                 <p>{condition.buyerAppeal}</p>
               </div>
             </div>

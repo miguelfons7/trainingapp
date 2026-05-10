@@ -1,7 +1,7 @@
 import type { ProductCondition } from '../types'
 
 export const conditionsIntro =
-  'Not all liquidation inventory is the same. Product condition determines pricing, buyer expectations, and the amount of work involved in reselling. You need to know these categories fluently.'
+  'Not all liquidation inventory is the same. Product condition determines pricing, buyer expectations, and the amount of work involved in reselling. You need to know these categories fluently. Note: approximately 80% of Via Trading\'s inventory is customer returns, though our mix changes daily.'
 
 export const productConditions: ProductCondition[] = [
   {
@@ -14,7 +14,7 @@ export const productConditions: ProductCondition[] = [
     buyerAppeal:
       'High quality, low risk, easy to resell. The tradeoff is higher cost compared to returns, and sometimes items didn\'t sell for a reason — less popular colors, styles, or brands.',
     colorClass: 'emerald',
-    emphasized: true,
+    emphasized: false,
     searchTerms: ['overstock', 'closeout', 'new', 'excess', 'discontinued', 'sealed', 'original packaging'],
   },
   {
@@ -27,7 +27,7 @@ export const productConditions: ProductCondition[] = [
     buyerAppeal:
       'Returns can be sourced for significantly less than overstocks, and the goods were originally purchased because consumers wanted them. Active buyers report similar profit margins (20-25%) though returns require more sorting and processing work.',
     colorClass: 'amber',
-    emphasized: true,
+    emphasized: false,
     searchTerms: ['returns', 'returned', 'buyer remorse', 'wrong size', 'defective', 'refund'],
   },
   {
@@ -40,7 +40,7 @@ export const productConditions: ProductCondition[] = [
     buyerAppeal:
       'Strong for buyers who want near-new condition without paying full overstock prices. Good margin potential with relatively low sorting effort.',
     colorClass: 'sky',
-    emphasized: true,
+    emphasized: false,
     searchTerms: ['shelf pulls', 'MOS', 'merchandise on sale', 'pulled', 'clearance', 'display'],
   },
   {
