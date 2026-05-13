@@ -86,9 +86,9 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
 
   const startModule = useCallback(
     (courseId: string, moduleId: string) => {
-      const key = `${courseId}/${moduleId}`
-      if (progress[key]?.status === 'completed') return
       setProgress((prev) => {
+        const key = `${courseId}/${moduleId}`
+        if (prev[key]?.status === 'completed' || prev[key]?.status === 'in-progress') return prev
         const next: Record<string, ModuleProgress> = {
           ...prev,
           [key]: {
@@ -101,7 +101,7 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
         return next
       })
     },
-    [progress],
+    [],
   )
 
   const getCourseProgress = useCallback(
