@@ -25,7 +25,7 @@ export function ProductConditions() {
       accentColor="border-amber-600"
       icon={<Tags className="w-5 h-5" />}
     >
-      <p className="text-sm text-slate-300 mb-6">{conditionsIntro}</p>
+      <p className="text-sm text-via-text mb-6">{conditionsIntro}</p>
 
       <div className="space-y-3">
         {productConditions.map((condition) => (
@@ -39,15 +39,15 @@ export function ProductConditions() {
           >
             <div className="space-y-3">
               <div>
-                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-1">Definition</p>
+                <p className="text-xs font-semibold text-via-text-light uppercase tracking-wide mb-1">Definition</p>
                 <p>{condition.definition}</p>
               </div>
               <div>
-                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-1">What to Expect</p>
+                <p className="text-xs font-semibold text-via-text-light uppercase tracking-wide mb-1">What to Expect</p>
                 <p>{condition.whatToExpect}</p>
               </div>
               <div>
-                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-1">Buyer Appeal</p>
+                <p className="text-xs font-semibold text-via-text-light uppercase tracking-wide mb-1">Buyer Appeal</p>
                 <p>{condition.buyerAppeal}</p>
               </div>
             </div>

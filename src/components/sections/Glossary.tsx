@@ -50,7 +50,7 @@ export function Glossary() {
 
         return (
           <div key={category} className="mb-6">
-            <h3 className="text-sm font-semibold text-slate-300 uppercase tracking-wide mb-3">
+            <h3 className="text-sm font-semibold text-via-text uppercase tracking-wide mb-3">
               {category}
             </h3>
             <div className="space-y-2">
@@ -70,7 +70,7 @@ export function Glossary() {
                 >
                   <p className="mb-2">{term.definition}</p>
                   {term.details && (
-                    <p className="text-slate-400 text-xs mt-1">{term.details}</p>
+                    <p className="text-via-text-light text-xs mt-1">{term.details}</p>
                   )}
                 </ExpandableCard>
               ))}
@@ -80,7 +80,7 @@ export function Glossary() {
       })}
 
       {hasQuery && totalResults === 0 && (
-        <div className="text-center py-8 text-slate-400">
+        <div className="text-center py-8 text-via-text-light">
           <p className="text-sm">No terms found matching "{searchQuery}"</p>
           <button
             onClick={() => setSearchQuery('')}

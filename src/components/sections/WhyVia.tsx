@@ -43,7 +43,7 @@ export function WhyVia() {
       accentColor="border-violet-500"
       icon={<Star className="w-5 h-5" />}
     >
-      <p className="text-sm text-slate-300 mb-6">{advantagesIntro}</p>
+      <p className="text-sm text-via-text mb-6">{advantagesIntro}</p>
 
       <div className="space-y-3">
         {advantages.map((advantage) => (
@@ -61,9 +61,9 @@ export function WhyVia() {
         ))}
       </div>
 
-      <div className="bg-violet-900/30 rounded-lg border border-violet-800 p-4 mt-6">
-        <p className="text-sm text-violet-400 font-medium mb-1">In Competitive Conversations</p>
-        <p className="text-sm text-violet-300">
+      <div className="bg-violet-100 rounded-lg border border-violet-500 p-4 mt-6">
+        <p className="text-sm text-violet-700 font-medium mb-1">In Competitive Conversations</p>
+        <p className="text-sm text-violet-700">
           Position Via based on advantages, not by trashing competitors. Many buyers work with
           multiple suppliers — Via often becomes their primary because of pricing and the AM
           relationship.

@@ -36,7 +36,7 @@ export function BuyerTypes() {
       accentColor="border-sky-500"
       icon={<Users className="w-5 h-5" />}
     >
-      <p className="text-sm text-slate-300 mb-6">{buyerTypesIntro}</p>
+      <p className="text-sm text-via-text mb-6">{buyerTypesIntro}</p>
 
       <div className="space-y-3">
         {buyerTypes.map((buyer) => (
@@ -53,7 +53,7 @@ export function BuyerTypes() {
           >
             <div className="space-y-4">
               <div>
-                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-2">
+                <p className="text-xs font-semibold text-via-text-light uppercase tracking-wide mb-2">
                   What They Care About
                 </p>
                 <ul className="space-y-1">
@@ -66,7 +66,7 @@ export function BuyerTypes() {
                 </ul>
               </div>
               <div>
-                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-2">
+                <p className="text-xs font-semibold text-via-text-light uppercase tracking-wide mb-2">
                   How to Spot Them
                 </p>
                 <ul className="space-y-1">

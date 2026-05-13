@@ -29,21 +29,21 @@ export function LoadTypes() {
       accentColor="border-emerald-600"
       icon={<Package className="w-5 h-5" />}
     >
-      <p className="text-sm text-slate-300 mb-6">{loadTypesIntro}</p>
+      <p className="text-sm text-via-text mb-6">{loadTypesIntro}</p>
 
-      <div className="bg-slate-800/50 rounded-xl border border-slate-700 p-6 mb-6">
-        <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-4">
+      <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6">
+        <p className="text-xs font-semibold text-via-text-light uppercase tracking-wide mb-4">
           Relative Size Comparison
         </p>
         <div className="flex items-end gap-3 h-24">
           {sizeVisual.map((size, i) => (
             <div key={size.name} className="flex flex-col items-center gap-1">
               <div
-                className={`${size.width} bg-emerald-900/50 border-2 border-emerald-500 rounded transition-all`}
+                className={`${size.width} bg-emerald-100 border-2 border-emerald-500 rounded transition-all`}
                 style={{ height: `${(i + 1) * 20 + 10}px` }}
               />
-              <span className="text-xs text-slate-300 font-medium">{size.name}</span>
-              <span className="text-xs text-slate-500">{size.label}</span>
+              <span className="text-xs text-via-text font-medium">{size.name}</span>
+              <span className="text-xs text-via-text-light">{size.label}</span>
             </div>
           ))}
         </div>
@@ -67,9 +67,9 @@ export function LoadTypes() {
         ))}
       </div>
 
-      <div className="bg-emerald-900/30 rounded-lg border border-emerald-800 p-4">
-        <p className="text-sm text-emerald-400 font-medium mb-1">Sales Insight</p>
-        <p className="text-sm text-emerald-300">{loadTypeInsight}</p>
+      <div className="bg-emerald-100 rounded-lg border border-emerald-500 p-4">
+        <p className="text-sm text-emerald-700 font-medium mb-1">Sales Insight</p>
+        <p className="text-sm text-emerald-700">{loadTypeInsight}</p>
       </div>
     </SectionWrapper>
   )

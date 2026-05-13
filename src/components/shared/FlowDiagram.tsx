@@ -10,7 +10,7 @@ interface FlowDiagramProps {
 export function FlowDiagram({ steps, label, color, highlightIndex }: FlowDiagramProps) {
   return (
     <div className="mb-6">
-      <p className="text-xs font-medium uppercase tracking-wide text-slate-400 mb-3">
+      <p className="text-xs font-medium uppercase tracking-wide text-via-text-light mb-3">
         {label}
       </p>
       <div className="flex flex-wrap items-center gap-1">
@@ -20,13 +20,13 @@ export function FlowDiagram({ steps, label, color, highlightIndex }: FlowDiagram
               className={`px-3 py-1.5 rounded-lg text-sm font-medium whitespace-nowrap ${
                 i === highlightIndex
                   ? `${color} text-white shadow-sm`
-                  : 'bg-slate-700 text-slate-300'
+                  : 'bg-via-border text-via-text'
               }`}
             >
               {step}
             </span>
             {i < steps.length - 1 && (
-              <ArrowRight className="w-4 h-4 text-slate-500 shrink-0" />
+              <ArrowRight className="w-4 h-4 text-via-text-light shrink-0" />
             )}
           </div>
         ))}

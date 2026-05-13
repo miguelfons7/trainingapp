@@ -31,7 +31,7 @@ export function ReverseLogistics() {
         />
       </div>
 
-      <h3 className="text-sm font-semibold text-slate-300 uppercase tracking-wide mb-3">
+      <h3 className="text-sm font-semibold text-via-text uppercase tracking-wide mb-3">
         The Dealer Levels
       </h3>
       <div className="space-y-3 mb-6">
@@ -56,9 +56,9 @@ export function ReverseLogistics() {
         ))}
       </div>
 
-      <div className="bg-indigo-900/30 rounded-lg border border-indigo-800 p-4">
-        <p className="text-sm text-indigo-400 font-medium mb-1">Key Sales Insight</p>
-        <p className="text-sm text-indigo-300">{keyInsight}</p>
+      <div className="bg-indigo-100 rounded-lg border border-indigo-500 p-4">
+        <p className="text-sm text-indigo-700 font-medium mb-1">Key Sales Insight</p>
+        <p className="text-sm text-indigo-700">{keyInsight}</p>
       </div>
     </SectionWrapper>
   )
