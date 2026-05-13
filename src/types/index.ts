@@ -53,6 +53,8 @@ export interface ComplianceItem {
   requiredBy: string
   priority: 'high' | 'medium'
   acknowledgedBy: string[]
+  createdBy?: string   // admin email (absent for seed items)
+  createdAt?: string   // ISO date string
 }
 
 // --- Existing content types ---

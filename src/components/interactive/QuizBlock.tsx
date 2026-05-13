@@ -20,6 +20,8 @@ import { FillInBlank } from './FillInBlank'
 
 interface QuizBlockProps {
   quizId: string
+  /** Called when the user submits all quiz answers. Receives (score, total). */
+  onComplete?: (score: number, total: number) => void
 }
 
 const quizMap: Record<string, QuizQuestion[]> = {
@@ -27,7 +29,7 @@ const quizMap: Record<string, QuizQuestion[]> = {
   'via-knowledge-check': viaQuizQuestions,
 }
 
-export function QuizBlock({ quizId }: QuizBlockProps) {
+export function QuizBlock({ quizId, onComplete }: QuizBlockProps) {
   const questions = quizMap[quizId] ?? []
   const [answers, setAnswers] = useState<Record<string, number>>({})
   const [revealed, setRevealed] = useState<Set<string>>(new Set())
@@ -59,6 +61,12 @@ export function QuizBlock({ quizId }: QuizBlockProps) {
       setRevealed((prev) => new Set(prev).add(q.id))
     })
     setSubmitted(true)
+
+    // Notify parent so the module can be marked complete with the score
+    const finalScore = questions.filter(
+      (q) => answers[q.id] === q.correctIndex,
+    ).length
+    onComplete?.(finalScore, questions.length)
   }
 
   const score = questions.filter(

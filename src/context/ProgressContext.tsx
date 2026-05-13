@@ -3,10 +3,13 @@ import {
   useContext,
   useState,
   useCallback,
+  useEffect,
+  useRef,
   type ReactNode,
 } from 'react'
 import type { ModuleProgress } from '../types'
 import { courses } from '../data/courses'
+import { useAuth } from './AuthContext'
 
 interface CourseProgressSummary {
   completed: number
@@ -30,11 +33,18 @@ const ProgressContext = createContext<ProgressContextValue | undefined>(
   undefined,
 )
 
-const STORAGE_KEY = 'via-academy-progress'
+/**
+ * DEV-ONLY: Progress is stored in localStorage, namespaced by user email
+ * so that multiple testers on the same browser get separate progress.
+ */
+function getStorageKey(email: string): string {
+  return `via-academy-progress:${email}`
+}
 
-function loadProgress(): Record<string, ModuleProgress> {
+function loadProgress(email: string): Record<string, ModuleProgress> {
+  if (!email) return {}
   try {
-    const stored = localStorage.getItem(STORAGE_KEY)
+    const stored = localStorage.getItem(getStorageKey(email))
     return stored
       ? (JSON.parse(stored) as Record<string, ModuleProgress>)
       : {}
@@ -43,14 +53,29 @@ function loadProgress(): Record<string, ModuleProgress> {
   }
 }
 
-function saveProgress(progress: Record<string, ModuleProgress>): void {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(progress))
+function saveProgress(email: string, progress: Record<string, ModuleProgress>): void {
+  if (!email) return
+  localStorage.setItem(getStorageKey(email), JSON.stringify(progress))
 }
 
 export function ProgressProvider({ children }: { children: ReactNode }) {
+  const { user } = useAuth()
+  const userEmail = user?.email ?? ''
+  const emailRef = useRef(userEmail)
+
   const [progress, setProgress] = useState<Record<string, ModuleProgress>>(
-    loadProgress,
+    () => loadProgress(userEmail),
   )
+
+  // Keep the ref in sync so callbacks can read the current email
+  useEffect(() => {
+    emailRef.current = userEmail
+  }, [userEmail])
+
+  // Re-load progress when user changes (login / logout / switch user)
+  useEffect(() => {
+    setProgress(loadProgress(userEmail))
+  }, [userEmail])
 
   const getModuleStatus = useCallback(
     (
@@ -77,7 +102,7 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
             completedAt: new Date().toISOString(),
           },
         }
-        saveProgress(next)
+        saveProgress(emailRef.current, next)
         return next
       })
     },
@@ -97,7 +122,7 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
             status: 'in-progress',
           },
         }
-        saveProgress(next)
+        saveProgress(emailRef.current, next)
         return next
       })
     },
@@ -140,7 +165,9 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
   )
 
   const resetProgress = useCallback(() => {
-    localStorage.removeItem(STORAGE_KEY)
+    if (emailRef.current) {
+      localStorage.removeItem(getStorageKey(emailRef.current))
+    }
     setProgress({})
   }, [])
 

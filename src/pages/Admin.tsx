@@ -1,15 +1,17 @@
 import { useState } from 'react'
-import { Shield, Users, ClipboardCheck, BarChart3, BookPlus } from 'lucide-react'
+import { Shield, Users, ClipboardCheck, BarChart3, BookPlus, Megaphone } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { UserProgressTable } from '../components/admin/UserProgressTable'
 import { ComplianceTracker } from '../components/admin/ComplianceTracker'
 import { CourseStats } from '../components/admin/CourseStats'
 import { AssignCourses } from '../components/admin/AssignCourses'
+import { AnnouncementManager } from '../components/admin/AnnouncementManager'
 
-type TabKey = 'progress' | 'compliance' | 'stats' | 'assign'
+type TabKey = 'progress' | 'announcements' | 'compliance' | 'stats' | 'assign'
 
 const tabs: { key: TabKey; label: string; icon: typeof Users }[] = [
   { key: 'progress', label: 'User Progress', icon: Users },
+  { key: 'announcements', label: 'Announcements', icon: Megaphone },
   { key: 'compliance', label: 'Compliance', icon: ClipboardCheck },
   { key: 'stats', label: 'Course Stats', icon: BarChart3 },
   { key: 'assign', label: 'Assign Courses', icon: BookPlus },
@@ -42,7 +44,7 @@ export function Admin() {
         </div>
         <div>
           <h1 className="text-2xl font-bold text-via-navy">Admin Dashboard</h1>
-          <p className="text-sm text-via-text-light">Manage users, compliance, and courses</p>
+          <p className="text-sm text-via-text-light">Manage users, announcements, and courses</p>
         </div>
       </div>
 
@@ -73,6 +75,7 @@ export function Admin() {
 
       {/* Tab content */}
       {activeTab === 'progress' && <UserProgressTable />}
+      {activeTab === 'announcements' && <AnnouncementManager />}
       {activeTab === 'compliance' && <ComplianceTracker />}
       {activeTab === 'stats' && <CourseStats />}
       {activeTab === 'assign' && <AssignCourses />}

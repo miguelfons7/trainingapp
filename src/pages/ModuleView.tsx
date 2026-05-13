@@ -1,4 +1,4 @@
-import { useEffect, useMemo, type ComponentType } from 'react'
+import { useEffect, useMemo, useCallback, type ComponentType } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { ArrowLeft, ChevronLeft, ChevronRight, CheckCircle } from 'lucide-react'
 import { getCourseById } from '../data/courses'
@@ -53,6 +53,7 @@ export function ModuleView() {
       : undefined
 
   const status = courseId && moduleId ? getModuleStatus(courseId, moduleId) : 'not-started'
+  const isQuiz = moduleId ? quizModules.has(moduleId) : false
 
   useEffect(() => {
     if (courseId && moduleId && currentModule) {
@@ -77,6 +78,7 @@ export function ModuleView() {
     )
   }
 
+  /** Called for non-quiz modules when user clicks "Mark as Complete" */
   function handleComplete() {
     if (!courseId || !moduleId) return
     completeModule(courseId, moduleId)
@@ -87,9 +89,18 @@ export function ModuleView() {
     }
   }
 
+  /** Called by QuizBlock when the quiz is submitted */
+  const handleQuizComplete = useCallback(
+    (score: number, total: number) => {
+      if (!courseId || !moduleId) return
+      const pct = Math.round((score / total) * 100)
+      completeModule(courseId, moduleId, pct)
+    },
+    [courseId, moduleId, completeModule],
+  )
+
   // Determine which content to render
   const ContentComponent = contentMap[moduleId]
-  const isQuiz = quizModules.has(moduleId)
 
   return (
     <div className="max-w-3xl mx-auto py-10 px-4">
@@ -120,7 +131,7 @@ export function ModuleView() {
       {/* Module content */}
       <div className="mb-8">
         {isQuiz ? (
-          <QuizBlock quizId={moduleId} />
+          <QuizBlock quizId={moduleId} onComplete={handleQuizComplete} />
         ) : ContentComponent ? (
           <ContentComponent />
         ) : (
@@ -130,8 +141,8 @@ export function ModuleView() {
         )}
       </div>
 
-      {/* Mark as complete */}
-      {status !== 'completed' && (
+      {/* Mark as complete — only for non-quiz modules */}
+      {!isQuiz && status !== 'completed' && (
         <div className="mb-8 text-center">
           <button
             onClick={handleComplete}
@@ -147,7 +158,7 @@ export function ModuleView() {
         <div className="mb-8 text-center">
           <span className="inline-flex items-center gap-2 text-sm font-medium text-via-success">
             <CheckCircle className="w-5 h-5" />
-            Module completed
+            Module completed{isQuiz ? '' : ''}
           </span>
         </div>
       )}
