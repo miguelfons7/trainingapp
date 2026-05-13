@@ -40,7 +40,7 @@ export function ExpandableCard({
             {badge}
           </div>
           {subtitle && (
-            <p className="text-sm text-via-text-light mt-0.5 truncate">{subtitle}</p>
+            <p className="text-sm text-via-text-light mt-0.5">{subtitle}</p>
           )}
         </div>
         <ChevronDown

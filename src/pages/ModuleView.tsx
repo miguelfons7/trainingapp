@@ -14,6 +14,7 @@ import { MissionValues } from '../components/sections/MissionValues'
 import { OurPlatforms } from '../components/sections/OurPlatforms'
 import { WhyVia } from '../components/sections/WhyVia'
 import { QuizBlock } from '../components/interactive/QuizBlock'
+import { ImagePlaceholder } from '../components/shared/ImagePlaceholder'
 
 const contentMap: Record<string, ComponentType> = {
   'secondary-market': SecondaryMarket,
@@ -29,6 +30,20 @@ const contentMap: Record<string, ComponentType> = {
 }
 
 const quizModules = new Set(['industry-knowledge-check', 'via-knowledge-check'])
+
+/** Maps module IDs to their hero image filenames in public/images/ */
+const moduleImageMap: Record<string, { src: string; alt: string }> = {
+  'secondary-market': { src: 'module-channels.png', alt: 'Secondary Market Sales Channels' },
+  'reverse-logistics': { src: 'module-reverse-logistics.png', alt: 'Reverse Logistics Flow' },
+  'product-conditions': { src: 'module-conditions.png', alt: 'Product Conditions Spectrum' },
+  'load-types': { src: 'module-load-types.png', alt: 'Load Types & Sizing Comparison' },
+  'buyer-types': { src: 'module-buyer-types.png', alt: 'Buyer Types Overview' },
+  'key-terminology': { src: 'module-dealer-levels.png', alt: 'Industry Terminology & Dealer Levels' },
+  'our-story': { src: 'course-2-via-trading.png', alt: 'Via Trading — Our Story' },
+  'mission-values': { src: 'course-2-via-trading.png', alt: 'Via Trading — Mission & Values' },
+  'our-platforms': { src: 'course-2-via-trading.png', alt: 'Via Trading Platforms' },
+  'why-via': { src: 'course-2-via-trading.png', alt: 'Why Buyers Choose Via' },
+}
 
 export function ModuleView() {
   const { courseId, moduleId } = useParams<{
@@ -127,6 +142,17 @@ export function ModuleView() {
           </p>
         )}
       </div>
+
+      {/* Module hero image */}
+      {moduleId && moduleImageMap[moduleId] && (
+        <div className="mb-6">
+          <ImagePlaceholder
+            src={moduleImageMap[moduleId].src}
+            alt={moduleImageMap[moduleId].alt}
+            aspectRatio="16:9"
+          />
+        </div>
+      )}
 
       {/* Module content */}
       <div className="mb-8">
