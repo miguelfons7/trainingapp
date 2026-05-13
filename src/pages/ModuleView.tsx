@@ -39,7 +39,7 @@ const moduleImageMap: Record<string, { src: string; alt: string }> = {
   'load-types': { src: 'module-load-types.png', alt: 'Load Types & Sizing Comparison' },
   'buyer-types': { src: 'module-buyer-types.png', alt: 'Buyer Types Overview' },
   'key-terminology': { src: 'module-dealer-levels.png', alt: 'Industry Terminology & Dealer Levels' },
-  'our-story': { src: 'course-2-via-trading.png', alt: 'Via Trading — Our Story' },
+  'our-story': { src: 'Warehouse aerial.png', alt: 'Via Trading — Our Story' },
   'mission-values': { src: 'course-2-via-trading.png', alt: 'Via Trading — Mission & Values' },
   'our-platforms': { src: 'course-2-via-trading.png', alt: 'Via Trading Platforms' },
   'why-via': { src: 'course-2-via-trading.png', alt: 'Why Buyers Choose Via' },
