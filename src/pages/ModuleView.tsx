@@ -10,6 +10,8 @@ import { LoadTypes } from '../components/sections/LoadTypes'
 import { BuyerTypes } from '../components/sections/BuyerTypes'
 import { Glossary } from '../components/sections/Glossary'
 import { CompanyOverview } from '../components/sections/CompanyOverview'
+import { MissionValues } from '../components/sections/MissionValues'
+import { OurPlatforms } from '../components/sections/OurPlatforms'
 import { WhyVia } from '../components/sections/WhyVia'
 import { QuizBlock } from '../components/interactive/QuizBlock'
 
@@ -21,8 +23,8 @@ const contentMap: Record<string, ComponentType> = {
   'buyer-types': BuyerTypes,
   'key-terminology': Glossary,
   'our-story': CompanyOverview,
-  'mission-values': CompanyOverview,
-  'our-platforms': CompanyOverview,
+  'mission-values': MissionValues,
+  'our-platforms': OurPlatforms,
   'why-via': WhyVia,
 }
 

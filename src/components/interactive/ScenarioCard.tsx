@@ -40,15 +40,15 @@ export function ScenarioCard({ scenarios, title = 'Scenario Practice' }: Scenari
   return (
     <div className="bg-via-card rounded-xl border border-via-border p-6">
       <div className="border-l-4 border-via-orange pl-4 mb-6">
-        <h3 className="text-lg font-semibold text-white">{title}</h3>
-        <p className="text-sm text-slate-400 mt-0.5">
+        <h3 className="text-lg font-semibold text-via-navy">{title}</h3>
+        <p className="text-sm text-via-text-light mt-0.5">
           Choose the best response for each scenario
         </p>
       </div>
 
       {/* Progress */}
       <div className="flex items-center justify-between mb-4">
-        <span className="text-sm text-slate-400">
+        <span className="text-sm text-via-text-light">
           Scenario {currentIndex + 1} of {scenarios.length}
         </span>
         <div className="flex gap-1.5">
@@ -78,8 +78,8 @@ export function ScenarioCard({ scenarios, title = 'Scenario Practice' }: Scenari
           transition={{ duration: 0.3 }}
         >
           {/* Scenario text */}
-          <div className="bg-via-dark rounded-lg border border-via-border p-4 mb-4">
-            <p className="text-sm text-slate-300 leading-relaxed">{current.scenario}</p>
+          <div className="bg-white rounded-lg border border-via-border p-4 mb-4">
+            <p className="text-sm text-via-text leading-relaxed">{current.scenario}</p>
           </div>
 
           {/* Options */}
@@ -93,15 +93,15 @@ export function ScenarioCard({ scenarios, title = 'Scenario Practice' }: Scenari
 
               if (revealed) {
                 if (isBest) {
-                  classes += ' bg-emerald-900/30 border-emerald-600 text-emerald-300'
+                  classes += ' bg-emerald-50 border-emerald-400 text-emerald-800'
                 } else if (isSelected && !isBest) {
-                  classes += ' bg-red-900/30 border-red-600 text-red-300'
+                  classes += ' bg-red-50 border-red-400 text-red-800'
                 } else {
-                  classes += ' bg-via-dark border-via-border text-slate-500'
+                  classes += ' bg-via-bg border-via-border text-via-text-light'
                 }
               } else {
                 classes +=
-                  ' bg-via-dark border-via-border text-slate-300 hover:border-slate-500 cursor-pointer'
+                  ' bg-white border-via-border text-via-text hover:border-via-navy/40 cursor-pointer'
               }
 
               return (
@@ -114,10 +114,10 @@ export function ScenarioCard({ scenarios, title = 'Scenario Practice' }: Scenari
                   <div className="flex items-center gap-3">
                     <span className="flex-1">{option}</span>
                     {revealed && isBest && (
-                      <CheckCircle className="w-5 h-5 text-emerald-400 shrink-0" />
+                      <CheckCircle className="w-5 h-5 text-emerald-600 shrink-0" />
                     )}
                     {revealed && isSelected && !isBest && (
-                      <XCircle className="w-5 h-5 text-red-400 shrink-0" />
+                      <XCircle className="w-5 h-5 text-red-500 shrink-0" />
                     )}
                   </div>
                 </button>
@@ -137,8 +137,8 @@ export function ScenarioCard({ scenarios, title = 'Scenario Practice' }: Scenari
                 <div
                   className={`mt-4 p-3 rounded-lg text-sm ${
                     selectedOption === current.bestAnswerIndex
-                      ? 'bg-emerald-900/20 border border-emerald-800 text-emerald-300'
-                      : 'bg-red-900/20 border border-red-800 text-red-300'
+                      ? 'bg-emerald-50 border border-emerald-300 text-emerald-800'
+                      : 'bg-red-50 border border-red-300 text-red-800'
                   }`}
                 >
                   <p className="font-medium mb-1">
@@ -176,13 +176,13 @@ export function ScenarioCard({ scenarios, title = 'Scenario Practice' }: Scenari
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mt-6 bg-emerald-900/20 border border-emerald-800 rounded-lg p-4 text-center"
+          className="mt-6 bg-emerald-50 border border-emerald-300 rounded-lg p-4 text-center"
         >
           <Award className="w-10 h-10 text-via-orange mx-auto mb-2" />
-          <p className="text-lg font-bold text-white">
+          <p className="text-lg font-bold text-via-navy">
             {correctCount} / {scenarios.length} Correct
           </p>
-          <p className="text-sm text-slate-400 mt-1">
+          <p className="text-sm text-via-text-light mt-1">
             {correctCount === scenarios.length
               ? 'Perfect! You chose the best response every time.'
               : correctCount >= scenarios.length * 0.7

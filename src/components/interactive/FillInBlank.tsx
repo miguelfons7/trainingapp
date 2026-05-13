@@ -48,8 +48,8 @@ export function FillInBlank({ items, title = 'Fill in the Blanks' }: FillInBlank
   return (
     <div className="bg-via-card rounded-xl border border-via-border p-6">
       <div className="border-l-4 border-via-orange pl-4 mb-6">
-        <h3 className="text-lg font-semibold text-white">{title}</h3>
-        <p className="text-sm text-slate-400 mt-0.5">
+        <h3 className="text-lg font-semibold text-via-navy">{title}</h3>
+        <p className="text-sm text-via-text-light mt-0.5">
           Select the correct word or phrase to complete each sentence
         </p>
       </div>
@@ -67,14 +67,14 @@ export function FillInBlank({ items, title = 'Fill in the Blanks' }: FillInBlank
               className={`rounded-lg border p-4 transition-all duration-300 ${
                 isChecked
                   ? isCorrect
-                    ? 'bg-emerald-900/20 border-emerald-700'
-                    : 'bg-red-900/20 border-red-700'
-                  : 'bg-via-dark border-via-border'
+                    ? 'bg-emerald-50 border-emerald-400'
+                    : 'bg-red-50 border-red-400'
+                  : 'bg-white border-via-border'
               }`}
             >
               <div className="flex items-start gap-3">
                 <div className="flex-1">
-                  <p className="text-sm text-slate-300 leading-relaxed inline">
+                  <p className="text-sm text-via-text leading-relaxed inline">
                     {parts[0]}
                     <span className="inline-block mx-1 align-middle">
                       <select
@@ -88,9 +88,9 @@ export function FillInBlank({ items, title = 'Fill in the Blanks' }: FillInBlank
                         className={`px-3 py-1.5 rounded-md border text-sm font-medium transition-colors ${
                           isChecked
                             ? isCorrect
-                              ? 'bg-emerald-900/40 border-emerald-600 text-emerald-300'
-                              : 'bg-red-900/40 border-red-600 text-red-300'
-                            : 'bg-via-card border-via-border text-slate-300 cursor-pointer hover:border-via-orange'
+                              ? 'bg-emerald-50 border-emerald-400 text-emerald-800'
+                              : 'bg-red-50 border-red-400 text-red-800'
+                            : 'bg-via-card border-via-border text-via-text cursor-pointer hover:border-via-orange'
                         }`}
                       >
                         <option value="" disabled>
@@ -110,9 +110,9 @@ export function FillInBlank({ items, title = 'Fill in the Blanks' }: FillInBlank
                 {isChecked && (
                   <div className="shrink-0 mt-0.5">
                     {isCorrect ? (
-                      <CheckCircle className="w-5 h-5 text-emerald-400" />
+                      <CheckCircle className="w-5 h-5 text-emerald-600" />
                     ) : (
-                      <XCircle className="w-5 h-5 text-red-400" />
+                      <XCircle className="w-5 h-5 text-red-500" />
                     )}
                   </div>
                 )}
@@ -123,10 +123,10 @@ export function FillInBlank({ items, title = 'Fill in the Blanks' }: FillInBlank
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
                   transition={{ duration: 0.3 }}
-                  className="text-xs text-red-400 mt-2 pl-0"
+                  className="text-xs text-red-600 mt-2 pl-0"
                 >
                   Correct answer:{' '}
-                  <span className="font-semibold text-emerald-400">
+                  <span className="font-semibold text-emerald-700">
                     {item.options[item.correctIndex]}
                   </span>
                 </motion.p>
@@ -137,7 +137,7 @@ export function FillInBlank({ items, title = 'Fill in the Blanks' }: FillInBlank
       </div>
 
       {/* Progress */}
-      <div className="mt-4 text-sm text-slate-400">
+      <div className="mt-4 text-sm text-via-text-light">
         Completed: {completedCount} / {items.length}
       </div>
 
@@ -146,13 +146,13 @@ export function FillInBlank({ items, title = 'Fill in the Blanks' }: FillInBlank
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mt-4 bg-emerald-900/20 border border-emerald-800 rounded-lg p-4 text-center"
+          className="mt-4 bg-emerald-50 border border-emerald-300 rounded-lg p-4 text-center"
         >
           <Award className="w-10 h-10 text-via-orange mx-auto mb-2" />
-          <p className="text-lg font-bold text-white">
+          <p className="text-lg font-bold text-via-navy">
             {correctCount} / {items.length} Correct
           </p>
-          <p className="text-sm text-slate-400 mt-1">
+          <p className="text-sm text-via-text-light mt-1">
             {correctCount === items.length
               ? 'Perfect score! You nailed every one.'
               : correctCount >= items.length * 0.7

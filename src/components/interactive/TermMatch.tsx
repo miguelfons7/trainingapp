@@ -68,8 +68,8 @@ export function TermMatch({ pairs, title = 'Match the Terms' }: TermMatchProps) 
   return (
     <div className="bg-via-card rounded-xl border border-via-border p-6">
       <div className="border-l-4 border-via-orange pl-4 mb-6">
-        <h3 className="text-lg font-semibold text-white">{title}</h3>
-        <p className="text-sm text-slate-400 mt-0.5">
+        <h3 className="text-lg font-semibold text-via-navy">{title}</h3>
+        <p className="text-sm text-via-text-light mt-0.5">
           Click a term, then click its matching definition
         </p>
       </div>
@@ -77,7 +77,7 @@ export function TermMatch({ pairs, title = 'Match the Terms' }: TermMatchProps) 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Terms column */}
         <div className="space-y-2">
-          <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-3">
+          <p className="text-xs font-semibold text-via-text-light uppercase tracking-wide mb-3">
             Terms
           </p>
           {shuffledTerms.map((term) => {
@@ -89,14 +89,14 @@ export function TermMatch({ pairs, title = 'Match the Terms' }: TermMatchProps) 
               'w-full text-left rounded-lg p-3 border text-sm transition-all duration-200'
 
             if (matched) {
-              classes += ' bg-emerald-900/30 border-emerald-600 text-emerald-300'
+              classes += ' bg-emerald-50 border-emerald-400 text-emerald-800'
             } else if (isFlashingWrong) {
-              classes += ' bg-red-900/30 border-red-600 text-red-300'
+              classes += ' bg-red-50 border-red-400 text-red-800'
             } else if (isSelected) {
-              classes += ' bg-via-orange/20 border-via-orange text-via-orange'
+              classes += ' bg-via-orange/10 border-via-orange text-via-orange'
             } else {
               classes +=
-                ' bg-via-dark border-via-border text-slate-300 hover:border-slate-500 cursor-pointer'
+                ' bg-white border-via-border text-via-text hover:border-via-navy/40 cursor-pointer'
             }
 
             return (
@@ -115,10 +115,10 @@ export function TermMatch({ pairs, title = 'Match the Terms' }: TermMatchProps) 
                 <div className="flex items-center gap-2">
                   <span className="flex-1 font-medium">{term}</span>
                   {matched && (
-                    <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0" />
                   )}
                   {isFlashingWrong && (
-                    <XCircle className="w-4 h-4 text-red-400 shrink-0" />
+                    <XCircle className="w-4 h-4 text-red-500 shrink-0" />
                   )}
                 </div>
               </motion.button>
@@ -128,7 +128,7 @@ export function TermMatch({ pairs, title = 'Match the Terms' }: TermMatchProps) 
 
         {/* Definitions column */}
         <div className="space-y-2">
-          <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-3">
+          <p className="text-xs font-semibold text-via-text-light uppercase tracking-wide mb-3">
             Definitions
           </p>
           {shuffledDefinitions.map((definition) => {
@@ -139,14 +139,14 @@ export function TermMatch({ pairs, title = 'Match the Terms' }: TermMatchProps) 
               'w-full text-left rounded-lg p-3 border text-sm transition-all duration-200'
 
             if (matched) {
-              classes += ' bg-emerald-900/30 border-emerald-600 text-emerald-300'
+              classes += ' bg-emerald-50 border-emerald-400 text-emerald-800'
             } else if (isFlashingWrong) {
-              classes += ' bg-red-900/30 border-red-600 text-red-300'
+              classes += ' bg-red-50 border-red-400 text-red-800'
             } else if (selectedTerm) {
               classes +=
-                ' bg-via-dark border-via-border text-slate-300 hover:border-via-orange cursor-pointer'
+                ' bg-white border-via-border text-via-text hover:border-via-orange cursor-pointer'
             } else {
-              classes += ' bg-via-dark border-via-border text-slate-400'
+              classes += ' bg-white border-via-border text-via-text-light'
             }
 
             return (
@@ -165,10 +165,10 @@ export function TermMatch({ pairs, title = 'Match the Terms' }: TermMatchProps) 
                 <div className="flex items-center gap-2">
                   <span className="flex-1">{definition}</span>
                   {matched && (
-                    <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0" />
                   )}
                   {isFlashingWrong && (
-                    <XCircle className="w-4 h-4 text-red-400 shrink-0" />
+                    <XCircle className="w-4 h-4 text-red-500 shrink-0" />
                   )}
                 </div>
               </motion.button>
@@ -178,12 +178,12 @@ export function TermMatch({ pairs, title = 'Match the Terms' }: TermMatchProps) 
       </div>
 
       {/* Progress */}
-      <div className="mt-4 flex items-center justify-between text-sm text-slate-400">
+      <div className="mt-4 flex items-center justify-between text-sm text-via-text-light">
         <span>
           Matched: {matchedPairs.size} / {pairs.length}
         </span>
         {wrongAttempts > 0 && (
-          <span className="text-red-400">
+          <span className="text-red-500">
             Wrong attempts: {wrongAttempts}
           </span>
         )}
@@ -194,11 +194,11 @@ export function TermMatch({ pairs, title = 'Match the Terms' }: TermMatchProps) 
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mt-4 bg-emerald-900/20 border border-emerald-800 rounded-lg p-4 text-center"
+          className="mt-4 bg-emerald-50 border border-emerald-300 rounded-lg p-4 text-center"
         >
           <Award className="w-10 h-10 text-via-orange mx-auto mb-2" />
-          <p className="text-lg font-bold text-emerald-300">All Matched!</p>
-          <p className="text-sm text-emerald-400 mt-1">
+          <p className="text-lg font-bold text-emerald-800">All Matched!</p>
+          <p className="text-sm text-emerald-600 mt-1">
             {matchedPairs.size}/{pairs.length} matched
             {wrongAttempts > 0
               ? `, ${wrongAttempts} wrong attempt${wrongAttempts === 1 ? '' : 's'}`
