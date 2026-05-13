@@ -4,7 +4,9 @@ import { SectionWrapper } from '../shared/SectionWrapper'
 import { FlowDiagram } from '../shared/FlowDiagram'
 import { ExpandableCard } from '../shared/ExpandableCard'
 import { Badge } from '../shared/Badge'
+import { FillInBlank } from '../interactive/FillInBlank'
 import { forwardPath, reversePath, dealerLevels, keyInsight } from '../../data/reverseLogisticsData'
+import { reverseLogisticsFillBlanks } from '../../data/modules/industry/inlineExercises'
 
 export function ReverseLogistics() {
   const [expandedLevel, setExpandedLevel] = useState<number | null>(null)
@@ -56,10 +58,13 @@ export function ReverseLogistics() {
         ))}
       </div>
 
-      <div className="bg-indigo-100 rounded-lg border border-indigo-500 p-4">
+      <div className="bg-indigo-100 rounded-lg border border-indigo-500 p-4 mb-8">
         <p className="text-sm text-indigo-700 font-medium mb-1">Key Sales Insight</p>
         <p className="text-sm text-indigo-700">{keyInsight}</p>
       </div>
+
+      {/* Inline exercise */}
+      <FillInBlank items={reverseLogisticsFillBlanks} title="Quick Check: Complete the Sentences" />
     </SectionWrapper>
   )
 }

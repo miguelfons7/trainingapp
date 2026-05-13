@@ -1,6 +1,8 @@
 import { Heart, Shield, Eye, Star } from 'lucide-react'
 import { SectionWrapper } from '../shared/SectionWrapper'
+import { TermMatch } from '../interactive/TermMatch'
 import { companyStory, coreValues, teamHighlights } from '../../data/companyData'
+import { missionValuesTermMatch } from '../../data/modules/via-trading/inlineExercises'
 
 export function MissionValues() {
   const valueIcons = [
@@ -92,7 +94,7 @@ export function MissionValues() {
       <h3 className="text-sm font-semibold text-via-text uppercase tracking-wide mb-3">
         Team Culture
       </h3>
-      <div className="bg-via-card rounded-xl border border-via-border p-5">
+      <div className="bg-via-card rounded-xl border border-via-border p-5 mb-8">
         <ul className="space-y-2">
           {teamHighlights.map((highlight) => (
             <li key={highlight} className="flex items-start gap-2 text-sm text-via-text">
@@ -102,6 +104,9 @@ export function MissionValues() {
           ))}
         </ul>
       </div>
+
+      {/* Inline exercise */}
+      <TermMatch pairs={missionValuesTermMatch} title="Quick Check: Match the Values" />
     </SectionWrapper>
   )
 }

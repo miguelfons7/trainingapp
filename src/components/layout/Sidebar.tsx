@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { Home, BookOpen, Shield, LogOut, ChevronLeft, GraduationCap } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
@@ -27,15 +28,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
     >
       {/* Logo */}
       <div className="flex items-center gap-3 px-4 py-5 border-b border-white/10">
-        <div className="w-8 h-8 bg-via-orange rounded-lg flex items-center justify-center shrink-0">
-          <GraduationCap className="w-5 h-5 text-white" />
-        </div>
-        {!collapsed && (
-          <div className="overflow-hidden">
-            <h1 className="text-sm font-bold tracking-wide">Via Academy</h1>
-            <p className="text-[10px] text-white/50">Training Platform</p>
-          </div>
-        )}
+        <LogoImage collapsed={collapsed} />
       </div>
 
       {/* Nav */}
@@ -102,5 +95,44 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
         </div>
       )}
     </aside>
+  )
+}
+
+/** Sidebar logo with fallback to icon if image doesn't load */
+function LogoImage({ collapsed }: { collapsed: boolean }) {
+  const [imgError, setImgError] = useState(false)
+  const src = `${import.meta.env.BASE_URL}images/via-academy-hero.png`
+
+  if (imgError) {
+    return (
+      <>
+        <div className="w-8 h-8 bg-via-orange rounded-lg flex items-center justify-center shrink-0">
+          <GraduationCap className="w-5 h-5 text-white" />
+        </div>
+        {!collapsed && (
+          <div className="overflow-hidden">
+            <h1 className="text-sm font-bold tracking-wide">Via Academy</h1>
+            <p className="text-[10px] text-white/50">Training Platform</p>
+          </div>
+        )}
+      </>
+    )
+  }
+
+  return (
+    <>
+      <img
+        src={src}
+        alt="Via Academy"
+        onError={() => setImgError(true)}
+        className="w-8 h-8 rounded-lg object-cover shrink-0"
+      />
+      {!collapsed && (
+        <div className="overflow-hidden">
+          <h1 className="text-sm font-bold tracking-wide">Via Academy</h1>
+          <p className="text-[10px] text-white/50">Training Platform</p>
+        </div>
+      )}
+    </>
   )
 }

@@ -32,6 +32,7 @@ export function AnnouncementManager() {
   const [priority, setPriority] = useState<'high' | 'medium'>('medium')
   const [requiredBy, setRequiredBy] = useState('')
   const [formError, setFormError] = useState('')
+  const [department, setDepartment] = useState<string>('all')
 
   const totalUsers = mockUsers.length
 
@@ -40,6 +41,7 @@ export function AnnouncementManager() {
     setDescription('')
     setDetails('')
     setPriority('medium')
+    setDepartment('all')
     setRequiredBy('')
     setFormError('')
     setShowForm(false)
@@ -148,7 +150,25 @@ export function AnnouncementManager() {
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-3 gap-4">
+              <div>
+                <label className="block text-xs font-medium text-via-text mb-1.5">
+                  Department
+                </label>
+                <select
+                  value={department}
+                  onChange={(e) => setDepartment(e.target.value)}
+                  className="w-full px-3 py-2.5 rounded-lg border border-via-border bg-white text-sm text-via-text focus:outline-none focus:ring-2 focus:ring-via-orange/30 focus:border-via-orange"
+                >
+                  <option value="all">All Departments</option>
+                  <option value="sales">Sales</option>
+                  <option value="operations">Operations</option>
+                  <option value="warehouse">Warehouse</option>
+                  <option value="marketing">Marketing</option>
+                  <option value="management">Management</option>
+                </select>
+              </div>
+
               <div>
                 <label className="block text-xs font-medium text-via-text mb-1.5">
                   Priority

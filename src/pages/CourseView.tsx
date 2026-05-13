@@ -1,12 +1,18 @@
 import { Link, useParams } from 'react-router-dom'
-import { ArrowLeft, Clock, Lock } from 'lucide-react'
+import { ArrowLeft, Clock, Lock, Play } from 'lucide-react'
 import { getCourseById } from '../data/courses'
+import { useProgress } from '../context/ProgressContext'
 import { CourseHeader } from '../components/course/CourseHeader'
 import { ModuleList } from '../components/course/ModuleList'
 
 export function CourseView() {
   const { courseId } = useParams<{ courseId: string }>()
   const course = courseId ? getCourseById(courseId) : undefined
+  const { getNextModule, getCourseProgress } = useProgress()
+  const nextModuleId = course ? getNextModule(course.id) : null
+  const progress = course ? getCourseProgress(course.id) : null
+  const isCompleted = progress ? progress.percentage === 100 : false
+  const hasStarted = progress ? progress.completed > 0 : false
 
   if (!course || course.status === 'coming-soon') {
     return (
@@ -52,6 +58,20 @@ export function CourseView() {
 
       <div className="space-y-6">
         <CourseHeader course={course} />
+
+        {/* Start / Continue button */}
+        {!isCompleted && nextModuleId && (
+          <div className="text-center">
+            <Link
+              to={`/course/${course.id}/module/${nextModuleId}`}
+              className="inline-flex items-center gap-3 px-8 py-4 bg-via-orange text-white text-lg font-bold rounded-xl hover:bg-via-orange-light transition-colors shadow-lg hover:shadow-xl"
+            >
+              <Play className="w-6 h-6" />
+              {hasStarted ? 'Continue Learning' : 'Start Course'}
+            </Link>
+          </div>
+        )}
+
         <ModuleList courseId={course.id} modules={course.modules} />
       </div>
     </div>

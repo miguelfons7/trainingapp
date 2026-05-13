@@ -74,7 +74,7 @@ export const glossaryTerms: GlossaryTerm[] = [
     term: 'Customer Returns',
     category: 'Product Types',
     definition: 'Goods returned to retailers by customers for various reasons (buyer\'s remorse, wrong size, defective, one-time use).',
-    details: 'Condition varies widely from brand new to non-functional. 10-25% of items may be compromised.',
+    details: 'Condition varies widely from brand new to non-functional. The compromise rate varies by load and category — every load is different.',
     searchTerms: ['customer returns', 'returned goods', 'refund', 'returned merchandise'],
   },
   {

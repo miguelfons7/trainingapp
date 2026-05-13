@@ -8,7 +8,7 @@ export const buyerTypes: BuyerType[] = [
     id: 'online-sellers',
     name: 'Online Sellers',
     icon: 'Monitor',
-    shortDescription: 'Sell through Amazon, eBay, Shopify, Poshmark, and other platforms',
+    shortDescription: 'Sell through Amazon, eBay, Shopify, Poshmark, Whatnot, Facebook Marketplace, and more',
     whatTheyCareAbout: [
       'Fast inventory turns and consistent supply',
       'Profitable margins and ease of listing (SKU data, manifests, UPC codes)',
@@ -16,11 +16,11 @@ export const buyerTypes: BuyerType[] = [
       'Manifested loads to evaluate items before purchasing',
     ],
     identifyingSignals: [
-      'Mentions eBay, Amazon, or Shopify',
+      'Mentions eBay, Amazon, Shopify, Whatnot, Facebook Marketplace, etc.',
       'Asks about condition and grading',
       'Interested in fast shipping and turnover',
     ],
-    searchTerms: ['online', 'amazon', 'ebay', 'shopify', 'poshmark', 'e-commerce', 'ecommerce'],
+    searchTerms: ['online', 'amazon', 'ebay', 'shopify', 'poshmark', 'e-commerce', 'ecommerce', 'whatnot', 'facebook marketplace', 'facebook', 'marketplace'],
   },
   {
     id: 'discount-stores',

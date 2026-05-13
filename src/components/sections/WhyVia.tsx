@@ -11,7 +11,9 @@ import {
 } from 'lucide-react'
 import { SectionWrapper } from '../shared/SectionWrapper'
 import { ExpandableCard } from '../shared/ExpandableCard'
+import { FillInBlank } from '../interactive/FillInBlank'
 import { advantages, advantagesIntro } from '../../data/advantagesData'
+import { whyViaFillBlanks } from '../../data/modules/via-trading/inlineExercises'
 
 const iconMap: Record<string, React.ReactNode> = {
   FileCheck: <FileCheck className="w-5 h-5" />,
@@ -61,7 +63,7 @@ export function WhyVia() {
         ))}
       </div>
 
-      <div className="bg-violet-100 rounded-lg border border-violet-500 p-4 mt-6">
+      <div className="bg-violet-100 rounded-lg border border-violet-500 p-4 mt-6 mb-8">
         <p className="text-sm text-violet-700 font-medium mb-1">In Competitive Conversations</p>
         <p className="text-sm text-violet-700">
           Position Via based on advantages, not by trashing competitors. Many buyers work with
@@ -69,6 +71,9 @@ export function WhyVia() {
           relationship.
         </p>
       </div>
+
+      {/* Inline exercise */}
+      <FillInBlank items={whyViaFillBlanks} title="Quick Check: Complete the Sentences" />
     </SectionWrapper>
   )
 }

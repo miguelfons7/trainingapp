@@ -3,7 +3,9 @@ import { Tags } from 'lucide-react'
 import { SectionWrapper } from '../shared/SectionWrapper'
 import { ExpandableCard } from '../shared/ExpandableCard'
 import { Badge } from '../shared/Badge'
+import { TermMatch } from '../interactive/TermMatch'
 import { productConditions, conditionsIntro } from '../../data/conditionsData'
+import { conditionsTermMatch } from '../../data/modules/industry/inlineExercises'
 
 export function ProductConditions() {
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set())
@@ -27,7 +29,7 @@ export function ProductConditions() {
     >
       <p className="text-sm text-via-text mb-6">{conditionsIntro}</p>
 
-      <div className="space-y-3">
+      <div className="space-y-3 mb-8">
         {productConditions.map((condition) => (
           <ExpandableCard
             key={condition.id}
@@ -54,6 +56,9 @@ export function ProductConditions() {
           </ExpandableCard>
         ))}
       </div>
+
+      {/* Inline exercise */}
+      <TermMatch pairs={conditionsTermMatch} title="Quick Check: Match the Conditions" />
     </SectionWrapper>
   )
 }

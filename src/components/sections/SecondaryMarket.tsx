@@ -1,6 +1,8 @@
 import { TrendingDown, ShoppingCart, Store, Tent, Archive, Gavel, Building2, CircleDollarSign, Globe, Warehouse } from 'lucide-react'
 import { SectionWrapper } from '../shared/SectionWrapper'
 import { marketStats, salesChannels } from '../../data/secondaryMarketData'
+import { TermMatch } from '../interactive/TermMatch'
+import { secondaryMarketTermMatch } from '../../data/modules/industry/inlineExercises'
 
 const iconMap: Record<string, React.ReactNode> = {
   ShoppingCart: <ShoppingCart className="w-5 h-5" />,
@@ -56,10 +58,13 @@ export function SecondaryMarket() {
         ))}
       </div>
 
-      <div className="bg-via-orange/10 rounded-lg border border-via-orange/30 p-4">
+      <div className="bg-via-orange/10 rounded-lg border border-via-orange/30 p-4 mb-8">
         <p className="text-sm text-via-orange font-medium mb-1">Why This Matters for Sales</p>
         <p className="text-sm text-orange-700">{marketStats.whyItMatters}</p>
       </div>
+
+      {/* Inline exercise */}
+      <TermMatch pairs={secondaryMarketTermMatch} title="Quick Check: Match the Terms" />
     </SectionWrapper>
   )
 }

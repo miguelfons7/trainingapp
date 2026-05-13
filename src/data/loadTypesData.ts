@@ -23,7 +23,7 @@ export const loadTypes: LoadType[] = [
     description:
       'A wooden structure (standard 48" x 48" base) loaded with merchandise, typically stacked 6-7 feet high.',
     details:
-      'Can contain assorted merchandise across categories or be category-specific. Pallets are a versatile format that works for a wide range of buyers.',
+      'Can contain assorted merchandise across categories or be category-specific. Pallets are a versatile format that works for a wide range of buyers. Common pallet formats include: Standard Pallets (wooden 48"×48" with merchandise stacked and shrink-wrapped), Gaylords (large corrugated cardboard boxes placed on a pallet, common for unsorted returns), Palletized Cases (individual case packs stacked on a pallet for organized category-specific lots), and Watermelon Bins (large open-top bins on pallets, used for bulk unsorted merchandise). The format affects how buyers receive, sort, and resell the merchandise.',
     icon: 'LayoutGrid',
     searchTerms: ['pallet', '48x48', 'wooden', 'standard'],
   },

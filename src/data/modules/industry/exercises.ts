@@ -73,12 +73,12 @@ export const industryScenarios: ScenarioQuestion[] = [
     options: [
       'Offer an immediate full refund',
       'Tell them that\'s normal and they should have known better',
-      'Acknowledge their concern, explain that 10-25% compromise rate is standard for Customer Returns, and offer to walk them through how to maximize value from every item — including repair, bundling, and resale strategies',
+      'Acknowledge their concern, explain that some level of compromise is expected with Customer Returns and it varies by load, then offer to walk them through how to maximize value from every item — including repair, bundling, and resale strategies',
       'Blame the shipping company',
     ],
     bestAnswerIndex: 2,
     explanation:
-      'Education and empathy are the right approach. Customer Returns have a typical 10-25% compromise rate — this is industry standard. Helping the buyer understand how to handle these items (repair, bundle, sell for parts) turns a complaint into a learning moment and builds long-term loyalty.',
+      'Education and empathy are the right approach. Customer Returns will always have some level of compromise — the rate varies by load and category, which is why we avoid quoting specific percentages. Helping the buyer understand how to handle these items (repair, bundle, sell for parts) turns a complaint into a learning moment and builds long-term loyalty.',
   },
   {
     id: 'scenario-4',
@@ -137,13 +137,5 @@ export const industryFillInBlanks: FillInBlankItem[] = [
     blank: 'manifest',
     options: ['manifest', 'invoice', 'purchase order', 'packing slip'],
     correctIndex: 0,
-  },
-  {
-    id: 'fib-6',
-    sentence:
-      'For Customer Returns, buyers should expect a typical compromise rate of _____.',
-    blank: '10-25%',
-    options: ['1-5%', '10-25%', '50-75%', '0%'],
-    correctIndex: 1,
   },
 ]

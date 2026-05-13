@@ -52,7 +52,17 @@ export function Login() {
       <div className="w-full max-w-sm">
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-via-navy rounded-2xl flex items-center justify-center mx-auto mb-4">
+          <img
+            src={`${import.meta.env.BASE_URL}images/via-academy-hero.png`}
+            alt="Via Academy"
+            className="w-20 h-20 rounded-2xl object-cover mx-auto mb-4"
+            onError={(e) => {
+              const target = e.target as HTMLImageElement
+              target.style.display = 'none'
+              target.nextElementSibling?.classList.remove('hidden')
+            }}
+          />
+          <div className="hidden w-16 h-16 bg-via-navy rounded-2xl flex items-center justify-center mx-auto mb-4">
             <GraduationCap className="w-9 h-9 text-white" />
           </div>
           <h1 className="text-2xl font-bold text-via-navy">Via Academy</h1>
@@ -93,7 +103,7 @@ export function Login() {
                 Enter your Via Trading credentials
               </p>
 
-              <div className="space-y-4">
+              <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); handleSignIn() }}>
                 <div>
                   <label className="block text-xs font-medium text-via-text mb-1.5">
                     Full Name
@@ -131,19 +141,20 @@ export function Login() {
                 )}
 
                 <button
-                  onClick={handleSignIn}
+                  type="submit"
                   className="w-full py-2.5 bg-via-navy text-white text-sm font-medium rounded-lg hover:bg-via-navy-light transition-colors cursor-pointer"
                 >
                   Sign In
                 </button>
 
                 <button
+                  type="button"
                   onClick={() => setShowPicker(false)}
                   className="w-full text-xs text-via-text-light hover:text-via-text transition-colors cursor-pointer"
                 >
                   Back to sign in options
                 </button>
-              </div>
+              </form>
             </>
           )}
         </div>

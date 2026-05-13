@@ -1,6 +1,8 @@
 import { Globe, ExternalLink, ShoppingCart, RotateCcw, DollarSign } from 'lucide-react'
 import { SectionWrapper } from '../shared/SectionWrapper'
+import { TermMatch } from '../interactive/TermMatch'
 import { platforms, retailerPartners } from '../../data/companyData'
+import { platformsTermMatch } from '../../data/modules/via-trading/inlineExercises'
 
 const platformDetails = [
   {
@@ -98,6 +100,13 @@ export function OurPlatforms() {
             </div>
           )
         })}
+        {/* And More */}
+        <div className="bg-via-card rounded-xl border border-dashed border-via-border p-5 text-center">
+          <p className="text-sm font-semibold text-via-navy mb-1">And More...</p>
+          <p className="text-xs text-via-text-light">
+            Via Trading is always expanding its digital ecosystem. Stay tuned for new tools and platforms designed to better serve our buyers and vendor partners.
+          </p>
+        </div>
       </div>
 
       {/* How They Connect */}
@@ -122,7 +131,7 @@ export function OurPlatforms() {
       <h3 className="text-sm font-semibold text-via-text uppercase tracking-wide mb-3">
         Major Retailer Partners
       </h3>
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap items-center gap-2">
         {retailerPartners.map((partner) => (
           <span
             key={partner}
@@ -131,6 +140,12 @@ export function OurPlatforms() {
             {partner}
           </span>
         ))}
+        <span className="text-sm font-medium text-via-orange italic">and more!</span>
+      </div>
+
+      {/* Inline exercise */}
+      <div className="mt-8">
+        <TermMatch pairs={platformsTermMatch} title="Quick Check: Match the Platforms" />
       </div>
     </SectionWrapper>
   )

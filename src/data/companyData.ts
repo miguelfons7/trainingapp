@@ -51,6 +51,9 @@ export const retailerPartners = [
   'Home Depot',
   'Wayfair',
   "Sam's Club",
+  "Macy's",
+  'JCPenney',
+  'Harbor Freight',
 ]
 
 export const teamHighlights = [

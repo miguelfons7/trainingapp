@@ -1,3 +1,4 @@
+import { useState, useRef, useEffect } from 'react'
 import { useLocation, Link } from 'react-router-dom'
 import { Bell, Menu } from 'lucide-react'
 import { useCompliance } from '../../context/ComplianceContext'
@@ -10,6 +11,18 @@ interface TopBarProps {
 export function TopBar({ onMenuToggle }: TopBarProps) {
   const location = useLocation()
   const { pendingItems } = useCompliance()
+  const [showNotif, setShowNotif] = useState(false)
+  const bellRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (bellRef.current && !bellRef.current.contains(e.target as Node)) {
+        setShowNotif(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
 
   const breadcrumbs = buildBreadcrumbs(location.pathname)
 
@@ -42,10 +55,10 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
         </nav>
       </div>
 
-      <div className="flex items-center gap-3">
-        <Link
-          to="/"
-          className="relative text-via-text-light hover:text-via-navy transition-colors"
+      <div className="relative flex items-center gap-3" ref={bellRef}>
+        <button
+          onClick={() => setShowNotif(!showNotif)}
+          className="relative text-via-text-light hover:text-via-navy transition-colors cursor-pointer"
         >
           <Bell className="w-5 h-5" />
           {pendingItems.length > 0 && (
@@ -53,7 +66,35 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
               {pendingItems.length}
             </span>
           )}
-        </Link>
+        </button>
+
+        {showNotif && (
+          <div className="absolute right-0 top-10 w-72 bg-white rounded-xl border border-via-border shadow-lg z-50 overflow-hidden">
+            <div className="px-4 py-3 border-b border-via-border">
+              <p className="text-sm font-semibold text-via-navy">Notifications</p>
+            </div>
+            {pendingItems.length === 0 ? (
+              <div className="px-4 py-6 text-center">
+                <Bell className="w-6 h-6 text-via-text-light mx-auto mb-2" />
+                <p className="text-sm text-via-text-light">No new notifications</p>
+              </div>
+            ) : (
+              <div className="max-h-60 overflow-y-auto">
+                {pendingItems.map((item) => (
+                  <Link
+                    key={item.id}
+                    to="/"
+                    onClick={() => setShowNotif(false)}
+                    className="block px-4 py-3 hover:bg-via-bg-subtle border-b border-via-border last:border-b-0"
+                  >
+                    <p className="text-sm font-medium text-via-navy">{item.title}</p>
+                    <p className="text-xs text-via-text-light mt-0.5 line-clamp-1">{item.description}</p>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </header>
   )

@@ -34,8 +34,14 @@ export function AssignCourses() {
   function handleAssign() {
     if (!selectedCourse || selectedUsers.size === 0) return
 
-    const course = courses.find((c) => c.id === selectedCourse)
-    if (!course) return
+    const isProgram = selectedCourse.startsWith('program-')
+    const courseName = isProgram
+      ? selectedCourse === 'program-new-hire-bdr'
+        ? 'New Hire — BDR Program'
+        : 'New AM Training Program'
+      : courses.find((c) => c.id === selectedCourse)?.title
+
+    if (!courseName) return
 
     const now = new Date().toISOString()
     const newAssignments: Assignment[] = []
@@ -45,13 +51,13 @@ export function AssignCourses() {
       if (!user) return
 
       const exists = assignments.some(
-        (a) => a.userEmail === email && a.courseName === course.title,
+        (a) => a.userEmail === email && a.courseName === courseName,
       )
       if (exists) return
 
       newAssignments.push({
-        id: `${course.id}-${email}-${Date.now()}`,
-        courseName: course.title,
+        id: `${selectedCourse}-${email}-${Date.now()}`,
+        courseName: courseName,
         userName: user.name,
         userEmail: email,
         assignedAt: now,
@@ -104,12 +110,18 @@ export function AssignCourses() {
               onChange={(e) => setSelectedCourse(e.target.value)}
               className="w-full rounded-lg border border-via-border bg-white px-3 py-2.5 text-sm text-via-text focus:outline-none focus:ring-2 focus:ring-via-orange/40 focus:border-via-orange"
             >
-              <option value="">Select a course...</option>
-              {courses.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.title}
-                </option>
-              ))}
+              <option value="">Select a course or program...</option>
+              <optgroup label="Programs">
+                <option value="program-new-hire-bdr">New Hire — BDR Program</option>
+                <option value="program-new-am">New AM Training Program</option>
+              </optgroup>
+              <optgroup label="Individual Courses">
+                {courses.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.title}
+                  </option>
+                ))}
+              </optgroup>
             </select>
           </div>
 

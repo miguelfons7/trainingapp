@@ -12,7 +12,9 @@ import {
 } from 'lucide-react'
 import { SectionWrapper } from '../shared/SectionWrapper'
 import { ExpandableCard } from '../shared/ExpandableCard'
+import { TermMatch } from '../interactive/TermMatch'
 import { buyerTypes, buyerTypesIntro } from '../../data/buyerTypesData'
+import { buyerTypesTermMatch } from '../../data/modules/industry/inlineExercises'
 
 const iconMap: Record<string, React.ReactNode> = {
   Monitor: <Monitor className="w-5 h-5" />,
@@ -38,7 +40,7 @@ export function BuyerTypes() {
     >
       <p className="text-sm text-via-text mb-6">{buyerTypesIntro}</p>
 
-      <div className="space-y-3">
+      <div className="space-y-3 mb-8">
         {buyerTypes.map((buyer) => (
           <ExpandableCard
             key={buyer.id}
@@ -82,6 +84,9 @@ export function BuyerTypes() {
           </ExpandableCard>
         ))}
       </div>
+
+      {/* Inline exercise */}
+      <TermMatch pairs={buyerTypesTermMatch} title="Quick Check: Match the Buyer Types" />
     </SectionWrapper>
   )
 }

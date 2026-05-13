@@ -12,6 +12,7 @@ import {
 } from 'lucide-react'
 import { SectionWrapper } from '../shared/SectionWrapper'
 import { StatCard } from '../shared/StatCard'
+import { FillInBlank } from '../interactive/FillInBlank'
 import {
   companyStory,
   coreValues,
@@ -20,6 +21,7 @@ import {
   retailerPartners,
   teamHighlights,
 } from '../../data/companyData'
+import { ourStoryFillBlanks } from '../../data/modules/via-trading/inlineExercises'
 
 const iconMap: Record<string, React.ReactNode> = {
   Calendar: <Calendar className="w-6 h-6" />,
@@ -104,7 +106,7 @@ export function CompanyOverview() {
       <h3 className="text-sm font-semibold text-via-text uppercase tracking-wide mb-3">
         Retailer Partners
       </h3>
-      <div className="flex flex-wrap gap-2 mb-6">
+      <div className="flex flex-wrap items-center gap-2 mb-6">
         {retailerPartners.map((partner) => (
           <span
             key={partner}
@@ -113,12 +115,13 @@ export function CompanyOverview() {
             {partner}
           </span>
         ))}
+        <span className="text-sm font-medium text-via-orange italic">and more!</span>
       </div>
 
       <h3 className="text-sm font-semibold text-via-text uppercase tracking-wide mb-3">
         Team Highlights
       </h3>
-      <div className="bg-via-card rounded-xl border border-via-border p-5">
+      <div className="bg-via-card rounded-xl border border-via-border p-5 mb-8">
         <ul className="space-y-2">
           {teamHighlights.map((highlight) => (
             <li key={highlight} className="flex items-start gap-2 text-sm text-via-text">
@@ -128,6 +131,9 @@ export function CompanyOverview() {
           ))}
         </ul>
       </div>
+
+      {/* Inline exercise */}
+      <FillInBlank items={ourStoryFillBlanks} title="Quick Check: Complete the Sentences" />
     </SectionWrapper>
   )
 }

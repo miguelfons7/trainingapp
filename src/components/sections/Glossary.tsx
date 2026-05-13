@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { BookOpen } from 'lucide-react'
 import { SectionWrapper } from '../shared/SectionWrapper'
-import { ExpandableCard } from '../shared/ExpandableCard'
 import { Badge } from '../shared/Badge'
 import { SearchBar } from '../layout/SearchBar'
 import { useSearch } from '../../hooks/useSearch'
@@ -17,17 +16,7 @@ const categoryColors: Record<string, string> = {
 
 export function Glossary() {
   const [searchQuery, setSearchQuery] = useState('')
-  const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set())
   const { filteredTerms, totalResults, hasQuery } = useSearch(searchQuery)
-
-  const toggle = (id: string) => {
-    setExpandedIds((prev) => {
-      const next = new Set(prev)
-      if (next.has(id)) next.delete(id)
-      else next.add(id)
-      return next
-    })
-  }
 
   return (
     <SectionWrapper
@@ -53,26 +42,24 @@ export function Glossary() {
             <h3 className="text-sm font-semibold text-via-text uppercase tracking-wide mb-3">
               {category}
             </h3>
-            <div className="space-y-2">
+            <div className="space-y-3">
               {terms.map((term) => (
-                <ExpandableCard
+                <div
                   key={term.id}
-                  title={term.term}
-                  badge={
+                  className="bg-via-card rounded-xl border border-via-border p-4"
+                >
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-base font-bold text-via-navy">{term.term}</span>
                     <Badge
                       text={term.category}
                       color={categoryColors[term.category] ?? 'slate'}
                     />
-                  }
-                  isExpanded={expandedIds.has(term.id)}
-                  onToggle={() => toggle(term.id)}
-                  accentColor="border-rose-500"
-                >
-                  <p className="mb-2">{term.definition}</p>
+                  </div>
+                  <p className="text-sm text-via-text leading-relaxed">{term.definition}</p>
                   {term.details && (
-                    <p className="text-via-text-light text-xs mt-1">{term.details}</p>
+                    <p className="text-xs text-via-text-light mt-1.5">{term.details}</p>
                   )}
-                </ExpandableCard>
+                </div>
               ))}
             </div>
           </div>

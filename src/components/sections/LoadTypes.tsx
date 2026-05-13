@@ -2,7 +2,9 @@ import { useState } from 'react'
 import { Package, Layers, LayoutGrid, Truck } from 'lucide-react'
 import { SectionWrapper } from '../shared/SectionWrapper'
 import { ExpandableCard } from '../shared/ExpandableCard'
+import { FillInBlank } from '../interactive/FillInBlank'
 import { loadTypes, loadTypesIntro, loadTypeInsight } from '../../data/loadTypesData'
+import { loadTypesFillBlanks } from '../../data/modules/industry/inlineExercises'
 
 const iconMap: Record<string, React.ReactNode> = {
   Package: <Package className="w-5 h-5" />,
@@ -67,10 +69,13 @@ export function LoadTypes() {
         ))}
       </div>
 
-      <div className="bg-emerald-100 rounded-lg border border-emerald-500 p-4">
+      <div className="bg-emerald-100 rounded-lg border border-emerald-500 p-4 mb-8">
         <p className="text-sm text-emerald-700 font-medium mb-1">Sales Insight</p>
         <p className="text-sm text-emerald-700">{loadTypeInsight}</p>
       </div>
+
+      {/* Inline exercise */}
+      <FillInBlank items={loadTypesFillBlanks} title="Quick Check: Complete the Sentences" />
     </SectionWrapper>
   )
 }
