@@ -1,10 +1,9 @@
 import type { LoadType } from '../types'
 
 export const loadTypesIntro =
-  'Liquidation merchandise is sold in standard lot sizes. These terms come up in every sales conversation, so know them cold.'
+  'Liquidation merchandise is sold in standard lot sizes. Understanding these formats is important for anyone working at Via Trading, whether you are discussing options with a buyer, coordinating logistics, or managing warehouse operations.'
 
-export const loadTypeInsight =
-  'Understanding load types helps you match the right product format to what the buyer needs. Any buyer can purchase at any level — from a single case to full truckloads.'
+export const loadTypeInsight = ''
 
 export const loadTypes: LoadType[] = [
   {
@@ -21,9 +20,9 @@ export const loadTypes: LoadType[] = [
     id: 'pallet',
     name: 'Pallet',
     description:
-      'A wooden structure (standard 48" x 48" base) loaded with merchandise, typically stacked 6-7 feet high.',
+      'A wooden or plastic structure (standard 48 inch by 48 inch base) loaded with merchandise. Pallets come in several formats, so it is important to understand the differences.',
     details:
-      'Can contain assorted merchandise across categories or be category-specific. Pallets are a versatile format that works for a wide range of buyers. Common pallet formats include: Standard Pallets (wooden 48"×48" with merchandise stacked and shrink-wrapped), Gaylords (large corrugated cardboard boxes placed on a pallet, common for unsorted returns), Palletized Cases (individual case packs stacked on a pallet for organized category-specific lots), and Watermelon Bins (large open-top bins on pallets, used for bulk unsorted merchandise). The format affects how buyers receive, sort, and resell the merchandise.',
+      'Can contain assorted merchandise across categories or be category-specific. Pallets are a versatile format that works for a wide range of buyers. Common pallet formats include: Standard Pallets (wooden 48"×48" with merchandise stacked and shrink-wrapped), Gaylords (large corrugated cardboard boxes placed on a pallet, common for unsorted returns), Palletized Cases (individual case packs stacked on a pallet for organized category-specific lots), and Watermelon Bins (large open-top bins on pallets, used for bulk unsorted merchandise). The format affects how merchandise is received, sorted, and resold.',
     icon: 'LayoutGrid',
     searchTerms: ['pallet', '48x48', 'wooden', 'standard'],
   },
@@ -31,9 +30,9 @@ export const loadTypes: LoadType[] = [
     id: 'ltl',
     name: 'LTL (Less Than Truckload)',
     description:
-      'A shipment of multiple pallets that does not fill an entire trailer. LTL shipments typically range up to 12 pallets.',
+      'A shipment of 1 to 6 pallets that shares trailer space with other shipments. If more than 6 pallets are needed, it may require consolidation or two separate LTL shipments.',
     details:
-      'LTL is a common shipping method when a buyer needs more than a few pallets but not a full truckload. Freight is shared with other shipments on the same trailer.',
+      'LTL is a common shipping method for buyers who need more than a few pallets but not a full truck. Residential delivery is available with a lift-gate surcharge. LTL drivers lower pallets to the curb or loading dock only. No inside delivery.',
     icon: 'Layers',
     searchTerms: ['LTL', 'less than truckload', 'partial', 'multi-pallet', 'freight'],
   },
@@ -41,9 +40,9 @@ export const loadTypes: LoadType[] = [
     id: 'truckload',
     name: 'Truckload / Container',
     description:
-      'A full trailer of merchandise. At Via Trading, truckloads use 53-foot trailers carrying 12 to 24-30 pallets depending on how the inventory is condensed.',
+      'A full trailer of merchandise. Via Trading uses 48-foot and 53-foot trailers. A 48-foot trailer holds 22 pallets (44 if double-stacked). A 53-foot trailer holds 26 pallets (52 if double-stacked).',
     details:
-      'Containers are similar but use shipping containers (up to 48 feet in length) and typically carry fewer pallets than a 53-foot trailer. Containers are common for export shipments.',
+      'Truckloads represent the highest volume and typically the lowest per-unit cost. Customers have a 2-hour window to unload upon delivery, after which detention charges may apply. The driver will not assist with unloading. For international shipments, ocean containers are used instead: a 20-foot container holds 10 pallets (20 double-stacked), a 40-foot holds 20 pallets (40 double-stacked), and a 45-foot high-cube holds 22 pallets (44 double-stacked). Hand-loading containers (without pallets) can increase capacity by 2 to 3 times.',
     icon: 'Truck',
     searchTerms: ['truckload', 'TL', 'trailer', '53-foot', 'container', '48-foot', 'full load', 'FTL'],
   },

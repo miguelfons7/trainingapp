@@ -5,8 +5,8 @@ export const glossaryTerms: GlossaryTerm[] = [
     id: 'liquidation',
     term: 'Liquidation',
     category: 'Industry Basics',
-    definition: 'Bulk resale of unsold or returned merchandise from retailers at discounted prices.',
-    searchTerms: ['liquidation', 'bulk resale', 'discounted'],
+    definition: 'The process of selling off merchandise, typically as a last resort before trashing, destroying, or donating it. Companies liquidate inventory for many reasons: excess stock, store closures, seasonal changeovers, returns processing, or bankruptcy. Liquidation companies like Via Trading purchase this merchandise in bulk and make it available to business buyers at discounted prices.',
+    searchTerms: ['liquidation', 'bulk resale', 'discounted', 'clearance'],
   },
   {
     id: 'secondary-market',
@@ -43,8 +43,8 @@ export const glossaryTerms: GlossaryTerm[] = [
     id: 'truckload',
     term: 'Truckload (TL)',
     category: 'Shipping & Sizing',
-    definition: 'A full trailer of palleted merchandise. 26-foot trailers hold ~12 pallets; 53-foot trailers hold ~24 pallets.',
-    details: 'Hand-stacked trailers contain more items but no pallets. Highest volume = lowest per-unit cost.',
+    definition: 'A full trailer of palleted merchandise. A 48-foot trailer holds 22 pallets; a 53-foot trailer holds 26 pallets. Double-stacking can double capacity.',
+    details: 'Customers have a 2-hour unloading window. Drivers do not assist with unloading. Hand-stacked trailers contain more items but no pallets.',
     searchTerms: ['truckload', 'TL', 'trailer', '26-foot', '53-foot', 'full load'],
   },
   {
@@ -58,7 +58,7 @@ export const glossaryTerms: GlossaryTerm[] = [
     id: 'gaylord',
     term: 'Gaylord',
     category: 'Shipping & Sizing',
-    definition: 'A large cardboard box used for shipping bulk merchandise, typically placed on a pallet.',
+    definition: 'A large open cardboard box placed on a pallet for shipping large quantities of smaller loose items. Typically 40 inches by 48 inches by 48 inches. Common for unsorted customer returns.',
     searchTerms: ['gaylord', 'cardboard box', 'bulk shipping', 'large box'],
   },
   {
@@ -152,6 +152,36 @@ export const glossaryTerms: GlossaryTerm[] = [
     definition: 'A retail format where customers select items from bins at flat or discounted prices, often restocked on a weekly markdown schedule.',
     details: 'Creates a "treasure hunt" shopping experience. Operators need high-volume, assorted merchandise.',
     searchTerms: ['bin store', 'flat price', 'treasure hunt', 'weekly markdown'],
+  },
+  {
+    id: 'ltl',
+    term: 'LTL (Less Than Load)',
+    category: 'Shipping & Sizing',
+    definition: 'A shipping method for 1 to 6 pallets that shares trailer space with other shipments. Cost-effective for mid-size orders that do not fill an entire truck.',
+    details: 'Residential delivery is available with a lift-gate surcharge. LTL drivers deliver to curbside or loading dock only, with no inside delivery.',
+    searchTerms: ['LTL', 'less than load', 'less than truckload', 'partial shipment'],
+  },
+  {
+    id: 'bol',
+    term: 'BOL (Bill of Lading)',
+    category: 'Shipping & Sizing',
+    definition: 'Shipping paperwork that accompanies a delivery. The recipient signs the BOL upon receipt to confirm delivery. It is important to inspect shipments and note any visible damage on the BOL before signing.',
+    searchTerms: ['BOL', 'bill of lading', 'shipping paperwork', 'delivery receipt'],
+  },
+  {
+    id: 'lift-gate',
+    term: 'Lift-Gate',
+    category: 'Shipping & Sizing',
+    definition: 'A hydraulic platform at the rear of a delivery truck used to lower pallets to ground level. Required when the delivery location does not have a loading dock or forklift.',
+    details: 'Lift-gate delivery typically carries an additional surcharge of $25 to $75.',
+    searchTerms: ['lift-gate', 'liftgate', 'hydraulic platform', 'loading'],
+  },
+  {
+    id: 'landed-cost',
+    term: 'Landed Cost',
+    category: 'Business Terms',
+    definition: 'The total cost of an item including the purchase price plus all costs to receive it: shipping, customs fees, taxes, and any other charges. Understanding landed cost is essential for calculating true profit margins.',
+    searchTerms: ['landed cost', 'total cost', 'shipping cost', 'all-in cost'],
   },
 ]
 

@@ -10,6 +10,23 @@ interface LogEntry {
 
 const changelog: LogEntry[] = [
   {
+    version: '0.5.0',
+    date: '2026-05-14',
+    title: 'Major Content Rewrite — Industry Accuracy Pass',
+    changes: [
+      'Rewrote Secondary Market module: inline term definitions, multiple flow charts, warehouse economics, removed exercise',
+      'Added WhatsApp, yard sales, Burlington, 99¢ stores, value retailers to sales channels',
+      'Precise wholesaler vs broker distinction in channel descriptions',
+      'Rewrote Product Conditions: reordered (Customer Returns first), added pros/cons, removed percentages, "brown box" for master case',
+      'Rewrote Load Types: corrected truckload data (48\'=22 pallets, 53\'=26 pallets), LTL = 1-6 pallets, removed Sales Insight',
+      'Renamed Buyer Types to "Who Buys Liquidation Goods?", added Non-Profits and Large Retailers',
+      'Expanded glossary: rewrote Liquidation definition, added LTL, BOL, Lift-Gate, Landed Cost',
+      'Removed all sales-centric language across all Industry modules',
+      'Removed Key Sales Insight boxes from all modules',
+      'All content verified against Via Trading website data',
+    ],
+  },
+  {
     version: '0.4.0',
     date: '2026-05-13',
     title: 'Content Enrichment & Acknowledgements',

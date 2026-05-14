@@ -3,7 +3,7 @@ import { Package, Layers, LayoutGrid, Truck } from 'lucide-react'
 import { SectionWrapper } from '../shared/SectionWrapper'
 import { ExpandableCard } from '../shared/ExpandableCard'
 import { FillInBlank } from '../interactive/FillInBlank'
-import { loadTypes, loadTypesIntro, loadTypeInsight } from '../../data/loadTypesData'
+import { loadTypes, loadTypesIntro } from '../../data/loadTypesData'
 import { loadTypesFillBlanks } from '../../data/modules/industry/inlineExercises'
 
 const iconMap: Record<string, React.ReactNode> = {
@@ -16,8 +16,8 @@ const iconMap: Record<string, React.ReactNode> = {
 const sizeVisual = [
   { name: 'Case', width: 'w-12', label: '1 case' },
   { name: 'Pallet', width: 'w-20', label: '48"x48"' },
-  { name: 'LTL', width: 'w-32', label: 'Up to 12 pallets' },
-  { name: 'Truckload', width: 'w-48', label: '12-30 pallets' },
+  { name: 'LTL', width: 'w-32', label: '1-6 pallets' },
+  { name: 'Truckload', width: 'w-48', label: '22-26 pallets' },
 ]
 
 export function LoadTypes() {
@@ -27,7 +27,7 @@ export function LoadTypes() {
     <SectionWrapper
       id="load-types"
       title="Load Types & Sizing"
-      subtitle="Standard lot sizes you'll discuss in every sales conversation"
+      subtitle="Standard lot sizes and shipping formats"
       accentColor="border-emerald-600"
       icon={<Package className="w-5 h-5" />}
     >
@@ -35,7 +35,7 @@ export function LoadTypes() {
 
       <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6">
         <p className="text-sm text-via-text leading-relaxed mb-3">
-          Every conversation with a buyer will involve lot sizing. Whether someone is a first-time entrepreneur testing the waters with a single case or a seasoned exporter filling a 40-foot shipping container, you need to speak fluently about <strong>load types</strong>. The right lot size depends on the buyer's budget, storage capacity, business model, and experience level.
+          Understanding lot sizes is essential for anyone at Via Trading. Whether coordinating a shipment, helping a customer choose the right format, or managing warehouse inventory, you will encounter these terms regularly. The right lot size depends on the buyer's budget, storage capacity, business model, and experience level.
         </p>
         <p className="text-sm text-via-text leading-relaxed">
           Via Trading has no minimum order — buyers can start with a single <strong>case</strong> for a few hundred dollars and scale up to full <strong>truckloads</strong> worth tens of thousands. This flexibility is one of Via's biggest advantages, especially for new buyers who want to test the business without a massive upfront investment.
@@ -80,13 +80,8 @@ export function LoadTypes() {
 
       <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6">
         <p className="text-sm text-via-text leading-relaxed">
-          It's worth taking a closer look at <strong>pallets</strong>, since they're the most common purchase format. Not all pallets look the same. A <strong>standard pallet</strong> is a wooden 48"×48" base with merchandise stacked and shrink-wrapped on top. A <strong>Gaylord</strong> is a large corrugated cardboard box (typically 40"×48"×48") placed on a pallet — common for unsorted <strong>Customer Returns</strong> where items are loose. <strong>Palletized cases</strong> are individual case packs neatly stacked on a pallet, offering more organized, category-specific lots. And <strong>Watermelon Bins</strong> are large open-top bins on pallets used for bulk unsorted merchandise. The format affects how buyers receive, sort, and resell — so it's worth understanding what each looks like.
+          Pallets deserve a closer look since they come in several different formats. Understanding these differences matters because the format affects how merchandise is received, sorted, and resold. A <strong>standard pallet</strong> is a wooden 48"×48" base with merchandise stacked and shrink-wrapped on top. A <strong>Gaylord</strong> is a large corrugated cardboard box (typically 40"×48"×48") placed on a pallet — common for unsorted <strong>Customer Returns</strong> where items are loose. <strong>Palletized cases</strong> are individual case packs neatly stacked on a pallet, offering more organized, category-specific lots. And <strong>Watermelon Bins</strong> are large open-top bins on pallets used for bulk unsorted merchandise.
         </p>
-      </div>
-
-      <div className="bg-emerald-100 rounded-lg border border-emerald-500 p-4 mb-8">
-        <p className="text-sm text-emerald-700 font-medium mb-1">Sales Insight</p>
-        <p className="text-sm text-emerald-700">{loadTypeInsight}</p>
       </div>
 
       {/* Inline exercise */}
