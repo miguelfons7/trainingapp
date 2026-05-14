@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
-import { Home, BookOpen, Award, FileCheck, Shield, LogOut, ChevronLeft, GraduationCap } from 'lucide-react'
+import { Home, BookOpen, Award, FileCheck, Shield, ScrollText, LogOut, ChevronLeft, GraduationCap } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 import { useCompliance } from '../../context/ComplianceContext'
+import { APP_VERSION } from '../../version'
 
 interface SidebarProps {
   collapsed: boolean
@@ -18,7 +19,10 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
     { to: '/acknowledgements', icon: FileCheck, label: 'Acks', end: true },
     { to: '/certificates', icon: Award, label: 'Certificates', end: true },
     ...(isAdmin
-      ? [{ to: '/admin', icon: Shield, label: 'Admin', end: false }]
+      ? [
+          { to: '/admin', icon: Shield, label: 'Admin', end: false },
+          { to: '/dev-log', icon: ScrollText, label: 'Dev Log', end: true },
+        ]
       : []),
   ]
 
@@ -94,6 +98,13 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
               </button>
             )}
           </div>
+        </div>
+      )}
+
+      {/* Version */}
+      {!collapsed && (
+        <div className="px-4 pb-3">
+          <p className="text-[9px] text-white/25 text-center">v{APP_VERSION}</p>
         </div>
       )}
     </aside>

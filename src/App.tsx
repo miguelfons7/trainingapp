@@ -10,6 +10,7 @@ import { ModuleView } from './pages/ModuleView'
 import { Admin } from './pages/Admin'
 import { Certificates } from './pages/Certificates'
 import { Acknowledgements } from './pages/Acknowledgements'
+import { DevLog } from './pages/DevLog'
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user } = useAuth()
@@ -40,6 +41,7 @@ function AppRoutes() {
         <Route path="acknowledgements" element={<Acknowledgements />} />
         <Route path="certificates" element={<Certificates />} />
         <Route path="admin" element={<Admin />} />
+        <Route path="dev-log" element={<DevLog />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
