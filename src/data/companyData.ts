@@ -2,11 +2,11 @@ import type { KeyFact, Platform } from '../types'
 
 export const companyStory = {
   founding:
-    'Via Trading was founded in 2002 by a team of 4 in a 6,000 square foot warehouse in Los Angeles. The company emerged at a time when the liquidation industry lacked transparency, customer service, and ethical standards.',
+    'Via Trading Corporation is the umbrella company that houses three operating entities: Via Trading (the wholesale liquidation business), LiquidateNow, and WeSolveReturns, with more branches on the way. It all started in 2002, when a team of 4 launched a wholesale liquidation company from a 6,000 square foot warehouse in Los Angeles. The industry at the time lacked transparency, customer service, and ethical standards, and Via Trading set out to change that.',
   growth:
-    'From that small beginning, Via Trading grew into one of the most recognized liquidation companies in the USA — operating from a 550,000+ square foot facility in Lynwood, California, serving 42,000+ customers across 129+ countries.',
+    'From that small beginning, Via Trading grew into one of the most recognized liquidation companies in the USA, now operating from 250,000 square feet of physical warehouse space in Lynwood, California. With rack space factored in, the total comes to over 550,000 square feet. Via Trading serves 42,000+ customers across 129+ countries.',
   mission:
-    'Via Trading is dedicated to the principles of continuous improvement, transparency & world class service. Our mission is to be the recognized leader in the liquidation industry & operate with a long term focus to develop high quality relationships with our customers, vendors & team members.',
+    'Via Trading is dedicated to the principles of continuous improvement, transparency, and world-class service. Our mission is to be the recognized leader in the liquidation industry and operate with a long-term focus to develop high-quality relationships with our customers, vendors, and team members. We believe in the American dream: that anyone with the drive and determination to build something can do it. Via Trading helps new entrepreneurs start with just a single case pack and grow into a full business. Every day, we see business owners turn a small investment into something they can be proud of, and we are honored to be part of that journey.',
 }
 
 export const coreValues = [
@@ -30,7 +30,7 @@ export const platforms: Platform[] = [
   {
     name: 'ViaTrading.com',
     url: 'https://viatrading.com',
-    description: 'Primary wholesale liquidation platform — the leading e-commerce destination for business buyers sourcing liquidation merchandise.',
+    description: 'Primary wholesale liquidation platform and the leading e-commerce destination for business owners sourcing liquidation merchandise.',
   },
   {
     name: 'WeSolveReturns.com',
@@ -45,11 +45,11 @@ export const platforms: Platform[] = [
 ]
 
 export const retailerPartners = [
-  'Walmart',
   'Target',
-  'Amazon',
-  'Home Depot',
+  'Walmart',
   'Wayfair',
+  'Home Depot',
+  'Amazon',
   "Sam's Club",
   "Macy's",
   'JCPenney',
@@ -57,8 +57,8 @@ export const retailerPartners = [
 ]
 
 export const teamHighlights = [
-  '100+ combined years of liquidation industry experience',
-  'Multilingual Account Managers: English, Spanish, Hebrew, French, Turkish, Greek, Arabic, Korean',
-  'Family-owned and operated — long-term business focus',
+  '300+ combined years of liquidation industry experience',
+  'Multilingual Account Managers: English, Spanish, Hebrew, French, Turkish, Greek, Arabic, Russian, Ukrainian',
+  'Family-owned and operated, and employee-owned through our ESOP program',
   'Entrepreneurial culture with empowered team members',
 ]

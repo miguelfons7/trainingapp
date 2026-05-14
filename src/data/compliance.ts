@@ -1,7 +1,7 @@
 import type { ComplianceItem } from '../types'
 
 /**
- * Seed compliance items — hardcoded announcements that ship with the app.
+ * Seed compliance items: hardcoded announcements that ship with the app.
  * Admins can create additional announcements via the Admin dashboard;
  * those are stored in localStorage (see ComplianceContext).
  */

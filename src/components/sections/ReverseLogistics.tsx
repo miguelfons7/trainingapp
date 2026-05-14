@@ -24,26 +24,26 @@ export function ReverseLogistics() {
         </h3>
         <p className="text-sm text-via-text leading-relaxed mb-4">
           In traditional retail, goods flow in one direction: manufacturer to distributor to
-          retailer to consumer. That's <strong>forward logistics</strong> — the supply chain
+          retailer to consumer. That's <strong>forward logistics</strong>, the supply chain
           most people picture when they think about how products reach store shelves. But what
           happens when a consumer returns something? Or when a retailer has 10,000 units of last
           season's inventory gathering dust in a warehouse? The product needs to flow backward
-          through the system — and that process is called <strong>reverse logistics</strong>.
+          through the system, and that process is called <strong>reverse logistics</strong>.
         </p>
         <p className="text-sm text-via-text leading-relaxed mb-4">
           Returns are not a small problem. In the United States alone, consumers return hundreds of
           billions of dollars worth of merchandise every year. Retailers can't realistically inspect,
-          repackage, and reshelve every single item — the labor costs alone would erase any value
+          repackage, and reshelve every single item. The labor costs alone would erase any value
           they'd recover. Instead, returned goods are aggregated at{' '}
           <strong>return processing centers</strong>, sorted into broad categories (electronics,
           apparel, home goods, etc.), palletized, and then sold to{' '}
           <strong>Level 1 dealers</strong> like Via Trading. From there, the merchandise flows
-          outward again — this time into the secondary market.
+          outward again, this time into the secondary market.
         </p>
         <p className="text-sm text-via-text leading-relaxed">
           As a <strong>Level 1 dealer</strong>, Via Trading holds direct contracts with major
           retailers. This is a critical distinction for our buyers: when you purchase from Via, you're
-          getting merchandise as close to the original source as possible — no middleman markup, no
+          getting merchandise as close to the original source as possible, with no middleman markup, no
           mystery about where the goods came from. That direct relationship is one of Via Trading's
           strongest competitive advantages, and it's worth emphasizing in every sales conversation.
         </p>

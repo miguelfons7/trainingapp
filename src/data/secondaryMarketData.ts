@@ -6,9 +6,9 @@ export const marketStats = {
   description:
     'The secondary market is where unsold, returned, and excess consumer products are discounted and resold. It is one of the largest and least understood segments of the retail economy.',
   whyItExists:
-    'Retailers cannot economically inspect, repackage, and reshelve every returned item. They turn to liquidators who purchase this merchandise in bulk and make it available to business buyers.',
+    'Retailers cannot economically inspect, repackage, and reshelve every returned item. They turn to liquidators who purchase this merchandise in bulk and make it available to business owners.',
   whyItMatters:
-    'Understanding the secondary market is foundational to working at Via Trading, regardless of your role. Whether you\'re working with buyers, vendors, drivers, or internal teams, knowing how this industry works helps you communicate effectively and make better decisions.',
+    'Understanding the liquidation industry is foundational to working at Via Trading, regardless of your role. Whether you\'re working with buyers, vendors, drivers, or internal teams, knowing how this industry works helps you communicate effectively and make better decisions.',
 }
 
 export const salesChannels: SalesChannel[] = [

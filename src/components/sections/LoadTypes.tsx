@@ -38,7 +38,7 @@ export function LoadTypes() {
           Understanding lot sizes is essential for anyone at Via Trading. Whether coordinating a shipment, helping a customer choose the right format, or managing warehouse inventory, you will encounter these terms regularly. The right lot size depends on the buyer's budget, storage capacity, business model, and experience level.
         </p>
         <p className="text-sm text-via-text leading-relaxed">
-          Via Trading has no minimum order — buyers can start with a single <strong>case</strong> for a few hundred dollars and scale up to full <strong>truckloads</strong> worth tens of thousands. This flexibility is one of Via's biggest advantages, especially for new buyers who want to test the business without a massive upfront investment.
+          Via Trading has no minimum order, so buyers can start with a single <strong>case</strong> for a few hundred dollars and scale up to full <strong>truckloads</strong> worth tens of thousands. This flexibility is one of Via's biggest advantages, especially for new buyers who want to test the business without a massive upfront investment.
         </p>
       </div>
 
@@ -80,7 +80,7 @@ export function LoadTypes() {
 
       <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6">
         <p className="text-sm text-via-text leading-relaxed">
-          Pallets deserve a closer look since they come in several different formats. Understanding these differences matters because the format affects how merchandise is received, sorted, and resold. A <strong>standard pallet</strong> is a wooden 48"×48" base with merchandise stacked and shrink-wrapped on top. A <strong>Gaylord</strong> is a large corrugated cardboard box (typically 40"×48"×48") placed on a pallet — common for unsorted <strong>Customer Returns</strong> where items are loose. <strong>Palletized cases</strong> are individual case packs neatly stacked on a pallet, offering more organized, category-specific lots. And <strong>Watermelon Bins</strong> are large open-top bins on pallets used for bulk unsorted merchandise.
+          Pallets deserve a closer look since they come in several different formats. Understanding these differences matters because the format affects how merchandise is received, sorted, and resold. A <strong>standard pallet</strong> is a wooden 48"×48" base with merchandise stacked and shrink-wrapped on top. A <strong>Gaylord</strong> is a large corrugated cardboard box (typically 40"×48"×48") placed on a pallet, common for unsorted <strong>Customer Returns</strong> where items are loose. <strong>Palletized cases</strong> are individual case packs neatly stacked on a pallet, offering more organized, category-specific lots. And <strong>Watermelon Bins</strong> are large open-top bins on pallets used for bulk unsorted merchandise.
         </p>
       </div>
 

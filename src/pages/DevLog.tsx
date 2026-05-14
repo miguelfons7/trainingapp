@@ -10,9 +10,31 @@ interface LogEntry {
 
 const changelog: LogEntry[] = [
   {
+    version: '0.6.0',
+    date: '2026-05-14',
+    title: 'Course 2 Overhaul, Corporate Structure, LN & WSR Modules',
+    changes: [
+      'Introduced "liquidation" as umbrella term in Course 1 opener',
+      'Replaced all em-dashes with natural language across entire codebase',
+      'Replaced "business buyers" with "business owners" everywhere',
+      'Restructured Our Story module with Via Trading Corporation umbrella (Via Trading, LiquidateNow, WeSolveReturns)',
+      'Added American dream / entrepreneur empowerment to mission statement',
+      'Updated warehouse to 250,000 sq ft (550,000+ with rack space)',
+      'Updated team: 300+ years experience, ESOP, Russian/Ukrainian languages',
+      'Reordered retailer partners (Target first)',
+      'Built corporate tree visualization in Our Platforms module',
+      'Created dedicated LiquidateNow module (consignment-based liquidation)',
+      'Created dedicated WeSolveReturns module (return center solution)',
+      'Rewrote Why Via: Tampa expansion, business development, removed sales language',
+      'Removed duplicate content between Course 2 modules',
+      'Rewrote Course 2 quiz (12 questions covering all 7 modules)',
+      'Updated all exercises and inline exercises for new content',
+    ],
+  },
+  {
     version: '0.5.0',
     date: '2026-05-14',
-    title: 'Major Content Rewrite — Industry Accuracy Pass',
+    title: 'Major Content Rewrite, Industry Accuracy Pass',
     changes: [
       'Rewrote Secondary Market module: inline term definitions, multiple flow charts, warehouse economics, removed exercise',
       'Added WhatsApp, yard sales, Burlington, 99¢ stores, value retailers to sales channels',
@@ -36,7 +58,7 @@ const changelog: LogEntry[] = [
       'Added growth timeline to Our Story module',
       'Bold glossary terms on first appearance throughout modules',
       'Removed redundant inline exercises from several modules',
-      'Fixed quiz Q8 and Q11 — replaced sales questions with industry knowledge',
+      'Fixed quiz Q8 and Q11, replaced sales questions with industry knowledge',
       'Fixed Secondary Market term match (removed uncovered Bin Store term)',
       'Added Certificates page and sidebar nav link',
       'Added version number to sidebar',
@@ -48,7 +70,7 @@ const changelog: LogEntry[] = [
     date: '2026-05-12',
     title: 'UI Overhaul & Interactive Exercises',
     changes: [
-      'Removed "Mark as Complete" — modules auto-complete on Continue',
+      'Removed "Mark as Complete"; modules auto-complete on Continue',
       'Fixed image cropping (object-cover → object-contain)',
       'Added inline exercises sprinkled throughout modules',
       'Restructured end-of-course quizzes (10-15 unique questions, no reveal until submit)',
@@ -63,7 +85,7 @@ const changelog: LogEntry[] = [
       'Added pallet subtypes (Gaylords, Palletized Cases, Watermelon Bins)',
       'Added Whatnot and Facebook Marketplace to online sellers',
       'Added department selector to admin announcements',
-      'Added "New Hire — BDR Program" to course assignment',
+      'Added "New Hire: BDR Program" to course assignment',
     ],
   },
   {

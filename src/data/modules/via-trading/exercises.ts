@@ -3,28 +3,28 @@ import type { TermMatchPair, ScenarioQuestion, FillInBlankItem } from '../../../
 // --- Term Match: Via Trading Knowledge ---
 export const viaTermMatchPairs: TermMatchPair[] = [
   {
-    term: 'ViaTrading.com',
-    definition: 'Primary wholesale liquidation platform for business buyers sourcing liquidation merchandise',
+    term: 'Via Trading Corporation',
+    definition: 'The parent umbrella company that houses Via Trading, LiquidateNow, and WeSolveReturns',
   },
   {
-    term: 'WeSolveReturns.com',
-    definition: 'Returns management and recommerce platform for helping retailers manage reverse logistics',
+    term: 'ViaTrading.com',
+    definition: 'Wholesale liquidation marketplace for business owners, serving 129+ countries',
   },
   {
     term: 'LiquidateNow.com',
-    definition: 'Vendor-facing platform where retailers and manufacturers liquidate excess and returned inventory',
+    definition: 'Consignment-based platform where vendors list inventory and leverage Via Trading\'s buyer network',
+  },
+  {
+    term: 'WeSolveReturns.com',
+    definition: 'Return center solution for brands that processes returns and feeds inventory back to Via Trading',
   },
   {
     term: 'Honesty',
     definition: 'Core value: transparent dealings with all stakeholders',
   },
   {
-    term: 'Integrity',
-    definition: 'Core value: ethical business practices and reliability',
-  },
-  {
-    term: 'Transparency',
-    definition: 'Core value: open communication and clear processes',
+    term: 'ESOP',
+    definition: 'Employee Stock Ownership Plan that makes Via Trading employee-owned',
   },
 ]
 
@@ -33,44 +33,44 @@ export const viaScenarios: ScenarioQuestion[] = [
   {
     id: 'via-scenario-1',
     scenario:
-      'A prospect visits ViaTrading.com and calls asking why they should buy from Via instead of a local liquidation auction. How do you best convey Via\'s value?',
+      'A new employee asks you to explain the difference between Via Trading and LiquidateNow. How would you describe it?',
     options: [
-      'Tell them auctions are a waste of time',
-      'Highlight that Via Trading is a Level 1 dealer with direct retailer contracts, consistent supply, manifested loads, and dedicated Account Managers — benefits most auction houses can\'t match',
-      'Offer to match any auction price',
-      'Suggest they try the auction first and come back later',
+      'They are the same company with different websites',
+      'Via Trading buys inventory outright and resells it wholesale. LiquidateNow operates on consignment, where vendors list their inventory and Via Trading\'s buyer network does the selling.',
+      'LiquidateNow is for international business owners only',
+      'LiquidateNow handles returns and Via Trading handles overstock',
     ],
     bestAnswerIndex: 1,
     explanation:
-      'Via Trading\'s competitive advantages — Level 1 sourcing, manifested loads, dedicated Account Managers, and consistent supply — differentiate us from auction houses. Educating the buyer on these benefits builds trust and demonstrates our value without badmouthing competitors.',
+      'Via Trading purchases inventory outright from retailers and sells it wholesale. LiquidateNow takes a different approach: vendors list their inventory on the platform and LiquidateNow leverages Via Trading\'s buyer network to sell it on a consignment basis.',
   },
   {
     id: 'via-scenario-2',
     scenario:
-      'A long-time customer mentions they\'re also looking into returns management for their own retail operation. Which Via Trading platform should you mention?',
+      'A brand reaches out because they have a large volume of customer returns and no way to process them. Which Via Trading platform would help them?',
     options: [
-      'ViaTrading.com — they can list their returns there',
-      'LiquidateNow.com — it\'s the vendor-facing liquidation platform',
-      'WeSolveReturns.com — it\'s specifically built for returns management and recommerce',
-      'Suggest they find a third-party returns processor',
+      'ViaTrading.com, where they can sell directly to business owners',
+      'LiquidateNow.com, because it handles consignment sales',
+      'WeSolveReturns.com, because it acts as a return center for brands without returns infrastructure',
+      'They should find a third-party returns processor outside of Via Trading',
     ],
     bestAnswerIndex: 2,
     explanation:
-      'WeSolveReturns.com is Via Trading\'s dedicated returns management platform, specifically designed to help retailers manage their reverse logistics. Knowing all three platforms and when to recommend each is essential for Account Managers.',
+      'WeSolveReturns.com is designed specifically for this situation. It provides a return center solution for brands that do not have their own returns infrastructure, processes the merchandise, and recovers value through Via Trading\'s marketplace.',
   },
   {
     id: 'via-scenario-3',
     scenario:
-      'A new buyer is hesitant because they had a bad experience with another liquidation company that misrepresented product conditions. How do you build confidence in Via Trading?',
+      'Someone asks what makes Via Trading different from other liquidation companies. What are the strongest points to share?',
     options: [
-      'Promise that nothing will ever go wrong',
-      'Offer a deep discount on their first order',
-      'Share that Via Trading operates on Honesty, Integrity, and Transparency — backed by manifested loads, 42,000+ customers, 90%+ repeat business rate, and 7 years of Inc 500 recognition',
-      'Tell them to just trust you',
+      'We are the cheapest in the market',
+      'We have been around the longest',
+      'Direct retailer contracts, 300+ years of combined team experience, ESOP ownership, dedicated Account Managers, and a 90%+ repeat business rate built on honesty, integrity, and transparency',
+      'We have the biggest warehouse in the country',
     ],
     bestAnswerIndex: 2,
     explanation:
-      'Via Trading\'s track record speaks for itself: 42,000+ customers served, 90%+ repeat business rate, and 7 years of Inc 500 recognition. Leading with concrete proof points — plus our commitment to manifested loads and transparent condition descriptions — directly addresses their concern.',
+      'Via Trading\'s track record speaks for itself: direct retailer contracts at Level 1 pricing, a team with 300+ combined years of experience, family and employee ownership through the ESOP, dedicated Account Managers, and a 90%+ repeat business rate. These concrete proof points differentiate Via from competitors.',
   },
 ]
 
@@ -95,9 +95,9 @@ export const viaFillInBlanks: FillInBlankItem[] = [
   {
     id: 'via-fib-3',
     sentence:
-      'Via Trading now operates from a _____ square foot facility in Lynwood, California.',
-    blank: '550,000+',
-    options: ['50,000', '150,000', '550,000+', '1,000,000'],
+      'Via Trading operates from _____ square feet of physical warehouse space, with over 550,000 sq ft including rack space.',
+    blank: '250,000',
+    options: ['50,000', '150,000', '250,000', '1,000,000'],
     correctIndex: 2,
   },
   {
@@ -111,7 +111,7 @@ export const viaFillInBlanks: FillInBlankItem[] = [
   {
     id: 'via-fib-5',
     sentence:
-      'The platform where retailers and manufacturers can liquidate their excess inventory is called _____.',
+      'The platform where vendors can liquidate merchandise on a consignment basis is called _____.',
     blank: 'LiquidateNow.com',
     options: ['ViaTrading.com', 'WeSolveReturns.com', 'LiquidateNow.com', 'BulkDealsDirect.com'],
     correctIndex: 2,

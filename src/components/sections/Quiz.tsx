@@ -38,7 +38,7 @@ export function Quiz() {
           <h2 className="text-xl font-semibold text-white">Knowledge Check</h2>
         </div>
         <p className="text-sm text-slate-400">
-          Test what you've learned — 4 quick questions
+          Test what you've learned: 4 quick questions
         </p>
       </div>
 

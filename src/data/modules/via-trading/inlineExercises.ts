@@ -1,7 +1,7 @@
 import type { TermMatchPair, FillInBlankItem } from '../../../types'
 
 /**
- * Small inline exercises sprinkled into each Via Trading module — max 4 items each.
+ * Small inline exercises sprinkled into each Via Trading module, max 4 items each.
  */
 
 // After "Our Story" module
@@ -15,10 +15,10 @@ export const ourStoryFillBlanks: FillInBlankItem[] = [
   },
   {
     id: 'via-inline-2',
-    sentence: 'Via Trading now operates from a facility of over _____ square feet.',
-    blank: '550,000',
+    sentence: 'Via Trading operates from _____ square feet of physical warehouse space.',
+    blank: '250,000',
     options: ['100,000', '250,000', '550,000', '1,000,000'],
-    correctIndex: 2,
+    correctIndex: 1,
   },
   {
     id: 'via-inline-3',
@@ -49,15 +49,15 @@ export const missionValuesTermMatch: TermMatchPair[] = [
 export const platformsTermMatch: TermMatchPair[] = [
   {
     term: 'ViaTrading.com',
-    definition: 'Wholesale marketplace where business buyers browse and purchase liquidation inventory',
+    definition: 'Wholesale marketplace where business owners browse and purchase liquidation inventory',
   },
   {
     term: 'WeSolveReturns.com',
-    definition: 'Returns management platform helping retailers process and liquidate returned merchandise',
+    definition: 'Return center solution for brands that processes returns and feeds inventory to Via Trading',
   },
   {
     term: 'LiquidateNow.com',
-    definition: 'Vendor-facing platform where retailers and manufacturers liquidate excess inventory',
+    definition: 'Consignment-based platform where vendors list inventory and leverage Via Trading\'s buyer network',
   },
 ]
 

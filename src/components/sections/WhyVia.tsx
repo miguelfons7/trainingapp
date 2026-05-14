@@ -11,7 +11,7 @@ import {
 } from 'lucide-react'
 import { SectionWrapper } from '../shared/SectionWrapper'
 import { ExpandableCard } from '../shared/ExpandableCard'
-import { advantages, advantagesIntro } from '../../data/advantagesData'
+import { advantages } from '../../data/advantagesData'
 
 const iconMap: Record<string, React.ReactNode> = {
   FileCheck: <FileCheck className="w-5 h-5" />,
@@ -38,18 +38,16 @@ export function WhyVia() {
   return (
     <SectionWrapper
       id="why-via"
-      title="Why Buyers Choose Via"
-      subtitle="7 competitive advantages that directly affect a buyer's bottom line"
+      title="Why Business Owners Choose Via"
+      subtitle="The key advantages that make Via Trading a leader in the liquidation industry"
       accentColor="border-violet-500"
       icon={<Star className="w-5 h-5" />}
     >
       <div className="bg-via-card rounded-xl border border-via-border p-5 mb-6">
         <p className="text-sm text-via-text leading-relaxed">
-          When a buyer is evaluating Via Trading against other liquidation companies — and they will — these are the <strong>concrete operational advantages</strong> you can point to. These aren't marketing slogans; they're real differences that affect a buyer's bottom line. Many buyers work with multiple suppliers simultaneously, and Via often becomes their <strong>primary source</strong> because of consistent pricing and the <strong>Account Manager relationship</strong>.
+          Here is what makes Via Trading different from other companies in the liquidation space. These are not marketing slogans; they are <strong>real operational advantages</strong> that make a tangible difference for business owners. Many customers work with multiple suppliers simultaneously, and Via often becomes their <strong>primary source</strong> because of consistent pricing, reliable inventory, and the dedicated <strong>Account Manager relationship</strong>.
         </p>
       </div>
-
-      <p className="text-sm text-via-text mb-6">{advantagesIntro}</p>
 
       <div className="space-y-3">
         {advantages.map((advantage) => (
@@ -67,12 +65,13 @@ export function WhyVia() {
         ))}
       </div>
 
-      <div className="bg-violet-100 rounded-lg border border-violet-500 p-4 mt-6 mb-8">
-        <p className="text-sm text-violet-700 font-medium mb-1">In Competitive Conversations</p>
-        <p className="text-sm text-violet-700">
-          Position Via based on advantages, not by trashing competitors. Many buyers work with
-          multiple suppliers — Via often becomes their primary because of pricing and the AM
-          relationship.
+      <div className="bg-via-orange/10 rounded-lg border border-via-orange/30 p-4 mt-6 mb-8">
+        <p className="text-sm text-orange-700 font-medium mb-1">Our Commitment</p>
+        <p className="text-sm text-orange-700">
+          Via Trading is dedicated to helping business owners succeed at every stage of their journey.
+          From a first-time entrepreneur buying a single case pack to an experienced operator filling
+          containers for export, Via provides the inventory, support, and partnership to help every
+          customer grow.
         </p>
       </div>
 

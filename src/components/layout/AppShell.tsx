@@ -23,7 +23,7 @@ export function AppShell() {
         />
       )}
 
-      {/* Sidebar — desktop always visible, mobile toggle */}
+      {/* Sidebar: desktop always visible, mobile toggle */}
       <div className={`hidden lg:block`}>
         <Sidebar
           collapsed={sidebarCollapsed}

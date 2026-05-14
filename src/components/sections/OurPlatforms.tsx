@@ -1,8 +1,6 @@
-import { Globe, ExternalLink, ShoppingCart, RotateCcw, DollarSign } from 'lucide-react'
+import { Globe, ExternalLink, ShoppingCart, RotateCcw, DollarSign, Building2, Network } from 'lucide-react'
 import { SectionWrapper } from '../shared/SectionWrapper'
-import { TermMatch } from '../interactive/TermMatch'
 import { platforms, retailerPartners } from '../../data/companyData'
-import { platformsTermMatch } from '../../data/modules/via-trading/inlineExercises'
 
 const platformDetails = [
   {
@@ -10,27 +8,24 @@ const platformDetails = [
     icon: <ShoppingCart className="w-6 h-6" />,
     tagline: 'Wholesale Liquidation Marketplace',
     description:
-      'Our primary e-commerce destination for business buyers. Browse and purchase liquidation merchandise by category, condition, and load type. The platform serves buyers across 129+ countries.',
-    audience: 'Business buyers, resellers, exporters',
+      'The flagship platform and the foundation of the entire Via Trading ecosystem. ViaTrading.com is where business owners browse and purchase liquidation merchandise by category, condition, and load type. Over two decades, this platform has built a buyer network spanning 129+ countries, and that network powers everything else Via Trading does.',
     colorClass: 'bg-blue-100 text-blue-600',
-  },
-  {
-    name: 'WeSolveReturns.com',
-    icon: <RotateCcw className="w-6 h-6" />,
-    tagline: 'Returns Management & Recommerce',
-    description:
-      'Our returns management platform helps retailers efficiently process and liquidate their returned merchandise. Rather than letting returns pile up, retailers can convert them into revenue.',
-    audience: 'Retailers, e-commerce brands',
-    colorClass: 'bg-emerald-100 text-emerald-600',
   },
   {
     name: 'LiquidateNow.com',
     icon: <DollarSign className="w-6 h-6" />,
-    tagline: 'Vendor Liquidation Portal',
+    tagline: 'Consignment-Based Liquidation Platform',
     description:
-      'Our vendor-facing platform where retailers and manufacturers can liquidate their excess and returned inventory. This is the supply side of Via Trading\'s business — where inventory enters our pipeline.',
-    audience: 'Retailers, manufacturers, vendors',
+      'LiquidateNow leverages Via Trading\'s established buyer network and marketing infrastructure to help businesses liquidate their merchandise on a consignment basis. Instead of Via Trading purchasing the inventory outright, retailers and manufacturers list their goods and LiquidateNow connects them directly with qualified business owners. This gives vendors more control over pricing while giving them access to Via Trading\'s massive reach.',
     colorClass: 'bg-orange-100 text-orange-600',
+  },
+  {
+    name: 'WeSolveReturns.com',
+    icon: <RotateCcw className="w-6 h-6" />,
+    tagline: 'Return Center Solution',
+    description:
+      'WeSolveReturns acts as a return center for brands and companies that do not have their own returns infrastructure. Rather than letting returns pile up or writing them off as a loss, WeSolveReturns processes those returns and offers companies a way to make money on them. The recovered merchandise is then sold through Via Trading\'s marketplace, completing the cycle.',
+    colorClass: 'bg-emerald-100 text-emerald-600',
   },
 ]
 
@@ -39,18 +34,77 @@ export function OurPlatforms() {
     <SectionWrapper
       id="our-platforms"
       title="Our Platforms"
-      subtitle="Three platforms working together to power Via Trading's ecosystem"
+      subtitle="How Via Trading Corporation's three platforms work together"
       accentColor="border-via-orange"
       icon={<Globe className="w-5 h-5" />}
     >
       {/* Platform Overview */}
       <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6">
         <p className="text-sm text-via-text leading-relaxed">
-          Via Trading operates three distinct platforms, each serving a different part of the liquidation ecosystem. As an Account Manager, understanding how all three connect helps you better serve customers and identify cross-selling opportunities.
+          Via Trading Corporation operates three distinct platforms, each serving a different part of the liquidation ecosystem. Understanding how they connect is important for every employee, regardless of your role. Everything is powered by <strong>Via Trading</strong>, the wholesale liquidation company that established the buyer network and marketplace that makes the other two platforms possible.
+        </p>
+      </div>
+
+      {/* Corporate Tree */}
+      <div className="bg-via-navy/5 rounded-xl border border-via-navy/10 p-6 mb-6">
+        <h3 className="text-sm font-semibold text-via-navy uppercase tracking-wide mb-4 flex items-center gap-2">
+          <Network className="w-4 h-4" />
+          Corporate Structure
+        </h3>
+
+        {/* Tree visualization */}
+        <div className="flex flex-col items-center">
+          {/* Parent */}
+          <div className="bg-via-navy text-white px-6 py-3 rounded-xl text-sm font-bold text-center">
+            <Building2 className="w-4 h-4 inline-block mr-2 -mt-0.5" />
+            Via Trading Corporation
+          </div>
+
+          {/* Connector line down */}
+          <div className="w-0.5 h-6 bg-via-navy/30" />
+
+          {/* Horizontal connector */}
+          <div className="relative w-full max-w-lg">
+            <div className="absolute top-0 left-1/6 right-1/6 h-0.5 bg-via-navy/30" />
+            {/* Three vertical drops */}
+            <div className="flex justify-between px-[16.67%]">
+              <div className="w-0.5 h-6 bg-via-navy/30" />
+              <div className="w-0.5 h-6 bg-via-navy/30" />
+              <div className="w-0.5 h-6 bg-via-navy/30" />
+            </div>
+          </div>
+
+          {/* Three children */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full max-w-lg">
+            <div className="bg-blue-50 border border-blue-200 rounded-lg px-3 py-2.5 text-center">
+              <p className="text-xs font-bold text-blue-700">Via Trading</p>
+              <p className="text-[10px] text-blue-600 mt-0.5">Wholesale Liquidation</p>
+            </div>
+            <div className="bg-orange-50 border border-orange-200 rounded-lg px-3 py-2.5 text-center">
+              <p className="text-xs font-bold text-orange-700">LiquidateNow</p>
+              <p className="text-[10px] text-orange-600 mt-0.5">Consignment Platform</p>
+            </div>
+            <div className="bg-emerald-50 border border-emerald-200 rounded-lg px-3 py-2.5 text-center">
+              <p className="text-xs font-bold text-emerald-700">WeSolveReturns</p>
+              <p className="text-[10px] text-emerald-600 mt-0.5">Return Center Solution</p>
+            </div>
+          </div>
+
+          {/* Maybe more */}
+          <div className="mt-3 px-4 py-1.5 border border-dashed border-via-border rounded-lg">
+            <p className="text-[10px] text-via-text-light italic">Maybe more?</p>
+          </div>
+        </div>
+
+        <p className="text-xs text-via-text-light mt-4 text-center">
+          Via Trading, the wholesale liquidation company, is the engine that powers the entire ecosystem. Its buyer network and marketplace infrastructure are what make LiquidateNow and WeSolveReturns possible.
         </p>
       </div>
 
       {/* Platform Cards */}
+      <h3 className="text-sm font-semibold text-via-text uppercase tracking-wide mb-3">
+        The Three Platforms
+      </h3>
       <div className="space-y-4 mb-6">
         {platformDetails.map((platform) => {
           const matchedData = platforms.find((p) => p.name === platform.name)
@@ -88,41 +142,31 @@ export function OurPlatforms() {
                     <p className="text-sm text-via-text leading-relaxed">
                       {platform.description}
                     </p>
-                    <div className="mt-2 flex items-center gap-1.5">
-                      <span className="text-[10px] font-semibold uppercase tracking-wider text-via-text-light">
-                        Target Audience:
-                      </span>
-                      <span className="text-xs text-via-text">{platform.audience}</span>
-                    </div>
                   </div>
                 </div>
               </div>
             </div>
           )
         })}
-        {/* And More */}
-        <div className="bg-via-card rounded-xl border border-dashed border-via-border p-5 text-center">
-          <p className="text-sm font-semibold text-via-navy mb-1">And More...</p>
-          <p className="text-xs text-via-text-light">
-            Via Trading is always expanding its digital ecosystem. Stay tuned for new tools and platforms designed to better serve our buyers and vendor partners.
-          </p>
-        </div>
       </div>
 
       {/* How They Connect */}
-      <div className="bg-via-navy/5 rounded-xl border border-via-navy/10 p-6 mb-6">
+      <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6">
         <h3 className="text-sm font-semibold text-via-navy uppercase tracking-wide mb-3">
           How They Connect
         </h3>
-        <div className="space-y-2 text-sm text-via-text">
+        <div className="space-y-3 text-sm text-via-text">
           <p>
-            <span className="font-medium text-via-navy">LiquidateNow.com</span> is where inventory enters Via's pipeline — retailers and manufacturers list their excess and returns.
+            <span className="font-medium text-via-navy">ViaTrading.com</span> is the foundation. It established the massive buyer network of business owners who purchase liquidation goods. Without this network, the other platforms would not exist.
           </p>
           <p>
-            <span className="font-medium text-via-navy">WeSolveReturns.com</span> provides retailers with ongoing returns management, creating a steady stream of merchandise.
+            <span className="font-medium text-via-navy">LiquidateNow.com</span> leverages that same buyer network and Via Trading's marketing platform to help businesses liquidate their merchandise on a consignment basis. Vendors list their inventory, and LiquidateNow puts it in front of Via Trading's global audience.
           </p>
           <p>
-            <span className="font-medium text-via-navy">ViaTrading.com</span> is where that inventory goes out — buyers browse, purchase, and build their businesses.
+            <span className="font-medium text-via-navy">WeSolveReturns.com</span> acts as a return center for brands that do not have their own returns solution. It processes their returns, recovers value from the merchandise, and feeds that inventory back into Via Trading's marketplace for resale.
+          </p>
+          <p className="text-via-text-light italic text-xs mt-2">
+            Each platform feeds into and strengthens the others. The upcoming LiquidateNow and WeSolveReturns modules in this course will go deeper into how each one works.
           </p>
         </div>
       </div>
@@ -143,10 +187,6 @@ export function OurPlatforms() {
         <span className="text-sm font-medium text-via-orange italic">and more!</span>
       </div>
 
-      {/* Inline exercise */}
-      <div className="mt-8">
-        <TermMatch pairs={platformsTermMatch} title="Quick Check: Match the Platforms" />
-      </div>
     </SectionWrapper>
   )
 }

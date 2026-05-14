@@ -47,6 +47,36 @@ export function SecondaryMarket() {
       accentColor="border-slate-500"
       icon={<TrendingDown className="w-5 h-5" />}
     >
+      {/* --- New opening: What Is Liquidation? --- */}
+      <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6">
+        <h3 className="text-sm font-semibold text-via-navy uppercase tracking-wide mb-3">
+          What Is Liquidation?
+        </h3>
+        <p className="text-sm text-via-text leading-relaxed mb-4">
+          Before we get into the details, it helps to start with the big picture.{' '}
+          <strong>Liquidation</strong> is the process by which unsold, returned, or excess merchandise
+          from retailers and manufacturers is sold in bulk at deeply discounted prices. It is the
+          umbrella term for an entire industry, and nearly everything you will learn in this training
+          falls under it.
+        </p>
+        <p className="text-sm text-via-text leading-relaxed mb-4">
+          When you hear people talk about the <strong>secondary market</strong>, they are referring to
+          the network of businesses and channels where liquidated goods are bought and resold. When
+          they mention <strong>reverse logistics</strong>, they mean the systems and processes that
+          move returned or unsold products back through the supply chain to companies like Via Trading.{' '}
+          <strong>Product conditions</strong> describe how those goods are categorized (new, used,
+          damaged, and so on). <strong>Load types</strong> refer to how merchandise is grouped, sized,
+          and shipped. And <strong>buyer types</strong> describe the different kinds of business owners
+          who purchase liquidation merchandise and what they do with it.
+        </p>
+        <p className="text-sm text-via-text leading-relaxed">
+          All of these concepts are pieces of the same puzzle. This course covers the liquidation
+          industry from end to end. Each module ahead will explore one piece of this ecosystem so that
+          by the time you finish, you will have a clear understanding of how the entire industry works
+          and where Via Trading fits within it.
+        </p>
+      </div>
+
       {/* --- Introductory prose: why the secondary market exists --- */}
       <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6">
         <h3 className="text-sm font-semibold text-via-navy uppercase tracking-wide mb-3">
@@ -82,7 +112,7 @@ export function SecondaryMarket() {
         </p>
         <p className="text-sm text-via-text leading-relaxed">
           Here's how it works in practice: liquidators like Via Trading purchase this merchandise in
-          bulk, sometimes entire truckloads at a time, and make it available to business buyers at a
+          bulk, sometimes entire truckloads at a time, and make it available to business owners at a
           fraction of the original retail price. It's a win for everyone involved. Retailers recover
           value from goods they'd otherwise write off. Buyers get name-brand merchandise at steep
           discounts. And end consumers get access to affordable products. Along the way, goods that

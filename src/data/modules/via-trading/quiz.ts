@@ -11,29 +11,29 @@ export const viaQuizQuestions: QuizQuestion[] = [
   },
   {
     id: 'via-q2',
-    question: "What is Via Trading's warehouse size?",
+    question: "How much physical warehouse space does Via Trading operate from?",
     options: [
       '50,000 sq ft',
       '150,000 sq ft',
-      '550,000+ sq ft',
+      '250,000 sq ft',
       '1,000,000 sq ft',
     ],
     correctIndex: 2,
     explanation:
-      'Via Trading operates from a 550,000+ square foot facility in Lynwood, California — a massive growth from the original 6,000 sq ft warehouse.',
+      'Via Trading operates from 250,000 square feet of physical warehouse space in Lynwood, California. With rack space, the total comes to over 550,000 square feet.',
   },
   {
     id: 'via-q3',
-    question: "Which of the following is NOT one of Via Trading's three platforms?",
+    question: "Which of the following is NOT one of Via Trading Corporation's three operating entities?",
     options: [
-      'ViaTrading.com',
-      'WeSolveReturns.com',
-      'BulkDealsDirect.com',
-      'LiquidateNow.com',
+      'Via Trading',
+      'WeSolveReturns',
+      'BulkDealsDirect',
+      'LiquidateNow',
     ],
     correctIndex: 2,
     explanation:
-      "Via Trading's three platforms are ViaTrading.com (wholesale liquidation), WeSolveReturns.com (returns management), and LiquidateNow.com (vendor liquidation). BulkDealsDirect.com is not a Via Trading platform.",
+      "Via Trading Corporation houses three entities: Via Trading (wholesale liquidation), LiquidateNow (consignment-based liquidation), and WeSolveReturns (return center solution). BulkDealsDirect is not part of Via Trading Corporation.",
   },
   {
     id: 'via-q4',
@@ -41,6 +41,6 @@ export const viaQuizQuestions: QuizQuestion[] = [
     options: ['50%+', '70%+', '80%+', '90%+'],
     correctIndex: 3,
     explanation:
-      "Over 90% of Via Trading's business comes from repeat customers. This exceptionally high rate reflects the company's commitment to honesty, integrity, and transparency in building long-term customer relationships.",
+      "Over 90% of Via Trading's business comes from repeat customers. This exceptionally high rate reflects the company's commitment to honesty, integrity, and transparency.",
   },
 ]

@@ -5,7 +5,7 @@ export const glossaryTerms: GlossaryTerm[] = [
     id: 'liquidation',
     term: 'Liquidation',
     category: 'Industry Basics',
-    definition: 'The process of selling off merchandise, typically as a last resort before trashing, destroying, or donating it. Companies liquidate inventory for many reasons: excess stock, store closures, seasonal changeovers, returns processing, or bankruptcy. Liquidation companies like Via Trading purchase this merchandise in bulk and make it available to business buyers at discounted prices.',
+    definition: 'The process of selling off merchandise, typically as a last resort before trashing, destroying, or donating it. Companies liquidate inventory for many reasons: excess stock, store closures, seasonal changeovers, returns processing, or bankruptcy. Liquidation companies like Via Trading purchase this merchandise in bulk and make it available to business owners at discounted prices.',
     searchTerms: ['liquidation', 'bulk resale', 'discounted', 'clearance'],
   },
   {
@@ -20,7 +20,7 @@ export const glossaryTerms: GlossaryTerm[] = [
     id: 'reverse-logistics',
     term: 'Reverse Logistics',
     category: 'Industry Basics',
-    definition: 'The process of moving goods backward through the supply chain — from consumer back through the retailer to liquidation channels.',
+    definition: 'The process of moving goods backward through the supply chain, from consumer back through the retailer to liquidation channels.',
     searchTerms: ['reverse logistics', 'backward', 'supply chain', 'return flow'],
   },
   {
@@ -74,7 +74,7 @@ export const glossaryTerms: GlossaryTerm[] = [
     term: 'Customer Returns',
     category: 'Product Types',
     definition: 'Goods returned to retailers by customers for various reasons (buyer\'s remorse, wrong size, defective, one-time use).',
-    details: 'Condition varies widely from brand new to non-functional. The compromise rate varies by load and category — every load is different.',
+    details: 'Condition varies widely from brand new to non-functional. The compromise rate varies by load and category, and every load is different.',
     searchTerms: ['customer returns', 'returned goods', 'refund', 'returned merchandise'],
   },
   {
@@ -89,7 +89,7 @@ export const glossaryTerms: GlossaryTerm[] = [
     id: 'salvage',
     term: 'Salvage',
     category: 'Product Types',
-    definition: 'Merchandise inspected and found to be significantly compromised — broken, missing parts, or heavily damaged.',
+    definition: 'Merchandise inspected and found to be significantly compromised: broken, missing parts, or heavily damaged.',
     details: 'Sold for parts, repair, or refurbishment by buyers with specialized knowledge.',
     searchTerms: ['salvage', 'broken', 'damaged', 'parts', 'repair'],
   },
@@ -105,7 +105,7 @@ export const glossaryTerms: GlossaryTerm[] = [
     id: 'msrp',
     term: 'MSRP',
     category: 'Business Terms',
-    definition: 'Manufacturer\'s Suggested Retail Price — the recommended sale price set by the manufacturer.',
+    definition: 'Manufacturer\'s Suggested Retail Price, the recommended sale price set by the manufacturer.',
     details: 'Some lots are priced as a percentage of MSRP, but MSRP may not reflect actual market value.',
     searchTerms: ['MSRP', 'retail price', 'suggested price', 'manufacturer price'],
   },
@@ -121,7 +121,7 @@ export const glossaryTerms: GlossaryTerm[] = [
     id: 'sku',
     term: 'SKU',
     category: 'Business Terms',
-    definition: 'Stock Keeping Unit — a unique identifier assigned to each distinct product for inventory tracking and management.',
+    definition: 'Stock Keeping Unit, a unique identifier assigned to each distinct product for inventory tracking and management.',
     searchTerms: ['SKU', 'stock keeping unit', 'product identifier', 'inventory code'],
   },
   {

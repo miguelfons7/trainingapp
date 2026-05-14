@@ -1,7 +1,7 @@
 import type { TermMatchPair, FillInBlankItem } from '../../../types'
 
 /**
- * Small inline exercises sprinkled into each module — max 4 items each.
+ * Small inline exercises sprinkled into each module, max 4 items each.
  * These appear at the bottom of the module content section to reinforce learning.
  */
 
@@ -61,7 +61,7 @@ export const reverseLogisticsFillBlanks: FillInBlankItem[] = [
 export const conditionsTermMatch: TermMatchPair[] = [
   {
     term: 'New Overstock',
-    definition: 'Unsold retail merchandise — never purchased by a consumer',
+    definition: 'Unsold retail merchandise, never purchased by a consumer',
   },
   {
     term: 'Customer Returns',
@@ -73,7 +73,7 @@ export const conditionsTermMatch: TermMatchPair[] = [
   },
   {
     term: 'Salvage',
-    definition: 'Merchandise found to be significantly compromised — broken or missing parts',
+    definition: 'Merchandise found to be significantly compromised: broken or missing parts',
   },
 ]
 

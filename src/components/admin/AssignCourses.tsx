@@ -37,7 +37,7 @@ export function AssignCourses() {
     const isProgram = selectedCourse.startsWith('program-')
     const courseName = isProgram
       ? selectedCourse === 'program-new-hire-bdr'
-        ? 'New Hire — BDR Program'
+        ? 'New Hire: BDR Program'
         : 'New AM Training Program'
       : courses.find((c) => c.id === selectedCourse)?.title
 
@@ -112,7 +112,7 @@ export function AssignCourses() {
             >
               <option value="">Select a course or program...</option>
               <optgroup label="Programs">
-                <option value="program-new-hire-bdr">New Hire — BDR Program</option>
+                <option value="program-new-hire-bdr">New Hire: BDR Program</option>
                 <option value="program-new-am">New AM Training Program</option>
               </optgroup>
               <optgroup label="Individual Courses">

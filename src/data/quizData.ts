@@ -11,10 +11,10 @@ export const quizQuestions: QuizQuestion[] = [
     id: 'q1',
     question: 'What level dealer is Via Trading in the liquidation supply chain?',
     options: [
-      'Level 3 — Local reseller',
-      'Level 1 — Direct contracts with major retailers',
-      'Level 2 — Regional wholesaler',
-      'Level 4 — End consumer',
+      'Level 3: Local reseller',
+      'Level 1: Direct contracts with major retailers',
+      'Level 2: Regional wholesaler',
+      'Level 4: End consumer',
     ],
     correctIndex: 1,
     explanation:
@@ -27,11 +27,11 @@ export const quizQuestions: QuizQuestion[] = [
       'New Overstock is cheaper than Customer Returns',
       'New Overstock was never purchased by a consumer; Customer Returns were bought and sent back',
       'Customer Returns are always defective; New Overstock is always perfect',
-      'There is no difference — they are the same condition',
+      'There is no difference; they are the same condition',
     ],
     correctIndex: 1,
     explanation:
-      'New Overstock consists of unsold retail merchandise still in original condition. Customer Returns are goods that consumers purchased and then returned for various reasons — condition can range from brand new (still sealed) to non-functional.',
+      'New Overstock consists of unsold retail merchandise still in original condition. Customer Returns are goods that consumers purchased and then returned for various reasons, and condition can range from brand new (still sealed) to non-functional.',
   },
   {
     id: 'q3',

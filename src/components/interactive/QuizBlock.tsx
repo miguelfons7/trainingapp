@@ -239,7 +239,7 @@ export function QuizBlock({ quizId, onComplete }: QuizBlockProps) {
                   Congratulations!
                 </p>
                 <p className="text-xl font-semibold text-emerald-600 mb-3">
-                  {score} / {questions.length} — You Passed!
+                  {score} / {questions.length}, You Passed!
                 </p>
                 <p className="text-sm text-emerald-700 mb-6">
                   Outstanding work! You've demonstrated a strong understanding of the material.
@@ -261,7 +261,7 @@ export function QuizBlock({ quizId, onComplete }: QuizBlockProps) {
                   Not Quite There Yet
                 </p>
                 <p className="text-xl font-semibold text-amber-600 mb-3">
-                  {score} / {questions.length} — Need {Math.ceil(questions.length * PASS_THRESHOLD)} to pass
+                  {score} / {questions.length}. Need {Math.ceil(questions.length * PASS_THRESHOLD)} to pass
                 </p>
                 <p className="text-sm text-amber-700">
                   Review the material above and try again when you're ready. You've got this!

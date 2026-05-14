@@ -37,7 +37,7 @@ const ComplianceContext = createContext<ComplianceContextValue | undefined>(
 const CUSTOM_KEY = 'via-academy-custom-announcements'
 const ACK_KEY = 'via-academy-compliance-acks'
 
-/** Seed item IDs — these cannot be deleted by admins */
+/** Seed item IDs (these cannot be deleted by admins) */
 const SEED_IDS = new Set(seedItems.map((i) => i.id))
 
 function loadCustomItems(): ComplianceItem[] {

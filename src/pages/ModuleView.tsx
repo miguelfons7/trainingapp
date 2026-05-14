@@ -12,6 +12,8 @@ import { Glossary } from '../components/sections/Glossary'
 import { CompanyOverview } from '../components/sections/CompanyOverview'
 import { MissionValues } from '../components/sections/MissionValues'
 import { OurPlatforms } from '../components/sections/OurPlatforms'
+import { LiquidateNow } from '../components/sections/LiquidateNow'
+import { WeSolveReturns } from '../components/sections/WeSolveReturns'
 import { WhyVia } from '../components/sections/WhyVia'
 import { QuizBlock } from '../components/interactive/QuizBlock'
 import { ImagePlaceholder } from '../components/shared/ImagePlaceholder'
@@ -26,6 +28,8 @@ const contentMap: Record<string, ComponentType> = {
   'our-story': CompanyOverview,
   'mission-values': MissionValues,
   'our-platforms': OurPlatforms,
+  'liquidatenow': LiquidateNow,
+  'wesolvereturns': WeSolveReturns,
   'why-via': WhyVia,
 }
 
@@ -39,10 +43,12 @@ const moduleImageMap: Record<string, { src: string; alt: string }> = {
   'load-types': { src: 'module-load-types.png', alt: 'Load Types & Sizing Comparison' },
   'buyer-types': { src: 'module-buyer-types.png', alt: 'Buyer Types Overview' },
   'key-terminology': { src: 'module-dealer-levels.png', alt: 'Industry Terminology & Dealer Levels' },
-  'our-story': { src: 'Warehouse aerial.png', alt: 'Via Trading — Our Story' },
-  'mission-values': { src: 'course-2-via-trading.png', alt: 'Via Trading — Mission & Values' },
+  'our-story': { src: 'Warehouse aerial.png', alt: 'Via Trading: Our Story' },
+  'mission-values': { src: 'course-2-via-trading.png', alt: 'Via Trading: Mission & Values' },
   'our-platforms': { src: 'course-2-via-trading.png', alt: 'Via Trading Platforms' },
-  'why-via': { src: 'course-2-via-trading.png', alt: 'Why Buyers Choose Via' },
+  'liquidatenow': { src: 'course-2-via-trading.png', alt: 'LiquidateNow' },
+  'wesolvereturns': { src: 'course-2-via-trading.png', alt: 'WeSolveReturns' },
+  'why-via': { src: 'course-2-via-trading.png', alt: 'Why Business Owners Choose Via' },
 }
 
 export function ModuleView() {
