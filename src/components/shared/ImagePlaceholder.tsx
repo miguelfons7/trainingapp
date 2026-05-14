@@ -25,14 +25,14 @@ export function ImagePlaceholder({
   const [imageError, setImageError] = useState(false)
 
   return (
-    <div className={`relative overflow-hidden rounded-xl ${aspectClasses[aspectRatio]} ${className}`}>
+    <div className={`relative overflow-hidden rounded-xl bg-via-bg-subtle ${aspectClasses[aspectRatio]} ${className}`}>
       {!imageError ? (
         <img
           src={`${import.meta.env.BASE_URL}images/${src}`}
           alt={alt}
           loading="lazy"
           onError={() => setImageError(true)}
-          className="absolute inset-0 h-full w-full object-cover"
+          className="absolute inset-0 h-full w-full object-contain"
         />
       ) : (
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 border border-via-border bg-via-navy/10">

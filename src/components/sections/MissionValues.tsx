@@ -1,8 +1,6 @@
 import { Heart, Shield, Eye, Star } from 'lucide-react'
 import { SectionWrapper } from '../shared/SectionWrapper'
-import { TermMatch } from '../interactive/TermMatch'
 import { companyStory, coreValues, teamHighlights } from '../../data/companyData'
-import { missionValuesTermMatch } from '../../data/modules/via-trading/inlineExercises'
 
 export function MissionValues() {
   const valueIcons = [
@@ -26,6 +24,13 @@ export function MissionValues() {
         </h3>
         <p className="text-sm text-orange-700 italic leading-relaxed">
           "{companyStory.mission}"
+        </p>
+      </div>
+
+      {/* Values Intro */}
+      <div className="bg-via-card rounded-xl border border-via-border p-5 mb-6">
+        <p className="text-sm text-via-text leading-relaxed">
+          Values aren't just words on a wall at Via Trading — they're how business gets done every day. In an industry that has historically lacked <strong>transparency</strong> and <strong>standardization</strong>, Via made a deliberate choice to operate differently. These three principles aren't just nice to have; they're the reason over <strong>90% of Via's sales</strong> come from repeat customers.
         </p>
       </div>
 
@@ -105,8 +110,6 @@ export function MissionValues() {
         </ul>
       </div>
 
-      {/* Inline exercise */}
-      <TermMatch pairs={missionValuesTermMatch} title="Quick Check: Match the Values" />
     </SectionWrapper>
   )
 }

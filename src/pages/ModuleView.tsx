@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useCallback, type ComponentType } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
-import { ArrowLeft, ChevronLeft, ChevronRight, CheckCircle } from 'lucide-react'
+import { ArrowLeft, ChevronLeft, ChevronRight } from 'lucide-react'
 import { getCourseById } from '../data/courses'
 import { useProgress } from '../context/ProgressContext'
 import { SecondaryMarket } from '../components/sections/SecondaryMarket'
@@ -51,7 +51,7 @@ export function ModuleView() {
     moduleId: string
   }>()
   const navigate = useNavigate()
-  const { startModule, completeModule, getModuleStatus } = useProgress()
+  const { startModule, completeModule } = useProgress()
 
   const course = courseId ? getCourseById(courseId) : undefined
 
@@ -67,7 +67,6 @@ export function ModuleView() {
       ? course.modules[currentIndex + 1]
       : undefined
 
-  const status = courseId && moduleId ? getModuleStatus(courseId, moduleId) : 'not-started'
   const isQuiz = moduleId ? quizModules.has(moduleId) : false
 
   useEffect(() => {
@@ -91,17 +90,6 @@ export function ModuleView() {
         </div>
       </div>
     )
-  }
-
-  /** Called for non-quiz modules when user clicks "Mark as Complete" */
-  function handleComplete() {
-    if (!courseId || !moduleId) return
-    completeModule(courseId, moduleId)
-    if (nextModule) {
-      navigate(`/course/${courseId}/module/${nextModule.id}`)
-    } else {
-      navigate(`/course/${courseId}`)
-    }
   }
 
   /** Called by QuizBlock when the quiz is submitted */
@@ -167,28 +155,6 @@ export function ModuleView() {
         )}
       </div>
 
-      {/* Mark as complete — only for non-quiz modules */}
-      {!isQuiz && status !== 'completed' && (
-        <div className="mb-8 text-center">
-          <button
-            onClick={handleComplete}
-            className="inline-flex items-center gap-2 px-6 py-3 bg-via-orange text-white font-semibold rounded-lg hover:bg-via-orange-light transition-colors cursor-pointer"
-          >
-            <CheckCircle className="w-5 h-5" />
-            Mark as Complete
-          </button>
-        </div>
-      )}
-
-      {status === 'completed' && (
-        <div className="mb-8 text-center">
-          <span className="inline-flex items-center gap-2 text-sm font-medium text-via-success">
-            <CheckCircle className="w-5 h-5" />
-            Module completed{isQuiz ? '' : ''}
-          </span>
-        </div>
-      )}
-
       {/* Previous / Next navigation */}
       <div className="flex items-center justify-between border-t border-via-border pt-6">
         {prevModule ? (
@@ -204,21 +170,27 @@ export function ModuleView() {
         )}
 
         {nextModule ? (
-          <Link
-            to={`/course/${courseId}/module/${nextModule.id}`}
-            className="inline-flex items-center gap-1.5 text-sm text-via-text-light hover:text-via-navy transition-colors"
+          <button
+            onClick={() => {
+              completeModule(courseId, moduleId)
+              navigate(`/course/${courseId}/module/${nextModule.id}`)
+            }}
+            className="inline-flex items-center gap-2 px-6 py-3 bg-via-orange text-white font-semibold rounded-xl hover:bg-via-orange-light transition-colors cursor-pointer"
           >
-            {nextModule.title}
-            <ChevronRight className="w-4 h-4" />
-          </Link>
+            Continue
+            <ChevronRight className="w-5 h-5" />
+          </button>
         ) : (
-          <Link
-            to={`/course/${courseId}`}
-            className="inline-flex items-center gap-1.5 text-sm text-via-text-light hover:text-via-navy transition-colors"
+          <button
+            onClick={() => {
+              completeModule(courseId, moduleId)
+              navigate(`/course/${courseId}`)
+            }}
+            className="inline-flex items-center gap-2 px-6 py-3 bg-via-navy text-white font-semibold rounded-xl hover:bg-via-navy/90 transition-colors cursor-pointer"
           >
             Back to Course
-            <ChevronRight className="w-4 h-4" />
-          </Link>
+            <ChevronRight className="w-5 h-5" />
+          </button>
         )}
       </div>
     </div>

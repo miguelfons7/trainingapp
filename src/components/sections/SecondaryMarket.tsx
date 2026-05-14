@@ -25,6 +25,39 @@ export function SecondaryMarket() {
       accentColor="border-slate-500"
       icon={<TrendingDown className="w-5 h-5" />}
     >
+      {/* --- Introductory prose: why the secondary market exists --- */}
+      <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6">
+        <h3 className="text-sm font-semibold text-via-navy uppercase tracking-wide mb-3">
+          Why the Secondary Market Exists
+        </h3>
+        <p className="text-sm text-via-text leading-relaxed mb-4">
+          Every year, major retailers like Walmart, Target, and Amazon generate millions of returned,
+          unsold, and excess products. You might wonder: why don't they just put returns back on the
+          shelf? The short answer is economics. It's rarely cost-effective to inspect, repackage, and
+          re-merchandise every returned item — especially when you're dealing with the sheer volume
+          these retailers see. So instead of absorbing the loss, they sell these goods in bulk to{' '}
+          <strong>liquidators</strong>. That decision created an entire industry: the{' '}
+          <strong>secondary market</strong>.
+        </p>
+        <p className="text-sm text-via-text leading-relaxed mb-4">
+          The scale is staggering. American retailers generate an estimated{' '}
+          <strong>$221 billion in returns annually</strong> (IHL Group). And that figure only covers
+          customer returns — it doesn't include <strong>New Overstock</strong> (excess inventory that
+          never sold), seasonal clearance, or products pulled from shelves due to packaging changes.
+          When you add it all up, the <strong>secondary market</strong> represents one of the
+          largest and least-understood sectors in retail.
+        </p>
+        <p className="text-sm text-via-text leading-relaxed">
+          Here's how <strong>liquidation</strong> works in practice: liquidators like Via Trading
+          purchase this merchandise in bulk — sometimes entire truckloads at a time — and make it
+          available to business buyers at a fraction of the original retail price. It's a win for
+          everyone involved. Retailers recover value from goods they'd otherwise write off. Buyers
+          get name-brand merchandise at steep discounts. And end consumers get access to affordable
+          products. Along the way, goods that might have ended up in a landfill get a second life —
+          which, in a world increasingly focused on sustainability, matters more than ever.
+        </p>
+      </div>
+
       <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6">
         <p className="text-sm text-via-text leading-relaxed mb-4">
           {marketStats.description}
@@ -56,6 +89,25 @@ export function SecondaryMarket() {
             </div>
           </div>
         ))}
+      </div>
+
+      {/* --- Post-grid prose: how the market is evolving --- */}
+      <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6">
+        <h3 className="text-sm font-semibold text-via-navy uppercase tracking-wide mb-3">
+          A Market That Keeps Evolving
+        </h3>
+        <p className="text-sm text-via-text leading-relaxed">
+          A decade ago, most liquidation merchandise moved through flea markets and small discount
+          shops. That world still exists, but the landscape has shifted dramatically.{' '}
+          <strong>Online sellers</strong> on platforms like Amazon, eBay, Whatnot, and Poshmark are
+          now one of the fastest-growing segments of the secondary market.{' '}
+          <strong>Bin stores</strong> — retail locations where shoppers dig through bins of
+          discounted merchandise on a weekly markdown schedule — have exploded in popularity across
+          the country. Meanwhile, <strong>exporters</strong> continue to ship container loads of
+          liquidation goods to markets in Latin America, Africa, the Middle East, and beyond. The
+          industry is always changing, and staying current with these trends is part of what makes
+          working in liquidation exciting.
+        </p>
       </div>
 
       <div className="bg-via-orange/10 rounded-lg border border-via-orange/30 p-4 mb-8">

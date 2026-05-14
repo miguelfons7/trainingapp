@@ -20,8 +20,8 @@ export const secondaryMarketTermMatch: TermMatchPair[] = [
     definition: 'Excess unsold retail merchandise still in original condition',
   },
   {
-    term: 'Bin Store',
-    definition: 'Retail format selling items at flat prices from large bins',
+    term: 'Exporter',
+    definition: 'Purchases merchandise in bulk and ships to international markets',
   },
 ]
 

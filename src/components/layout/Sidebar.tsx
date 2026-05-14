@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
-import { Home, BookOpen, Shield, LogOut, ChevronLeft, GraduationCap } from 'lucide-react'
+import { Home, BookOpen, Award, Shield, LogOut, ChevronLeft, GraduationCap } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 import { useCompliance } from '../../context/ComplianceContext'
 
@@ -15,6 +15,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   const navItems = [
     { to: '/', icon: Home, label: 'Home', end: true },
     { to: '/course/intro-to-industry', icon: BookOpen, label: 'My Courses', end: false },
+    { to: '/certificates', icon: Award, label: 'Certificates', end: true },
     ...(isAdmin
       ? [{ to: '/admin', icon: Shield, label: 'Admin', end: false }]
       : []),

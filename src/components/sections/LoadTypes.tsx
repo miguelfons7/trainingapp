@@ -34,6 +34,15 @@ export function LoadTypes() {
       <p className="text-sm text-via-text mb-6">{loadTypesIntro}</p>
 
       <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6">
+        <p className="text-sm text-via-text leading-relaxed mb-3">
+          Every conversation with a buyer will involve lot sizing. Whether someone is a first-time entrepreneur testing the waters with a single case or a seasoned exporter filling a 40-foot shipping container, you need to speak fluently about <strong>load types</strong>. The right lot size depends on the buyer's budget, storage capacity, business model, and experience level.
+        </p>
+        <p className="text-sm text-via-text leading-relaxed">
+          Via Trading has no minimum order — buyers can start with a single <strong>case</strong> for a few hundred dollars and scale up to full <strong>truckloads</strong> worth tens of thousands. This flexibility is one of Via's biggest advantages, especially for new buyers who want to test the business without a massive upfront investment.
+        </p>
+      </div>
+
+      <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6">
         <p className="text-xs font-semibold text-via-text-light uppercase tracking-wide mb-4">
           Relative Size Comparison
         </p>
@@ -67,6 +76,12 @@ export function LoadTypes() {
             <p>{type.details}</p>
           </ExpandableCard>
         ))}
+      </div>
+
+      <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6">
+        <p className="text-sm text-via-text leading-relaxed">
+          It's worth taking a closer look at <strong>pallets</strong>, since they're the most common purchase format. Not all pallets look the same. A <strong>standard pallet</strong> is a wooden 48"×48" base with merchandise stacked and shrink-wrapped on top. A <strong>Gaylord</strong> is a large corrugated cardboard box (typically 40"×48"×48") placed on a pallet — common for unsorted <strong>Customer Returns</strong> where items are loose. <strong>Palletized cases</strong> are individual case packs neatly stacked on a pallet, offering more organized, category-specific lots. And <strong>Watermelon Bins</strong> are large open-top bins on pallets used for bulk unsorted merchandise. The format affects how buyers receive, sort, and resell — so it's worth understanding what each looks like.
+        </p>
       </div>
 
       <div className="bg-emerald-100 rounded-lg border border-emerald-500 p-4 mb-8">

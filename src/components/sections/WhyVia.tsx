@@ -11,9 +11,7 @@ import {
 } from 'lucide-react'
 import { SectionWrapper } from '../shared/SectionWrapper'
 import { ExpandableCard } from '../shared/ExpandableCard'
-import { FillInBlank } from '../interactive/FillInBlank'
 import { advantages, advantagesIntro } from '../../data/advantagesData'
-import { whyViaFillBlanks } from '../../data/modules/via-trading/inlineExercises'
 
 const iconMap: Record<string, React.ReactNode> = {
   FileCheck: <FileCheck className="w-5 h-5" />,
@@ -45,6 +43,12 @@ export function WhyVia() {
       accentColor="border-violet-500"
       icon={<Star className="w-5 h-5" />}
     >
+      <div className="bg-via-card rounded-xl border border-via-border p-5 mb-6">
+        <p className="text-sm text-via-text leading-relaxed">
+          When a buyer is evaluating Via Trading against other liquidation companies — and they will — these are the <strong>concrete operational advantages</strong> you can point to. These aren't marketing slogans; they're real differences that affect a buyer's bottom line. Many buyers work with multiple suppliers simultaneously, and Via often becomes their <strong>primary source</strong> because of consistent pricing and the <strong>Account Manager relationship</strong>.
+        </p>
+      </div>
+
       <p className="text-sm text-via-text mb-6">{advantagesIntro}</p>
 
       <div className="space-y-3">
@@ -72,8 +76,6 @@ export function WhyVia() {
         </p>
       </div>
 
-      {/* Inline exercise */}
-      <FillInBlank items={whyViaFillBlanks} title="Quick Check: Complete the Sentences" />
     </SectionWrapper>
   )
 }

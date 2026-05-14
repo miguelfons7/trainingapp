@@ -26,6 +26,12 @@ export function Glossary() {
       accentColor="border-rose-500"
       icon={<BookOpen className="w-5 h-5" />}
     >
+      <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6">
+        <p className="text-sm text-via-text leading-relaxed">
+          The liquidation industry has its own language. Some of these terms overlap with general business vocabulary, but many have specific meanings in the context of the <strong>secondary market</strong>. As you work with buyers and internal teams, you'll use these terms daily. Don't worry about memorizing everything right away — think of this as a reference you can come back to anytime.
+        </p>
+      </div>
+
       <SearchBar
         value={searchQuery}
         onChange={setSearchQuery}
