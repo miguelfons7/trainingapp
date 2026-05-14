@@ -9,6 +9,7 @@ import { CourseView } from './pages/CourseView'
 import { ModuleView } from './pages/ModuleView'
 import { Admin } from './pages/Admin'
 import { Certificates } from './pages/Certificates'
+import { Acknowledgements } from './pages/Acknowledgements'
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user } = useAuth()
@@ -36,6 +37,7 @@ function AppRoutes() {
         <Route index element={<Home />} />
         <Route path="course/:courseId" element={<CourseView />} />
         <Route path="course/:courseId/module/:moduleId" element={<ModuleView />} />
+        <Route path="acknowledgements" element={<Acknowledgements />} />
         <Route path="certificates" element={<Certificates />} />
         <Route path="admin" element={<Admin />} />
       </Route>

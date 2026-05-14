@@ -1,9 +1,6 @@
 import { AlertTriangle } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { useCompliance } from '../../context/ComplianceContext'
-
-interface ComplianceBannerProps {
-  onAcknowledge: (itemId: string) => void
-}
 
 const priorityStyles: Record<string, { badge: string; label: string }> = {
   high: {
@@ -16,7 +13,7 @@ const priorityStyles: Record<string, { badge: string; label: string }> = {
   },
 }
 
-export function ComplianceBanner({ onAcknowledge }: ComplianceBannerProps) {
+export function ComplianceBanner() {
   const { pendingItems } = useCompliance()
 
   if (pendingItems.length === 0) return null
@@ -64,12 +61,12 @@ export function ComplianceBanner({ onAcknowledge }: ComplianceBannerProps) {
                     </span>
                   </span>
 
-                  <button
-                    onClick={() => onAcknowledge(item.id)}
+                  <Link
+                    to="/acknowledgements"
                     className="inline-flex items-center gap-1.5 rounded-lg bg-via-navy px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-via-navy-light"
                   >
                     Review & Acknowledge
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>

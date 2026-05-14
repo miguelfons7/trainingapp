@@ -10,7 +10,7 @@ import { CourseCard } from '../components/home/CourseCard'
 
 export function Home() {
   const { user } = useAuth()
-  const { acknowledgeItem, items, isAcknowledged } = useCompliance()
+  const { items, isAcknowledged } = useCompliance()
   const { getCourseProgress } = useProgress()
 
   const firstName = user?.name?.split(' ')[0] ?? 'Learner'
@@ -34,7 +34,7 @@ export function Home() {
       </div>
 
       {/* Compliance banner */}
-      <ComplianceBanner onAcknowledge={acknowledgeItem} />
+      <ComplianceBanner />
 
       {/* Continue learning */}
       <ContinueLearning />

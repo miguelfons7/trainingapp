@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
-import { Home, BookOpen, Award, Shield, LogOut, ChevronLeft, GraduationCap } from 'lucide-react'
+import { Home, BookOpen, Award, FileCheck, Shield, LogOut, ChevronLeft, GraduationCap } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 import { useCompliance } from '../../context/ComplianceContext'
 
@@ -15,6 +15,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   const navItems = [
     { to: '/', icon: Home, label: 'Home', end: true },
     { to: '/course/intro-to-industry', icon: BookOpen, label: 'My Courses', end: false },
+    { to: '/acknowledgements', icon: FileCheck, label: 'Acks', end: true },
     { to: '/certificates', icon: Award, label: 'Certificates', end: true },
     ...(isAdmin
       ? [{ to: '/admin', icon: Shield, label: 'Admin', end: false }]
@@ -49,7 +50,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
           >
             <item.icon className="w-5 h-5 shrink-0" />
             {!collapsed && <span>{item.label}</span>}
-            {!collapsed && item.label === 'Home' && pendingItems.length > 0 && (
+            {!collapsed && item.label === 'Acks' && pendingItems.length > 0 && (
               <span className="ml-auto bg-via-danger text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center">
                 {pendingItems.length}
               </span>
