@@ -4,6 +4,7 @@ import { SectionWrapper } from '../shared/SectionWrapper'
 import { FlowDiagram } from '../shared/FlowDiagram'
 import { ExpandableCard } from '../shared/ExpandableCard'
 import { Badge } from '../shared/Badge'
+import { AdditionalResources } from '../shared/AdditionalResources'
 import { forwardPath, reversePath, dealerLevels, keyInsight } from '../../data/reverseLogisticsData'
 
 export function ReverseLogistics() {
@@ -92,6 +93,24 @@ export function ReverseLogistics() {
         <p className="text-sm text-indigo-700 font-medium mb-1">Key Sales Insight</p>
         <p className="text-sm text-indigo-700">{keyInsight}</p>
       </div>
+
+      {/* --- Additional Resources --- */}
+      <AdditionalResources
+        resources={[
+          {
+            title: 'How Does Via Trading Source Its Inventory?',
+            url: 'https://www.viatrading.com/blog/how-does-via-trading-source-its-inventory/',
+            source: 'Via Trading Blog',
+            description: 'Learn how Via Trading sources inventory directly from major retailers through the reverse logistics pipeline.',
+          },
+          {
+            title: 'Understanding Liquidation Merchandise Conditions',
+            url: 'https://www.viatrading.com/blog/understanding-liquidation-merchandise-conditions/',
+            source: 'Via Trading Blog',
+            description: 'How product condition relates to how goods move through the reverse logistics process.',
+          },
+        ]}
+      />
 
     </SectionWrapper>
   )

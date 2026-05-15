@@ -11,6 +11,7 @@ import {
 } from 'lucide-react'
 import { SectionWrapper } from '../shared/SectionWrapper'
 import { ExpandableCard } from '../shared/ExpandableCard'
+import { AdditionalResources } from '../shared/AdditionalResources'
 import { advantages } from '../../data/advantagesData'
 
 const iconMap: Record<string, React.ReactNode> = {
@@ -65,7 +66,7 @@ export function WhyVia() {
         ))}
       </div>
 
-      <div className="bg-via-orange/10 rounded-lg border border-via-orange/30 p-4 mt-6 mb-8">
+      <div className="bg-via-orange/10 rounded-lg border border-via-orange/30 p-4 mt-6">
         <p className="text-sm text-orange-700 font-medium mb-1">Our Commitment</p>
         <p className="text-sm text-orange-700">
           Via Trading is dedicated to helping business owners succeed at every stage of their journey.
@@ -74,6 +75,24 @@ export function WhyVia() {
           customer grow.
         </p>
       </div>
+
+      {/* --- Additional Resources --- */}
+      <AdditionalResources
+        resources={[
+          {
+            title: 'Why Via Trading? Learn Why You Should Work With Us',
+            url: 'https://www.viatrading.com/why-via-trading/',
+            source: 'ViaTrading.com',
+            description: 'The full story of what makes Via Trading the industry leader in wholesale liquidation.',
+          },
+          {
+            title: 'Via Trading on Inc. 500',
+            url: 'https://www.viatrading.com/blog/via-trading-inc-500/',
+            source: 'Via Trading Blog',
+            description: 'How Via Trading earned 7 years of recognition on the Inc. 500 list of fastest-growing companies.',
+          },
+        ]}
+      />
 
     </SectionWrapper>
   )

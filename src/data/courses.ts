@@ -33,18 +33,18 @@ export const courses: Course[] = [
         description: 'Learn Via Trading\'s condition categories, from new overstock to salvage, and understand what each means.',
       },
       {
-        id: 'load-types',
-        title: 'Load Types',
-        estimatedTime: '7 min',
-        contentType: 'lesson',
-        description: 'Explore the different ways liquidation inventory is sold: pallets, truckloads, containers, and more.',
-      },
-      {
         id: 'buyer-types',
-        title: 'Buyer Types',
+        title: 'Who Buys Liquidation Goods?',
         estimatedTime: '8 min',
         contentType: 'lesson',
-        description: 'Identify the main buyer personas in the liquidation space and what motivates each type.',
+        description: 'Discover the wide range of business owners and organizations that participate in the secondary market.',
+      },
+      {
+        id: 'shipping-terms',
+        title: 'Shipping Terms',
+        estimatedTime: '8 min',
+        contentType: 'lesson',
+        description: 'Learn the standard lot sizes, shipping formats, and logistics terminology used in the liquidation industry.',
       },
       {
         id: 'key-terminology',

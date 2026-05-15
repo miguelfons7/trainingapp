@@ -124,7 +124,7 @@ function LogoImage({ collapsed }: { collapsed: boolean }) {
         </div>
         {!collapsed && (
           <div className="overflow-hidden">
-            <h1 className="text-sm font-bold tracking-wide">Via Academy</h1>
+            <h1 className="text-sm font-bold tracking-wide">VIAcademy</h1>
             <p className="text-[10px] text-white/50">Training Platform</p>
           </div>
         )}
@@ -136,13 +136,13 @@ function LogoImage({ collapsed }: { collapsed: boolean }) {
     <>
       <img
         src={src}
-        alt="Via Academy"
+        alt="VIAcademy"
         onError={() => setImgError(true)}
         className="w-8 h-8 rounded-lg object-cover shrink-0"
       />
       {!collapsed && (
         <div className="overflow-hidden">
-          <h1 className="text-sm font-bold tracking-wide">Via Academy</h1>
+          <h1 className="text-sm font-bold tracking-wide">VIAcademy</h1>
           <p className="text-[10px] text-white/50">Training Platform</p>
         </div>
       )}

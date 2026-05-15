@@ -10,6 +10,27 @@ interface LogEntry {
 
 const changelog: LogEntry[] = [
   {
+    version: '0.7.0',
+    date: '2026-05-14',
+    title: 'Shipping Terms, Quiz Restructure, Final Exam, Additional Resources',
+    changes: [
+      'Renamed "Load Types" module to "Shipping Terms" with comprehensive rewrite',
+      'Separated Ocean Containers into dedicated section with size comparison table',
+      'Added pinwheel explanation and truckload capacity details (26 standard, 28 pinwheeled)',
+      'Added Key Shipping Terms section (FOB, BOL, Lift-Gate, Loading Dock, Double-Stacked, Landed Cost, Direct Shipment)',
+      'Reordered modules: Buyer Types now precedes Shipping Terms',
+      'Fixed "A Market That Keeps Evolving" section (removed inaccurate historical claims)',
+      'Added liquidation pricing context (below manufacturing/China costs)',
+      'Restructured course quizzes: 4 term match + 8 MC + 4 fill-in-blank (16 items per exam)',
+      'Built Program Final Exam: timed (25 min), no going back, 80% passing, certification',
+      'Created Additional Resources component with hyperlinked articles at bottom of modules',
+      'Created Sources & Citations component for content attribution',
+      'Added resources to Secondary Market, Reverse Logistics, Buyer Types, Shipping Terms, and Why Via modules',
+      'LTL corrected to "Less Than Load" across all content',
+      'Updated truckload data in exercises and quizzes (26 pallets for 53-footer)',
+    ],
+  },
+  {
     version: '0.6.0',
     date: '2026-05-14',
     title: 'Course 2 Overhaul, Corporate Structure, LN & WSR Modules',
@@ -93,7 +114,7 @@ const changelog: LogEntry[] = [
     date: '2026-05-11',
     title: 'Platform Launch',
     changes: [
-      'Built Via Academy platform with React + TypeScript + Tailwind',
+      'Built VIAcademy platform with React + TypeScript + Tailwind',
       'Google SSO stub login (accepts @viatrading.com emails)',
       'Home dashboard with compliance banner, program progress, course grid',
       'Course 1: Intro to the Liquidation Industry (7 modules, fully built)',

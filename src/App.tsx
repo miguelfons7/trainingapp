@@ -11,6 +11,7 @@ import { Admin } from './pages/Admin'
 import { Certificates } from './pages/Certificates'
 import { Acknowledgements } from './pages/Acknowledgements'
 import { DevLog } from './pages/DevLog'
+import { FinalExam } from './pages/FinalExam'
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user } = useAuth()
@@ -40,6 +41,7 @@ function AppRoutes() {
         <Route path="course/:courseId/module/:moduleId" element={<ModuleView />} />
         <Route path="acknowledgements" element={<Acknowledgements />} />
         <Route path="certificates" element={<Certificates />} />
+        <Route path="final-exam" element={<FinalExam />} />
         <Route path="admin" element={<Admin />} />
         <Route path="dev-log" element={<DevLog />} />
       </Route>

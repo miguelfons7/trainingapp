@@ -117,9 +117,9 @@ export const industryFillInBlanks: FillInBlankItem[] = [
   {
     id: 'fib-3',
     sentence:
-      'A standard Via Trading truckload uses a 53-foot trailer that can carry _____ pallets depending on how inventory is condensed.',
-    blank: '12 to 24-30',
-    options: ['6 to 8', '12 to 24-30', '50 to 60', '4 to 6'],
+      'A standard 53-foot trailer holds _____ pallets, or up to 28 if pinwheeled.',
+    blank: '26',
+    options: ['12', '26', '52', '6'],
     correctIndex: 1,
   },
   {

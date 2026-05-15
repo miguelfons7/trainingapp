@@ -54,7 +54,7 @@ export function Login() {
         <div className="text-center mb-8">
           <img
             src={`${import.meta.env.BASE_URL}images/via-academy-hero.png`}
-            alt="Via Academy"
+            alt="VIAcademy"
             className="w-20 h-20 rounded-2xl object-cover mx-auto mb-4"
             onError={(e) => {
               const target = e.target as HTMLImageElement
@@ -65,9 +65,9 @@ export function Login() {
           <div className="hidden w-16 h-16 bg-via-navy rounded-2xl flex items-center justify-center mx-auto mb-4">
             <GraduationCap className="w-9 h-9 text-white" />
           </div>
-          <h1 className="text-2xl font-bold text-via-navy">Via Academy</h1>
+          <h1 className="text-2xl font-bold text-via-navy">VIAcademy</h1>
           <p className="text-sm text-via-text-light mt-1">
-            Internal Knowledge & Training Platform
+            Via Trading's Knowledge & Training Platform
           </p>
         </div>
 
@@ -97,7 +97,7 @@ export function Login() {
           ) : (
             <>
               <h2 className="text-lg font-semibold text-via-navy text-center mb-1">
-                Welcome to Via Academy
+                Welcome to VIAcademy
               </h2>
               <p className="text-xs text-via-text-light text-center mb-6">
                 Enter your Via Trading credentials

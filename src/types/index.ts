@@ -166,6 +166,14 @@ export interface QuizQuestion {
   explanation: string
 }
 
+/** Sectioned quiz format: term match + MC + fill-in-blank */
+export interface SectionedQuiz {
+  termMatch: TermMatchPair[]
+  multipleChoice: QuizQuestion[]
+  fillInBlank: FillInBlankItem[]
+  passThreshold?: number // defaults to 0.85
+}
+
 // --- Mock user for admin ---
 
 export interface MockUser {

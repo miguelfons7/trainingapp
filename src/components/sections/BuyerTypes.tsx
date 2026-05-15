@@ -14,6 +14,7 @@ import {
 } from 'lucide-react'
 import { SectionWrapper } from '../shared/SectionWrapper'
 import { ExpandableCard } from '../shared/ExpandableCard'
+import { AdditionalResources } from '../shared/AdditionalResources'
 import { buyerTypes, buyerTypesIntro } from '../../data/buyerTypesData'
 
 const iconMap: Record<string, React.ReactNode> = {
@@ -105,6 +106,24 @@ export function BuyerTypes() {
           The categories above represent the most common types of businesses we work with, but they are far from exhaustive. Many buyers operate across multiple categories simultaneously. An online seller might also run a booth at a local flea market. A discount store owner might export to family overseas. The liquidation industry attracts creative, entrepreneurial people who find unique ways to build their businesses. At Via Trading, we are here to support all of them.
         </p>
       </div>
+
+      {/* --- Additional Resources --- */}
+      <AdditionalResources
+        resources={[
+          {
+            title: 'Top 10 Places to Sell Liquidation Merchandise',
+            url: 'https://www.viatrading.com/blog/top-10-places-to-sell-liquidation-merchandise/',
+            source: 'Via Trading Blog',
+            description: 'Explore the most popular sales channels that liquidation buyers use to resell merchandise.',
+          },
+          {
+            title: 'How to Start a Bin Store Business',
+            url: 'https://www.viatrading.com/blog/how-to-start-a-bin-store-business/',
+            source: 'Via Trading Blog',
+            description: 'A guide to one of the fastest-growing buyer segments in the liquidation industry.',
+          },
+        ]}
+      />
 
     </SectionWrapper>
   )

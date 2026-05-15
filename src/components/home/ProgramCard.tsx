@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+import { Shield } from 'lucide-react'
 import { ProgressRing } from '../shared/ProgressRing'
 import { getProgram } from '../../data/courses'
 import { useProgress } from '../../context/ProgressContext'
@@ -25,6 +27,8 @@ export function ProgramCard() {
     (cp) => cp.percentage === 100,
   ).length
 
+  const allCoursesComplete = completedCourses === availableCourses.length && availableCourses.length > 0
+
   return (
     <div className="rounded-2xl border border-via-border bg-via-card p-6">
       <div className="flex items-center gap-5">
@@ -42,6 +46,21 @@ export function ProgramCard() {
           </p>
         </div>
       </div>
+
+      {allCoursesComplete && (
+        <div className="mt-4 pt-4 border-t border-via-border">
+          <Link
+            to="/final-exam"
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-via-navy text-white font-semibold rounded-xl hover:bg-via-navy/90 transition-colors text-sm"
+          >
+            <Shield className="w-4 h-4" />
+            Take Program Final Exam
+          </Link>
+          <p className="text-xs text-via-text-light mt-1.5">
+            25 minutes, 20 questions, 80% to pass and earn your certification
+          </p>
+        </div>
+      )}
     </div>
   )
 }

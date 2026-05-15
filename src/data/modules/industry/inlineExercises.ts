@@ -89,8 +89,8 @@ export const loadTypesFillBlanks: FillInBlankItem[] = [
   {
     id: 'lt-fib-2',
     sentence: 'LTL stands for _____.',
-    blank: 'Less Than Truckload',
-    options: ['Less Than Truckload', 'Large Trailer Load', 'Local Transport Line', 'Liquidation Transfer Lot'],
+    blank: 'Less Than Load',
+    options: ['Less Than Load', 'Large Trailer Load', 'Local Transport Line', 'Liquidation Transfer Lot'],
     correctIndex: 0,
   },
   {
@@ -102,9 +102,9 @@ export const loadTypesFillBlanks: FillInBlankItem[] = [
   },
   {
     id: 'lt-fib-4',
-    sentence: 'A 53-foot trailer can carry _____ pallets depending on how inventory is condensed.',
-    blank: '12 to 24-30',
-    options: ['6 to 8', '12 to 24-30', '50 to 60', '4 to 6'],
+    sentence: 'A standard 53-foot trailer holds _____ pallets, or up to 28 if pinwheeled.',
+    blank: '26',
+    options: ['12', '26', '50', '6'],
     correctIndex: 1,
   },
 ]
