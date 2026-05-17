@@ -15,6 +15,11 @@ import { OurPlatforms } from '../components/sections/OurPlatforms'
 import { LiquidateNow } from '../components/sections/LiquidateNow'
 import { WeSolveReturns } from '../components/sections/WeSolveReturns'
 import { WhyVia } from '../components/sections/WhyVia'
+import { ProductOverview } from '../components/sections/ProductOverview'
+import { TargetPrograms } from '../components/sections/TargetPrograms'
+import { HomeImprovementPrograms } from '../components/sections/HomeImprovementPrograms'
+import { GeneralMerchPrograms } from '../components/sections/GeneralMerchPrograms'
+import { LiquidateNowOfferings } from '../components/sections/LiquidateNowOfferings'
 import { QuizBlock } from '../components/interactive/QuizBlock'
 import { ImagePlaceholder } from '../components/shared/ImagePlaceholder'
 
@@ -31,9 +36,15 @@ const contentMap: Record<string, ComponentType> = {
   'liquidatenow': LiquidateNow,
   'wesolvereturns': WeSolveReturns,
   'why-via': WhyVia,
+  // Course 3 — Product Knowledge
+  'product-overview': ProductOverview,
+  'target-programs': TargetPrograms,
+  'home-improvement-programs': HomeImprovementPrograms,
+  'general-merch-programs': GeneralMerchPrograms,
+  'ln-offerings': LiquidateNowOfferings,
 }
 
-const quizModules = new Set(['industry-knowledge-check', 'via-knowledge-check'])
+const quizModules = new Set(['industry-knowledge-check', 'via-knowledge-check', 'product-knowledge-check'])
 
 /** Maps module IDs to their hero image filenames in public/images/.
  *  Heroes always use AI-generated .png images. Real photos are used inline only. */
@@ -52,6 +63,12 @@ const moduleImageMap: Record<string, { src: string; alt: string }> = {
   'liquidatenow': { src: 'course-2-via-trading.png', alt: 'LiquidateNow Platform' },
   'wesolvereturns': { src: 'course-2-via-trading.png', alt: 'WeSolveReturns Platform' },
   'why-via': { src: 'course-2-via-trading.png', alt: 'Why Business Owners Choose Via' },
+  // Course 3 — uses shared AI course image until unique module images are generated
+  'product-overview': { src: 'course-3-product.png', alt: 'Via Trading Product Categories' },
+  'target-programs': { src: 'course-3-product.png', alt: 'Target Retail Programs' },
+  'home-improvement-programs': { src: 'course-3-product.png', alt: 'Home Improvement Programs' },
+  'general-merch-programs': { src: 'course-3-product.png', alt: 'General Merchandise Programs' },
+  'ln-offerings': { src: 'course-3-product.png', alt: 'LiquidateNow Offerings' },
 }
 
 export function ModuleView() {

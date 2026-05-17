@@ -27,7 +27,7 @@ export function ImagePlaceholder({
   const [imageError, setImageError] = useState(false)
 
   return (
-    <div className={`relative overflow-hidden rounded-xl bg-via-bg-subtle ${aspectClasses[aspectRatio]} ${className}`}>
+    <div className={`relative overflow-hidden rounded-xl ${imageError ? 'bg-via-bg-subtle' : 'bg-[#e8eaee]'} ${aspectClasses[aspectRatio]} ${className}`}>
       {!imageError ? (
         <img
           src={`${import.meta.env.BASE_URL}images/${src}`}

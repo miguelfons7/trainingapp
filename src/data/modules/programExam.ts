@@ -2,10 +2,8 @@ import type { QuizQuestion } from '../../types'
 
 /**
  * Program Final Exam for "New AM Training Program"
- * Pulls questions from Course 1 (Industry) and Course 2 (Via Trading).
- * 20 questions total, 80% passing (16 correct), timed at 25 minutes.
- *
- * When more courses are added, this exam should expand to cover them.
+ * Pulls questions from Course 1 (Industry), Course 2 (Via Trading), and Course 3 (Product Knowledge).
+ * 25 questions total, 80% passing (20 correct), timed at 25 minutes.
  */
 
 export const EXAM_TIME_LIMIT_MINUTES = 25
@@ -273,5 +271,62 @@ export const programExamQuestions: QuizQuestion[] = [
     correctIndex: 2,
     explanation:
       'Via Trading is expanding to Tampa, Florida, demonstrating continued investment in growth and the ability to serve more business owners across the country.',
+  },
+
+  // --- Course 3: Product Knowledge (5 questions) ---
+  {
+    id: 'pe-21',
+    question: 'How many retail partner programs does Via Trading currently operate?',
+    options: ['6', '12', '18', '24'],
+    correctIndex: 2,
+    explanation:
+      'Via Trading operates 18 retail partner programs across 12+ retail partners, spanning categories from general merchandise and apparel to tools, furniture, and footwear.',
+  },
+  {
+    id: 'pe-22',
+    question: 'What is the difference between a manifested and an unmanifested load?',
+    options: [
+      'Manifested loads are bigger than unmanifested loads',
+      'Manifested loads include an item-level inventory list; unmanifested loads are sold without detailed contents information',
+      'Manifested loads are only available for export',
+      'There is no real difference — the terms are interchangeable',
+    ],
+    correctIndex: 1,
+    explanation:
+      'Manifested loads come with a detailed item-level inventory list so the buyer knows exactly what is in the load before purchasing. Unmanifested loads are sold by category and condition without a detailed manifest.',
+  },
+  {
+    id: 'pe-23',
+    question: 'Which retail partner does Via Trading have the most programs with?',
+    options: ['Amazon', 'Walmart', 'Target', 'Home Depot'],
+    correctIndex: 2,
+    explanation:
+      'Target has four programs with Via Trading: TGT Salvage (general merchandise), TGT Apparel (New Overstock clothing), TGT Premium, and TGT Distribution Center — more than any other retail partner.',
+  },
+  {
+    id: 'pe-24',
+    question: 'What makes TGT Salvage loads notable in the industry?',
+    options: [
+      'They are the cheapest loads available',
+      'They are considered one of the cleanest customer return loads in the industry, with a significant percentage of Shelf-Pull merchandise',
+      'They only contain electronics',
+      'They are exclusively available for export',
+    ],
+    correctIndex: 1,
+    explanation:
+      'TGT Salvage loads are known as one of the cleanest customer return loads in the industry. The majority of goods are retail-ready, and a significant percentage of Shelf-Pull merchandise is mixed in.',
+  },
+  {
+    id: 'pe-25',
+    question: 'How do LiquidateNow offerings complement Via Trading\'s direct programs?',
+    options: [
+      'They do not — LiquidateNow operates completely independently',
+      'LiquidateNow replaces Via Trading\'s direct programs',
+      'LiquidateNow offers consignment-based merchandise from vendors who list their own inventory, adding unique lots that fill gaps in Via\'s direct supply',
+      'LiquidateNow only sells to international buyers',
+    ],
+    correctIndex: 2,
+    explanation:
+      'LiquidateNow offers consignment-based merchandise from vendors who list their inventory directly. This adds unique, vendor-controlled lots that complement Via Trading\'s direct retailer programs, giving buyers more options and variety.',
   },
 ]
