@@ -5,6 +5,7 @@ import {
   Star,
   Warehouse,
   Truck,
+  Shirt,
 } from 'lucide-react'
 import { SectionWrapper } from '../shared/SectionWrapper'
 import { ExpandableCard } from '../shared/ExpandableCard'
@@ -196,6 +197,48 @@ export function TargetPrograms() {
                 <li className="flex items-start gap-2 text-sm text-via-text">
                   <span className="w-1.5 h-1.5 rounded-full bg-red-500 mt-1.5 shrink-0" />
                   Ideal for buyers who want visibility into exactly what they are getting
+                </li>
+              </ul>
+            </div>
+          </div>
+        </ExpandableCard>
+
+        {/* Apparel */}
+        <ExpandableCard
+          title="TGT Apparel (TGTAPP)"
+          subtitle="New Overstock Apparel"
+          icon={<Shirt className="w-5 h-5" />}
+          badge={<Badge text="Unmanifested" color="amber" />}
+          isExpanded={expandedIds.has('tgt-apparel')}
+          onToggle={() => toggle('tgt-apparel')}
+          accentColor="border-red-500"
+        >
+          <div className="space-y-4">
+            <div>
+              <p className="text-xs font-semibold text-via-navy uppercase tracking-wide mb-2">Overview</p>
+              <p className="text-sm text-via-text leading-relaxed">
+                TGT Apparel consists of <strong>New Overstock</strong> apparel from Target — these items were never purchased by consumers and are still in original condition. The loads include a mix of Kids, Women's, and Men's apparel across seasonal styles.
+              </p>
+            </div>
+
+            <div>
+              <p className="text-xs font-semibold text-via-navy uppercase tracking-wide mb-2">Key Features</p>
+              <ul className="space-y-1.5">
+                <li className="flex items-start gap-2 text-sm text-via-text">
+                  <span className="w-1.5 h-1.5 rounded-full bg-red-500 mt-1.5 shrink-0" />
+                  <strong>90%+ New Master Case</strong> — all items are new and retail-ready
+                </li>
+                <li className="flex items-start gap-2 text-sm text-via-text">
+                  <span className="w-1.5 h-1.5 rounded-full bg-red-500 mt-1.5 shrink-0" />
+                  Available in 12-pallet loads, 26-pallet loads, ocean containers, or by pallet
+                </li>
+                <li className="flex items-start gap-2 text-sm text-via-text">
+                  <span className="w-1.5 h-1.5 rounded-full bg-red-500 mt-1.5 shrink-0" />
+                  Primarily Target private labels with some national brands
+                </li>
+                <li className="flex items-start gap-2 text-sm text-via-text">
+                  <span className="w-1.5 h-1.5 rounded-full bg-red-500 mt-1.5 shrink-0" />
+                  Average 5ft pallet height — viewable at warehouse
                 </li>
               </ul>
             </div>

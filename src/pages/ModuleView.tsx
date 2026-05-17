@@ -17,8 +17,14 @@ import { WeSolveReturns } from '../components/sections/WeSolveReturns'
 import { WhyVia } from '../components/sections/WhyVia'
 import { ProductOverview } from '../components/sections/ProductOverview'
 import { TargetPrograms } from '../components/sections/TargetPrograms'
-import { HomeImprovementPrograms } from '../components/sections/HomeImprovementPrograms'
-import { GeneralMerchPrograms } from '../components/sections/GeneralMerchPrograms'
+import { WalmartPrograms } from '../components/sections/WalmartPrograms'
+import { HomeDepotPrograms } from '../components/sections/HomeDepotPrograms'
+import { AmazonPrograms } from '../components/sections/AmazonPrograms'
+import { WayfairPrograms } from '../components/sections/WayfairPrograms'
+import { ZapposPrograms } from '../components/sections/ZapposPrograms'
+import { SamsClubPrograms } from '../components/sections/SamsClubPrograms'
+import { LowesPrograms } from '../components/sections/LowesPrograms'
+import { OtherPrograms } from '../components/sections/OtherPrograms'
 import { LiquidateNowOfferings } from '../components/sections/LiquidateNowOfferings'
 import { QuizBlock } from '../components/interactive/QuizBlock'
 import { ImagePlaceholder } from '../components/shared/ImagePlaceholder'
@@ -39,8 +45,14 @@ const contentMap: Record<string, ComponentType> = {
   // Course 3 — Product Knowledge
   'product-overview': ProductOverview,
   'target-programs': TargetPrograms,
-  'home-improvement-programs': HomeImprovementPrograms,
-  'general-merch-programs': GeneralMerchPrograms,
+  'walmart-programs': WalmartPrograms,
+  'home-depot-programs': HomeDepotPrograms,
+  'amazon-programs': AmazonPrograms,
+  'wayfair-programs': WayfairPrograms,
+  'zappos-programs': ZapposPrograms,
+  'sams-club-programs': SamsClubPrograms,
+  'lowes-programs': LowesPrograms,
+  'other-programs': OtherPrograms,
   'ln-offerings': LiquidateNowOfferings,
 }
 
@@ -66,8 +78,14 @@ const moduleImageMap: Record<string, { src: string; alt: string }> = {
   // Course 3 — uses shared AI course image until unique module images are generated
   'product-overview': { src: 'course-3-product.png', alt: 'Via Trading Product Categories' },
   'target-programs': { src: 'course-3-product.png', alt: 'Target Retail Programs' },
-  'home-improvement-programs': { src: 'course-3-product.png', alt: 'Walmart & Home Depot Programs' },
-  'general-merch-programs': { src: 'course-3-product.png', alt: 'Amazon, Wayfair, Zappos & More' },
+  'walmart-programs': { src: 'course-3-product.png', alt: 'Walmart Programs' },
+  'home-depot-programs': { src: 'course-3-product.png', alt: 'Home Depot Programs' },
+  'amazon-programs': { src: 'course-3-product.png', alt: 'Amazon Programs' },
+  'wayfair-programs': { src: 'course-3-product.png', alt: 'Wayfair Programs' },
+  'zappos-programs': { src: 'course-3-product.png', alt: 'Zappos Programs' },
+  'sams-club-programs': { src: 'course-3-product.png', alt: "Sam's Club Programs" },
+  'lowes-programs': { src: 'course-3-product.png', alt: 'Lowes Programs' },
+  'other-programs': { src: 'course-3-product.png', alt: 'Additional Retail Partners' },
   'ln-offerings': { src: 'course-3-product.png', alt: 'LiquidateNow Offerings' },
 }
 
