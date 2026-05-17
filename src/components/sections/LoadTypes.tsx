@@ -151,6 +151,18 @@ export function LoadTypes() {
             </div>
           </div>
         </div>
+
+        {/* Hand-loaded truck photo */}
+        <div className="mt-4">
+          <img
+            src={`${import.meta.env.BASE_URL}images/module-load-types.jpg`}
+            alt="Sample hand-loaded trucks from Via Trading's facility"
+            className="rounded-lg w-full object-cover"
+          />
+          <p className="text-xs text-via-text-light mt-1 text-center italic">
+            Sample hand-loaded trucks from Via Trading's facility
+          </p>
+        </div>
       </div>
 
       {/* --- Ocean Containers section --- */}
@@ -229,6 +241,11 @@ export function LoadTypes() {
           <div className="border-l-3 border-emerald-500 pl-4">
             <p className="text-sm font-semibold text-via-navy">Lift-Gate</p>
             <p className="text-xs text-via-text-light">A hydraulic platform at the rear of a delivery truck used to lower pallets to ground level. Required when there is no loading dock or forklift. Typically carries an additional surcharge.</p>
+            <img
+              src={`${import.meta.env.BASE_URL}images/liftgate.jpg`}
+              alt="A hydraulic lift-gate on the rear of a delivery truck"
+              className="mt-2 rounded-lg w-full max-w-md object-cover"
+            />
           </div>
           <div className="border-l-3 border-emerald-500 pl-4">
             <p className="text-sm font-semibold text-via-navy">Loading Dock</p>

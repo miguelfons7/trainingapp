@@ -74,19 +74,19 @@ export function OurPlatforms() {
             </div>
           </div>
 
-          {/* Three children */}
+          {/* Three children with logos */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full max-w-lg">
-            <div className="bg-blue-50 border border-blue-200 rounded-lg px-3 py-2.5 text-center">
-              <p className="text-xs font-bold text-blue-700">Via Trading</p>
-              <p className="text-[10px] text-blue-600 mt-0.5">Wholesale Liquidation</p>
+            <div className="bg-blue-50 border border-blue-200 rounded-lg px-3 py-3 text-center flex flex-col items-center gap-1.5">
+              <img src={`${import.meta.env.BASE_URL}images/viatrading-logo-dark.svg`} alt="Via Trading" className="h-5" />
+              <p className="text-[10px] text-blue-600">Wholesale Liquidation</p>
             </div>
-            <div className="bg-orange-50 border border-orange-200 rounded-lg px-3 py-2.5 text-center">
-              <p className="text-xs font-bold text-orange-700">LiquidateNow</p>
-              <p className="text-[10px] text-orange-600 mt-0.5">Consignment Platform</p>
+            <div className="bg-orange-50 border border-orange-200 rounded-lg px-3 py-3 text-center flex flex-col items-center gap-1.5">
+              <img src={`${import.meta.env.BASE_URL}images/liquidatenow-logo.png`} alt="LiquidateNow" className="h-5" />
+              <p className="text-[10px] text-orange-600">Consignment Platform</p>
             </div>
-            <div className="bg-emerald-50 border border-emerald-200 rounded-lg px-3 py-2.5 text-center">
-              <p className="text-xs font-bold text-emerald-700">WeSolveReturns</p>
-              <p className="text-[10px] text-emerald-600 mt-0.5">Return Center Solution</p>
+            <div className="bg-emerald-50 border border-emerald-200 rounded-lg px-3 py-3 text-center flex flex-col items-center gap-1.5">
+              <img src={`${import.meta.env.BASE_URL}images/wsr-logo.svg`} alt="WeSolveReturns" className="h-5" />
+              <p className="text-[10px] text-emerald-600">Return Center Solution</p>
             </div>
           </div>
 

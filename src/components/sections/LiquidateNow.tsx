@@ -17,6 +17,15 @@ export function LiquidateNow() {
       accentColor="border-orange-500"
       icon={<DollarSign className="w-5 h-5" />}
     >
+      {/* LN logo */}
+      <div className="flex items-center justify-center mb-6 bg-via-card rounded-xl border border-via-border p-5">
+        <img
+          src={`${import.meta.env.BASE_URL}images/liquidatenow-logo.png`}
+          alt="LiquidateNow — Powered by Via Trading"
+          className="h-12"
+        />
+      </div>
+
       {/* What It Is */}
       <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6">
         <h3 className="text-sm font-semibold text-via-navy uppercase tracking-wide mb-3">

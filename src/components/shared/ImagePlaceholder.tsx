@@ -7,6 +7,7 @@ interface ImagePlaceholderProps {
   aspectRatio: '16:9' | '4:3' | '1:1'
   icon?: LucideIcon
   className?: string
+  objectFit?: 'contain' | 'cover'
 }
 
 const aspectClasses: Record<string, string> = {
@@ -21,6 +22,7 @@ export function ImagePlaceholder({
   aspectRatio,
   icon: Icon = ImageIcon,
   className = '',
+  objectFit = 'contain',
 }: ImagePlaceholderProps) {
   const [imageError, setImageError] = useState(false)
 
@@ -32,7 +34,7 @@ export function ImagePlaceholder({
           alt={alt}
           loading="lazy"
           onError={() => setImageError(true)}
-          className="absolute inset-0 h-full w-full object-contain"
+          className={`absolute inset-0 h-full w-full ${objectFit === 'cover' ? 'object-cover' : 'object-contain'}`}
         />
       ) : (
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 border border-via-border bg-via-navy/10">

@@ -208,6 +208,26 @@ export function SecondaryMarket() {
           valuable warehouse space. New channels, technologies, and buyer demographics continue to
           reshape how liquidation merchandise moves from retailers to end consumers.
         </p>
+
+        {/* Trade show and auction photos */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+          <div>
+            <img
+              src={`${import.meta.env.BASE_URL}images/course-2-via-trading.jpg`}
+              alt="Via Trading's booth at the ASD Market Week trade show"
+              className="rounded-lg w-full h-40 object-cover"
+            />
+            <p className="text-xs text-via-text-light mt-1 text-center italic">Via Trading at ASD Market Week</p>
+          </div>
+          <div>
+            <img
+              src={`${import.meta.env.BASE_URL}images/course-1-industry.jpg`}
+              alt="A live liquidation auction at Via Trading's warehouse"
+              className="rounded-lg w-full h-40 object-cover"
+            />
+            <p className="text-xs text-via-text-light mt-1 text-center italic">Live auction at Via Trading's warehouse</p>
+          </div>
+        </div>
       </div>
 
       {/* --- Why this matters (general, not sales-specific) --- */}

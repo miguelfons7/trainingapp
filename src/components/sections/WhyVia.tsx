@@ -48,6 +48,14 @@ export function WhyVia() {
         <p className="text-sm text-via-text leading-relaxed">
           Here is what makes Via Trading different from other companies in the liquidation space. These are not marketing slogans; they are <strong>real operational advantages</strong> that make a tangible difference for business owners. Many customers work with multiple suppliers simultaneously, and Via often becomes their <strong>primary source</strong> because of consistent pricing, reliable inventory, and the dedicated <strong>Account Manager relationship</strong>.
         </p>
+        <img
+          src={`${import.meta.env.BASE_URL}images/personalized-service.jpg`}
+          alt="Via Trading's Account Management team at work"
+          className="mt-4 rounded-lg w-full object-cover max-h-64"
+        />
+        <p className="text-xs text-via-text-light mt-1 text-center italic">
+          Via Trading's Account Management team
+        </p>
       </div>
 
       <div className="space-y-3">

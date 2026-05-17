@@ -38,19 +38,19 @@ const quizModules = new Set(['industry-knowledge-check', 'via-knowledge-check'])
 
 /** Maps module IDs to their hero image filenames in public/images/ */
 const moduleImageMap: Record<string, { src: string; alt: string }> = {
-  'secondary-market': { src: 'module-channels.png', alt: 'Secondary Market Sales Channels' },
+  'secondary-market': { src: 'module-channels.jpg', alt: 'Secondary Market Sales Channels' },
   'reverse-logistics': { src: 'module-reverse-logistics.png', alt: 'Reverse Logistics Flow' },
   'product-conditions': { src: 'module-conditions.png', alt: 'Product Conditions Spectrum' },
-  'load-types': { src: 'module-load-types.png', alt: 'Load Types & Sizing Comparison' },
-  'shipping-terms': { src: 'module-load-types.png', alt: 'Shipping Terms & Formats' },
+  'load-types': { src: 'module-load-types.jpg', alt: 'Load Types & Sizing Comparison' },
+  'shipping-terms': { src: 'module-load-types.jpg', alt: 'Shipping Terms & Formats' },
   'buyer-types': { src: 'module-buyer-types.png', alt: 'Buyer Types Overview' },
   'key-terminology': { src: 'module-dealer-levels.png', alt: 'Industry Terminology & Dealer Levels' },
   'our-story': { src: 'Warehouse aerial.png', alt: 'Via Trading: Our Story' },
-  'mission-values': { src: 'course-2-via-trading.png', alt: 'Via Trading: Mission & Values' },
-  'our-platforms': { src: 'course-2-via-trading.png', alt: 'Via Trading Platforms' },
-  'liquidatenow': { src: 'course-2-via-trading.png', alt: 'LiquidateNow' },
-  'wesolvereturns': { src: 'course-2-via-trading.png', alt: 'WeSolveReturns' },
-  'why-via': { src: 'course-2-via-trading.png', alt: 'Why Business Owners Choose Via' },
+  'mission-values': { src: 'course-2-via-trading.jpg', alt: 'Via Trading: Mission & Values' },
+  'our-platforms': { src: 'course-2-via-trading.jpg', alt: 'Via Trading Platforms' },
+  'liquidatenow': { src: 'course-2-via-trading.jpg', alt: 'LiquidateNow' },
+  'wesolvereturns': { src: 'Warehouse aerial.png', alt: 'WeSolveReturns' },
+  'why-via': { src: 'personalized-service.jpg', alt: 'Why Business Owners Choose Via' },
 }
 
 export function ModuleView() {
@@ -146,6 +146,7 @@ export function ModuleView() {
             src={moduleImageMap[moduleId].src}
             alt={moduleImageMap[moduleId].alt}
             aspectRatio="16:9"
+            objectFit="cover"
           />
         </div>
       )}
