@@ -6,40 +6,57 @@ import {
   Wrench,
   Home,
   Monitor,
-  Footprints,
   Gamepad2,
   ShoppingBag,
   ArrowRight,
-  BarChart3,
-  Users,
   Layers,
+  Car,
+  Baby,
+  Heart,
+  Plug,
+  Box,
+  TreePine,
+  Dog,
+  Sun,
+  Dumbbell,
+  ShoppingCart,
+  Tag,
 } from 'lucide-react'
 import { SectionWrapper } from '../shared/SectionWrapper'
-import { StatCard } from '../shared/StatCard'
 import { FlowDiagram } from '../shared/FlowDiagram'
 import { AdditionalResources } from '../shared/AdditionalResources'
-import { productCategories, programStats } from '../../data/modules/product-knowledge/programsData'
+import { productCategories, skuNaming } from '../../data/modules/product-knowledge/programsData'
 
 const iconMap: Record<string, React.ReactNode> = {
-  Package: <Package className="w-5 h-5" />,
-  Sofa: <Sofa className="w-5 h-5" />,
-  Shirt: <Shirt className="w-5 h-5" />,
-  Wrench: <Wrench className="w-5 h-5" />,
-  Home: <Home className="w-5 h-5" />,
+  Layers: <Layers className="w-5 h-5" />,
+  Car: <Car className="w-5 h-5" />,
+  Baby: <Baby className="w-5 h-5" />,
   Monitor: <Monitor className="w-5 h-5" />,
-  Footprints: <Footprints className="w-5 h-5" />,
+  Shirt: <Shirt className="w-5 h-5" />,
+  Sofa: <Sofa className="w-5 h-5" />,
+  Heart: <Heart className="w-5 h-5" />,
+  Plug: <Plug className="w-5 h-5" />,
+  Home: <Home className="w-5 h-5" />,
+  Box: <Box className="w-5 h-5" />,
+  TreePine: <TreePine className="w-5 h-5" />,
+  Dog: <Dog className="w-5 h-5" />,
+  Sun: <Sun className="w-5 h-5" />,
+  Dumbbell: <Dumbbell className="w-5 h-5" />,
+  ShoppingCart: <ShoppingCart className="w-5 h-5" />,
+  Wrench: <Wrench className="w-5 h-5" />,
   Gamepad2: <Gamepad2 className="w-5 h-5" />,
+  Package: <Package className="w-5 h-5" />,
 }
 
 const programFlow = {
-  steps: ['Retailer Returns / Overstock', 'Via Trading Purchases', 'Sorted & Palletized', 'Business Owner Buys'],
+  steps: ['Retailer Has Excess / Returns', 'Via Trading Program', 'Ships to Buyer'],
   label: 'How Programs Work',
   color: 'bg-blue-600',
 }
 
 export function ProductOverview() {
   const [showAllCategories, setShowAllCategories] = useState(false)
-  const visibleCategories = showAllCategories ? productCategories : productCategories.slice(0, 4)
+  const visibleCategories = showAllCategories ? productCategories : productCategories.slice(0, 6)
 
   return (
     <SectionWrapper
@@ -58,35 +75,8 @@ export function ProductOverview() {
           Via Trading purchases excess, returned, and overstock merchandise from major U.S. retailers and sells it in bulk to business owners around the world. The merchandise comes through structured <strong>programs</strong>, each tied to a specific retail partner. Each program has its own product mix, pricing model, and load format.
         </p>
         <p className="text-sm text-via-text leading-relaxed">
-          As an Account Manager, you need to understand what is available, how each program works, and which products are a good fit for different buyer types. This course gives you a working overview of every program Via Trading currently offers.
+          This section gives you a working overview of what Via Trading sells, how programs are structured, and the types of products you will encounter. You do not need to memorize every detail right now — the goal is to build a general understanding that the rest of the training will expand on.
         </p>
-      </div>
-
-      {/* Key Stats */}
-      <h3 className="text-sm font-semibold text-via-text uppercase tracking-wide mb-3">
-        At a Glance
-      </h3>
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
-        <StatCard
-          icon={<Layers className="w-6 h-6" />}
-          value={String(programStats.totalPrograms)}
-          label="Active Programs"
-        />
-        <StatCard
-          icon={<Users className="w-6 h-6" />}
-          value={`${programStats.partnerCount}+`}
-          label="Retail Partners"
-        />
-        <StatCard
-          icon={<Package className="w-6 h-6" />}
-          value={String(programStats.categoryCount)}
-          label="Product Categories"
-        />
-        <StatCard
-          icon={<BarChart3 className="w-6 h-6" />}
-          value="3"
-          label="Pricing Models"
-        />
       </div>
 
       {/* How Programs Work */}
@@ -95,8 +85,22 @@ export function ProductOverview() {
           How Programs Work
         </h3>
         <p className="text-sm text-via-text leading-relaxed mb-4">
-          Via Trading maintains ongoing relationships with major retailers. When those retailers need to move excess or returned merchandise, they send it to Via Trading through a structured program. Via Trading receives, sorts, and palletizes the merchandise at its facilities, then makes it available for purchase by business owners.
+          Via Trading maintains ongoing relationships with major retailers. When those retailers need to move excess or returned merchandise, Via Trading facilitates the sale through a structured program. Depending on the program, the merchandise may follow different paths:
         </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
+          <div className="bg-blue-50 rounded-lg border border-blue-200 p-4">
+            <p className="text-sm font-semibold text-blue-800 mb-2">Direct-Ship Programs</p>
+            <p className="text-xs text-blue-700 leading-relaxed">
+              Many programs ship directly from the retailer's facilities (stores or distribution centers) to the buyer. Via Trading handles the sale, but the merchandise never passes through Via's warehouse.
+            </p>
+          </div>
+          <div className="bg-blue-50 rounded-lg border border-blue-200 p-4">
+            <p className="text-sm font-semibold text-blue-800 mb-2">Warehouse-First Programs</p>
+            <p className="text-xs text-blue-700 leading-relaxed">
+              Some programs require the merchandise to ship to Via Trading's facilities first. Via receives, sorts, and palletizes the goods before making them available for purchase. These loads may also be viewable at the warehouse.
+            </p>
+          </div>
+        </div>
         <FlowDiagram
           steps={programFlow.steps}
           label={programFlow.label}
@@ -111,7 +115,7 @@ export function ProductOverview() {
           Manifested vs. Unmanifested
         </h3>
         <p className="text-sm text-via-text leading-relaxed mb-4">
-          One of the most important distinctions you will encounter across programs is whether a load is <strong>manifested</strong> or <strong>unmanifested</strong>. This affects how the merchandise is priced, what the buyer knows before purchasing, and the types of business owners who gravitate toward each format.
+          One of the most important distinctions across programs is whether a load is <strong>manifested</strong> or <strong>unmanifested</strong>. This affects how the merchandise is priced, what the buyer knows before purchasing, and the types of buyers who gravitate toward each format.
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="bg-emerald-50 rounded-lg border border-emerald-300 p-4">
@@ -159,33 +163,29 @@ export function ProductOverview() {
         </div>
       </div>
 
-      {/* Pricing Models */}
+      {/* SKU Naming */}
       <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6">
-        <h3 className="text-sm font-semibold text-via-navy uppercase tracking-wide mb-3">
-          Pricing Models
-        </h3>
+        <div className="flex items-center gap-2 mb-3">
+          <Tag className="w-4 h-4 text-via-navy" />
+          <h3 className="text-sm font-semibold text-via-navy uppercase tracking-wide">
+            Parent SKU Naming
+          </h3>
+        </div>
         <p className="text-sm text-via-text leading-relaxed mb-4">
-          Different programs use different pricing structures. Understanding these helps you set expectations with buyers and recommend programs that fit their budget.
+          Via Trading cannot publicly advertise which retailers it works with, so all programs use a <strong>Parent SKU</strong> code instead of the retailer name. You will see these codes throughout the system, on load listings, and in conversations with buyers.
         </p>
-        <div className="space-y-3">
-          <div className="border-l-3 border-blue-500 pl-4">
-            <p className="text-sm font-semibold text-via-navy">Percentage of Retail / Wholesale</p>
-            <p className="text-xs text-via-text-light">
-              The load is priced as a percentage of the total retail or wholesale value of the items inside. Common for manifested programs where item-level data is available. Examples: 9-12% of retail (Boscov's), 31% of wholesale (HD Manifested).
-            </p>
-          </div>
-          <div className="border-l-3 border-blue-500 pl-4">
-            <p className="text-sm font-semibold text-via-navy">Flat Price per Load</p>
-            <p className="text-xs text-via-text-light">
-              A fixed dollar amount per load regardless of the retail value inside. Common for unmanifested programs. Examples: Lowes at $4,850-$4,950, HD Turbo at $7,800-$10,800.
-            </p>
-          </div>
-          <div className="border-l-3 border-blue-500 pl-4">
-            <p className="text-sm font-semibold text-via-navy">Tiered Pricing</p>
-            <p className="text-xs text-via-text-light">
-              Multiple quality tiers within the same program, each at a different price point. The flagship example is TGT Salvage with four tiers: Value ($10,990), Prime ($12,990), Max ($23,990), and Ocean Container ($18,490).
-            </p>
-          </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {skuNaming.map((entry) => (
+            <div
+              key={entry.retailer}
+              className="flex items-center justify-between bg-via-bg-subtle rounded-lg border border-via-border px-4 py-2.5"
+            >
+              <span className="text-sm font-medium text-via-navy">{entry.retailer}</span>
+              <span className="text-xs font-mono text-via-orange font-semibold">
+                {entry.skus.join(', ')}
+              </span>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -193,6 +193,9 @@ export function ProductOverview() {
       <h3 className="text-sm font-semibold text-via-text uppercase tracking-wide mb-3">
         Product Categories
       </h3>
+      <p className="text-xs text-via-text-light mb-4">
+        Via Trading organizes merchandise into 17 official product categories. Here is the full taxonomy:
+      </p>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
         {visibleCategories.map((cat) => (
           <div
@@ -202,12 +205,11 @@ export function ProductOverview() {
             <span className="text-via-orange mt-0.5 shrink-0">{iconMap[cat.icon]}</span>
             <div>
               <p className="text-sm font-semibold text-via-navy">{cat.name}</p>
-              <p className="text-xs text-via-text-light mt-0.5">{cat.description}</p>
             </div>
           </div>
         ))}
       </div>
-      {!showAllCategories && productCategories.length > 4 && (
+      {!showAllCategories && productCategories.length > 6 && (
         <button
           onClick={() => setShowAllCategories(true)}
           className="flex items-center gap-1 text-sm text-via-orange font-medium hover:underline mb-6 cursor-pointer"
@@ -228,7 +230,7 @@ export function ProductOverview() {
       <div className="bg-via-orange/10 rounded-lg border border-via-orange/30 p-4 mb-0">
         <p className="text-sm text-orange-700 font-medium mb-1">What's Ahead</p>
         <p className="text-sm text-orange-700">
-          The modules that follow will walk you through each retail partner program in detail, starting with Via Trading's flagship Target programs, then moving to Home Improvement, General Merchandise, and LiquidateNow offerings. By the end, you will be able to match any buyer with the right program.
+          The following modules will introduce each retail partner program in more detail. For now, the key takeaway is that Via Trading works across a wide range of product categories and retail partners, each with its own format and pricing. You will become more familiar with individual programs as you continue through the training.
         </p>
       </div>
 

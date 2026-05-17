@@ -4,22 +4,24 @@ import type { QuizQuestion, SectionedQuiz } from '../../../types'
  * End-of-course quiz for "Product Knowledge"
  * Sectioned format: 4 term match + 8 MC + 4 fill-in-blank = 16 items
  * Passing score: 85% (14 of 16 correct)
+ *
+ * NOTE: Avoid questions about specific program counts — these change frequently.
  */
 
 /** Legacy flat quiz (kept for backward compatibility) */
 export const productKnowledgeQuiz: QuizQuestion[] = [
   {
     id: 'pk-cq-1',
-    question: 'How many retail partner programs does Via Trading currently operate?',
+    question: 'Why does Via Trading use Parent SKU codes (like TGT, WM, HD) instead of retailer names?',
     options: [
-      '8',
-      '12',
-      '18',
-      '24',
+      'It is easier for the warehouse to process',
+      'Via Trading cannot publicly advertise which retailers it works with',
+      'It is a government requirement for liquidation companies',
+      'Retailers prefer to remain anonymous',
     ],
-    correctIndex: 2,
+    correctIndex: 1,
     explanation:
-      'Via Trading currently operates 18 retail partner programs across 12+ retail partners covering 8 product categories.',
+      'Via Trading uses Parent SKU codes because it cannot publicly advertise which retailers it works with. For example, Target programs use TGT and ARW, Walmart uses WM, and Home Depot uses HD.',
   },
   {
     id: 'pk-cq-2',
@@ -36,16 +38,16 @@ export const productKnowledgeQuiz: QuizQuestion[] = [
   },
   {
     id: 'pk-cq-3',
-    question: 'How many pricing tiers does the TGT Salvage program have?',
+    question: 'What is unique about TGT Premium compared to TGT Salvage?',
     options: [
-      '2 — Standard and Premium',
-      '3 — Value, Prime, and Max',
-      '4 — Value, Prime, Max, and Ocean Container',
-      '5 — Budget, Value, Prime, Max, and Ocean Container',
+      'Premium loads are larger',
+      'Premium items are cherry-picked by Target from customer returns and the loads are manifested',
+      'Premium loads are cheaper than Salvage',
+      'Premium loads only contain electronics',
     ],
-    correctIndex: 2,
+    correctIndex: 1,
     explanation:
-      'TGT Salvage has four pricing tiers: Value ($10,990), Prime ($12,990), Max ($23,990), and Ocean Container ($18,490). Each tier reflects a different quality level and load configuration.',
+      'TGT Premium is manifested and contains items cherry-picked by Target from the customer returns stream. These are higher-quality items sold at a higher rate than standard salvage loads.',
   },
   {
     id: 'pk-cq-4',
@@ -62,16 +64,16 @@ export const productKnowledgeQuiz: QuizQuestion[] = [
   },
   {
     id: 'pk-cq-5',
-    question: 'What is the pricing model for Boscov\'s loads?',
+    question: 'How does merchandise flow differ across Via Trading programs?',
     options: [
-      'Flat price per load',
-      'Tiered pricing by quality',
-      '9-12% of retail value',
-      '31% of wholesale value',
+      'All merchandise is shipped to Via Trading\'s warehouse first',
+      'All merchandise ships directly from the retailer to the buyer',
+      'Some programs ship directly from the retailer to the buyer, while others go through Via Trading\'s facilities first',
+      'Via Trading picks up all merchandise from retail stores',
     ],
     correctIndex: 2,
     explanation:
-      'Boscov\'s loads are priced at 9-12% of retail value, making them among the lowest-priced programs in Via Trading\'s catalog. This appeals to budget-conscious buyers.',
+      'Merchandise flow varies by program. Some programs ship directly from the retailer\'s facilities to the buyer, reducing fuel and storage costs. Other programs require merchandise to be shipped to Via Trading\'s facilities first before going to customers.',
   },
   {
     id: 'pk-cq-6',
@@ -88,29 +90,29 @@ export const productKnowledgeQuiz: QuizQuestion[] = [
   },
   {
     id: 'pk-cq-7',
-    question: 'Which Lowes program detail is correct?',
+    question: 'What is the "Make an Offer" feature on LiquidateNow?',
     options: [
-      'Lowes loads are manifested with item-level detail',
-      'Lowes only ships from California',
-      'Lowes loads are unmanifested customer returns with 22-26 pallets per load, available from multiple FOB locations',
-      'Lowes loads are priced as a percentage of retail value',
-    ],
-    correctIndex: 2,
-    explanation:
-      'Lowes loads are unmanifested customer returns, typically containing 22-26 pallets per load. They are available from multiple FOB locations including CA, OR, WY, and NC, priced at $4,850-$4,950 per load.',
-  },
-  {
-    id: 'pk-cq-8',
-    question: 'What condition is TGT Apparel merchandise?',
-    options: [
-      'Customer Returns — mixed condition',
-      'New Overstock — 90%+ retail ready',
-      'Salvage — damaged or incomplete',
-      'Refurbished — inspected and repaired',
+      'A way for vendors to offer discounts automatically',
+      'A feature that lets buyers submit an offer below the listed price for the vendor to consider',
+      'An auction system where buyers bid against each other',
+      'A referral program for returning buyers',
     ],
     correctIndex: 1,
     explanation:
-      'TGT Apparel is New Overstock condition, with 90%+ of items in new master case and retail-ready condition. This is a high-margin apparel program popular with clothing resellers.',
+      'The "Make an Offer" feature allows buyers to submit an offer lower than the listed price. The vendor then reviews and considers the offer. This is represented by an orange "Make an Offer" button on the LiquidateNow website.',
+  },
+  {
+    id: 'pk-cq-8',
+    question: 'Which retail partner\'s program is part of Via Trading\'s WeSolveReturns (WSR) program?',
+    options: [
+      'Target',
+      'Walmart',
+      'Zappos',
+      'Amazon',
+    ],
+    correctIndex: 2,
+    explanation:
+      'Zappos is part of Via Trading\'s WeSolveReturns (WSR) program, which processes returns for brands that don\'t have their own returns infrastructure. The Zappos program provides manifested footwear loads.',
   },
 ]
 
@@ -119,36 +121,36 @@ export const productKnowledgeSectionedQuiz: SectionedQuiz = {
   termMatch: [
     {
       term: 'Manifested',
-      definition: 'A load with full item-level detail available before purchase, priced as a percentage of retail or wholesale',
+      definition: 'A load with full item-level detail available before purchase, so the buyer knows exactly what they are getting',
     },
     {
-      term: 'TGT Salvage',
-      definition: 'Via Trading\'s flagship Target program with four pricing tiers, known as one of the cleanest customer return loads in the industry',
+      term: 'Parent SKU',
+      definition: 'The code name used to identify a retail partner\'s program without publicly naming the retailer (e.g., TGT for Target, WM for Walmart)',
     },
     {
       term: 'LiquidateNow',
       definition: 'Consignment-based platform where vendors list their own inventory and leverage Via Trading\'s buyer network',
     },
     {
-      term: 'FOB',
-      definition: 'Freight on Board — the pickup location where merchandise is available, which affects shipping costs and logistics',
+      term: 'Make an Offer',
+      definition: 'A LiquidateNow feature that lets buyers submit a price lower than the listing for the vendor to consider',
     },
   ],
   multipleChoice: productKnowledgeQuiz,
   fillInBlank: [
     {
       id: 'pk-cq-fib-1',
-      sentence: 'Via Trading operates _____ retail partner programs across 12+ partners.',
-      blank: '18',
-      options: ['8', '12', '18', '24'],
-      correctIndex: 2,
+      sentence: 'Via Trading uses _____ codes to refer to its retail partners without naming them publicly.',
+      blank: 'Parent SKU',
+      options: ['Brand', 'Parent SKU', 'Wholesale', 'Retail'],
+      correctIndex: 1,
     },
     {
       id: 'pk-cq-fib-2',
-      sentence: 'TGT Salvage Value tier is priced at _____ per load.',
-      blank: '$10,990',
-      options: ['$4,950', '$7,800', '$10,990', '$18,490'],
-      correctIndex: 2,
+      sentence: 'TGT Premium loads are _____, meaning buyers get item-level detail before purchasing.',
+      blank: 'manifested',
+      options: ['unmanifested', 'manifested', 'consignment', 'flat-priced'],
+      correctIndex: 1,
     },
     {
       id: 'pk-cq-fib-3',
@@ -159,10 +161,10 @@ export const productKnowledgeSectionedQuiz: SectionedQuiz = {
     },
     {
       id: 'pk-cq-fib-4',
-      sentence: 'Lowes loads typically contain _____ to 26 pallets per load.',
-      blank: '22',
-      options: ['10', '16', '22', '30'],
-      correctIndex: 2,
+      sentence: 'Zappos is part of Via Trading\'s _____ program.',
+      blank: 'WeSolveReturns',
+      options: ['LiquidateNow', 'WeSolveReturns', 'Direct Purchase', 'Premium'],
+      correctIndex: 1,
     },
   ],
 }

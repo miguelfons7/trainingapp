@@ -5,6 +5,9 @@ import {
   ArrowLeftRight,
   ShoppingBag,
   Store,
+  Tag,
+  HandCoins,
+  Zap,
 } from 'lucide-react'
 import { SectionWrapper } from '../shared/SectionWrapper'
 import { FlowDiagram } from '../shared/FlowDiagram'
@@ -54,7 +57,7 @@ export function LiquidateNowOfferings() {
           LiquidateNow vs. Via Trading's Wholesale Model
         </h3>
         <p className="text-sm text-via-text leading-relaxed mb-3">
-          In an earlier module, you learned what LiquidateNow is and how consignment works. This module focuses on what is actually <strong>available</strong> through LN and how those offerings fit into the broader product catalog you can present to buyers.
+          In an earlier module, you learned what LiquidateNow is and how consignment works. This module focuses on what is actually <strong>available</strong> through LN and how those offerings fit into Via Trading's broader product catalog.
         </p>
         <p className="text-sm text-via-text leading-relaxed mb-3">
           The key difference is sourcing. Via Trading's direct programs (Target, Lowes, Home Depot, etc.) involve Via Trading purchasing merchandise outright from the retailer. Via owns the inventory and sets the pricing. With <strong>LiquidateNow</strong>, Via Trading does not own the inventory. Instead, vendors — retailers, manufacturers, and other businesses — list their own merchandise on the platform and set their own pricing expectations. LN acts as the marketplace and marketing engine.
@@ -111,7 +114,7 @@ export function LiquidateNowOfferings() {
           Types of Merchandise on LiquidateNow
         </h3>
         <p className="text-sm text-via-text leading-relaxed mb-4">
-          Because LiquidateNow accepts listings from a wide range of vendors, the product mix is broader and more varied than what you see in Via Trading's direct programs. Here are the main categories of merchandise available through LN.
+          Because LiquidateNow accepts listings from a wide range of vendors, the product mix is broader and more varied than what appears in Via Trading's direct programs. Here are the main categories of merchandise available through LN.
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {merchandiseTypes.map((type) => (
@@ -142,13 +145,66 @@ export function LiquidateNowOfferings() {
         />
       </div>
 
+      {/* Make an Offer Feature */}
+      <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6">
+        <h3 className="text-sm font-semibold text-via-navy uppercase tracking-wide mb-3">
+          The "Make an Offer" Feature
+        </h3>
+        <p className="text-sm text-via-text leading-relaxed mb-3">
+          Many LiquidateNow listings use a <strong>"Make an Offer"</strong> setting, which allows buyers to submit an offer <strong>lower</strong> than the listed price. The vendor or client who owns the inventory then reviews the offer and decides whether to accept, counter, or decline. This is a key differentiator from Via Trading's direct programs, where pricing is fixed.
+        </p>
+
+        {/* Visual callout showing the orange button concept */}
+        <div className="bg-orange-50 rounded-lg border border-orange-300 p-5 mb-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <div className="flex items-center gap-3">
+              <div className="bg-orange-500 text-white text-sm font-semibold px-5 py-2.5 rounded-lg shadow-md flex items-center gap-2">
+                <Tag className="w-4 h-4" />
+                Make an Offer
+              </div>
+            </div>
+            <div className="flex-1">
+              <p className="text-sm text-orange-800 leading-relaxed">
+                Listings with this feature display an orange <strong>"Make an Offer"</strong> button on the website. When a buyer clicks it, they can propose a price below the listed amount. The vendor receives the offer and can respond directly.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Benefits grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="bg-via-bg-subtle rounded-lg p-4 flex items-start gap-3">
+            <span className="text-green-600 mt-0.5 shrink-0">
+              <HandCoins className="w-5 h-5" />
+            </span>
+            <div>
+              <p className="text-sm font-semibold text-via-navy">Benefit for Buyers</p>
+              <p className="text-xs text-via-text-light mt-0.5">
+                Buyers have the opportunity to negotiate a lower price, which can mean better margins on resale. This flexibility is especially appealing for price-sensitive buyers or those purchasing in large quantities.
+              </p>
+            </div>
+          </div>
+          <div className="bg-via-bg-subtle rounded-lg p-4 flex items-start gap-3">
+            <span className="text-orange-600 mt-0.5 shrink-0">
+              <Zap className="w-5 h-5" />
+            </span>
+            <div>
+              <p className="text-sm font-semibold text-via-navy">Benefit for Vendors</p>
+              <p className="text-xs text-via-text-light mt-0.5">
+                Vendors can move inventory faster by being open to negotiation. Rather than waiting for a buyer willing to pay full price, they can evaluate offers and close deals more quickly, reducing holding costs.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* How Vendors List on LN */}
       <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6">
         <h3 className="text-sm font-semibold text-via-navy uppercase tracking-wide mb-3">
           How Vendors List on LN
         </h3>
         <p className="text-sm text-via-text leading-relaxed mb-3">
-          Vendors who want to liquidate inventory through LiquidateNow go through a straightforward onboarding process. They provide details about their merchandise — category, condition, quantity, photos, and pricing expectations. The LN team reviews the listing and, once approved, markets it to Via Trading's buyer network through the website, email campaigns, and Account Manager outreach.
+          Vendors who want to liquidate inventory through LiquidateNow go through a straightforward onboarding process. They provide details about their merchandise — category, condition, quantity, photos, and pricing expectations. The LN team reviews the listing and, once approved, markets it to Via Trading's buyer network through the website, email campaigns, and direct outreach.
         </p>
         <p className="text-sm text-via-text leading-relaxed">
           This model works for vendors of all sizes. A small brand with a few pallets of overstock can list alongside a large retailer clearing thousands of units. LN handles the marketing and transaction logistics so the vendor can focus on their core business.
@@ -161,7 +217,7 @@ export function LiquidateNowOfferings() {
           Why LN Complements Via Trading's Direct Programs
         </h3>
         <p className="text-sm text-via-text leading-relaxed mb-3">
-          LiquidateNow is not a competitor to Via Trading's wholesale programs — it is an extension of them. Together, they give Account Managers a more complete inventory to offer buyers.
+          LiquidateNow is not a competitor to Via Trading's wholesale programs — it is an extension of them. Together, they give the team a more complete inventory to offer buyers.
         </p>
         <div className="space-y-3">
           <div className="flex items-start gap-3">
@@ -193,7 +249,7 @@ export function LiquidateNowOfferings() {
             <div>
               <p className="text-sm font-medium text-via-navy">Leverages the Buyer Network</p>
               <p className="text-xs text-via-text-light mt-0.5">
-                Everything on LN benefits from Via Trading's network of 42,000+ business owners. The same Account Managers who sell direct programs can also introduce buyers to relevant LN listings.
+                Everything on LN benefits from Via Trading's network of 42,000+ business owners. The same team members who work with direct programs can also introduce buyers to relevant LN listings.
               </p>
             </div>
           </div>
@@ -204,7 +260,7 @@ export function LiquidateNowOfferings() {
       <div className="bg-via-orange/10 rounded-lg border border-via-orange/30 p-4 mb-0">
         <p className="text-sm text-orange-700 font-medium mb-1">Key Takeaway</p>
         <p className="text-sm text-orange-700">
-          When a buyer asks for something that does not fit neatly into one of Via Trading's direct programs, check LiquidateNow. The broader vendor base and varied merchandise types mean there may be a listing that matches what they need. Think of LN as an extension of your product catalog, not a separate platform.
+          When a buyer asks for something that does not fit neatly into one of Via Trading's direct programs, check LiquidateNow. The broader vendor base, varied merchandise types, and the "Make an Offer" feature — which lets buyers negotiate below the listed price — mean there may be a listing that matches what they need. Think of LN as an extension of Via Trading's product catalog, not a separate platform.
         </p>
       </div>
 

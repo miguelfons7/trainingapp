@@ -1,6 +1,9 @@
 /**
- * Product Knowledge: Via Trading's retail partner programs.
- * Source: internal program questionnaires + product knowledge files.
+ * Product Knowledge: Via Trading's retail partner programs and official taxonomy.
+ * Source: internal program questionnaires + official product taxonomy.
+ *
+ * IMPORTANT: Do not hard-code program counts — programs change frequently.
+ * Do not assume the audience is an Account Manager — this content is for all roles.
  */
 
 export interface RetailProgram {
@@ -20,19 +23,44 @@ export interface RetailProgram {
   status: 'active' | 'partial'
 }
 
-/** Product categories Via Trading handles */
+/** Via Trading's official product taxonomy — 17 categories */
 export const productCategories = [
-  { id: 'gm', name: 'General Merchandise', icon: 'Package', description: 'A broad mix of products across multiple categories, from housewares and toys to electronics and personal care. Most liquidation loads fall under this category.' },
-  { id: 'furniture', name: 'Furniture & Home', icon: 'Sofa', description: 'Indoor and outdoor furniture, patio sets, home décor, rugs, bedding, and large home goods. Includes items from retailers like Wayfair and Costway.' },
-  { id: 'apparel', name: 'Clothing & Apparel', icon: 'Shirt', description: 'Men\'s, women\'s, and children\'s clothing, shoes, and accessories. Includes both New Overstock and Customer Return conditions.' },
-  { id: 'tools', name: 'Tools & Hardware', icon: 'Wrench', description: 'Power tools, hand tools, hardware, and home improvement items. Sourced from retailers like Home Depot and department stores.' },
-  { id: 'housewares', name: 'Housewares & Home Improvement', icon: 'Home', description: 'Kitchen appliances, fans, lighting, plumbing fixtures, flooring, and general home improvement products.' },
-  { id: 'electronics', name: 'Electronics', icon: 'Monitor', description: 'Consumer electronics including small appliances, audio equipment, personal electronics, and smart home devices. Often mixed into General Merchandise loads.' },
-  { id: 'shoes', name: 'Shoes & Footwear', icon: 'Footprints', description: 'Athletic, casual, dress, and specialty footwear from national brands. Available through dedicated programs like Zappos.' },
-  { id: 'toys', name: 'Toys & Sporting Goods', icon: 'Gamepad2', description: 'Children\'s toys, games, outdoor play equipment, and sporting goods. Major brands like Barbie, Lego, Nerf, and more.' },
+  { id: 'mixed-lots', name: 'Mixed Lots', icon: 'Layers' },
+  { id: 'automotive', name: 'Automotive', icon: 'Car' },
+  { id: 'baby', name: 'Baby', icon: 'Baby' },
+  { id: 'electronics', name: 'Electronics', icon: 'Monitor' },
+  { id: 'fashion', name: 'Fashion', icon: 'Shirt' },
+  { id: 'furniture', name: 'Furniture', icon: 'Sofa' },
+  { id: 'health-beauty', name: 'Health and Beauty', icon: 'Heart' },
+  { id: 'home-appliances', name: 'Home Appliances', icon: 'Plug' },
+  { id: 'home-essentials', name: 'Home Essentials', icon: 'Home' },
+  { id: 'miscellaneous', name: 'Miscellaneous', icon: 'Box' },
+  { id: 'outdoors', name: 'Outdoors', icon: 'TreePine' },
+  { id: 'pet-supplies', name: 'Pet Supplies', icon: 'Dog' },
+  { id: 'seasonal', name: 'Seasonal', icon: 'Sun' },
+  { id: 'sports-fitness', name: 'Sports and Fitness', icon: 'Dumbbell' },
+  { id: 'supermarket', name: 'Supermarket', icon: 'ShoppingCart' },
+  { id: 'tools-hardware', name: 'Tools and Hardware', icon: 'Wrench' },
+  { id: 'toys-kids', name: 'Toys and Kids', icon: 'Gamepad2' },
 ]
 
-/** All 18 retail programs */
+/**
+ * Parent SKU codes.
+ * Via Trading cannot publicly advertise which retailers it works with,
+ * so all programs use a "Parent SKU" name instead of the retailer name.
+ */
+export const skuNaming = [
+  { retailer: 'Target', skus: ['TGT', 'ARW'] },
+  { retailer: 'Walmart', skus: ['WM', 'WMAPP', 'WMCOM'] },
+  { retailer: 'Home Depot', skus: ['HD', 'TRB', 'VHD'] },
+  { retailer: 'Amazon', skus: ['AMZ'] },
+  { retailer: 'Lowes', skus: ['LWS'] },
+  { retailer: 'Zappos', skus: ['ZAP'] },
+  { retailer: "Sam's Club", skus: ['SMS'] },
+  { retailer: 'Wayfair', skus: ['WYF'] },
+]
+
+/** Known retail programs — this list is representative, not exhaustive */
 export const retailPrograms: RetailProgram[] = [
   // === TARGET PROGRAMS ===
   {
@@ -52,31 +80,30 @@ export const retailPrograms: RetailProgram[] = [
       'One of the cleanest customer return loads in the industry',
       'Majority retail-ready goods',
       'Significant percentage of Shelf-Pull merchandise mixed in',
-      'Four tiers: Value ($10,990), Prime ($12,990), Max ($23,990), Ocean Container ($18,490)',
+      'Multiple pricing tiers available (e.g., Value, Prime, Max, Ocean Container)',
       'Can be floor-loaded in ocean containers for export',
       'Viewable at warehouse',
     ],
     status: 'active',
   },
   {
-    id: 'tgt-apparel',
-    sku: 'LOAD-TGTAPP',
-    name: 'TGT Apparel',
+    id: 'tgt-dc',
+    sku: 'LOAD-TGTDC',
+    name: 'TGT DC (Distribution Center)',
     retailPartner: 'Target',
-    category: 'Clothing/Apparel',
+    category: 'General Merchandise',
     type: 'Unmanifested',
-    condition: 'New Overstock',
-    pricingModel: 'Flat price per load',
+    condition: 'Mixed (Customer Returns + New items)',
+    pricingModel: 'Varies by sub-program',
     priceRange: 'Contact for pricing',
     fob: 'Los Angeles, CA',
-    products: 'Mix of Kids, Women\'s, and Men\'s apparel. Seasonal mix: Spring/Summer & Fall/Winter styles. Small percentage may include shoes, accessories, or general merchandise.',
-    brands: 'Target private labels with some national brands',
+    products: 'Broad assortment sorted into sub-programs: TGTMix (general mix), RSGM (general merchandise), Apparel, and others',
+    brands: 'National brands across all Target categories',
     keyFeatures: [
-      '90%+ New Master Case, all New Retail Ready condition',
-      'High-margin apparel loads',
-      'Available in 12-pallet, 26-pallet, ocean containers, or by pallet',
-      'Average 5-foot pallet height',
-      'Consistent ongoing program',
+      'Sourced directly from Target distribution centers',
+      'Sorted into sub-programs: TGTMix, RSGM, Apparel, and more',
+      'Broader assortment than store-sourced loads',
+      'Sub-programs may have different pricing and product mixes',
     ],
     status: 'active',
   },
@@ -86,67 +113,87 @@ export const retailPrograms: RetailProgram[] = [
     name: 'TGT Premium',
     retailPartner: 'Target',
     category: 'General Merchandise',
-    type: 'Unmanifested',
-    condition: 'Customer Returns + Shelf-Pull mix',
-    pricingModel: 'Premium tier pricing',
+    type: 'Manifested',
+    condition: 'Cherry-picked Customer Returns',
+    pricingModel: 'Premium pricing',
     priceRange: 'Contact for pricing',
     fob: 'Los Angeles, CA',
-    products: 'Toys, Housewares, Home Décor, Bath, Baby, Outdoor, Furniture, Sporting Goods, Pet Supplies, Clothing, Accessories, Holiday, Footwear, Bedding, Personal Care, HBA/Cosmetics, Electronics',
-    brands: 'Same brand pool as TGT Salvage',
+    products: 'Higher-value items cherry-picked from the customer returns stream by Target',
+    brands: 'Name brands and higher-value items across categories',
     keyFeatures: [
-      'Premium quality tier within the Target program',
-      'Better consolidation than Value and Prime tiers',
-      'Mix of hardgoods and soft goods',
-      'Regular ongoing program',
+      'Cherry-picked by Target from customer returns — higher quality selection',
+      'Manifested — buyers get item-level detail before purchasing',
+      'Sold at a higher rate than standard salvage loads',
+      'Appeals to buyers looking for more predictable, higher-value merchandise',
     ],
     status: 'active',
   },
   {
-    id: 'tgt-dc',
-    sku: 'LOAD-TGTDC',
-    name: 'TGT Distribution Center',
+    id: 'tgt-raw',
+    sku: 'LOAD-TGTRAW',
+    name: 'TGT RAW',
     retailPartner: 'Target',
     category: 'General Merchandise',
     type: 'Unmanifested',
-    condition: 'Mixed (Customer Returns + New items)',
-    pricingModel: 'TBD',
-    priceRange: 'Contact for pricing',
+    condition: 'Variable',
+    pricingModel: 'Variable per truck',
+    priceRange: 'Varies per truck',
     fob: 'Los Angeles, CA',
-    products: 'Broad assortment due to distribution center processing. Same categories as standard TGT program.',
-    brands: 'Barbie, Disney, Fisher-Price, Hot Wheels, Lego, Little Tikes, Nerf, and more',
+    products: 'General merchandise — contents vary significantly per truck',
+    brands: 'National brands across Target categories',
     keyFeatures: [
-      'Sourced directly from Target distribution centers',
-      'Broader assortment than store-sourced loads',
-      'Mixed condition merchandise',
-      'Flexible load sizes',
+      'Value varies depending on what comes in each truck',
+      'Unmanifested — contents not detailed in advance',
+      'Pricing reflects the variable nature of each load',
     ],
     status: 'active',
   },
 
-  // === HOME IMPROVEMENT ===
+  // === WALMART ===
   {
-    id: 'lowes',
-    sku: 'LOAD-LWS',
-    name: 'Lowes (LWS)',
-    retailPartner: 'Lowes',
-    category: 'Housewares / Home Improvement',
+    id: 'walmart-apparel',
+    sku: 'LOAD-VWMAPP',
+    name: 'WMAPP (Walmart Apparel)',
+    retailPartner: 'Walmart',
+    category: 'Clothing/Apparel',
     type: 'Unmanifested',
-    condition: 'Customer Returns',
-    pricingModel: 'Flat price per load',
-    priceRange: '$4,850 – $4,950 per load',
-    fob: 'CA, OR, WY, NC',
-    products: 'Fans, Toilets, Patio Furniture, Ceiling Fans, Wet/Dry Vac, Lighting, Vanities, Refrigerators, Tool Cabinets, Leaf Blowers, Flooring, Shelving, Ladders, Paint Sprayers, Air Conditioners, Sinks, Faucets, and more',
-    brands: 'American Standard, Kobalt, Craftsman, DeWalt, Honeywell, Ego Power, Kichler, Harbor Breeze, Allen + Roth',
+    condition: 'Customer Returns & Overstock',
+    pricingModel: 'Flat per truck',
+    priceRange: '$43,000 – $45,000',
+    fob: 'Various US locations',
+    products: 'Walmart apparel, clothing, and accessories',
+    brands: 'Walmart private labels and national apparel brands',
     keyFeatures: [
-      'Regular ongoing program — always available',
-      '22 to 26 pallets per load',
-      'Multiple FOB locations for flexibility',
-      'Can be floor-loaded into ocean containers for export',
-      'Sold as-received from retailer (virgin state)',
-      'Viewable at LA facility',
+      'Full truckload apparel loads',
+      'Flat pricing per truck',
+      'Mix of customer returns and overstock',
+      'Consistent program availability',
     ],
     status: 'active',
   },
+  {
+    id: 'walmart-exits',
+    sku: 'LOAD-WMCMDE',
+    name: 'WMCOM (Walmart Exits)',
+    retailPartner: 'Walmart.com',
+    category: 'General Merchandise',
+    type: 'Manifested',
+    condition: 'Customer Returns',
+    pricingModel: '% of retail',
+    priceRange: '$1,400 – $58,000',
+    fob: 'Various US locations',
+    products: 'General merchandise from Walmart.com marketplace returns',
+    brands: 'National brands across all Walmart categories',
+    keyFeatures: [
+      'Manifested — item-level detail available',
+      'Walmart.com marketplace returns',
+      'Very wide price range for all budget levels',
+      'Regular availability',
+    ],
+    status: 'active',
+  },
+
+  // === HOME DEPOT ===
   {
     id: 'hd-turbo',
     sku: 'LOAD-HDTRB',
@@ -190,7 +237,7 @@ export const retailPrograms: RetailProgram[] = [
     status: 'active',
   },
 
-  // === GENERAL MERCHANDISE & SPECIALTY ===
+  // === AMAZON ===
   {
     id: 'amazon',
     sku: 'LOAD-AMZ',
@@ -213,27 +260,8 @@ export const retailPrograms: RetailProgram[] = [
     ],
     status: 'active',
   },
-  {
-    id: 'sams-club',
-    sku: 'LOAD-SMSST',
-    name: 'SMS (Sam\'s Club)',
-    retailPartner: 'Sam\'s Club',
-    category: 'General Merchandise',
-    type: 'Manifested',
-    condition: 'Customer Returns',
-    pricingModel: '20-35% of retail',
-    priceRange: '$33.76 – $6,700',
-    fob: 'Various US locations',
-    products: 'General merchandise from Sam\'s Club stores and distribution centers',
-    brands: 'National brands across all Sam\'s Club categories',
-    keyFeatures: [
-      'Manifested — item-level detail available',
-      'Priced at 20-35% of retail value',
-      'Wide range of lot sizes from small to large',
-      'Regular availability',
-    ],
-    status: 'active',
-  },
+
+  // === WAYFAIR ===
   {
     id: 'wayfair',
     sku: 'LOAD-WYF',
@@ -255,48 +283,79 @@ export const retailPrograms: RetailProgram[] = [
     ],
     status: 'active',
   },
+
+  // === ZAPPOS ===
   {
-    id: 'walmart-apparel',
-    sku: 'LOAD-VWMAPP',
-    name: 'WMAPP (Walmart Apparel)',
-    retailPartner: 'Walmart',
-    category: 'Clothing/Apparel',
-    type: 'Unmanifested',
-    condition: 'Customer Returns & Overstock',
-    pricingModel: 'Flat per truck',
-    priceRange: '$43,000 – $45,000',
-    fob: 'Various US locations',
-    products: 'Walmart apparel, clothing, and accessories',
-    brands: 'Walmart private labels and national apparel brands',
-    keyFeatures: [
-      'Full truckload apparel loads',
-      'Flat pricing per truck',
-      'Mix of customer returns and overstock',
-      'Consistent program availability',
-    ],
-    status: 'active',
-  },
-  {
-    id: 'walmart-exits',
-    sku: 'LOAD-WMCMDE',
-    name: 'WMCOM (Walmart Exits)',
-    retailPartner: 'Walmart.com',
-    category: 'General Merchandise',
+    id: 'zappos',
+    sku: 'LOAD-ZAP',
+    name: 'Zappos (ZAP)',
+    retailPartner: 'Zappos',
+    category: 'Shoes/Apparel',
     type: 'Manifested',
     condition: 'Customer Returns',
     pricingModel: '% of retail',
-    priceRange: '$1,400 – $58,000',
+    priceRange: '$1,100 – $127,000',
     fob: 'Various US locations',
-    products: 'General merchandise from Walmart.com marketplace returns',
-    brands: 'National brands across all Walmart categories',
+    products: 'Shoes, footwear, and apparel from Zappos returns',
+    brands: 'National footwear and apparel brands',
     keyFeatures: [
       'Manifested — item-level detail available',
-      'Walmart.com marketplace returns',
-      'Very wide price range for all budget levels',
+      'Footwear-focused program',
+      'Part of Via Trading\'s WeSolveReturns (WSR) program',
+      'Wide range of lot sizes',
       'Regular availability',
     ],
     status: 'active',
   },
+
+  // === SAM'S CLUB ===
+  {
+    id: 'sams-club',
+    sku: 'LOAD-SMSST',
+    name: 'SMS (Sam\'s Club)',
+    retailPartner: "Sam's Club",
+    category: 'General Merchandise',
+    type: 'Manifested',
+    condition: 'Customer Returns',
+    pricingModel: '20-35% of retail',
+    priceRange: '$33.76 – $6,700',
+    fob: 'Various US locations',
+    products: 'General merchandise from Sam\'s Club stores and distribution centers',
+    brands: 'National brands across all Sam\'s Club categories',
+    keyFeatures: [
+      'Manifested — item-level detail available',
+      'Priced at 20-35% of retail value',
+      'Wide range of lot sizes from small to large',
+      'Regular availability',
+    ],
+    status: 'active',
+  },
+
+  // === LOWES ===
+  {
+    id: 'lowes',
+    sku: 'LOAD-LWS',
+    name: 'Lowes (LWS)',
+    retailPartner: 'Lowes',
+    category: 'Housewares / Home Improvement',
+    type: 'Unmanifested',
+    condition: 'Customer Returns',
+    pricingModel: 'Flat price per load',
+    priceRange: '$4,850 – $4,950 per load',
+    fob: 'CA, OR, WY, NC',
+    products: 'Fans, Toilets, Patio Furniture, Ceiling Fans, Wet/Dry Vac, Lighting, Vanities, Refrigerators, Tool Cabinets, Leaf Blowers, Flooring, Shelving, Ladders, Paint Sprayers, Air Conditioners, Sinks, Faucets, and more',
+    brands: 'American Standard, Kobalt, Craftsman, DeWalt, Honeywell, Ego Power, Kichler, Harbor Breeze, Allen + Roth',
+    keyFeatures: [
+      'Regular ongoing program — always available',
+      '22 to 26 pallets per load',
+      'Multiple FOB locations for flexibility',
+      'Can be floor-loaded into ocean containers for export',
+      'Viewable at LA facility',
+    ],
+    status: 'active',
+  },
+
+  // === OTHER / SPECIALTY ===
   {
     id: 'costway',
     sku: 'LOAD-COSTWAY',
@@ -315,27 +374,6 @@ export const retailPrograms: RetailProgram[] = [
       'Multiple FOB options (California and New Jersey)',
       'Consistent program availability',
       'Customer return condition',
-    ],
-    status: 'active',
-  },
-  {
-    id: 'zappos',
-    sku: 'LOAD-ZAP',
-    name: 'Zappos (ZAP)',
-    retailPartner: 'Zappos',
-    category: 'Shoes/Apparel',
-    type: 'Manifested',
-    condition: 'Customer Returns',
-    pricingModel: '% of retail',
-    priceRange: '$1,100 – $127,000',
-    fob: 'Various US locations',
-    products: 'Shoes, footwear, and apparel from Zappos returns',
-    brands: 'National footwear and apparel brands',
-    keyFeatures: [
-      'Manifested — item-level detail available',
-      'Footwear-focused program',
-      'Wide range of lot sizes',
-      'Regular availability',
     ],
     status: 'active',
   },
@@ -382,15 +420,15 @@ export const retailPrograms: RetailProgram[] = [
   {
     id: 'boscovs',
     sku: 'LOAD-BV',
-    name: 'Boscov\'s (BV)',
-    retailPartner: 'Boscov\'s',
+    name: "Boscov's (BV)",
+    retailPartner: "Boscov's",
     category: 'General Merchandise',
     type: 'Manifested',
     condition: 'Customer Returns',
     pricingModel: '9-12% of retail',
     priceRange: 'Variable',
     fob: 'Various US locations',
-    products: 'General merchandise from Boscov\'s department stores',
+    products: "General merchandise from Boscov's department stores",
     brands: 'National brands across department store categories',
     keyFeatures: [
       'Manifested — item-level detail available',
@@ -424,22 +462,16 @@ export const retailPrograms: RetailProgram[] = [
 /** Group programs by retail partner for display */
 export const programsByPartner = {
   target: retailPrograms.filter((p) => p.retailPartner === 'Target'),
-  homeImprovement: retailPrograms.filter((p) =>
-    ['Lowes', 'Home Depot'].includes(p.retailPartner),
+  walmart: retailPrograms.filter((p) =>
+    ['Walmart', 'Walmart.com'].includes(p.retailPartner),
   ),
-  generalMerch: retailPrograms.filter((p) =>
-    ['Amazon', 'Sam\'s Club', 'Walmart', 'Walmart.com', 'Boscov\'s', 'Albertsons / CTC Discount Store', 'JCPenney', 'Department Store'].includes(p.retailPartner),
+  homeDepot: retailPrograms.filter((p) => p.retailPartner === 'Home Depot'),
+  amazon: retailPrograms.filter((p) => p.retailPartner === 'Amazon'),
+  wayfair: retailPrograms.filter((p) => p.retailPartner === 'Wayfair'),
+  zappos: retailPrograms.filter((p) => p.retailPartner === 'Zappos'),
+  samsClub: retailPrograms.filter((p) => p.retailPartner === "Sam's Club"),
+  lowes: retailPrograms.filter((p) => p.retailPartner === 'Lowes'),
+  other: retailPrograms.filter((p) =>
+    ['Costway', 'Department Store', 'JCPenney', "Boscov's", 'Albertsons / CTC Discount Store'].includes(p.retailPartner),
   ),
-  furniture: retailPrograms.filter((p) =>
-    ['Wayfair', 'Costway'].includes(p.retailPartner),
-  ),
-  footwear: retailPrograms.filter((p) => p.retailPartner === 'Zappos'),
-}
-
-/** Stats for the overview module */
-export const programStats = {
-  totalPrograms: 18,
-  retailPartners: 'Target, Amazon, Lowes, Home Depot, Walmart, Sam\'s Club, Wayfair, Costway, Zappos, JCPenney, Boscov\'s, Albertsons',
-  partnerCount: 12,
-  categoryCount: 8,
 }

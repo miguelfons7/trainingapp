@@ -149,17 +149,17 @@ export const courses: Course[] = [
       },
       {
         id: 'home-improvement-programs',
-        title: 'Home Improvement Programs',
+        title: 'Walmart & Home Depot',
         estimatedTime: '8 min',
         contentType: 'lesson',
-        description: 'Learn about Via Trading\'s Lowes and Home Depot programs, including manifested and unmanifested options.',
+        description: 'Explore Via Trading\'s Walmart and Home Depot programs, including both manifested and unmanifested options.',
       },
       {
         id: 'general-merch-programs',
-        title: 'General Merchandise & Specialty',
+        title: 'Amazon, Wayfair, Zappos & More',
         estimatedTime: '10 min',
         contentType: 'lesson',
-        description: 'Discover programs from Amazon, Walmart, Sam\'s Club, Wayfair, Zappos, and more.',
+        description: 'Discover programs from Amazon, Wayfair, Zappos, Sam\'s Club, Lowes, and other retail partners.',
       },
       {
         id: 'ln-offerings',

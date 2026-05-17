@@ -66,8 +66,8 @@ const moduleImageMap: Record<string, { src: string; alt: string }> = {
   // Course 3 — uses shared AI course image until unique module images are generated
   'product-overview': { src: 'course-3-product.png', alt: 'Via Trading Product Categories' },
   'target-programs': { src: 'course-3-product.png', alt: 'Target Retail Programs' },
-  'home-improvement-programs': { src: 'course-3-product.png', alt: 'Home Improvement Programs' },
-  'general-merch-programs': { src: 'course-3-product.png', alt: 'General Merchandise Programs' },
+  'home-improvement-programs': { src: 'course-3-product.png', alt: 'Walmart & Home Depot Programs' },
+  'general-merch-programs': { src: 'course-3-product.png', alt: 'Amazon, Wayfair, Zappos & More' },
   'ln-offerings': { src: 'course-3-product.png', alt: 'LiquidateNow Offerings' },
 }
 

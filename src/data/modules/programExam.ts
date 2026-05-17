@@ -4,6 +4,8 @@ import type { QuizQuestion } from '../../types'
  * Program Final Exam for "New AM Training Program"
  * Pulls questions from Course 1 (Industry), Course 2 (Via Trading), and Course 3 (Product Knowledge).
  * 25 questions total, 80% passing (20 correct), timed at 25 minutes.
+ *
+ * NOTE: Avoid questions about specific program counts — these change frequently.
  */
 
 export const EXAM_TIME_LIMIT_MINUTES = 25
@@ -257,7 +259,7 @@ export const programExamQuestions: QuizQuestion[] = [
     ],
     correctIndex: 1,
     explanation:
-      'A 90%+ repeat business rate reflects deep customer trust. It is built on honesty, integrity, transparency, consistent product quality, and strong Account Manager relationships.',
+      'A 90%+ repeat business rate reflects deep customer trust. It is built on honesty, integrity, transparency, consistent product quality, and strong relationships.',
   },
   {
     id: 'pe-20',
@@ -276,11 +278,16 @@ export const programExamQuestions: QuizQuestion[] = [
   // --- Course 3: Product Knowledge (5 questions) ---
   {
     id: 'pe-21',
-    question: 'How many retail partner programs does Via Trading currently operate?',
-    options: ['6', '12', '18', '24'],
-    correctIndex: 2,
+    question: 'Why does Via Trading use Parent SKU codes instead of retailer names?',
+    options: [
+      'It makes warehouse processing faster',
+      'Via Trading cannot publicly advertise which retailers it works with',
+      'Retailers require anonymity by law',
+      'It is an industry-wide standard',
+    ],
+    correctIndex: 1,
     explanation:
-      'Via Trading operates 18 retail partner programs across 12+ retail partners, spanning categories from general merchandise and apparel to tools, furniture, and footwear.',
+      'Via Trading uses Parent SKU codes (e.g., TGT for Target, WM for Walmart, HD for Home Depot) because it cannot publicly advertise which retailers it works with. This is standard practice in the liquidation industry.',
   },
   {
     id: 'pe-22',
@@ -297,24 +304,29 @@ export const programExamQuestions: QuizQuestion[] = [
   },
   {
     id: 'pe-23',
-    question: 'Which retail partner does Via Trading have the most programs with?',
-    options: ['Amazon', 'Walmart', 'Target', 'Home Depot'],
-    correctIndex: 2,
-    explanation:
-      'Target has four programs with Via Trading: TGT Salvage (general merchandise), TGT Apparel (New Overstock clothing), TGT Premium, and TGT Distribution Center — more than any other retail partner.',
-  },
-  {
-    id: 'pe-24',
-    question: 'What makes TGT Salvage loads notable in the industry?',
+    question: 'What makes TGT Premium different from TGT Salvage?',
     options: [
-      'They are the cheapest loads available',
-      'They are considered one of the cleanest customer return loads in the industry, with a significant percentage of Shelf-Pull merchandise',
-      'They only contain electronics',
-      'They are exclusively available for export',
+      'Premium loads are larger and cheaper',
+      'Premium items are cherry-picked by Target from customer returns and the loads are manifested',
+      'Premium only contains electronics',
+      'Premium and Salvage are the same program',
     ],
     correctIndex: 1,
     explanation:
-      'TGT Salvage loads are known as one of the cleanest customer return loads in the industry. The majority of goods are retail-ready, and a significant percentage of Shelf-Pull merchandise is mixed in.',
+      'TGT Premium contains items cherry-picked by Target from the customer returns stream. Unlike standard Salvage loads which are unmanifested, Premium loads are manifested and sold at a higher rate.',
+  },
+  {
+    id: 'pe-24',
+    question: 'How does merchandise flow vary across Via Trading\'s programs?',
+    options: [
+      'All merchandise goes through Via Trading\'s warehouse',
+      'All merchandise ships directly from retailers to buyers',
+      'Some programs ship directly from retailer to buyer; others go through Via Trading\'s facilities first',
+      'Via Trading picks up all merchandise from retail stores',
+    ],
+    correctIndex: 2,
+    explanation:
+      'Merchandise flow varies by program. Some programs ship directly from the retailer\'s facilities to the buyer, which reduces waste in fuel and storage space. Other programs require merchandise to be shipped to Via Trading\'s facilities first.',
   },
   {
     id: 'pe-25',
@@ -327,6 +339,6 @@ export const programExamQuestions: QuizQuestion[] = [
     ],
     correctIndex: 2,
     explanation:
-      'LiquidateNow offers consignment-based merchandise from vendors who list their inventory directly. This adds unique, vendor-controlled lots that complement Via Trading\'s direct retailer programs, giving buyers more options and variety.',
+      'LiquidateNow offers consignment-based merchandise from vendors who list their inventory directly. This adds unique, vendor-controlled lots that complement Via Trading\'s direct retailer programs, giving buyers more options and variety. Buyers can also use the "Make an Offer" feature to submit offers below the listed price.',
   },
 ]
