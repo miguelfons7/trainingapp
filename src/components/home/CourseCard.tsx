@@ -49,7 +49,6 @@ export function CourseCard({ course }: CourseCardProps) {
             aspectRatio="1:1"
             icon={Icon}
             className="rounded-none"
-            objectFit="cover"
           />
           <div className="absolute inset-0 flex items-center justify-center bg-black/40">
             <div className="flex items-center gap-2 rounded-full bg-black/60 px-4 py-2">

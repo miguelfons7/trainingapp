@@ -18,7 +18,6 @@ export function CourseHeader({ course }: CourseHeaderProps) {
         src={course.imagePath ?? ''}
         alt={course.title}
         aspectRatio="16:9"
-        objectFit="cover"
       />
 
       <div className="p-6">

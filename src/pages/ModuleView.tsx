@@ -45,13 +45,13 @@ const moduleImageMap: Record<string, { src: string; alt: string }> = {
   'shipping-terms': { src: 'module-load-types.png', alt: 'Shipping Terms & Formats' },
   'buyer-types': { src: 'module-buyer-types.png', alt: 'Buyer Types Overview' },
   'key-terminology': { src: 'module-dealer-levels.png', alt: 'Industry Terminology & Dealer Levels' },
-  // Course 2 — AI placeholder names (ImagePlaceholder shows icon fallback until generated)
-  'our-story': { src: 'module-our-story.png', alt: 'Via Trading: Our Story' },
-  'mission-values': { src: 'module-mission-values.png', alt: 'Via Trading: Mission & Values' },
-  'our-platforms': { src: 'module-our-platforms.png', alt: 'Via Trading Platforms' },
-  'liquidatenow': { src: 'module-liquidatenow.png', alt: 'LiquidateNow Platform' },
-  'wesolvereturns': { src: 'module-wesolvereturns.png', alt: 'WeSolveReturns Platform' },
-  'why-via': { src: 'module-why-via.png', alt: 'Why Business Owners Choose Via' },
+  // Course 2 — uses shared AI course image until unique module images are generated
+  'our-story': { src: 'course-2-via-trading.png', alt: 'Via Trading: Our Story' },
+  'mission-values': { src: 'course-2-via-trading.png', alt: 'Via Trading: Mission & Values' },
+  'our-platforms': { src: 'course-2-via-trading.png', alt: 'Via Trading Platforms' },
+  'liquidatenow': { src: 'course-2-via-trading.png', alt: 'LiquidateNow Platform' },
+  'wesolvereturns': { src: 'course-2-via-trading.png', alt: 'WeSolveReturns Platform' },
+  'why-via': { src: 'course-2-via-trading.png', alt: 'Why Business Owners Choose Via' },
 }
 
 export function ModuleView() {
@@ -147,7 +147,6 @@ export function ModuleView() {
             src={moduleImageMap[moduleId].src}
             alt={moduleImageMap[moduleId].alt}
             aspectRatio="16:9"
-            objectFit="cover"
           />
         </div>
       )}
