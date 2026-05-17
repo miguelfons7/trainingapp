@@ -145,7 +145,7 @@ export const courses: Course[] = [
         title: 'Target Programs',
         estimatedTime: '8 min',
         contentType: 'lesson',
-        description: 'Explore Via Trading\'s four Target programs: TGT Salvage, Apparel, Premium, and Distribution Center.',
+        description: 'Explore Via Trading\'s Target sub-programs, including Salvage, DC, Premium, RAW, and more.',
       },
       {
         id: 'home-improvement-programs',
