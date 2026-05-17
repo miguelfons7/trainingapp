@@ -18,17 +18,11 @@ export function WeSolveReturns() {
       icon={<RotateCcw className="w-5 h-5" />}
     >
       {/* WSR branding */}
-      <div className="flex items-center gap-4 mb-6 bg-via-card rounded-xl border border-via-border p-5">
+      <div className="flex items-center justify-center mb-6 bg-via-card rounded-xl border border-via-border p-5">
         <img
           src={`${import.meta.env.BASE_URL}images/wsr-logo.svg`}
-          alt="WeSolveReturns logo"
-          className="h-10"
-        />
-        <div className="h-8 w-px bg-via-border" />
-        <img
-          src={`${import.meta.env.BASE_URL}images/Warehouse aerial.png`}
-          alt="Via Trading warehouse — WeSolveReturns operates from the same facility"
-          className="h-16 rounded-lg object-cover"
+          alt="WeSolveReturns — Powered by Via Trading"
+          className="h-12"
         />
       </div>
 

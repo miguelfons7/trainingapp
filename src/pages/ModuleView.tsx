@@ -22,7 +22,6 @@ const contentMap: Record<string, ComponentType> = {
   'secondary-market': SecondaryMarket,
   'reverse-logistics': ReverseLogistics,
   'product-conditions': ProductConditions,
-  'load-types': LoadTypes,
   'shipping-terms': LoadTypes,
   'buyer-types': BuyerTypes,
   'key-terminology': Glossary,
@@ -36,21 +35,23 @@ const contentMap: Record<string, ComponentType> = {
 
 const quizModules = new Set(['industry-knowledge-check', 'via-knowledge-check'])
 
-/** Maps module IDs to their hero image filenames in public/images/ */
+/** Maps module IDs to their hero image filenames in public/images/.
+ *  Heroes always use AI-generated .png images. Real photos are used inline only. */
 const moduleImageMap: Record<string, { src: string; alt: string }> = {
-  'secondary-market': { src: 'module-channels.jpg', alt: 'Secondary Market Sales Channels' },
+  // Course 1 — AI images exist
+  'secondary-market': { src: 'module-channels.png', alt: 'Secondary Market Sales Channels' },
   'reverse-logistics': { src: 'module-reverse-logistics.png', alt: 'Reverse Logistics Flow' },
   'product-conditions': { src: 'module-conditions.png', alt: 'Product Conditions Spectrum' },
-  'load-types': { src: 'module-load-types.jpg', alt: 'Load Types & Sizing Comparison' },
-  'shipping-terms': { src: 'module-load-types.jpg', alt: 'Shipping Terms & Formats' },
+  'shipping-terms': { src: 'module-load-types.png', alt: 'Shipping Terms & Formats' },
   'buyer-types': { src: 'module-buyer-types.png', alt: 'Buyer Types Overview' },
   'key-terminology': { src: 'module-dealer-levels.png', alt: 'Industry Terminology & Dealer Levels' },
-  'our-story': { src: 'Warehouse aerial.png', alt: 'Via Trading: Our Story' },
-  'mission-values': { src: 'course-2-via-trading.jpg', alt: 'Via Trading: Mission & Values' },
-  'our-platforms': { src: 'course-2-via-trading.jpg', alt: 'Via Trading Platforms' },
-  'liquidatenow': { src: 'course-2-via-trading.jpg', alt: 'LiquidateNow' },
-  'wesolvereturns': { src: 'Warehouse aerial.png', alt: 'WeSolveReturns' },
-  'why-via': { src: 'personalized-service.jpg', alt: 'Why Business Owners Choose Via' },
+  // Course 2 — AI placeholder names (ImagePlaceholder shows icon fallback until generated)
+  'our-story': { src: 'module-our-story.png', alt: 'Via Trading: Our Story' },
+  'mission-values': { src: 'module-mission-values.png', alt: 'Via Trading: Mission & Values' },
+  'our-platforms': { src: 'module-our-platforms.png', alt: 'Via Trading Platforms' },
+  'liquidatenow': { src: 'module-liquidatenow.png', alt: 'LiquidateNow Platform' },
+  'wesolvereturns': { src: 'module-wesolvereturns.png', alt: 'WeSolveReturns Platform' },
+  'why-via': { src: 'module-why-via.png', alt: 'Why Business Owners Choose Via' },
 }
 
 export function ModuleView() {
