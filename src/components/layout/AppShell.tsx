@@ -1,11 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import { Sidebar } from './Sidebar'
 import { TopBar } from './TopBar'
 
-/** Breakpoint widths matching Tailwind defaults */
 const MD_BREAKPOINT = 768
-const LG_BREAKPOINT = 1024
 
 export function AppShell() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
@@ -13,14 +11,26 @@ export function AppShell() {
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== 'undefined' ? window.innerWidth : 1200,
   )
+  const prevWidth = useRef(windowWidth)
   const location = useLocation()
 
-  // Track window width for responsive sidebar
+  // Track window width
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth)
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
   }, [])
+
+  // Auto-collapse when the window shrinks below 1024px (but don't force — user can re-expand)
+  useEffect(() => {
+    if (prevWidth.current >= 1024 && windowWidth < 1024) {
+      setSidebarCollapsed(true)
+    }
+    if (prevWidth.current < 1024 && windowWidth >= 1024) {
+      setSidebarCollapsed(false)
+    }
+    prevWidth.current = windowWidth
+  }, [windowWidth])
 
   // Scroll to top on route change
   useEffect(() => {
@@ -32,12 +42,7 @@ export function AppShell() {
     setMobileMenuOpen(false)
   }, [location.pathname])
 
-  // Determine sidebar state based on screen size
   const isMobile = windowWidth < MD_BREAKPOINT
-  const isMedium = windowWidth >= MD_BREAKPOINT && windowWidth < LG_BREAKPOINT
-
-  // On medium screens, force collapsed. On large screens, respect user toggle.
-  const effectiveCollapsed = isMedium ? true : sidebarCollapsed
 
   return (
     <div className="min-h-screen bg-via-bg">
@@ -52,7 +57,7 @@ export function AppShell() {
       {/* Sidebar: hidden on mobile, always visible on md+ */}
       <div className="hidden md:block">
         <Sidebar
-          collapsed={effectiveCollapsed}
+          collapsed={sidebarCollapsed}
           onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
         />
       </div>
@@ -71,7 +76,7 @@ export function AppShell() {
       {/* Main content — margin matches sidebar width on md+ */}
       <div
         className={`transition-all duration-300 ${
-          isMobile ? '' : effectiveCollapsed ? 'md:ml-16' : 'md:ml-60'
+          isMobile ? '' : sidebarCollapsed ? 'md:ml-16' : 'md:ml-60'
         }`}
       >
         <TopBar onMenuToggle={() => setMobileMenuOpen(!mobileMenuOpen)} />
