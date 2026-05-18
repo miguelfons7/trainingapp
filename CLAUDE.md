@@ -421,8 +421,12 @@ interface CourseModule {
 - **ComplianceContext uses Supabase** — Migrated from localStorage to `compliance_items` + `compliance_acknowledgements` tables with optimistic updates and rollback. Seed items protected via `is_seed` flag. `acknowledgedBy` stores user IDs (UUIDs), not emails.
 - **Compliance seed data lives in DB** — The old `src/data/compliance.ts` was deleted. Seed items are inserted via migration 003 with `ON CONFLICT DO NOTHING`.
 - **Supabase Auth URLs** — Site URL and redirect URL configured for Vercel production domain. Update these if the domain changes.
+- **Module gating** — Regular users can only access modules sequentially (previous must be completed). Quiz modules hide the "Continue" button, forcing quiz completion. Admins and leadership (`isAdmin || isLeadership`) bypass all gating. Logic in `ModuleList.tsx` and `ModuleView.tsx`.
+- **Admin tabs merged** — "Announcements" and "Compliance" are now one tab (`ComplianceManager.tsx`). Old `AnnouncementManager.tsx` and `ComplianceTracker.tsx` are still in the repo but no longer imported from Admin.tsx.
+- **Responsive sidebar** — AppShell uses `window.innerWidth` tracking with breakpoints: `<768px` = mobile hamburger, `768-1024px` = auto-collapsed (icon-only), `>1024px` = user-togglable expanded/collapsed. Content always has margin matching sidebar width.
 
 ## Pending Work
 
 - **Build AM Role Training course** (rough draft, same pattern as BDR)
 - **Code splitting** — Bundle is >1.2MB; consider dynamic imports for course section components
+- **Delete old admin components** — `AnnouncementManager.tsx` and `ComplianceTracker.tsx` are unused but still in repo
