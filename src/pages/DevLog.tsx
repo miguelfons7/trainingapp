@@ -10,6 +10,21 @@ interface LogEntry {
 
 const changelog: LogEntry[] = [
   {
+    version: '0.13.2',
+    date: '2026-05-18',
+    title: 'Unified Content Hub + Profile Avatar Fix',
+    changes: [
+      'New Content Hub: merged "Content Editor" and "Manage Courses" admin tabs into a single unified "Content" tab.',
+      'Content Hub overview bar: Programs, Courses, Total Modules, CMS Published, and CMS Drafts at a glance.',
+      'Programs sub-tab: table view with create/edit/delete, expandable rows showing included courses, course checkbox assignment.',
+      'Courses & Modules sub-tab: table with Course, Modules count, Status, "Used In" column (violet badges showing program membership), and action buttons.',
+      'Expandable course rows reveal module sub-table with #, title, type, time, CMS status badges (Published/Draft/Quiz/Built-in), and per-module actions.',
+      'Per-module "Content" link opens the CMS block editor at /admin/content/:courseId/:moduleId directly from the table.',
+      'Create courses and modules inline with auto-generated slugs, icon picker, status selector, and all metadata fields.',
+      'Profile avatar redesigned: replaced two-tone orange/white effect with clean navy circle, white initials, card border, and subtle shadow.',
+    ],
+  },
+  {
     version: '0.13.1',
     date: '2026-05-18',
     title: 'DB-Backed Course Data + Consumer Migration',

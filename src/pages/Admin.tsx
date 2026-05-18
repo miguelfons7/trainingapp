@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Shield, Users, BarChart3, BookPlus, Megaphone, UserPlus, Building2, UserCog, FileEdit, Construction, FolderOpen } from 'lucide-react'
+import { Shield, Users, BarChart3, BookPlus, Megaphone, UserPlus, Building2, UserCog, Layers, Construction } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { UserProgressTable } from '../components/admin/UserProgressTable'
 import { CourseStats } from '../components/admin/CourseStats'
@@ -8,11 +8,10 @@ import { ComplianceManager } from '../components/admin/ComplianceManager'
 import { InviteUsers } from '../components/admin/InviteUsers'
 import { ManageTeams } from '../components/admin/ManageTeams'
 import { ManageUsers } from '../components/admin/ManageUsers'
-import { ContentManager } from '../components/admin/ContentManager'
+import { ContentHub } from '../components/admin/ContentHub'
 import { ConstructionManager } from '../components/admin/ConstructionManager'
-import { ManageCourses } from '../components/admin/ManageCourses'
 
-type TabKey = 'progress' | 'compliance' | 'stats' | 'assign' | 'invite' | 'teams' | 'users' | 'content' | 'construction' | 'courses'
+type TabKey = 'progress' | 'compliance' | 'stats' | 'assign' | 'invite' | 'teams' | 'users' | 'content' | 'construction'
 
 const tabs: { key: TabKey; label: string; icon: typeof Users }[] = [
   { key: 'progress', label: 'User Progress', icon: Users },
@@ -22,8 +21,7 @@ const tabs: { key: TabKey; label: string; icon: typeof Users }[] = [
   { key: 'compliance', label: 'Announcements', icon: Megaphone },
   { key: 'stats', label: 'Course Stats', icon: BarChart3 },
   { key: 'assign', label: 'Assign Courses', icon: BookPlus },
-  { key: 'content', label: 'Content Editor', icon: FileEdit },
-  { key: 'courses', label: 'Manage Courses', icon: FolderOpen },
+  { key: 'content', label: 'Content', icon: Layers },
   { key: 'construction', label: 'Construction', icon: Construction },
 ]
 
@@ -91,8 +89,7 @@ export function Admin() {
       {activeTab === 'stats' && <CourseStats />}
       {activeTab === 'assign' && <AssignCourses />}
       {activeTab === 'invite' && <InviteUsers />}
-      {activeTab === 'content' && <ContentManager />}
-      {activeTab === 'courses' && <ManageCourses />}
+      {activeTab === 'content' && <ContentHub />}
       {activeTab === 'construction' && <ConstructionManager />}
     </div>
   )

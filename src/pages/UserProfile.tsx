@@ -196,10 +196,10 @@ export function UserProfile() {
     <div className="max-w-5xl mx-auto py-8 px-4">
       {/* Hero Section */}
       <div className="bg-via-card rounded-xl border border-via-border overflow-hidden mb-6">
-        <div className="bg-gradient-to-r from-via-navy to-via-navy-light h-24" />
+        <div className="bg-via-navy h-24" />
         <div className="px-6 pb-6 -mt-10">
           <div className="flex items-end gap-4 mb-4">
-            <div className="w-20 h-20 rounded-full bg-via-orange/20 border-4 border-via-card flex items-center justify-center text-2xl font-bold text-via-orange shrink-0">
+            <div className="w-20 h-20 rounded-full bg-via-navy border-4 border-via-card flex items-center justify-center text-2xl font-bold text-white shrink-0 shadow-md">
               {initials}
             </div>
             <div className="pb-1">

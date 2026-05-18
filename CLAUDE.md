@@ -23,7 +23,7 @@ A React-based training platform for Via Trading Corporation (wholesale liquidati
 ```
 src/
   components/
-    admin/          <- Admin dashboard tabs (InviteUsers, ManageTeams, ManageUsers, ContentManager, etc.)
+    admin/          <- Admin dashboard tabs (InviteUsers, ManageTeams, ManageUsers, ContentHub, etc.)
     cms/            <- CMS block editor (BlockEditor, BlockRenderer, BlockPalette, editors/, etc.)
     sections/       <- One component per lesson module (e.g., BdrRoleOverview.tsx)
     shared/         <- Reusable UI components (SectionWrapper, ExpandableCard, etc.)
@@ -442,12 +442,14 @@ interface CourseModule {
 - **Program stats** — CourseStats shows a Program Overview table above the per-course table, with enrolled/completed/avg progress.
 - **Audit log** — `audit_log` table with RLS (admins read, all insert own actions). ComplianceContext auto-logs create, update, status_change, delete actions.
 - **Construction status** — `construction_overrides` table lets admins mark courses/modules/programs as under construction. ConstructionContext provides `isUnderConstruction()` app-wide. Regular users blocked; admins/leadership see warning banners. Toggle switches with optimistic updates. Migration 006.
-- **Admin CMS** — Block-based content editor with visual, code, and preview modes. 18 block types matching existing shared/interactive components. Content stored as JSONB in `module_content` table with draft/publish workflow and version history with rollback. Content resolution: hardcoded TSX first → CMS published content → "coming soon" placeholder. Admin "Edit in CMS" button on every module page. Content Editor tab in Admin dashboard lists all modules with CMS status. Editor page at `/admin/content/:courseId/:moduleId`. DB migration 005.
+- **Admin CMS** — Block-based content editor with visual, code, and preview modes. 18 block types matching existing shared/interactive components. Content stored as JSONB in `module_content` table with draft/publish workflow and version history with rollback. Content resolution: published CMS → hardcoded TSX → draft CMS → "coming soon" placeholder. Admin "Edit in CMS" button on every module page. Editor page at `/admin/content/:courseId/:moduleId`. DB migration 005.
+- **Content Hub (unified)** — The old "Content Editor" (ContentManager.tsx) and "Manage Courses" (ManageCourses.tsx) admin tabs have been merged into a single "Content" tab (`ContentHub.tsx`). Features: overview stats bar (Programs/Courses/Modules/CMS Published/Drafts), Programs sub-tab with table + create/edit/delete + course checkboxes, Courses & Modules sub-tab with expandable rows showing module sub-tables with CMS status badges and "Content" links to the CMS editor, "Used In" column showing program membership. Full CRUD for programs, courses, and modules. DB-backed via `managed_courses`, `managed_modules`, `managed_programs` tables (migration 007). CoursesContext provides `useCourses()` hook with `courses`, `programs`, `getCourseById`, `getProgram`, and all CRUD methods. Hardcoded `courses.ts`/`programs.ts` used as fallback only in CoursesContext — all other consumers use the hook.
+- **Admin user editing** — ManageUsers tab supports editing name and email inline (previously only role and team).
+- **Consumer migration complete** — All 15+ components that previously imported from `courses.ts`/`programs.ts` now use `useCourses()` hook from CoursesContext. CoursesProvider wraps ProgressProvider in App.tsx so ProgressContext can access course data dynamically.
 
 ## Pending Work
 
 - **Build AM Role Training course** (rough draft, same pattern as BDR)
 - **Code splitting** — Bundle is >1.2MB; consider dynamic imports for course section components
-- **Delete old admin components** — `AnnouncementManager.tsx` and `ComplianceTracker.tsx` are unused but still in repo
 - **CMS enhancements** — Drag-and-drop block reordering (dnd-kit is installed but not yet wired into BlockEditor), Monaco editor integration (installed but code mode uses textarea), rich text editor for paragraph blocks (currently plain HTML strings)
 - **Color palette expansion** — Add tasteful, complementary colors beyond blue/orange for visual variety
