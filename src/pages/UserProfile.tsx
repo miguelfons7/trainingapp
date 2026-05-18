@@ -15,7 +15,7 @@ import {
 import { useAuth } from '../context/AuthContext'
 import { useProgress } from '../context/ProgressContext'
 import { useCompliance } from '../context/ComplianceContext'
-import { courses } from '../data/courses'
+import { useCourses } from '../context/CoursesContext'
 import { supabase } from '../lib/supabase'
 import type { Profile, Team, ModuleProgressRow } from '../types/database'
 
@@ -36,6 +36,7 @@ export function UserProfile() {
   const { user: currentUser, isAdmin, isLeadership } = useAuth()
   const { getCourseProgress } = useProgress()
   const { items, isAcknowledged } = useCompliance()
+  const { courses } = useCourses()
 
   const isOwnProfile = !userId || userId === currentUser?.id
   const targetUserId = userId || currentUser?.id

@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import { useLocation, Link } from 'react-router-dom'
 import { Bell, Menu } from 'lucide-react'
 import { useCompliance } from '../../context/ComplianceContext'
-import { getCourseById } from '../../data/courses'
+import { useCourses } from '../../context/CoursesContext'
 
 interface TopBarProps {
   onMenuToggle: () => void
@@ -11,6 +11,7 @@ interface TopBarProps {
 export function TopBar({ onMenuToggle }: TopBarProps) {
   const location = useLocation()
   const { pendingItems } = useCompliance()
+  const { getCourseById } = useCourses()
   const [showNotif, setShowNotif] = useState(false)
   const bellRef = useRef<HTMLDivElement>(null)
 
@@ -24,7 +25,7 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
-  const breadcrumbs = buildBreadcrumbs(location.pathname)
+  const breadcrumbs = buildBreadcrumbs(location.pathname, getCourseById)
 
   return (
     <header className="h-14 bg-via-card border-b border-via-border flex items-center justify-between px-4 sm:px-6 sticky top-0 z-20">
@@ -105,7 +106,7 @@ interface Breadcrumb {
   path: string
 }
 
-function buildBreadcrumbs(pathname: string): Breadcrumb[] {
+function buildBreadcrumbs(pathname: string, getCourseById: (id: string) => { title: string; modules: { id: string; title: string }[] } | undefined): Breadcrumb[] {
   const crumbs: Breadcrumb[] = [{ label: 'Home', path: '/' }]
 
   const parts = pathname.split('/').filter(Boolean)

@@ -1,11 +1,12 @@
 import { Award, CheckCircle, FileCheck } from 'lucide-react'
 import { useProgress } from '../context/ProgressContext'
 import { useCompliance } from '../context/ComplianceContext'
-import { courses } from '../data/courses'
+import { useCourses } from '../context/CoursesContext'
 
 export function Certificates() {
   const { getCourseProgress } = useProgress()
   const { items, isAcknowledged } = useCompliance()
+  const { courses } = useCourses()
 
   const completedCourses = courses
     .filter((c) => c.status === 'available')

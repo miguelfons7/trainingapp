@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom'
 import { Shield, Construction } from 'lucide-react'
 import { ProgressRing } from '../shared/ProgressRing'
-import { getProgram } from '../../data/courses'
 import { useProgress } from '../../context/ProgressContext'
 import { useConstruction } from '../../context/ConstructionContext'
-import { courses } from '../../data/courses'
+import { useCourses } from '../../context/CoursesContext'
 
 export function ProgramCard() {
+  const { courses, getProgram } = useCourses()
   const program = getProgram()
   const { getCourseProgress } = useProgress()
   const { isUnderConstruction, getConstructionMessage } = useConstruction()

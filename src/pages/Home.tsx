@@ -2,7 +2,7 @@ import { Award, CheckCircle, FileCheck } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { useCompliance } from '../context/ComplianceContext'
 import { useProgress } from '../context/ProgressContext'
-import { courses } from '../data/courses'
+import { useCourses } from '../context/CoursesContext'
 import { ComplianceBanner } from '../components/home/ComplianceBanner'
 import { ContinueLearning } from '../components/home/ContinueLearning'
 import { ProgramCard } from '../components/home/ProgramCard'
@@ -12,6 +12,7 @@ export function Home() {
   const { user } = useAuth()
   const { items, isAcknowledged } = useCompliance()
   const { getCourseProgress } = useProgress()
+  const { courses } = useCourses()
 
   const firstName = user?.name?.split(' ')[0] ?? 'Learner'
 

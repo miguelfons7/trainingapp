@@ -10,6 +10,20 @@ interface LogEntry {
 
 const changelog: LogEntry[] = [
   {
+    version: '0.13.1',
+    date: '2026-05-18',
+    title: 'DB-Backed Course Data + Consumer Migration',
+    changes: [
+      'Migration 007 executed: managed_courses, managed_modules, and managed_programs tables live in production with all seed data.',
+      'All 15+ consumer components migrated from hardcoded courses.ts/programs.ts imports to use the CoursesContext (useCourses() hook).',
+      'New courses, modules, and programs created via the admin dashboard now appear throughout the entire app: Home, CourseView, ModuleView, Certificates, UserProfile, ProgramCard, ContinueLearning, TopBar breadcrumbs, and all admin tabs.',
+      'CoursesProvider moved above ProgressProvider in App.tsx — ProgressContext now reads course data from the DB-backed context instead of hardcoded imports.',
+      'CourseStats and UserProgressTable: moved module-level constants (availableCourses, totalModules) inside component scope for dynamic DB data.',
+      'TopBar breadcrumbs refactored: getCourseById passed as parameter to buildBreadcrumbs function for hook compatibility.',
+      'Only CoursesContext itself retains hardcoded imports as fallback — all other files use the context exclusively.',
+    ],
+  },
+  {
     version: '0.13.0',
     date: '2026-05-18',
     title: 'Admin Course Management, User Editing, CMS Content Override',

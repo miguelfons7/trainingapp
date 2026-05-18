@@ -1,12 +1,13 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Check, X, UserPlus, BookOpen, Loader2 } from 'lucide-react'
-import { courses } from '../../data/courses'
+import { useCourses } from '../../context/CoursesContext'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../context/AuthContext'
 import type { Profile, CourseAssignment } from '../../types/database'
 
 export function AssignCourses() {
   const { user } = useAuth()
+  const { courses } = useCourses()
   const [profiles, setProfiles] = useState<Profile[]>([])
   const [assignments, setAssignments] = useState<(CourseAssignment & { userName: string; courseName: string })[]>([])
   const [loading, setLoading] = useState(true)

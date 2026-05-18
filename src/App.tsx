@@ -81,15 +81,15 @@ function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <ProgressProvider>
-          <ComplianceProvider>
-            <ConstructionProvider>
-              <CoursesProvider>
+        <CoursesProvider>
+          <ProgressProvider>
+            <ComplianceProvider>
+              <ConstructionProvider>
                 <AppRoutes />
-              </CoursesProvider>
-            </ConstructionProvider>
-          </ComplianceProvider>
-        </ProgressProvider>
+              </ConstructionProvider>
+            </ComplianceProvider>
+          </ProgressProvider>
+        </CoursesProvider>
       </AuthProvider>
     </BrowserRouter>
   )

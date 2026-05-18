@@ -8,8 +8,7 @@ import {
   Megaphone,
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { courses } from '../../data/courses'
-import { programs } from '../../data/programs'
+import { useCourses } from '../../context/CoursesContext'
 import { useConstruction, type ConstructionEntityType } from '../../context/ConstructionContext'
 
 // ── Toggle Row ─────────────────────────────────────────
@@ -115,6 +114,7 @@ function ToggleRow({ label, sublabel, entityType, entityId, parentId }: ToggleRo
 
 // ── Main Component ─────────────────────────────────────
 export function ConstructionManager() {
+  const { courses, programs } = useCourses()
   const { overrides, loading } = useConstruction()
   const [expandedCourses, setExpandedCourses] = useState<Set<string>>(new Set())
 

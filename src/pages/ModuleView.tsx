@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useCallback, type ComponentType } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { ArrowLeft, ChevronLeft, ChevronRight, Pencil, Loader2, Construction } from 'lucide-react'
-import { getCourseById } from '../data/courses'
 import { useProgress } from '../context/ProgressContext'
+import { useCourses } from '../context/CoursesContext'
 import { useAuth } from '../context/AuthContext'
 import { useConstruction } from '../context/ConstructionContext'
 import { useModuleContent } from '../hooks/useModuleContent'
@@ -152,6 +152,7 @@ export function ModuleView() {
   const { startModule, completeModule } = useProgress()
   const { user, isAdmin, isLeadership } = useAuth()
   const { isUnderConstruction, getConstructionMessage } = useConstruction()
+  const { getCourseById } = useCourses()
   const canBypass = isAdmin || isLeadership
 
   const course = courseId ? getCourseById(courseId) : undefined

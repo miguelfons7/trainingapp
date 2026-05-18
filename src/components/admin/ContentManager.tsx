@@ -11,7 +11,7 @@ import {
   ChevronRight,
   Layers,
 } from 'lucide-react'
-import { courses } from '../../data/courses'
+import { useCourses } from '../../context/CoursesContext'
 import { supabase } from '../../lib/supabase'
 import { hardcodedModuleIds } from '../../data/hardcodedModules'
 
@@ -24,6 +24,7 @@ interface ContentStatus {
 }
 
 export function ContentManager() {
+  const { courses } = useCourses()
   const [statusMap, setStatusMap] = useState<Map<string, ContentStatus>>(new Map())
   const [loading, setLoading] = useState(true)
   const [expandedCourses, setExpandedCourses] = useState<Set<string>>(

@@ -1,10 +1,11 @@
 import { Link } from 'react-router-dom'
 import { PlayCircle, CheckCircle2 } from 'lucide-react'
 import { useProgress } from '../../context/ProgressContext'
-import { courses } from '../../data/courses'
+import { useCourses } from '../../context/CoursesContext'
 
 export function ContinueLearning() {
   const { getCourseProgress, getNextModule } = useProgress()
+  const { courses } = useCourses()
 
   // Find the first available course that has incomplete modules
   const activeCourse = courses

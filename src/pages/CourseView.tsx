@@ -1,7 +1,7 @@
 import { Link, useParams } from 'react-router-dom'
 import { ArrowLeft, Clock, Lock, Play, Construction } from 'lucide-react'
-import { getCourseById } from '../data/courses'
 import { useProgress } from '../context/ProgressContext'
+import { useCourses } from '../context/CoursesContext'
 import { useAuth } from '../context/AuthContext'
 import { useConstruction } from '../context/ConstructionContext'
 import { CourseHeader } from '../components/course/CourseHeader'
@@ -9,6 +9,7 @@ import { ModuleList } from '../components/course/ModuleList'
 
 export function CourseView() {
   const { courseId } = useParams<{ courseId: string }>()
+  const { getCourseById } = useCourses()
   const course = courseId ? getCourseById(courseId) : undefined
   const { getNextModule, getCourseProgress } = useProgress()
   const { isAdmin, isLeadership } = useAuth()

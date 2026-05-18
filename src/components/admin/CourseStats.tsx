@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Loader2, X, BarChart3 } from 'lucide-react'
-import { courses } from '../../data/courses'
-import { programs } from '../../data/programs'
+import { useCourses } from '../../context/CoursesContext'
 import { supabase } from '../../lib/supabase'
 import type { Profile } from '../../types/database'
 
@@ -41,9 +40,9 @@ interface ProgramStat {
   avgOverallProgress: number  // average % across enrolled users
 }
 
-const availableCourses = courses.filter((c) => c.status === 'available')
-
 export function CourseStats() {
+  const { courses, programs } = useCourses()
+  const availableCourses = courses.filter((c) => c.status === 'available')
   const [stats, setStats] = useState<ComputedCourseStat[]>([])
   const [programStats, setProgramStats] = useState<ProgramStat[]>([])
   const [profiles, setProfiles] = useState<Map<string, string>>(new Map())

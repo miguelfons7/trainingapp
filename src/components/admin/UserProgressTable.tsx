@@ -3,7 +3,7 @@ import { ArrowUpDown, Loader2, ExternalLink, Search, X } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { ProgressBar } from '../shared/ProgressBar'
 import { supabase } from '../../lib/supabase'
-import { courses } from '../../data/courses'
+import { useCourses } from '../../context/CoursesContext'
 import type { Profile } from '../../types/database'
 
 interface UserWithProgress {
@@ -32,10 +32,10 @@ function formatDate(iso: string | null): string {
   return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
 }
 
-const availableCourses = courses.filter((c) => c.status === 'available')
-const totalModules = availableCourses.reduce((sum, c) => sum + c.modules.length, 0)
-
 export function UserProgressTable() {
+  const { courses } = useCourses()
+  const availableCourses = courses.filter((c) => c.status === 'available')
+  const totalModules = availableCourses.reduce((sum, c) => sum + c.modules.length, 0)
   const navigate = useNavigate()
   const [users, setUsers] = useState<UserWithProgress[]>([])
   const [loading, setLoading] = useState(true)

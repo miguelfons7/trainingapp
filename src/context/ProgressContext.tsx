@@ -7,7 +7,7 @@ import {
   type ReactNode,
 } from 'react'
 import type { ModuleProgress } from '../types'
-import { courses } from '../data/courses'
+import { useCourses } from './CoursesContext'
 import { useAuth } from './AuthContext'
 import { supabase } from '../lib/supabase'
 
@@ -35,6 +35,7 @@ const ProgressContext = createContext<ProgressContextValue | undefined>(
 
 export function ProgressProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth()
+  const { courses } = useCourses()
   const userId = user?.id ?? ''
 
   const [progress, setProgress] = useState<Record<string, ModuleProgress>>({})
@@ -185,7 +186,7 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
         percentage: total > 0 ? Math.round((completed / total) * 100) : 0,
       }
     },
-    [progress],
+    [progress, courses],
   )
 
   const getNextModule = useCallback(
@@ -200,7 +201,7 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
 
       return next?.id ?? null
     },
-    [progress],
+    [progress, courses],
   )
 
   const resetProgress = useCallback(() => {

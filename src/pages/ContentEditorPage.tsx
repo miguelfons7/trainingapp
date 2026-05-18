@@ -1,8 +1,8 @@
 import { useParams, Link } from 'react-router-dom'
 import { ArrowLeft, Loader2, AlertCircle, History, Layers } from 'lucide-react'
 import { useState } from 'react'
-import { getCourseById } from '../data/courses'
 import { useAuth } from '../context/AuthContext'
+import { useCourses } from '../context/CoursesContext'
 import { useModuleContent } from '../hooks/useModuleContent'
 import { BlockEditor } from '../components/cms/BlockEditor'
 import { VersionHistory } from '../components/cms/VersionHistory'
@@ -13,6 +13,7 @@ import type { PageContent } from '../types/blocks'
 export function ContentEditorPage() {
   const { courseId, moduleId } = useParams<{ courseId: string; moduleId: string }>()
   const { user, isAdmin } = useAuth()
+  const { getCourseById } = useCourses()
   const { record, content, loading, error, isPublished, save, publish, reload } = useModuleContent(
     courseId,
     moduleId,
