@@ -144,7 +144,7 @@ export function AskingRightQuestions() {
 
       {/* Funnelling technique */}
       <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6 overflow-hidden">
-        <InlineImage src="inline-doctor-examining.jpg" alt="Doctor examining patient" float="left" size="small" caption="Good intake questions lead to good discovery" />
+        <InlineImage src="inline-funnel.jpg" alt="Sales funnel concept" float="left" size="small" caption="Start broad, then narrow down" />
         <h3 className="text-sm font-semibold text-via-navy uppercase tracking-wide mb-4">
           The Funnelling Technique
         </h3>

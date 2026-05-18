@@ -77,7 +77,7 @@ const contentMap: Record<string, ComponentType> = {
 const quizModules = new Set(['industry-knowledge-check', 'via-knowledge-check', 'product-knowledge-check', 'sales-philosophy-quiz'])
 
 /** Maps module IDs to their hero image filenames in public/images/.
- *  Course 1 uses AI-generated .png images. Courses 2-4 use stock photos from Pexels. */
+ *  Course 1 uses AI-generated .png images. Courses 2-4 use company photos and stock images. */
 const moduleImageMap: Record<string, { src: string; alt: string }> = {
   // Course 1 — AI images exist
   'secondary-market': { src: 'module-channels.png', alt: 'Secondary Market Sales Channels' },
@@ -87,12 +87,11 @@ const moduleImageMap: Record<string, { src: string; alt: string }> = {
   'buyer-types': { src: 'module-buyer-types.png', alt: 'Buyer Types Overview' },
   'key-terminology': { src: 'module-dealer-levels.png', alt: 'Industry Terminology & Dealer Levels' },
   // Course 2 — Via Trading
-  'our-story': { src: 'module-our-story.jpg', alt: 'Via Trading Warehouse' },
-  'mission-values': { src: 'module-mission-values.jpg', alt: 'Team Collaboration and Values' },
+  'mission-values': { src: 'via-office-team.jpg', alt: 'Via Trading Office Team' },
   'our-platforms': { src: 'module-our-platforms.jpg', alt: 'E-Commerce Technology' },
-  'liquidatenow': { src: 'module-liquidatenow.jpg', alt: 'Online Marketplace' },
+  'liquidatenow': { src: 'module-liquidatenow.png', alt: 'LiquidateNow — Liquidate Your Inventory' },
   'wesolvereturns': { src: 'module-wesolvereturns.jpg', alt: 'Returns and Logistics' },
-  'why-via': { src: 'module-why-via.jpg', alt: 'Business Team Celebrating Success' },
+  'why-via': { src: 'via-sales-team.jpg', alt: 'Via Trading Sales Team' },
   // Course 3 — Product Knowledge
   'product-overview': { src: 'module-product-overview.jpg', alt: 'Warehouse Product Shelves' },
   'target-programs': { src: 'module-target-programs.jpg', alt: 'Target Store Exterior' },
@@ -105,15 +104,15 @@ const moduleImageMap: Record<string, { src: string; alt: string }> = {
   'other-programs': { src: 'module-other-programs.jpg', alt: 'Retail Merchandise' },
   'ln-offerings': { src: 'module-ln-offerings.jpg', alt: 'Digital Marketplace' },
   // Course 4 — Consultative Sales
-  'consultative-mindset': { src: 'module-consultative-mindset.jpg', alt: 'Doctor with Stethoscope' },
-  'asking-right-questions': { src: 'module-asking-right-questions.jpg', alt: 'Stethoscope on Heart' },
+  'consultative-mindset': { src: 'module-consultative-mindset.jpg', alt: 'Question Marks — The Consultative Mindset' },
+  'asking-right-questions': { src: 'module-asking-right-questions.jpg', alt: 'Stethoscope — Your Questions Are Your Diagnostic Tool' },
   'listening-beyond-words': { src: 'module-listening-beyond-words.jpg', alt: 'Doctor Listening to Patient' },
   'know-your-patients': { src: 'module-know-your-patients.jpg', alt: 'Medical Records and Charts' },
-  'five-step-method': { src: 'module-five-step-method.jpg', alt: 'Doctor Reviewing Diagnosis' },
+  'five-step-method': { src: 'module-five-step-method.jpg', alt: 'The Number 5' },
   'when-patients-push-back': { src: 'module-when-patients-push-back.jpg', alt: 'Doctor-Patient Conversation' },
   'art-of-the-close': { src: 'module-art-of-the-close.jpg', alt: 'Professional Handshake' },
-  'transaction-to-partnership': { src: 'module-transaction-to-partnership.jpg', alt: 'Doctor Follow-Up Care' },
-  'triage-and-diagnosis': { src: 'module-triage-and-diagnosis.jpg', alt: 'Nurse Performing Triage' },
+  'transaction-to-partnership': { src: 'module-transaction-to-partnership.jpg', alt: 'Epic Handshake — Partnership' },
+  'triage-and-diagnosis': { src: 'module-triage-and-diagnosis.jpg', alt: 'Customer Service Team' },
 }
 
 export function ModuleView() {

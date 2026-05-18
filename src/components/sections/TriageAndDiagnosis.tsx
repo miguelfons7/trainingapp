@@ -55,7 +55,7 @@ export function TriageAndDiagnosis() {
           <Badge text="BDR" color="blue" />
         </div>
 
-        <InlineImage src="inline-nurse-triage.jpg" alt="Nurse performing triage" float="right" size="small" caption="BDR: The triage nurse" />
+        <InlineImage src="inline-bdr-sales.jpg" alt="Business Development Representative" float="right" size="small" caption="BDR: Qualify and route" />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
           <div>
@@ -116,7 +116,7 @@ export function TriageAndDiagnosis() {
           <Badge text="AM" color="teal" />
         </div>
 
-        <InlineImage src="inline-medical-team.jpg" alt="Medical team collaborating" float="left" size="small" caption="AM: The specialist physician" />
+        <InlineImage src="inline-account-manager.png" alt="Strategic Account Manager" float="left" size="small" caption="AM: Own the relationship" />
 
         <p className="text-sm text-via-text leading-relaxed mb-4">
           The Account Manager owns the buyer relationship from the first substantive conversation

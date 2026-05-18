@@ -147,7 +147,7 @@ export function TransactionToPartnership() {
         <h3 className="text-sm font-semibold text-via-navy uppercase tracking-wide mb-3">
           Trust Is the Product
         </h3>
-        <InlineImage src="inline-doctor-trust.jpg" alt="Doctor building patient trust" float="right" size="small" caption="Trust is the product" />
+        <InlineImage src="inline-cliff-helping.jpg" alt="Helping hand — trust and partnership" float="right" size="small" caption="Trust is the product" />
         <p className="text-sm text-via-text leading-relaxed mb-4">
           In liquidation, buyers are not just buying inventory. They are buying the person they
           are speaking to. Many buyers have been burned before: they purchased a bad load, did not

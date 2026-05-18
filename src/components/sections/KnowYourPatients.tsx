@@ -12,7 +12,6 @@ import {
   ArrowDown,
 } from 'lucide-react'
 import { SectionWrapper } from '../shared/SectionWrapper'
-import { InlineImage } from '../shared/InlineImage'
 import { ExpandableCard } from '../shared/ExpandableCard'
 import { Badge } from '../shared/Badge'
 import { FillInBlank } from '../interactive/FillInBlank'
@@ -52,8 +51,7 @@ export function KnowYourPatients() {
       icon={<Users className="w-5 h-5" />}
     >
       {/* Opening */}
-      <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6 overflow-hidden">
-        <InlineImage src="inline-doctor-clipboard.jpg" alt="Doctor reviewing patient chart" float="right" size="small" caption="Know your patients before treating" />
+      <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6">
         <h3 className="text-sm font-semibold text-via-navy uppercase tracking-wide mb-3">
           Patient Profiles
         </h3>

@@ -11,7 +11,6 @@ import {
   Eye,
 } from 'lucide-react'
 import { SectionWrapper } from '../shared/SectionWrapper'
-import { InlineImage } from '../shared/InlineImage'
 import { ExpandableCard } from '../shared/ExpandableCard'
 import { closingTechniques, languageGuidance } from '../../data/modules/consultative-sales/consultativeData'
 
@@ -47,11 +46,10 @@ export function ArtOfTheClose() {
       icon={<HandshakeIcon className="w-5 h-5" />}
     >
       {/* Opening */}
-      <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6 overflow-hidden">
+      <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6">
         <h3 className="text-sm font-semibold text-via-navy uppercase tracking-wide mb-3">
           Closing Is a Natural Conclusion
         </h3>
-        <InlineImage src="inline-doctor-patient.jpg" alt="Doctor with patient" float="right" size="small" caption="The follow-up, not the final verdict" />
         <p className="text-sm text-via-text leading-relaxed mb-4">
           Think about it this way: a doctor who has thoroughly examined a patient, explained the
           diagnosis, and laid out the treatment plan does not need to "close" the patient on

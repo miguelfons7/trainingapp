@@ -11,7 +11,6 @@ import {
   MapPin,
 } from 'lucide-react'
 import { SectionWrapper } from '../shared/SectionWrapper'
-import { InlineImage } from '../shared/InlineImage'
 import { StatCard } from '../shared/StatCard'
 import {
   companyStory,
@@ -39,12 +38,20 @@ export function CompanyOverview() {
       accentColor="border-via-orange"
       icon={<Building2 className="w-5 h-5" />}
     >
+      {/* Company logo */}
+      <div className="flex items-center justify-center mb-6 bg-via-card rounded-xl border border-via-border p-8">
+        <img
+          src={`${import.meta.env.BASE_URL}images/viatrading-logo-dark.svg`}
+          alt="Via Trading Corporation"
+          className="h-16 sm:h-20"
+        />
+      </div>
+
       {/* Via Trading Corporation Umbrella */}
-      <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6 overflow-hidden">
+      <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6">
         <h3 className="text-sm font-semibold text-via-text uppercase tracking-wide mb-3">
           Via Trading Corporation
         </h3>
-        <InlineImage src="inline-warehouse-workers.jpg" alt="Warehouse operations" float="right" size="medium" caption="Via Trading warehouse operations" />
         <p className="text-sm text-via-text leading-relaxed mb-3">
           Via Trading Corporation is the parent umbrella company that houses three operating entities, with more branches on the way:
         </p>

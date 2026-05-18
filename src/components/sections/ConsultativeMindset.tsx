@@ -13,11 +13,10 @@ export function ConsultativeMindset() {
       icon={<Stethoscope className="w-5 h-5" />}
     >
       {/* Opening hook */}
-      <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6 overflow-hidden">
+      <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6">
         <h3 className="text-sm font-semibold text-via-navy uppercase tracking-wide mb-3">
           What If Your Doctor Just Started Prescribing?
         </h3>
-        <InlineImage src="inline-stethoscope.jpg" alt="Stethoscope" float="right" size="small" caption="Your questions are the stethoscope" />
         <p className="text-sm text-via-text leading-relaxed mb-4">
           Imagine walking into a doctor's office. Before you sit down, before you describe your
           symptoms, before anyone takes your temperature or checks your blood pressure, the doctor
@@ -89,7 +88,7 @@ export function ConsultativeMindset() {
         <h3 className="text-sm font-semibold text-via-navy uppercase tracking-wide mb-4">
           The 30% Rule
         </h3>
-        <InlineImage src="inline-doctor-clipboard.jpg" alt="Doctor reviewing notes" float="left" size="small" caption="Diagnose before you prescribe" />
+        <InlineImage src="inline-listening.jpg" alt="Active listening in practice" float="left" size="small" caption="Listen more than you speak" />
         <p className="text-sm text-via-text leading-relaxed mb-4">
           In a consultative conversation, the salesperson should contribute approximately{' '}
           <strong>30% of the talking</strong>. The buyer does the other 70%. That 30% is almost
