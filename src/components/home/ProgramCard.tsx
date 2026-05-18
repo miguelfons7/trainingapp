@@ -1,13 +1,17 @@
 import { Link } from 'react-router-dom'
-import { Shield } from 'lucide-react'
+import { Shield, Construction } from 'lucide-react'
 import { ProgressRing } from '../shared/ProgressRing'
 import { getProgram } from '../../data/courses'
 import { useProgress } from '../../context/ProgressContext'
+import { useConstruction } from '../../context/ConstructionContext'
 import { courses } from '../../data/courses'
 
 export function ProgramCard() {
   const program = getProgram()
   const { getCourseProgress } = useProgress()
+  const { isUnderConstruction, getConstructionMessage } = useConstruction()
+  const isProgramConstruction = isUnderConstruction('program', program.id)
+  const programMsg = getConstructionMessage('program', program.id)
 
   const availableCourses = courses.filter((c) => c.status === 'available')
 
@@ -31,6 +35,17 @@ export function ProgramCard() {
 
   return (
     <div className="rounded-2xl border border-via-border bg-via-card p-6">
+      {/* Program under construction banner */}
+      {isProgramConstruction && (
+        <div className="bg-amber-50 rounded-lg border border-amber-200 p-3 flex items-center gap-2.5 mb-4">
+          <Construction className="w-4 h-4 text-amber-600 shrink-0" />
+          <div>
+            <p className="text-xs font-semibold text-amber-800">Program Under Construction</p>
+            {programMsg && <p className="text-[10px] text-amber-700">{programMsg}</p>}
+          </div>
+        </div>
+      )}
+
       <div className="flex items-center gap-5">
         <div className="shrink-0">
           <ProgressRing value={overallProgress} size={80} showLabel />

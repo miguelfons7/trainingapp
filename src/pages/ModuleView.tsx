@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useCallback, type ComponentType } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
-import { ArrowLeft, ChevronLeft, ChevronRight, Pencil, Loader2 } from 'lucide-react'
+import { ArrowLeft, ChevronLeft, ChevronRight, Pencil, Loader2, Construction } from 'lucide-react'
 import { getCourseById } from '../data/courses'
 import { useProgress } from '../context/ProgressContext'
 import { useAuth } from '../context/AuthContext'
+import { useConstruction } from '../context/ConstructionContext'
 import { useModuleContent } from '../hooks/useModuleContent'
 import { BlockRenderer } from '../components/cms/BlockRenderer'
 import { SecondaryMarket } from '../components/sections/SecondaryMarket'
@@ -150,9 +151,12 @@ export function ModuleView() {
   const navigate = useNavigate()
   const { startModule, completeModule } = useProgress()
   const { user, isAdmin, isLeadership } = useAuth()
+  const { isUnderConstruction, getConstructionMessage } = useConstruction()
   const canBypass = isAdmin || isLeadership
 
   const course = courseId ? getCourseById(courseId) : undefined
+  const isModuleConstruction = moduleId ? isUnderConstruction('module', moduleId) : false
+  const moduleConstructionMsg = moduleId ? getConstructionMessage('module', moduleId) : null
 
   // CMS content — only fetched if no hardcoded component exists
   const hasHardcoded = moduleId ? !!contentMap[moduleId] : false
@@ -240,8 +244,32 @@ export function ModuleView() {
         )}
       </div>
 
+      {/* Module under construction — block regular users */}
+      {isModuleConstruction && !canBypass && (
+        <div className="bg-via-card rounded-xl border border-amber-200 p-12 text-center mb-8">
+          <Construction className="w-12 h-12 text-amber-500 mx-auto mb-4" />
+          <h2 className="text-xl font-bold text-via-navy mb-2">Under Construction</h2>
+          <p className="text-sm text-via-text-light">
+            {moduleConstructionMsg || 'This module is currently being updated and will be available soon.'}
+          </p>
+        </div>
+      )}
+
+      {/* Construction banner for admins/leadership */}
+      {isModuleConstruction && canBypass && (
+        <div className="bg-amber-50 rounded-xl border border-amber-200 p-4 flex items-center gap-3 mb-6">
+          <Construction className="w-5 h-5 text-amber-600 shrink-0" />
+          <div>
+            <p className="text-sm font-semibold text-amber-800">Module Under Construction</p>
+            <p className="text-xs text-amber-700">
+              {moduleConstructionMsg || 'This module is marked as under construction. Regular users cannot access it.'}
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* Module hero image */}
-      {moduleId && moduleImageMap[moduleId] && (
+      {!(isModuleConstruction && !canBypass) && moduleId && moduleImageMap[moduleId] && (
         <div className="mb-6">
           <ImagePlaceholder
             src={moduleImageMap[moduleId].src}
@@ -252,7 +280,7 @@ export function ModuleView() {
       )}
 
       {/* Admin: Edit content button */}
-      {isAdmin && !isQuiz && (
+      {isAdmin && !isQuiz && !(isModuleConstruction && !canBypass) && (
         <div className="mb-4">
           <Link
             to={`/admin/content/${courseId}/${moduleId}`}
@@ -264,24 +292,26 @@ export function ModuleView() {
         </div>
       )}
 
-      {/* Module content */}
-      <div className="mb-8">
-        {isQuiz ? (
-          <QuizBlock quizId={moduleId} onComplete={handleQuizComplete} />
-        ) : ContentComponent ? (
-          <ContentComponent />
-        ) : cmsLoading ? (
-          <div className="flex items-center justify-center py-20">
-            <Loader2 className="w-6 h-6 text-via-navy animate-spin" />
-          </div>
-        ) : cmsContent ? (
-          <BlockRenderer content={cmsContent} />
-        ) : (
-          <div className="bg-via-card rounded-xl border border-via-border p-12 text-center">
-            <p className="text-via-text-light">Content coming soon.</p>
-          </div>
-        )}
-      </div>
+      {/* Module content — hidden for regular users if under construction */}
+      {!(isModuleConstruction && !canBypass) && (
+        <div className="mb-8">
+          {isQuiz ? (
+            <QuizBlock quizId={moduleId} onComplete={handleQuizComplete} />
+          ) : ContentComponent ? (
+            <ContentComponent />
+          ) : cmsLoading ? (
+            <div className="flex items-center justify-center py-20">
+              <Loader2 className="w-6 h-6 text-via-navy animate-spin" />
+            </div>
+          ) : cmsContent ? (
+            <BlockRenderer content={cmsContent} />
+          ) : (
+            <div className="bg-via-card rounded-xl border border-via-border p-12 text-center">
+              <p className="text-via-text-light">Content coming soon.</p>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Previous / Next navigation */}
       <div className="flex items-center justify-between border-t border-via-border pt-6">

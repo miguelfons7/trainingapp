@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Shield, Users, BarChart3, BookPlus, Megaphone, UserPlus, Building2, UserCog, FileEdit } from 'lucide-react'
+import { Shield, Users, BarChart3, BookPlus, Megaphone, UserPlus, Building2, UserCog, FileEdit, Construction } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { UserProgressTable } from '../components/admin/UserProgressTable'
 import { CourseStats } from '../components/admin/CourseStats'
@@ -9,8 +9,9 @@ import { InviteUsers } from '../components/admin/InviteUsers'
 import { ManageTeams } from '../components/admin/ManageTeams'
 import { ManageUsers } from '../components/admin/ManageUsers'
 import { ContentManager } from '../components/admin/ContentManager'
+import { ConstructionManager } from '../components/admin/ConstructionManager'
 
-type TabKey = 'progress' | 'compliance' | 'stats' | 'assign' | 'invite' | 'teams' | 'users' | 'content'
+type TabKey = 'progress' | 'compliance' | 'stats' | 'assign' | 'invite' | 'teams' | 'users' | 'content' | 'construction'
 
 const tabs: { key: TabKey; label: string; icon: typeof Users }[] = [
   { key: 'progress', label: 'User Progress', icon: Users },
@@ -21,6 +22,7 @@ const tabs: { key: TabKey; label: string; icon: typeof Users }[] = [
   { key: 'stats', label: 'Course Stats', icon: BarChart3 },
   { key: 'assign', label: 'Assign Courses', icon: BookPlus },
   { key: 'content', label: 'Content Editor', icon: FileEdit },
+  { key: 'construction', label: 'Construction', icon: Construction },
 ]
 
 export function Admin() {
@@ -88,6 +90,7 @@ export function Admin() {
       {activeTab === 'assign' && <AssignCourses />}
       {activeTab === 'invite' && <InviteUsers />}
       {activeTab === 'content' && <ContentManager />}
+      {activeTab === 'construction' && <ConstructionManager />}
     </div>
   )
 }

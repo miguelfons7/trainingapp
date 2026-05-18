@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import {
   Lock,
+  Construction,
   Warehouse,
   Building2,
   Package,
@@ -14,6 +15,7 @@ import {
 import { ProgressBar } from '../shared/ProgressBar'
 import { ImagePlaceholder } from '../shared/ImagePlaceholder'
 import { useProgress } from '../../context/ProgressContext'
+import { useConstruction } from '../../context/ConstructionContext'
 import type { Course } from '../../types'
 
 interface CourseCardProps {
@@ -34,12 +36,17 @@ const iconMap: Record<string, LucideIcon> = {
 
 export function CourseCard({ course }: CourseCardProps) {
   const { getCourseProgress } = useProgress()
+  const { isUnderConstruction, getConstructionMessage } = useConstruction()
   const isComingSoon = course.status === 'coming-soon'
+  const isCourseConstruction = isUnderConstruction('course', course.id)
+  const constructionMsg = getConstructionMessage('course', course.id)
 
   const Icon = iconMap[course.icon] ?? BookOpen
   const progress = getCourseProgress(course.id)
 
-  if (isComingSoon) {
+  if (isComingSoon || isCourseConstruction) {
+    const label = isCourseConstruction ? 'Under Construction' : 'Coming Soon'
+    const OverlayIcon = isCourseConstruction ? Construction : Lock
     return (
       <div className="group relative flex flex-col overflow-hidden rounded-xl border border-via-border bg-via-card opacity-60">
         <div className="relative">
@@ -51,11 +58,16 @@ export function CourseCard({ course }: CourseCardProps) {
             className="rounded-none"
           />
           <div className="absolute inset-0 flex items-center justify-center bg-black/40">
-            <div className="flex items-center gap-2 rounded-full bg-black/60 px-4 py-2">
-              <Lock className="h-4 w-4 text-white" />
-              <span className="text-sm font-medium text-white">
-                Coming Soon
-              </span>
+            <div className="flex flex-col items-center gap-1">
+              <div className="flex items-center gap-2 rounded-full bg-black/60 px-4 py-2">
+                <OverlayIcon className="h-4 w-4 text-white" />
+                <span className="text-sm font-medium text-white">{label}</span>
+              </div>
+              {constructionMsg && (
+                <span className="text-xs text-white/80 bg-black/40 rounded-full px-3 py-1 max-w-[200px] text-center truncate">
+                  {constructionMsg}
+                </span>
+              )}
             </div>
           </div>
         </div>

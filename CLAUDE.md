@@ -74,7 +74,7 @@ public/
 - **Anon Key**: Stored in `.env.local` as `VITE_SUPABASE_ANON_KEY`
 - `.env.local` is gitignored via `*.local` pattern
 
-### Database Schema (11 tables)
+### Database Schema (12 tables)
 
 | Table | Purpose | Key Fields |
 |-------|---------|------------|
@@ -89,6 +89,7 @@ public/
 | `audit_log` | Admin action tracking | `actor_id`, `action`, `entity_type`, `entity_id`, `entity_title`, `details` (jsonb) |
 | `module_content` | CMS block content per module (one row per module) | `course_id`, `module_id`, `content` (jsonb PageContent), `status` (draft/published), `version`, `created_by`, `updated_by` |
 | `module_content_versions` | Immutable version snapshots (created on publish) | `module_content_id` (FK), `content` (jsonb), `version`, `published_by`, `published_at` |
+| `construction_overrides` | Admin toggles for under-construction status | `entity_type` (course/module/program), `entity_id`, `is_active`, `message`, `updated_by` |
 
 ### Roles & Permissions
 
@@ -440,6 +441,7 @@ interface CourseModule {
 - **Search in admin tables** — UserProgressTable and ManageUsers both have search bars filtering by name or email.
 - **Program stats** — CourseStats shows a Program Overview table above the per-course table, with enrolled/completed/avg progress.
 - **Audit log** — `audit_log` table with RLS (admins read, all insert own actions). ComplianceContext auto-logs create, update, status_change, delete actions.
+- **Construction status** — `construction_overrides` table lets admins mark courses/modules/programs as under construction. ConstructionContext provides `isUnderConstruction()` app-wide. Regular users blocked; admins/leadership see warning banners. Toggle switches with optimistic updates. Migration 006.
 - **Admin CMS** — Block-based content editor with visual, code, and preview modes. 18 block types matching existing shared/interactive components. Content stored as JSONB in `module_content` table with draft/publish workflow and version history with rollback. Content resolution: hardcoded TSX first → CMS published content → "coming soon" placeholder. Admin "Edit in CMS" button on every module page. Content Editor tab in Admin dashboard lists all modules with CMS status. Editor page at `/admin/content/:courseId/:moduleId`. DB migration 005.
 
 ## Pending Work

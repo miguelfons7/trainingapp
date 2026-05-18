@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom'
-import { CheckCircle, Play, Circle, Clock, Lock } from 'lucide-react'
+import { CheckCircle, Play, Circle, Clock, Lock, Construction } from 'lucide-react'
 import type { CourseModule } from '../../types'
 import { useProgress } from '../../context/ProgressContext'
 import { useAuth } from '../../context/AuthContext'
+import { useConstruction } from '../../context/ConstructionContext'
 
 interface ModuleListProps {
   courseId: string
@@ -27,6 +28,7 @@ const contentTypeBadge: Record<string, { label: string; className: string }> = {
 export function ModuleList({ courseId, modules }: ModuleListProps) {
   const { getModuleStatus } = useProgress()
   const { isAdmin, isLeadership } = useAuth()
+  const { isUnderConstruction: isConstructing } = useConstruction()
 
   const canBypass = isAdmin || isLeadership
 
@@ -36,11 +38,13 @@ export function ModuleList({ courseId, modules }: ModuleListProps) {
         const status = getModuleStatus(courseId, mod.id)
         const badge = contentTypeBadge[mod.contentType]
         const isLast = index === modules.length - 1
+        const isModuleConstruction = isConstructing('module', mod.id)
 
         // First module is always accessible; admins/leadership can access any module.
         // Regular users must complete the previous module before unlocking the next one.
+        // Modules under construction are inaccessible to regular users.
         const prevStatus = index > 0 ? getModuleStatus(courseId, modules[index - 1].id) : 'completed'
-        const isAccessible = canBypass || index === 0 || prevStatus === 'completed'
+        const isAccessible = canBypass || ((index === 0 || prevStatus === 'completed') && !isModuleConstruction)
 
         const sharedClassName = `flex items-center gap-4 px-5 py-4 ${
           !isLast ? 'border-b border-via-border' : ''
@@ -57,9 +61,13 @@ export function ModuleList({ courseId, modules }: ModuleListProps) {
                 {index + 1}
               </span>
 
-              {/* Lock icon */}
+              {/* Lock / Construction icon */}
               <div className="shrink-0">
-                <Lock className="w-5 h-5 text-via-text-light/40" />
+                {isModuleConstruction ? (
+                  <Construction className="w-5 h-5 text-amber-400" />
+                ) : (
+                  <Lock className="w-5 h-5 text-via-text-light/40" />
+                )}
               </div>
 
               {/* Content */}
@@ -77,6 +85,11 @@ export function ModuleList({ courseId, modules }: ModuleListProps) {
                   >
                     {badge.label}
                   </span>
+                  {isModuleConstruction && (
+                    <span className="text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 rounded-full bg-amber-100 text-amber-700">
+                      Under Construction
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
@@ -124,6 +137,11 @@ export function ModuleList({ courseId, modules }: ModuleListProps) {
                 >
                   {badge.label}
                 </span>
+                {isModuleConstruction && canBypass && (
+                  <span className="text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 rounded-full bg-amber-100 text-amber-700">
+                    Under Construction
+                  </span>
+                )}
               </div>
             </div>
           </Link>

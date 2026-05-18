@@ -10,6 +10,24 @@ interface LogEntry {
 
 const changelog: LogEntry[] = [
   {
+    version: '0.12.0',
+    date: '2026-05-18',
+    title: 'Construction Status Manager + Acknowledgement Access',
+    changes: [
+      'New "Construction" tab in Admin dashboard: toggle any course, module, or program as "under construction" with optional custom messages.',
+      'ConstructionContext: app-wide context (like ComplianceContext) provides isUnderConstruction() and getConstructionMessage() to all components.',
+      'Course cards show "Under Construction" overlay with construction icon and optional message (replaces "Coming Soon" when active).',
+      'CourseView blocks regular users from under-construction courses with dedicated message page. Admins/leadership see amber warning banner but can still access.',
+      'Module list shows "Under Construction" badge on affected modules. Regular users see construction icon instead of lock; admins see badge alongside normal module link.',
+      'ModuleView blocks regular users from under-construction modules with dedicated message. Admins/leadership see amber banner and can still view/edit content.',
+      'ProgramCard shows construction banner when the program is marked under construction.',
+      'Toggle switches with optimistic updates and rollback — same pattern as compliance system.',
+      'Custom messages per entity: optional text shown to users explaining when content will be available.',
+      '"Create Announcement" quick link in Construction Manager for easy access to acknowledgement creation.',
+      'DB migration 006: construction_overrides table with RLS (all read, admins manage), updated_at trigger, partial index on active overrides.',
+    ],
+  },
+  {
     version: '0.11.0',
     date: '2026-05-18',
     title: 'Admin CMS: Visual Block Editor + Code Editor',

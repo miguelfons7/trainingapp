@@ -472,6 +472,42 @@ export interface Database {
           },
         ]
       }
+      construction_overrides: {
+        Row: {
+          id: string
+          entity_type: string
+          entity_id: string
+          parent_id: string | null
+          is_active: boolean
+          message: string
+          updated_by: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          entity_type: string
+          entity_id: string
+          parent_id?: string | null
+          is_active?: boolean
+          message?: string
+          updated_by?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          entity_type?: string
+          entity_id?: string
+          parent_id?: string | null
+          is_active?: boolean
+          message?: string
+          updated_by?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: Record<string, never>
     Functions: {
@@ -514,3 +550,4 @@ export type ContentRequest = Database['public']['Tables']['content_requests']['R
 export type ComplianceItemRow = Database['public']['Tables']['compliance_items']['Row']
 export type ComplianceAcknowledgementRow = Database['public']['Tables']['compliance_acknowledgements']['Row']
 export type AuditLogRow = Database['public']['Tables']['audit_log']['Row']
+export type ConstructionOverrideRow = Database['public']['Tables']['construction_overrides']['Row']
