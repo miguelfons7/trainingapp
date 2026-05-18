@@ -4,164 +4,168 @@ import type { QuizQuestion, SectionedQuiz } from '../../../types'
  * End-of-course quiz for "Intro to the Liquidation Industry"
  * Sectioned format: 4 term match + 8 MC + 4 fill-in-blank = 16 items
  * Passing score: 85% (14 of 16 correct)
+ *
+ * CONCEPT ISOLATION (no cross-section leakage):
+ *   TM: Gaylord, Reverse Logistics, LTL, Landed Cost
+ *   MC: secondary market, Level 1 advantage, bin store needs, FOB, manifests,
+ *       e-commerce impact, exporter pallet preference, truckload economics
+ *   FIB: 53-ft trailer capacity, New Overstock, Shelf Pulls, Level 1 = 70%
  */
 
-/** Legacy flat quiz (kept for backward compatibility) */
 export const industryCourseQuiz: QuizQuestion[] = [
   {
     id: 'cq-1',
-    question: 'What is the primary reason the secondary market exists?',
+    question: 'Why does the secondary market exist?',
     options: [
-      'To compete with traditional retail stores',
-      'To provide an outlet for unsold, returned, and excess merchandise from retailers',
-      'To manufacture cheaper versions of brand-name products',
-      'To serve as a recycling center for damaged goods',
+      'To compete directly with traditional retail stores on price',
+      'To provide an outlet for the massive volume of unsold, returned, and excess merchandise that major retailers generate',
+      'To serve as a recycling and disposal center for damaged goods',
+      'To manufacture lower-cost alternatives to brand-name products',
     ],
     correctIndex: 1,
     explanation:
-      'The secondary market exists because major retailers generate enormous volumes of unsold, returned, and excess merchandise that needs an outlet. Rather than destroying it, this inventory flows into the secondary market where it can be resold at discounted prices.',
+      'The secondary market exists because major retailers generate enormous volumes of unsold, returned, and excess merchandise. Rather than destroying this inventory, it flows into the secondary market where it can be resold at discounted prices through liquidation companies.',
   },
   {
     id: 'cq-2',
-    question: 'What distinguishes a Level 1 dealer from a Level 2 or Level 3 dealer?',
+    question: 'What is the biggest advantage of buying from a Level 1 dealer instead of a broker?',
     options: [
-      'Level 1 dealers only sell electronics',
-      'Level 1 dealers have direct contracts with major retailers and handle ~70% of salvage goods',
-      'Level 1 dealers sell directly to consumers',
-      'Level 1 dealers only operate in the United States',
+      'Level 1 dealers always offer the lowest prices in the market',
+      'Level 1 dealers have direct retailer contracts, giving them access to the freshest inventory with no middleman markup',
+      'Level 1 dealers exclusively sell electronics and high-value categories',
+      'Level 1 dealers offer financing and payment plans that brokers cannot',
     ],
     correctIndex: 1,
     explanation:
-      'Level 1 dealers like Via Trading have direct contracts with major retailers (Walmart, Target, Amazon, etc.) and handle approximately 70% of all salvage goods entering the secondary market. This gives them access to the freshest inventory at the best prices.',
+      'Level 1 dealers like Via Trading have direct contracts with major retailers, which means they handle inventory first — before brokers or smaller dealers see it. This results in fresher merchandise at better pricing because there\'s no middleman adding markup.',
+  },
+  {
+    id: 'cq-3',
+    question: 'A buyer tells you they operate a bin store with a weekly markdown schedule. Which factor matters MOST when sourcing inventory for them?',
+    options: [
+      'Premium brand names and high retail values per item',
+      'High product density and broad assorted variety per load',
+      'Manifested loads with detailed item-level breakdowns',
+      'Category-specific pallets focused on a single product type',
+    ],
+    correctIndex: 1,
+    explanation:
+      'Bin store operators need high-volume, assorted merchandise that creates a "treasure hunt" experience for their customers. Product density (more units per pallet) and variety matter more than specific brands or manifests, because bin stores reprice everything on a weekly markdown cycle.',
   },
   {
     id: 'cq-4',
-    question: 'What is a manifest and why is it important to buyers?',
+    question: 'Why should a buyer pay close attention to the FOB location listed on a deal?',
     options: [
-      'A shipping label that shows the weight of a pallet',
-      'A document listing all items in a lot with brand, model, quantity, and value, essential for evaluating a purchase',
-      'A receipt showing the final sale price',
-      'A government form required for international shipping',
+      'It tells them the warranty terms for the merchandise',
+      'It determines the pallet format they will receive',
+      'It reveals the pickup location for freight calculation and whether the transaction is direct or brokered',
+      'It indicates the condition grade of the merchandise',
+    ],
+    correctIndex: 2,
+    explanation:
+      'FOB (Freight On Board) indicates the location where merchandise is available for pickup or shipping. This helps buyers calculate freight costs accurately and also reveals whether they\'re dealing with a direct source or a middleman, since FOB locations at odd locations often signal brokered deals.',
+  },
+  {
+    id: 'cq-5',
+    question: 'What does a "manifested" load provide that an "unmanifested" load does not?',
+    options: [
+      'A guarantee that all items are in working condition',
+      'A detailed list of every item — brand, quantity, and estimated value — available before purchase',
+      'Faster shipping and priority processing',
+      'A lower per-unit cost due to reduced sorting requirements',
     ],
     correctIndex: 1,
     explanation:
-      'A manifest is a detailed document listing every item in a lot, including brand, model number, quantity, and wholesale value. It allows buyers to evaluate a purchase before committing and is a key differentiator for transparent liquidation companies like Via Trading.',
+      'A manifested load includes item-level detail that buyers can review before committing to a purchase. This transparency lets them evaluate the lot\'s value, plan their resale strategy, and make informed purchasing decisions. Unmanifested loads offer a general category but no item breakdown.',
   },
   {
     id: 'cq-6',
-    question: 'A buyer mentions they operate a bin store and need weekly replenishment. What type of merchandise would best suit their needs?',
+    question: 'How has the rapid growth of e-commerce impacted the liquidation industry?',
     options: [
-      'Category-specific electronics pallets',
-      'High-volume assorted merchandise with strong product density',
-      'Individual cases of premium items',
-      'Salvage-grade goods for repair',
+      'It reduced the volume of liquidation inventory because online shoppers return less',
+      'It had no meaningful impact since liquidation primarily handles retail store inventory',
+      'It significantly increased inventory volume because online purchases have much higher return rates than in-store purchases',
+      'It eliminated the need for physical warehouses in the liquidation supply chain',
     ],
-    correctIndex: 1,
+    correctIndex: 2,
     explanation:
-      'Bin store operators need high-volume, assorted merchandise that creates a "treasure hunt" experience for their customers. They typically restock on a weekly markdown schedule and care most about product density and competitive pricing.',
+      'E-commerce has dramatically expanded the liquidation industry. Online purchases have return rates of 20-30% compared to 8-10% for in-store purchases. This surge in returns creates a massive volume of merchandise that flows into the secondary market.',
   },
   {
     id: 'cq-7',
-    question: 'What does FOB stand for and why does it matter in liquidation?',
+    question: 'An exporter loading a shipping container for international delivery would MOST likely prefer which pallet format?',
     options: [
-      'Free Of Burden, it means the buyer has no obligations',
-      'Freight On Board; it indicates the pickup/shipping location and helps calculate freight costs',
-      'First Order Bonus, a discount for new customers',
-      'Federal Oversight Board, a regulatory requirement',
+      'Gaylords, because they protect merchandise during ocean transit',
+      'Standard pallets with shrink-wrapped loose items for easy inspection',
+      'Palletized cases, because they stack efficiently and maximize container space',
+      'Watermelon bins, because they hold the most merchandise by weight',
     ],
-    correctIndex: 1,
+    correctIndex: 2,
     explanation:
-      'FOB (Freight On Board) indicates the location where merchandise is available for pickup or shipping. It helps buyers calculate freight costs and also reveals whether a transaction is direct or brokered, which is important for evaluating the source of inventory.',
+      'Palletized cases (case packs stacked on pallets) are ideal for exporters because the uniform boxes stack tightly and maximize container utilization. When shipping internationally, efficient space usage is critical because container costs are fixed regardless of how much merchandise fits inside.',
   },
   {
-    id: 'cq-9',
-    question: 'What are the common pallet formats a buyer might receive?',
+    id: 'cq-8',
+    question: 'What is the primary economic benefit of purchasing a full truckload instead of individual pallets?',
     options: [
-      'Only standard wooden pallets',
-      'Standard Pallets, Gaylords, Palletized Cases, and Watermelon Bins',
-      'Only shrink-wrapped cases',
-      'Loose merchandise in cardboard boxes',
+      'Truckload buyers receive higher-quality merchandise',
+      'Per-unit cost drops significantly because shipping and handling costs are spread across far more merchandise',
+      'Truckload orders always include manifests while pallet orders do not',
+      'Truckload buyers get priority customer support from their Account Manager',
     ],
     correctIndex: 1,
     explanation:
-      'There are several common pallet formats: Standard Pallets (wooden 48"x48" with stacked merchandise), Gaylords (large cardboard boxes on pallets), Palletized Cases (case packs stacked on pallets), and Watermelon Bins (large open-top bins). The format affects how buyers receive, sort, and resell.',
-  },
-  {
-    id: 'cq-10',
-    question: 'What is "reverse logistics" in the liquidation industry?',
-    options: [
-      'Shipping products faster to retail stores',
-      'The process of moving goods backward through the supply chain, from consumer back to liquidation',
-      'Returning defective products to manufacturers',
-      'A logistics company that specializes in reverse delivery routes',
-    ],
-    correctIndex: 1,
-    explanation:
-      'Reverse logistics describes the flow of goods backward through the supply chain: consumers return items to retailers, retailers aggregate returns, and those goods flow to liquidation companies like Via Trading who distribute them to the secondary market.',
-  },
-  {
-    id: 'cq-11',
-    question: 'What is the difference between LTL and a full truckload shipment?',
-    options: [
-      'LTL is for international shipping only; truckloads are domestic only',
-      'LTL ships 1-6 pallets sharing trailer space; a truckload fills an entire trailer with 22-28 pallets',
-      'LTL is faster than truckload shipping',
-      'There is no difference; they are the same thing',
-    ],
-    correctIndex: 1,
-    explanation:
-      'LTL (Less Than Load) ships 1 to 6 pallets and shares trailer space with other shipments. A full truckload fills an entire trailer (48-foot or 53-foot) with 22 to 28 pallets depending on trailer size and configuration. Larger shipments generally mean lower per-unit costs.',
+      'Buying by the truckload dramatically lowers the per-unit cost. Shipping a full trailer of 22-28 pallets costs far less per pallet than shipping individual pallets via LTL. The fixed costs of freight, handling, and logistics are distributed across a much larger quantity of merchandise.',
   },
 ]
 
-/** Sectioned quiz format for the new quiz layout */
 export const industrySectionedQuiz: SectionedQuiz = {
   termMatch: [
     {
-      term: 'New Overstock',
-      definition: 'Unsold retail merchandise still in original condition, never purchased by a consumer',
+      term: 'Gaylord',
+      definition: 'A large cardboard box mounted on a pallet, commonly used for loose or assorted merchandise',
     },
     {
-      term: 'Customer Returns',
-      definition: 'Goods purchased by consumers and sent back to the retailer for various reasons',
+      term: 'Reverse Logistics',
+      definition: 'The process of moving goods backward through the supply chain — from consumer returns to liquidation',
     },
     {
-      term: 'Shelf Pulls (MOS)',
-      definition: 'Items removed from retail sales floors that remained unsold, typically in original packaging',
+      term: 'LTL (Less Than Load)',
+      definition: 'A shipping method for 1–6 pallets that shares trailer space with other shipments',
     },
     {
-      term: 'Salvage',
-      definition: 'Merchandise found to be significantly compromised: broken, missing parts, or heavily damaged',
+      term: 'Landed Cost',
+      definition: 'The total cost of merchandise including purchase price, shipping, and all delivery fees',
     },
   ],
   multipleChoice: industryCourseQuiz,
   fillInBlank: [
     {
       id: 'cq-fib-1',
-      sentence: 'At Via Trading, unsold merchandise that was never purchased by a consumer is called _____.',
-      blank: 'New Overstock',
-      options: ['New Overstock', 'Clearance', 'Deadstock', 'Surplus'],
-      correctIndex: 0,
+      sentence: 'A standard 53-foot trailer holds _____ pallets when loaded straight.',
+      blank: '26',
+      options: ['12', '22', '26', '48'],
+      correctIndex: 2,
     },
     {
       id: 'cq-fib-2',
-      sentence: 'A standard 53-foot trailer holds _____ pallets when loaded straight, or up to 28 if pinwheeled.',
-      blank: '26',
-      options: ['12', '22', '26', '52'],
-      correctIndex: 2,
+      sentence: 'Merchandise that was never purchased by a consumer and is still in original condition is classified as _____.',
+      blank: 'New Overstock',
+      options: ['Customer Returns', 'New Overstock', 'Salvage', 'Clearance'],
+      correctIndex: 1,
     },
     {
       id: 'cq-fib-3',
-      sentence: 'Level 1 dealers handle approximately _____% of all salvage goods entering the secondary market.',
-      blank: '70',
-      options: ['30', '50', '70', '90'],
-      correctIndex: 2,
+      sentence: 'Items removed from retail sales floors that were never purchased by a consumer are called _____.',
+      blank: 'Shelf Pulls',
+      options: ['Customer Returns', 'New Overstock', 'Salvage', 'Shelf Pulls'],
+      correctIndex: 3,
     },
     {
       id: 'cq-fib-4',
-      sentence: 'The total cost of merchandise including purchase price, shipping, and all delivery fees is called the _____.',
-      blank: 'landed cost',
-      options: ['retail price', 'wholesale price', 'landed cost', 'MSRP'],
+      sentence: 'Level 1 dealers handle approximately _____% of all salvage goods entering the secondary market.',
+      blank: '70',
+      options: ['30', '50', '70', '90'],
       correctIndex: 2,
     },
   ],

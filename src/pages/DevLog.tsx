@@ -10,6 +10,19 @@ interface LogEntry {
 
 const changelog: LogEntry[] = [
   {
+    version: '0.13.3',
+    date: '2026-05-18',
+    title: 'Quiz Overhaul — Harder Questions, No Cross-Section Leakage',
+    changes: [
+      'Rewrote all 5 end-of-course quizzes (Industry, Via Trading, Product Knowledge, Consultative Sales, BDR Role) — 81 total quiz items.',
+      'Eliminated 28 cross-section leakage instances where term match definitions, multiple choice text, or fill-in-blank items revealed answers to other questions within the same quiz.',
+      'Concept isolation: each fact now appears in exactly ONE section (term match OR multiple choice OR fill-in-blank) — never across sections.',
+      'Multiple choice questions rewritten as scenario-based application questions with more plausible distractors, replacing simple recall questions.',
+      'Fill-in-blank items test unique numeric facts and specific terms not mentioned anywhere else in the quiz.',
+      'Term match definitions written to test vocabulary without leaking answers to MC or FIB sections.',
+    ],
+  },
+  {
     version: '0.13.2',
     date: '2026-05-18',
     title: 'Unified Content Hub + Profile Avatar Fix',
