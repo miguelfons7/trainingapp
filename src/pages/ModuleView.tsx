@@ -77,7 +77,7 @@ const contentMap: Record<string, ComponentType> = {
 const quizModules = new Set(['industry-knowledge-check', 'via-knowledge-check', 'product-knowledge-check', 'sales-philosophy-quiz'])
 
 /** Maps module IDs to their hero image filenames in public/images/.
- *  Heroes always use AI-generated .png images. Real photos are used inline only. */
+ *  Course 1 uses AI-generated .png images. Courses 2-4 use stock photos from Pexels. */
 const moduleImageMap: Record<string, { src: string; alt: string }> = {
   // Course 1 — AI images exist
   'secondary-market': { src: 'module-channels.png', alt: 'Secondary Market Sales Channels' },
@@ -86,34 +86,34 @@ const moduleImageMap: Record<string, { src: string; alt: string }> = {
   'shipping-terms': { src: 'module-load-types.png', alt: 'Shipping Terms & Formats' },
   'buyer-types': { src: 'module-buyer-types.png', alt: 'Buyer Types Overview' },
   'key-terminology': { src: 'module-dealer-levels.png', alt: 'Industry Terminology & Dealer Levels' },
-  // Course 2 — uses shared AI course image until unique module images are generated
-  'our-story': { src: 'course-2-via-trading.png', alt: 'Via Trading: Our Story' },
-  'mission-values': { src: 'course-2-via-trading.png', alt: 'Via Trading: Mission & Values' },
-  'our-platforms': { src: 'course-2-via-trading.png', alt: 'Via Trading Platforms' },
-  'liquidatenow': { src: 'course-2-via-trading.png', alt: 'LiquidateNow Platform' },
-  'wesolvereturns': { src: 'course-2-via-trading.png', alt: 'WeSolveReturns Platform' },
-  'why-via': { src: 'course-2-via-trading.png', alt: 'Why Business Owners Choose Via' },
-  // Course 3 — uses shared AI course image until unique module images are generated
-  'product-overview': { src: 'course-3-product.png', alt: 'Via Trading Product Categories' },
-  'target-programs': { src: 'course-3-product.png', alt: 'Target Retail Programs' },
-  'walmart-programs': { src: 'course-3-product.png', alt: 'Walmart Programs' },
-  'home-depot-programs': { src: 'course-3-product.png', alt: 'Home Depot Programs' },
-  'amazon-programs': { src: 'course-3-product.png', alt: 'Amazon Programs' },
-  'wayfair-programs': { src: 'course-3-product.png', alt: 'Wayfair Programs' },
-  'zappos-programs': { src: 'course-3-product.png', alt: 'Zappos Programs' },
-  'sams-club-programs': { src: 'course-3-product.png', alt: "Sam's Club Programs" },
-  'other-programs': { src: 'course-3-product.png', alt: 'Additional Retail Partners' },
-  'ln-offerings': { src: 'course-3-product.png', alt: 'LiquidateNow Offerings' },
+  // Course 2 — Via Trading
+  'our-story': { src: 'module-our-story.jpg', alt: 'Via Trading Warehouse' },
+  'mission-values': { src: 'module-mission-values.jpg', alt: 'Team Collaboration and Values' },
+  'our-platforms': { src: 'module-our-platforms.jpg', alt: 'E-Commerce Technology' },
+  'liquidatenow': { src: 'module-liquidatenow.jpg', alt: 'Online Marketplace' },
+  'wesolvereturns': { src: 'module-wesolvereturns.jpg', alt: 'Returns and Logistics' },
+  'why-via': { src: 'module-why-via.jpg', alt: 'Business Partnership' },
+  // Course 3 — Product Knowledge
+  'product-overview': { src: 'module-product-overview.jpg', alt: 'Warehouse Product Shelves' },
+  'target-programs': { src: 'module-target-programs.jpg', alt: 'Retail Store Display' },
+  'walmart-programs': { src: 'module-walmart-programs.jpg', alt: 'Retail Shopping' },
+  'home-depot-programs': { src: 'module-home-depot-programs.jpg', alt: 'Home Improvement Tools' },
+  'amazon-programs': { src: 'module-amazon-programs.jpg', alt: 'Package Delivery' },
+  'wayfair-programs': { src: 'module-wayfair-programs.jpg', alt: 'Furniture Showroom' },
+  'zappos-programs': { src: 'module-zappos-programs.jpg', alt: 'Shoe Display' },
+  'sams-club-programs': { src: 'module-sams-club-programs.jpg', alt: 'Wholesale Warehouse' },
+  'other-programs': { src: 'module-other-programs.jpg', alt: 'Retail Merchandise' },
+  'ln-offerings': { src: 'module-ln-offerings.jpg', alt: 'Digital Marketplace' },
   // Course 4 — Consultative Sales
-  'consultative-mindset': { src: 'course-4-sales.png', alt: 'The Consultative Mindset' },
-  'asking-right-questions': { src: 'course-4-sales.png', alt: 'Asking the Right Questions' },
-  'listening-beyond-words': { src: 'course-4-sales.png', alt: 'Listening Beyond Words' },
-  'know-your-patients': { src: 'course-4-sales.png', alt: 'Know Your Patients: Buyer Archetypes' },
-  'five-step-method': { src: 'course-4-sales.png', alt: 'The 5-Step Consultative Method' },
-  'when-patients-push-back': { src: 'course-4-sales.png', alt: 'Objection Handling with K.L.A.P.D.O.C.' },
-  'art-of-the-close': { src: 'course-4-sales.png', alt: 'The Art of the Close' },
-  'transaction-to-partnership': { src: 'course-4-sales.png', alt: 'From Transaction to Partnership' },
-  'triage-and-diagnosis': { src: 'course-4-sales.png', alt: 'Triage & Diagnosis: BDR + AM Roles' },
+  'consultative-mindset': { src: 'module-consultative-mindset.jpg', alt: 'Professional Consultation' },
+  'asking-right-questions': { src: 'module-asking-right-questions.jpg', alt: 'Business Conversation' },
+  'listening-beyond-words': { src: 'module-listening-beyond-words.jpg', alt: 'Active Listening' },
+  'know-your-patients': { src: 'module-know-your-patients.jpg', alt: 'Diverse Business Professionals' },
+  'five-step-method': { src: 'module-five-step-method.jpg', alt: 'Strategy Planning on Whiteboard' },
+  'when-patients-push-back': { src: 'module-when-patients-push-back.jpg', alt: 'Business Negotiation' },
+  'art-of-the-close': { src: 'module-art-of-the-close.jpg', alt: 'Professional Handshake' },
+  'transaction-to-partnership': { src: 'module-transaction-to-partnership.jpg', alt: 'Business Partnership Meeting' },
+  'triage-and-diagnosis': { src: 'module-triage-and-diagnosis.jpg', alt: 'Team Assessment Meeting' },
 }
 
 export function ModuleView() {
