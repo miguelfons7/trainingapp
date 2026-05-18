@@ -196,19 +196,20 @@ export function UserProfile() {
     <div className="max-w-5xl mx-auto py-8 px-4">
       {/* Hero Section */}
       <div className="bg-via-card rounded-xl border border-via-border overflow-hidden mb-6">
-        <div className="bg-via-navy h-24" />
-        <div className="px-6 pb-6 -mt-10">
-          <div className="flex items-end gap-4 mb-4">
-            <div className="w-20 h-20 rounded-full bg-via-navy border-4 border-via-card flex items-center justify-center text-2xl font-bold text-white shrink-0 shadow-md">
+        <div className="bg-gradient-to-r from-via-navy to-indigo-900 px-6 py-6">
+          <div className="flex items-center gap-4">
+            <div className="w-16 h-16 rounded-full bg-white/20 border-2 border-white/30 flex items-center justify-center text-xl font-bold text-white shrink-0">
               {initials}
             </div>
-            <div className="pb-1">
-              <h1 className="text-xl font-bold text-via-navy">
+            <div>
+              <h1 className="text-lg font-bold text-white">
                 {profile.full_name}
               </h1>
-              <p className="text-sm text-via-text-light">{profile.email}</p>
+              <p className="text-sm text-white/70">{profile.email}</p>
             </div>
           </div>
+        </div>
+        <div className="px-6 py-4">
           <div className="flex flex-wrap items-center gap-2">
             <span
               className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${roleBadgeStyles[profile.role] ?? 'bg-gray-100 text-gray-700'}`}

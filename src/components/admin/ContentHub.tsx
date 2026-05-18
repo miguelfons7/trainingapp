@@ -19,6 +19,7 @@ import {
   Minus,
   GraduationCap,
   Search,
+  Lightbulb,
 } from 'lucide-react'
 import { useCourses } from '../../context/CoursesContext'
 import { supabase } from '../../lib/supabase'
@@ -379,9 +380,18 @@ function ProgramsSection({
       {showCreate && (
         <div className="bg-via-card rounded-xl border-2 border-via-orange/30 p-4 space-y-3">
           <p className="text-sm font-semibold text-via-navy">Create New Program</p>
-          <input placeholder="Program title" value={form.title} onChange={(e) => setForm((p) => ({ ...p, title: e.target.value }))} className={inputClass} />
-          <textarea placeholder="Description" value={form.description} onChange={(e) => setForm((p) => ({ ...p, description: e.target.value }))} className={`${inputClass} h-16 resize-none`} />
-          <input placeholder="Estimated time (e.g. ~6 hours)" value={form.estimatedTime} onChange={(e) => setForm((p) => ({ ...p, estimatedTime: e.target.value }))} className={inputClass} />
+          <div>
+            <label className="block text-xs font-medium text-via-text-light mb-1">Program Title</label>
+            <input placeholder="e.g. New Hire Onboarding" value={form.title} onChange={(e) => setForm((p) => ({ ...p, title: e.target.value }))} className={inputClass} />
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-via-text-light mb-1">Description</label>
+            <textarea placeholder="Brief description of this program" value={form.description} onChange={(e) => setForm((p) => ({ ...p, description: e.target.value }))} className={`${inputClass} h-16 resize-none`} />
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-via-text-light mb-1">Estimated Time</label>
+            <input placeholder="e.g. ~6 hours" value={form.estimatedTime} onChange={(e) => setForm((p) => ({ ...p, estimatedTime: e.target.value }))} className={inputClass} />
+          </div>
           <CourseCheckboxes />
           <div className="flex items-center gap-2 pt-1">
             <button onClick={handleCreate} disabled={saving || !form.title.trim()} className={btnPrimary}>
@@ -500,9 +510,18 @@ function ProgramRow({
           <td colSpan={5} className="bg-via-bg-subtle/50 px-6 py-3 border-b border-via-border">
             {isEditing ? (
               <div className="space-y-3 max-w-2xl">
-                <input value={form.title} onChange={(e) => setForm((p) => ({ ...p, title: e.target.value }))} className={inputClass} placeholder="Title" />
-                <textarea value={form.description} onChange={(e) => setForm((p) => ({ ...p, description: e.target.value }))} className={`${inputClass} h-16 resize-none`} placeholder="Description" />
-                <input value={form.estimatedTime} onChange={(e) => setForm((p) => ({ ...p, estimatedTime: e.target.value }))} className={inputClass} placeholder="Estimated time" />
+                <div>
+                  <label className="block text-xs font-medium text-via-text-light mb-1">Title</label>
+                  <input value={form.title} onChange={(e) => setForm((p) => ({ ...p, title: e.target.value }))} className={inputClass} placeholder="Program title" />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-via-text-light mb-1">Description</label>
+                  <textarea value={form.description} onChange={(e) => setForm((p) => ({ ...p, description: e.target.value }))} className={`${inputClass} h-16 resize-none`} placeholder="Brief description" />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-via-text-light mb-1">Estimated Time</label>
+                  <input value={form.estimatedTime} onChange={(e) => setForm((p) => ({ ...p, estimatedTime: e.target.value }))} className={inputClass} placeholder="e.g. ~6 hours" />
+                </div>
                 <div>
                   <p className="text-xs font-semibold text-via-text mb-2">Courses in this program:</p>
                   <div className="grid grid-cols-2 gap-1.5">
@@ -698,6 +717,14 @@ function CoursesSection({
 
   return (
     <div className="space-y-3">
+      {/* CMS info banner */}
+      <div className="flex items-start gap-2.5 rounded-lg bg-sky-50 border border-sky-200 px-4 py-3">
+        <Lightbulb className="w-4 h-4 text-sky-600 mt-0.5 shrink-0" />
+        <p className="text-xs text-sky-700 leading-relaxed">
+          Click <span className="font-semibold text-via-orange">"Edit Content"</span> on any module to open the visual content editor. Changes save as drafts until you publish.
+        </p>
+      </div>
+
       {/* Toolbar */}
       <div className="flex items-center justify-between gap-3">
         <div className="relative flex-1 max-w-xs">
@@ -725,20 +752,41 @@ function CoursesSection({
         <div className="bg-via-card rounded-xl border-2 border-via-orange/30 p-4 space-y-3">
           <p className="text-sm font-semibold text-via-navy">Create New Course</p>
           <div className="grid grid-cols-2 gap-3">
-            <input placeholder="Course title" value={courseForm.title} onChange={(e) => setCourseForm((p) => ({ ...p, title: e.target.value, id: toSlug(e.target.value) }))} className={inputClass} />
-            <input placeholder="ID (auto-generated)" value={courseForm.id} onChange={(e) => setCourseForm((p) => ({ ...p, id: e.target.value }))} className={`${inputClass} text-via-text-light`} />
+            <div>
+              <label className="block text-xs font-medium text-via-text-light mb-1">Course Title</label>
+              <input placeholder="e.g. Product Knowledge" value={courseForm.title} onChange={(e) => setCourseForm((p) => ({ ...p, title: e.target.value, id: toSlug(e.target.value) }))} className={inputClass} />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-via-text-light mb-1">ID (auto-generated)</label>
+              <input placeholder="auto-generated-from-title" value={courseForm.id} onChange={(e) => setCourseForm((p) => ({ ...p, id: e.target.value }))} className={`${inputClass} text-via-text-light`} />
+            </div>
           </div>
-          <textarea placeholder="Description" value={courseForm.description} onChange={(e) => setCourseForm((p) => ({ ...p, description: e.target.value }))} className={`${inputClass} h-16 resize-none`} />
+          <div>
+            <label className="block text-xs font-medium text-via-text-light mb-1">Description</label>
+            <textarea placeholder="Brief description of this course" value={courseForm.description} onChange={(e) => setCourseForm((p) => ({ ...p, description: e.target.value }))} className={`${inputClass} h-16 resize-none`} />
+          </div>
           <div className="grid grid-cols-4 gap-3">
-            <select value={courseForm.icon} onChange={(e) => setCourseForm((p) => ({ ...p, icon: e.target.value }))} className={selectClass}>
-              {ICON_OPTIONS.map((i) => <option key={i} value={i}>{i}</option>)}
-            </select>
-            <input placeholder="~30 min" value={courseForm.estimatedTime} onChange={(e) => setCourseForm((p) => ({ ...p, estimatedTime: e.target.value }))} className={inputClass} />
-            <select value={courseForm.status} onChange={(e) => setCourseForm((p) => ({ ...p, status: e.target.value as any }))} className={selectClass}>
-              <option value="coming-soon">Coming Soon</option>
-              <option value="available">Available</option>
-            </select>
-            <input placeholder="Image filename" value={courseForm.imagePath} onChange={(e) => setCourseForm((p) => ({ ...p, imagePath: e.target.value }))} className={inputClass} />
+            <div>
+              <label className="block text-xs font-medium text-via-text-light mb-1">Icon</label>
+              <select value={courseForm.icon} onChange={(e) => setCourseForm((p) => ({ ...p, icon: e.target.value }))} className={selectClass}>
+                {ICON_OPTIONS.map((i) => <option key={i} value={i}>{i}</option>)}
+              </select>
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-via-text-light mb-1">Estimated Time</label>
+              <input placeholder="e.g. ~30 min" value={courseForm.estimatedTime} onChange={(e) => setCourseForm((p) => ({ ...p, estimatedTime: e.target.value }))} className={inputClass} />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-via-text-light mb-1">Status</label>
+              <select value={courseForm.status} onChange={(e) => setCourseForm((p) => ({ ...p, status: e.target.value as any }))} className={selectClass}>
+                <option value="coming-soon">Coming Soon</option>
+                <option value="available">Available</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-via-text-light mb-1">Image Filename</label>
+              <input placeholder="e.g. course-1-industry.png" value={courseForm.imagePath} onChange={(e) => setCourseForm((p) => ({ ...p, imagePath: e.target.value }))} className={inputClass} />
+            </div>
           </div>
           <div className="flex items-center gap-2 pt-1">
             <button onClick={handleCreateCourse} disabled={saving || !courseForm.title.trim()} className={btnPrimary}>
@@ -907,21 +955,39 @@ function CourseRowGroup({
           <td colSpan={6} className="bg-via-bg-subtle/50 px-6 py-3 border-b border-via-border">
             <div className="space-y-3 max-w-3xl">
               <div className="grid grid-cols-2 gap-3">
-                <input value={courseForm.title} onChange={(e: any) => setCourseForm((p: any) => ({ ...p, title: e.target.value }))} className={inputClass} placeholder="Title" />
+                <div>
+                  <label className="block text-xs font-medium text-via-text-light mb-1">Title</label>
+                  <input value={courseForm.title} onChange={(e: any) => setCourseForm((p: any) => ({ ...p, title: e.target.value }))} className={inputClass} placeholder="Course title" />
+                </div>
                 <div className="grid grid-cols-2 gap-2">
-                  <select value={courseForm.status} onChange={(e: any) => setCourseForm((p: any) => ({ ...p, status: e.target.value }))} className={selectClass}>
-                    <option value="coming-soon">Coming Soon</option>
-                    <option value="available">Available</option>
-                  </select>
-                  <input value={courseForm.estimatedTime} onChange={(e: any) => setCourseForm((p: any) => ({ ...p, estimatedTime: e.target.value }))} className={inputClass} placeholder="Time" />
+                  <div>
+                    <label className="block text-xs font-medium text-via-text-light mb-1">Status</label>
+                    <select value={courseForm.status} onChange={(e: any) => setCourseForm((p: any) => ({ ...p, status: e.target.value }))} className={selectClass}>
+                      <option value="coming-soon">Coming Soon</option>
+                      <option value="available">Available</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-via-text-light mb-1">Estimated Time</label>
+                    <input value={courseForm.estimatedTime} onChange={(e: any) => setCourseForm((p: any) => ({ ...p, estimatedTime: e.target.value }))} className={inputClass} placeholder="e.g. ~30 min" />
+                  </div>
                 </div>
               </div>
-              <textarea value={courseForm.description} onChange={(e: any) => setCourseForm((p: any) => ({ ...p, description: e.target.value }))} className={`${inputClass} h-16 resize-none`} placeholder="Description" />
+              <div>
+                <label className="block text-xs font-medium text-via-text-light mb-1">Description</label>
+                <textarea value={courseForm.description} onChange={(e: any) => setCourseForm((p: any) => ({ ...p, description: e.target.value }))} className={`${inputClass} h-16 resize-none`} placeholder="Brief description" />
+              </div>
               <div className="grid grid-cols-2 gap-3">
-                <select value={courseForm.icon} onChange={(e: any) => setCourseForm((p: any) => ({ ...p, icon: e.target.value }))} className={selectClass}>
-                  {ICON_OPTIONS.map((i) => <option key={i} value={i}>{i}</option>)}
-                </select>
-                <input value={courseForm.imagePath} onChange={(e: any) => setCourseForm((p: any) => ({ ...p, imagePath: e.target.value }))} className={inputClass} placeholder="Image filename" />
+                <div>
+                  <label className="block text-xs font-medium text-via-text-light mb-1">Icon</label>
+                  <select value={courseForm.icon} onChange={(e: any) => setCourseForm((p: any) => ({ ...p, icon: e.target.value }))} className={selectClass}>
+                    {ICON_OPTIONS.map((i) => <option key={i} value={i}>{i}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-via-text-light mb-1">Image Filename</label>
+                  <input value={courseForm.imagePath} onChange={(e: any) => setCourseForm((p: any) => ({ ...p, imagePath: e.target.value }))} className={inputClass} placeholder="e.g. course-1-industry.png" />
+                </div>
               </div>
               <div className="flex items-center gap-2">
                 <button onClick={handleSaveCourse} disabled={saving} className={btnPrimary}>
@@ -961,15 +1027,27 @@ function CourseRowGroup({
                   return (
                     <div key={mod.id} className="px-3 py-2 bg-white rounded-lg border border-via-border mb-1.5 space-y-2">
                       <div className="grid grid-cols-3 gap-2">
-                        <input value={moduleForm.title} onChange={(e: any) => setModuleForm((p: any) => ({ ...p, title: e.target.value }))} className={inputClass} placeholder="Title" />
-                        <input value={moduleForm.estimatedTime} onChange={(e: any) => setModuleForm((p: any) => ({ ...p, estimatedTime: e.target.value }))} className={inputClass} placeholder="Time" />
-                        <select value={moduleForm.contentType} onChange={(e: any) => setModuleForm((p: any) => ({ ...p, contentType: e.target.value }))} className={selectClass}>
-                          <option value="lesson">Lesson</option>
-                          <option value="quiz">Quiz</option>
-                          <option value="interactive">Interactive</option>
-                        </select>
+                        <div>
+                          <label className="block text-xs font-medium text-via-text-light mb-1">Title</label>
+                          <input value={moduleForm.title} onChange={(e: any) => setModuleForm((p: any) => ({ ...p, title: e.target.value }))} className={inputClass} placeholder="Module title" />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-medium text-via-text-light mb-1">Estimated Time</label>
+                          <input value={moduleForm.estimatedTime} onChange={(e: any) => setModuleForm((p: any) => ({ ...p, estimatedTime: e.target.value }))} className={inputClass} placeholder="e.g. 10 min" />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-medium text-via-text-light mb-1">Content Type</label>
+                          <select value={moduleForm.contentType} onChange={(e: any) => setModuleForm((p: any) => ({ ...p, contentType: e.target.value }))} className={selectClass}>
+                            <option value="lesson">Lesson</option>
+                            <option value="quiz">Quiz</option>
+                            <option value="interactive">Interactive</option>
+                          </select>
+                        </div>
                       </div>
-                      <input value={moduleForm.description} onChange={(e: any) => setModuleForm((p: any) => ({ ...p, description: e.target.value }))} className={inputClass} placeholder="Description" />
+                      <div>
+                        <label className="block text-xs font-medium text-via-text-light mb-1">Description</label>
+                        <input value={moduleForm.description} onChange={(e: any) => setModuleForm((p: any) => ({ ...p, description: e.target.value }))} className={inputClass} placeholder="Optional description" />
+                      </div>
                       <div className="flex items-center gap-2">
                         <button onClick={handleSaveModule} disabled={saving} className={btnPrimary}>
                           {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
@@ -1030,11 +1108,11 @@ function CourseRowGroup({
                       {!isQuiz && (
                         <Link
                           to={`/admin/content/${course.id}/${mod.id}`}
-                          className="inline-flex items-center gap-1 px-2 py-1 text-[10px] font-semibold text-via-navy bg-via-navy/10 rounded-md hover:bg-via-navy/20 transition-colors"
+                          className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold text-via-orange bg-via-orange/10 rounded-md hover:bg-via-orange/20 transition-colors"
                           title="Edit content in CMS"
                         >
                           <ExternalLink className="w-3 h-3" />
-                          Content
+                          Edit Content
                         </Link>
                       )}
                       <button onClick={() => startEditModule(course.id, mod)} className="p-1 rounded hover:bg-via-bg-subtle text-via-text-light hover:text-via-navy cursor-pointer" title="Edit metadata">
@@ -1053,19 +1131,31 @@ function CourseRowGroup({
                 <div className="px-3 py-2 bg-white rounded-lg border-2 border-via-orange/30 mt-1.5 space-y-2">
                   <p className="text-xs font-semibold text-via-navy">New Module</p>
                   <div className="grid grid-cols-3 gap-2">
-                    <input
-                      value={moduleForm.title}
-                      onChange={(e) => setModuleForm((p: any) => ({ ...p, title: e.target.value, id: toSlug(e.target.value) }))}
-                      className={inputClass} placeholder="Module title"
-                    />
-                    <input value={moduleForm.estimatedTime} onChange={(e) => setModuleForm((p: any) => ({ ...p, estimatedTime: e.target.value }))} className={inputClass} placeholder="10 min" />
-                    <select value={moduleForm.contentType} onChange={(e) => setModuleForm((p: any) => ({ ...p, contentType: e.target.value }))} className={selectClass}>
-                      <option value="lesson">Lesson</option>
-                      <option value="quiz">Quiz</option>
-                      <option value="interactive">Interactive</option>
-                    </select>
+                    <div>
+                      <label className="block text-xs font-medium text-via-text-light mb-1">Module Title</label>
+                      <input
+                        value={moduleForm.title}
+                        onChange={(e) => setModuleForm((p: any) => ({ ...p, title: e.target.value, id: toSlug(e.target.value) }))}
+                        className={inputClass} placeholder="e.g. Introduction"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-via-text-light mb-1">Estimated Time</label>
+                      <input value={moduleForm.estimatedTime} onChange={(e) => setModuleForm((p: any) => ({ ...p, estimatedTime: e.target.value }))} className={inputClass} placeholder="e.g. 10 min" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-via-text-light mb-1">Content Type</label>
+                      <select value={moduleForm.contentType} onChange={(e) => setModuleForm((p: any) => ({ ...p, contentType: e.target.value }))} className={selectClass}>
+                        <option value="lesson">Lesson</option>
+                        <option value="quiz">Quiz</option>
+                        <option value="interactive">Interactive</option>
+                      </select>
+                    </div>
                   </div>
-                  <input value={moduleForm.description} onChange={(e) => setModuleForm((p: any) => ({ ...p, description: e.target.value }))} className={inputClass} placeholder="Description (optional)" />
+                  <div>
+                    <label className="block text-xs font-medium text-via-text-light mb-1">Description (optional)</label>
+                    <input value={moduleForm.description} onChange={(e) => setModuleForm((p: any) => ({ ...p, description: e.target.value }))} className={inputClass} placeholder="Brief description of this module" />
+                  </div>
                   <div className="flex items-center gap-2">
                     <button onClick={handleCreateModule} disabled={saving || !moduleForm.title.trim()} className={btnPrimary}>
                       {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}

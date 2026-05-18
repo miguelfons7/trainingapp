@@ -10,6 +10,17 @@ interface LogEntry {
 
 const changelog: LogEntry[] = [
   {
+    version: '0.13.4',
+    date: '2026-05-18',
+    title: 'Profile Banner Fix + Content Hub Form Labels + CMS Access',
+    changes: [
+      'Profile hero redesigned: replaced two-tone navy/white banner with a gradient header — name and email now render as white text on a navy-to-indigo gradient, eliminating the invisible text overlap issue.',
+      'Content Hub form labels: all create and edit forms for programs, courses, and modules now display clear field labels above every input and dropdown (Icon, Status, Content Type, Estimated Time, etc.).',
+      'CMS "Edit Content" link made more prominent: larger text, orange accent color, renamed from "Content" to "Edit Content" for clarity.',
+      'Added info banner at the top of the Courses & Modules tab explaining how the visual content editor works.',
+    ],
+  },
+  {
     version: '0.13.3',
     date: '2026-05-18',
     title: 'Quiz Overhaul — Harder Questions, No Cross-Section Leakage',
