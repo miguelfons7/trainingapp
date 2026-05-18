@@ -82,7 +82,7 @@ export function KnowYourPatients() {
           <ExpandableCard
             key={archetype.id}
             title={archetype.name}
-            subtitle={archetype.whoTheyAre.slice(0, 90) + '…'}
+            subtitle={archetype.whoTheyAre.slice(0, 130) + '…'}
             icon={iconMap[archetype.icon]}
             isExpanded={expandedIds.has(archetype.id)}
             onToggle={() => toggle(archetype.id)}

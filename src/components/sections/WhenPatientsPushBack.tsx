@@ -65,7 +65,7 @@ export function WhenPatientsPushBack() {
           <ExpandableCard
             key={step.id}
             title={`${step.letter} — ${step.title}`}
-            subtitle={step.description.slice(0, 80) + '…'}
+            subtitle={step.description.slice(0, 130) + '…'}
             icon={letterIcons[step.letter]}
             badge={<Badge text={step.letter} color="teal" />}
             isExpanded={expandedIds.has(step.id)}

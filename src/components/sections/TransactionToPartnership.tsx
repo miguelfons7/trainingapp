@@ -59,7 +59,7 @@ export function TransactionToPartnership() {
           <ExpandableCard
             key={strategy.id}
             title={strategy.title}
-            subtitle={strategy.description.slice(0, 85) + '…'}
+            subtitle={strategy.description.slice(0, 130) + '…'}
             icon={iconMap[strategy.icon]}
             isExpanded={expandedIds.has(strategy.id)}
             onToggle={() => toggle(strategy.id)}
