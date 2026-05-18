@@ -7,6 +7,7 @@ import { industrySectionedQuiz } from '../../data/modules/industry/courseQuiz'
 import { viaSectionedQuiz } from '../../data/modules/via-trading/courseQuiz'
 import { productKnowledgeSectionedQuiz } from '../../data/modules/product-knowledge/courseQuiz'
 import { salesPhilosophySectionedQuiz } from '../../data/modules/consultative-sales/courseQuiz'
+import { bdrRoleSectionedQuiz } from '../../data/modules/bdr-role/courseQuiz'
 import { Confetti } from './Confetti'
 
 interface QuizBlockProps {
@@ -20,6 +21,7 @@ const sectionedQuizMap: Record<string, SectionedQuiz> = {
   'via-knowledge-check': viaSectionedQuiz,
   'product-knowledge-check': productKnowledgeSectionedQuiz,
   'sales-philosophy-quiz': salesPhilosophySectionedQuiz,
+  'bdr-role-quiz': bdrRoleSectionedQuiz,
 }
 
 const PASS_THRESHOLD = 0.85
@@ -30,6 +32,7 @@ const nextCourseMap: Record<string, { id: string; title: string }> = {
   'via-knowledge-check': { id: 'product-knowledge', title: 'Product Knowledge' },
   'product-knowledge-check': { id: 'sales-philosophy', title: 'Consultative Sales' },
   'sales-philosophy-quiz': { id: 'bdr-role', title: 'BDR Role Training' },
+  'bdr-role-quiz': { id: 'am-role', title: 'AM Role Training' },
 }
 
 // ─────────────────────────────────────────

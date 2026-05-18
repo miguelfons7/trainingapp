@@ -35,6 +35,14 @@ import { WhenPatientsPushBack } from '../components/sections/WhenPatientsPushBac
 import { ArtOfTheClose } from '../components/sections/ArtOfTheClose'
 import { TransactionToPartnership } from '../components/sections/TransactionToPartnership'
 import { TriageAndDiagnosis } from '../components/sections/TriageAndDiagnosis'
+// Course 5 — BDR Role Training
+import { BdrRoleOverview } from '../components/sections/BdrRoleOverview'
+import { BdrDailyWorkflow } from '../components/sections/BdrDailyWorkflow'
+import { BdrOpeningCalls } from '../components/sections/BdrOpeningCalls'
+import { BdrDiscoveryFramework } from '../components/sections/BdrDiscoveryFramework'
+import { BdrObjectionsRouting } from '../components/sections/BdrObjectionsRouting'
+import { BdrToolsHubspot } from '../components/sections/BdrToolsHubspot'
+import { BdrFollowUps } from '../components/sections/BdrFollowUps'
 import { QuizBlock } from '../components/interactive/QuizBlock'
 import { ImagePlaceholder } from '../components/shared/ImagePlaceholder'
 
@@ -72,9 +80,17 @@ const contentMap: Record<string, ComponentType> = {
   'art-of-the-close': ArtOfTheClose,
   'transaction-to-partnership': TransactionToPartnership,
   'triage-and-diagnosis': TriageAndDiagnosis,
+  // Course 5 — BDR Role Training
+  'bdr-role-overview': BdrRoleOverview,
+  'bdr-daily-workflow': BdrDailyWorkflow,
+  'bdr-opening-calls': BdrOpeningCalls,
+  'bdr-discovery-framework': BdrDiscoveryFramework,
+  'bdr-objections-routing': BdrObjectionsRouting,
+  'bdr-tools-hubspot': BdrToolsHubspot,
+  'bdr-follow-ups': BdrFollowUps,
 }
 
-const quizModules = new Set(['industry-knowledge-check', 'via-knowledge-check', 'product-knowledge-check', 'sales-philosophy-quiz'])
+const quizModules = new Set(['industry-knowledge-check', 'via-knowledge-check', 'product-knowledge-check', 'sales-philosophy-quiz', 'bdr-role-quiz'])
 
 /** Maps module IDs to their hero image filenames in public/images/.
  *  Course 1 uses AI-generated .png images. Courses 2-4 use company photos and stock images. */
@@ -113,6 +129,14 @@ const moduleImageMap: Record<string, { src: string; alt: string }> = {
   'art-of-the-close': { src: 'module-art-of-the-close.jpg', alt: 'Professional Handshake' },
   'transaction-to-partnership': { src: 'module-transaction-to-partnership.jpg', alt: 'Tying the Knot — From Transaction to Partnership' },
   'triage-and-diagnosis': { src: 'module-triage-and-diagnosis.jpg', alt: 'Customer Service Team' },
+  // Course 5 — BDR Role Training
+  'bdr-role-overview': { src: 'module-bdr-role-overview.jpg', alt: 'Business Development Representative at Work' },
+  'bdr-daily-workflow': { src: 'module-bdr-daily-workflow.jpg', alt: 'Organized Desk with Planner and Computer' },
+  'bdr-opening-calls': { src: 'module-bdr-opening-calls.jpg', alt: 'Professional Making a Phone Call' },
+  'bdr-discovery-framework': { src: 'module-bdr-discovery-framework.jpg', alt: 'Magnifying Glass Over Data' },
+  'bdr-objections-routing': { src: 'module-bdr-objections-routing.jpg', alt: 'Signpost with Multiple Directions' },
+  'bdr-tools-hubspot': { src: 'module-bdr-tools-hubspot.jpg', alt: 'CRM Dashboard on Screen' },
+  'bdr-follow-ups': { src: 'module-bdr-follow-ups.jpg', alt: 'Calendar and Checklist' },
 }
 
 export function ModuleView() {
