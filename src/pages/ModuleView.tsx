@@ -25,6 +25,16 @@ import { ZapposPrograms } from '../components/sections/ZapposPrograms'
 import { SamsClubPrograms } from '../components/sections/SamsClubPrograms'
 import { OtherPrograms } from '../components/sections/OtherPrograms'
 import { LiquidateNowOfferings } from '../components/sections/LiquidateNowOfferings'
+// Course 4 — Consultative Sales
+import { ConsultativeMindset } from '../components/sections/ConsultativeMindset'
+import { AskingRightQuestions } from '../components/sections/AskingRightQuestions'
+import { ListeningBeyondWords } from '../components/sections/ListeningBeyondWords'
+import { KnowYourPatients } from '../components/sections/KnowYourPatients'
+import { FiveStepMethod } from '../components/sections/FiveStepMethod'
+import { WhenPatientsPushBack } from '../components/sections/WhenPatientsPushBack'
+import { ArtOfTheClose } from '../components/sections/ArtOfTheClose'
+import { TransactionToPartnership } from '../components/sections/TransactionToPartnership'
+import { TriageAndDiagnosis } from '../components/sections/TriageAndDiagnosis'
 import { QuizBlock } from '../components/interactive/QuizBlock'
 import { ImagePlaceholder } from '../components/shared/ImagePlaceholder'
 
@@ -52,9 +62,19 @@ const contentMap: Record<string, ComponentType> = {
   'sams-club-programs': SamsClubPrograms,
   'other-programs': OtherPrograms,
   'ln-offerings': LiquidateNowOfferings,
+  // Course 4 — Consultative Sales
+  'consultative-mindset': ConsultativeMindset,
+  'asking-right-questions': AskingRightQuestions,
+  'listening-beyond-words': ListeningBeyondWords,
+  'know-your-patients': KnowYourPatients,
+  'five-step-method': FiveStepMethod,
+  'when-patients-push-back': WhenPatientsPushBack,
+  'art-of-the-close': ArtOfTheClose,
+  'transaction-to-partnership': TransactionToPartnership,
+  'triage-and-diagnosis': TriageAndDiagnosis,
 }
 
-const quizModules = new Set(['industry-knowledge-check', 'via-knowledge-check', 'product-knowledge-check'])
+const quizModules = new Set(['industry-knowledge-check', 'via-knowledge-check', 'product-knowledge-check', 'sales-philosophy-quiz'])
 
 /** Maps module IDs to their hero image filenames in public/images/.
  *  Heroes always use AI-generated .png images. Real photos are used inline only. */
@@ -84,6 +104,16 @@ const moduleImageMap: Record<string, { src: string; alt: string }> = {
   'sams-club-programs': { src: 'course-3-product.png', alt: "Sam's Club Programs" },
   'other-programs': { src: 'course-3-product.png', alt: 'Additional Retail Partners' },
   'ln-offerings': { src: 'course-3-product.png', alt: 'LiquidateNow Offerings' },
+  // Course 4 — Consultative Sales
+  'consultative-mindset': { src: 'course-4-sales.png', alt: 'The Consultative Mindset' },
+  'asking-right-questions': { src: 'course-4-sales.png', alt: 'Asking the Right Questions' },
+  'listening-beyond-words': { src: 'course-4-sales.png', alt: 'Listening Beyond Words' },
+  'know-your-patients': { src: 'course-4-sales.png', alt: 'Know Your Patients: Buyer Archetypes' },
+  'five-step-method': { src: 'course-4-sales.png', alt: 'The 5-Step Consultative Method' },
+  'when-patients-push-back': { src: 'course-4-sales.png', alt: 'Objection Handling with K.L.A.P.D.O.C.' },
+  'art-of-the-close': { src: 'course-4-sales.png', alt: 'The Art of the Close' },
+  'transaction-to-partnership': { src: 'course-4-sales.png', alt: 'From Transaction to Partnership' },
+  'triage-and-diagnosis': { src: 'course-4-sales.png', alt: 'Triage & Diagnosis: BDR + AM Roles' },
 }
 
 export function ModuleView() {

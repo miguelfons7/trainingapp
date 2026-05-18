@@ -6,6 +6,7 @@ import type { SectionedQuiz, TermMatchPair, FillInBlankItem } from '../../types'
 import { industrySectionedQuiz } from '../../data/modules/industry/courseQuiz'
 import { viaSectionedQuiz } from '../../data/modules/via-trading/courseQuiz'
 import { productKnowledgeSectionedQuiz } from '../../data/modules/product-knowledge/courseQuiz'
+import { salesPhilosophySectionedQuiz } from '../../data/modules/consultative-sales/courseQuiz'
 import { Confetti } from './Confetti'
 
 interface QuizBlockProps {
@@ -18,6 +19,7 @@ const sectionedQuizMap: Record<string, SectionedQuiz> = {
   'industry-knowledge-check': industrySectionedQuiz,
   'via-knowledge-check': viaSectionedQuiz,
   'product-knowledge-check': productKnowledgeSectionedQuiz,
+  'sales-philosophy-quiz': salesPhilosophySectionedQuiz,
 }
 
 const PASS_THRESHOLD = 0.85
@@ -26,7 +28,8 @@ const PASS_THRESHOLD = 0.85
 const nextCourseMap: Record<string, { id: string; title: string }> = {
   'industry-knowledge-check': { id: 'who-is-via', title: 'Who Is Via Trading' },
   'via-knowledge-check': { id: 'product-knowledge', title: 'Product Knowledge' },
-  'product-knowledge-check': { id: 'sales-philosophy', title: 'Sales Philosophy & Process' },
+  'product-knowledge-check': { id: 'sales-philosophy', title: 'Consultative Sales' },
+  'sales-philosophy-quiz': { id: 'bdr-role', title: 'BDR Role Training' },
 }
 
 // ─────────────────────────────────────────
