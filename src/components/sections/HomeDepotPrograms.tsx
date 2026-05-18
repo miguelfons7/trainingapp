@@ -38,6 +38,10 @@ export function HomeDepotPrograms() {
         <p className="text-sm text-via-text leading-relaxed">
           Home Depot is a great example of how the same retailer can offer both manifested and unmanifested options. The key tradeoff is <strong>transparency vs. pricing</strong>: manifested loads let the buyer see exactly what they are getting, while unmanifested loads come at a lower per-unit cost with more potential upside.
         </p>
+        <div className="mt-4 rounded-lg overflow-hidden border border-via-border">
+          <img src={`${import.meta.env.BASE_URL}images/program-hd.webp`} alt="Home Depot tools and hardware liquidation loads" className="w-full h-48 object-cover" />
+          <p className="text-xs text-via-text-light p-2 text-center">Sample Home Depot load</p>
+        </div>
       </div>
 
       {/* Program Cards */}
@@ -59,7 +63,7 @@ export function HomeDepotPrograms() {
             <div>
               <p className="text-xs font-semibold text-via-navy uppercase tracking-wide mb-2">Overview</p>
               <p className="text-sm text-via-text leading-relaxed">
-                HD Turbo is Via Trading's unmanifested Home Depot program. These are customer return loads focused on tools and hardware — no item-level detail is provided. The flat pricing model makes TRB a strong option for experienced tool resellers who are comfortable buying without a manifest.
+                HD Turbo is Via Trading's unmanifested Home Depot program. These loads are <strong>As-Is Customer Returns and will include Defective merchandise</strong>. No item-level detail is provided. The flat pricing model makes TRB a strong option for experienced tool resellers who are comfortable buying without a manifest.
               </p>
             </div>
 
@@ -80,6 +84,14 @@ export function HomeDepotPrograms() {
                 </li>
                 <li className="flex items-start gap-2 text-sm text-via-text">
                   <span className="w-1.5 h-1.5 rounded-full bg-orange-500 mt-1.5 shrink-0" />
+                  Loads include varying % of New Overstock and Shelf Pull Merchandise
+                </li>
+                <li className="flex items-start gap-2 text-sm text-via-text">
+                  <span className="w-1.5 h-1.5 rounded-full bg-orange-500 mt-1.5 shrink-0" />
+                  There is no guarantee of items, pallet heights, value or unit counts
+                </li>
+                <li className="flex items-start gap-2 text-sm text-via-text">
+                  <span className="w-1.5 h-1.5 rounded-full bg-orange-500 mt-1.5 shrink-0" />
                   Best for experienced tool resellers
                 </li>
               </ul>
@@ -93,7 +105,7 @@ export function HomeDepotPrograms() {
               </div>
               <div className="bg-via-bg-subtle rounded-lg p-3">
                 <p className="text-xs text-via-text-light uppercase tracking-wide">FOB</p>
-                <p className="text-sm font-semibold text-via-navy mt-0.5">Various US Locations</p>
+                <p className="text-sm font-semibold text-via-navy mt-0.5">Phoenix, AZ</p>
               </div>
               <div className="bg-via-bg-subtle rounded-lg p-3">
                 <p className="text-xs text-via-text-light uppercase tracking-wide">Category</p>
@@ -103,6 +115,22 @@ export function HomeDepotPrograms() {
                 <p className="text-xs text-via-text-light uppercase tracking-wide">Pricing Model</p>
                 <p className="text-sm font-semibold text-via-navy mt-0.5">Flat Rate per Load</p>
               </div>
+            </div>
+
+            {/* Products */}
+            <div>
+              <p className="text-xs font-semibold text-via-navy uppercase tracking-wide mb-1">Products</p>
+              <p className="text-xs text-via-text-light leading-relaxed">
+                Shower Heads, Wet/Dry Vacuum, Heater Fan, Mower, Range Hood, Locks, Sprayer, Welding Helmet, Hammer, Scales, Security Light, Vents, Boots, Night Light, Paint Kits, Ceiling Fans, Fans, Bins, Patio Furniture, Lighting, Tool Cabinets, Leaf Blowers, Flooring, Shelving, Faucets, Reciprocating Saws, Hose, Storage Units, Water Filters, Air Filters, Door Handles, Fire Pits, Mail Box, and more
+              </p>
+            </div>
+
+            {/* Brands */}
+            <div>
+              <p className="text-xs font-semibold text-via-navy uppercase tracking-wide mb-1">Brands</p>
+              <p className="text-xs text-via-text-light leading-relaxed">
+                Wagner, Moen, Milwaukee, Husky, Hampton Bay, Hoover, Lasko, Ryobi, 3M, Halo, FEIT Electric, Dewalt, Ridgid, NuTone, Defiant, Echo, Siemens
+              </p>
             </div>
           </div>
         </ExpandableCard>

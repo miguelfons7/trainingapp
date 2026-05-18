@@ -54,6 +54,22 @@ export function TargetPrograms() {
         </p>
       </div>
 
+      {/* Product Images */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
+        <div className="rounded-lg overflow-hidden border border-via-border">
+          <img src={`${import.meta.env.BASE_URL}images/program-tgt-salvage.webp`} alt="TGT Salvage loads" className="w-full h-32 object-cover" />
+          <p className="text-xs text-via-text-light p-2 text-center">TGT Salvage</p>
+        </div>
+        <div className="rounded-lg overflow-hidden border border-via-border">
+          <img src={`${import.meta.env.BASE_URL}images/program-tgt-premium.webp`} alt="TGT Premium loads" className="w-full h-32 object-cover" />
+          <p className="text-xs text-via-text-light p-2 text-center">TGT Premium</p>
+        </div>
+        <div className="rounded-lg overflow-hidden border border-via-border">
+          <img src={`${import.meta.env.BASE_URL}images/program-tgt-dc.webp`} alt="TGT DC loads" className="w-full h-32 object-cover" />
+          <p className="text-xs text-via-text-light p-2 text-center">TGT DC / New Mastercase</p>
+        </div>
+      </div>
+
       {/* Program Cards */}
       <h3 className="text-sm font-semibold text-via-text uppercase tracking-wide mb-3">
         Target Sub-Programs
@@ -119,10 +135,10 @@ export function TargetPrograms() {
           </div>
         </ExpandableCard>
 
-        {/* DC Program */}
+        {/* DC Program / TGTMix */}
         <ExpandableCard
-          title="TGT DC Program"
-          subtitle="Distribution Center Loads"
+          title="TGT DC / TGTMix"
+          subtitle="New Retail-Ready DC Loads — From $8,100"
           icon={<Warehouse className="w-5 h-5" />}
           badge={<Badge text="Unmanifested" color="amber" />}
           isExpanded={expandedIds.has('tgt-dc')}
@@ -133,7 +149,7 @@ export function TargetPrograms() {
             <div>
               <p className="text-xs font-semibold text-via-navy uppercase tracking-wide mb-2">Overview</p>
               <p className="text-sm text-via-text leading-relaxed">
-                Sourced directly from Target Distribution Centers rather than retail stores. DC loads are sorted into several sub-programs — examples include TGTMix, RSGM, Apparel, and others — each reflecting a different product category or sorting methodology.
+                Sourced directly from Target Distribution Centers rather than retail stores. Available in <strong>12 & 26 pallet lots</strong>. All items are in <strong>New Retail Ready Condition</strong>, with the very large majority (90%+) being New Master Case. Typically well over <strong>$100K retail per 26 pallet load</strong>. Starting from <strong>$8,100</strong>.
               </p>
             </div>
 
@@ -142,7 +158,15 @@ export function TargetPrograms() {
               <ul className="space-y-1.5">
                 <li className="flex items-start gap-2 text-sm text-via-text">
                   <span className="w-1.5 h-1.5 rounded-full bg-red-500 mt-1.5 shrink-0" />
-                  Merchandise sourced from DCs, not individual retail locations
+                  <strong>90%+ New Master Case</strong> — all items new and retail-ready
+                </li>
+                <li className="flex items-start gap-2 text-sm text-via-text">
+                  <span className="w-1.5 h-1.5 rounded-full bg-red-500 mt-1.5 shrink-0" />
+                  Available in 12-pallet and 26-pallet lot sizes
+                </li>
+                <li className="flex items-start gap-2 text-sm text-via-text">
+                  <span className="w-1.5 h-1.5 rounded-full bg-red-500 mt-1.5 shrink-0" />
+                  Well over $100K retail value per 26-pallet load
                 </li>
                 <li className="flex items-start gap-2 text-sm text-via-text">
                   <span className="w-1.5 h-1.5 rounded-full bg-red-500 mt-1.5 shrink-0" />
@@ -150,13 +174,17 @@ export function TargetPrograms() {
                 </li>
                 <li className="flex items-start gap-2 text-sm text-via-text">
                   <span className="w-1.5 h-1.5 rounded-full bg-red-500 mt-1.5 shrink-0" />
-                  Product mix and condition can vary by sub-program
-                </li>
-                <li className="flex items-start gap-2 text-sm text-via-text">
-                  <span className="w-1.5 h-1.5 rounded-full bg-red-500 mt-1.5 shrink-0" />
                   Unmanifested — no item-level detail provided
                 </li>
               </ul>
+            </div>
+
+            {/* Categories */}
+            <div>
+              <p className="text-xs font-semibold text-via-navy uppercase tracking-wide mb-1">Categories</p>
+              <p className="text-xs text-via-text-light leading-relaxed">
+                Toys, Home Decor, Lighting, Bedding & Domestics, Clothing, Fashion Accessories, Shoes, Kitchen, Baby Items, Outdoor Goods, Plants, Furniture, Bath, Luggage, Table Tops, Grills & Gardening, School/Office Supplies, Storage/Organization, Dining, Patio, Cookware & Bakeware
+              </p>
             </div>
           </div>
         </ExpandableCard>
@@ -164,7 +192,7 @@ export function TargetPrograms() {
         {/* Premium */}
         <ExpandableCard
           title="TGT Premium"
-          subtitle="Cherry-Picked Customer Returns by Target"
+          subtitle="Clean Customer Returns — From $166.24/pallet"
           icon={<Star className="w-5 h-5" />}
           badge={<Badge text="Manifested" color="emerald" />}
           isExpanded={expandedIds.has('tgt-premium')}
@@ -175,7 +203,7 @@ export function TargetPrograms() {
             <div>
               <p className="text-xs font-semibold text-via-navy uppercase tracking-wide mb-2">Overview</p>
               <p className="text-sm text-via-text leading-relaxed">
-                Premium is a manifested program — buyers receive item-level detail for what they are purchasing. The items are cherry-picked from customer returns <strong>by Target itself</strong> (not by Via Trading), resulting in a higher-quality selection. Because of this curation and transparency, TGT Premium is sold at a higher rate than standard salvage loads.
+                Clean general merchandise customer return loads. Most items are in original packaging. One of the cleanest customer return loads in the industry, with a majority of <strong>retail-ready goods</strong>. Items are cherry-picked from customer returns <strong>by Target itself</strong> (not by Via Trading), resulting in a higher-quality selection. Available from <strong>$166.24</strong> at pallet level.
               </p>
             </div>
 
@@ -192,13 +220,29 @@ export function TargetPrograms() {
                 </li>
                 <li className="flex items-start gap-2 text-sm text-via-text">
                   <span className="w-1.5 h-1.5 rounded-full bg-red-500 mt-1.5 shrink-0" />
-                  Higher rate than standard salvage due to curated selection
+                  One of the cleanest customer return loads in the industry
                 </li>
                 <li className="flex items-start gap-2 text-sm text-via-text">
                   <span className="w-1.5 h-1.5 rounded-full bg-red-500 mt-1.5 shrink-0" />
-                  Ideal for buyers who want visibility into exactly what they are getting
+                  Most items in original packaging, majority retail-ready
                 </li>
               </ul>
+            </div>
+
+            {/* Products */}
+            <div>
+              <p className="text-xs font-semibold text-via-navy uppercase tracking-wide mb-1">Products</p>
+              <p className="text-xs text-via-text-light leading-relaxed">
+                Accessories, Action Figures, Audio/Video Accessories, Baby Items, Board Games, Coffee Makers, Electronics, Headphones, Small Appliances, Sporting Goods, Vacuums, Video Games/Accessories
+              </p>
+            </div>
+
+            {/* Brands */}
+            <div>
+              <p className="text-xs font-semibold text-via-navy uppercase tracking-wide mb-1">Brands</p>
+              <p className="text-xs text-via-text-light leading-relaxed">
+                Apple, Barbie, Black & Decker, Bose, Clorox, Disney, Fisher Price, Hamilton Beach, Hasbro, Hoover, Keurig, Lego, Melissa & Doug, Nintendo, T-Fal, Vtech
+              </p>
             </div>
           </div>
         </ExpandableCard>

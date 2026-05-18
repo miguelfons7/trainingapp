@@ -23,7 +23,6 @@ import { AmazonPrograms } from '../components/sections/AmazonPrograms'
 import { WayfairPrograms } from '../components/sections/WayfairPrograms'
 import { ZapposPrograms } from '../components/sections/ZapposPrograms'
 import { SamsClubPrograms } from '../components/sections/SamsClubPrograms'
-import { LowesPrograms } from '../components/sections/LowesPrograms'
 import { OtherPrograms } from '../components/sections/OtherPrograms'
 import { LiquidateNowOfferings } from '../components/sections/LiquidateNowOfferings'
 import { QuizBlock } from '../components/interactive/QuizBlock'
@@ -51,7 +50,6 @@ const contentMap: Record<string, ComponentType> = {
   'wayfair-programs': WayfairPrograms,
   'zappos-programs': ZapposPrograms,
   'sams-club-programs': SamsClubPrograms,
-  'lowes-programs': LowesPrograms,
   'other-programs': OtherPrograms,
   'ln-offerings': LiquidateNowOfferings,
 }
@@ -84,7 +82,6 @@ const moduleImageMap: Record<string, { src: string; alt: string }> = {
   'wayfair-programs': { src: 'course-3-product.png', alt: 'Wayfair Programs' },
   'zappos-programs': { src: 'course-3-product.png', alt: 'Zappos Programs' },
   'sams-club-programs': { src: 'course-3-product.png', alt: "Sam's Club Programs" },
-  'lowes-programs': { src: 'course-3-product.png', alt: 'Lowes Programs' },
   'other-programs': { src: 'course-3-product.png', alt: 'Additional Retail Partners' },
   'ln-offerings': { src: 'course-3-product.png', alt: 'LiquidateNow Offerings' },
 }

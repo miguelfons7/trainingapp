@@ -50,11 +50,15 @@ export function AmazonPrograms() {
           Amazon Liquidation Overview
         </h3>
         <p className="text-sm text-via-text leading-relaxed mb-3">
-          Amazon offers multiple load types including <strong>shelf-pulls</strong>, <strong>customer returns</strong>, and <strong>assorted mixed merchandise</strong>. Loads are available in various configurations from single pallets to full truckloads and ocean containers, making the program accessible to buyers of all sizes.
+          Amazon loads are marketed as <strong>Customer Returns</strong>, though the <strong>large majority of items will generally be Brand New, Poly Bagged &amp; with Retail Tags</strong>. All loads are <strong>fully manifested</strong> with the majority of items' retail values provided by Amazon. Loads are available in various configurations from single pallets to full truckloads and ocean containers, making the program accessible to buyers of all sizes.
         </p>
-        <p className="text-sm text-via-text leading-relaxed">
-          Both manifested and unmanifested options exist, giving buyers flexibility in how they purchase. The product variety spans all categories, and the parent SKU for all Amazon programs is <strong>AMZ</strong>.
+        <p className="text-sm text-via-text leading-relaxed mb-3">
+          There are two main types of AMZ loads: (1) <strong>Predominantly Apparel &amp; Shoes</strong>, and (2) <strong>Predominantly Home, Wireless, Toys &amp; Drugstore</strong>. The percentage-of-retail sales price can vary per load based on the commodity mix. The parent SKU for all Amazon programs is <strong>AMZ</strong>.
         </p>
+        <div className="mt-4 rounded-lg overflow-hidden border border-via-border">
+          <img src={`${import.meta.env.BASE_URL}images/program-amz.webp`} alt="Amazon shelf-pull loads on pallets" className="w-full h-48 object-cover" />
+          <p className="text-xs text-via-text-light p-2 text-center">Sample Amazon load</p>
+        </div>
       </div>
 
       {/* Program Card */}
@@ -66,7 +70,7 @@ export function AmazonPrograms() {
           title="Amazon (AMZ)"
           subtitle="Shelf Pulls & Customer Returns"
           icon={<Package className="w-5 h-5" />}
-          badge={<Badge text="Mixed" color="blue" />}
+          badge={<Badge text="Manifested" color="emerald" />}
           isExpanded={expandedIds.has('amz')}
           onToggle={() => toggle('amz')}
           accentColor="border-indigo-500"
@@ -76,7 +80,7 @@ export function AmazonPrograms() {
             <div>
               <p className="text-xs font-semibold text-via-navy uppercase tracking-wide mb-2">Overview</p>
               <p className="text-sm text-via-text leading-relaxed">
-                Amazon loads include a broad assortment of shelf-pull and customer return merchandise spanning virtually every consumer product category. With both manifested and unmanifested options available, buyers can choose the level of transparency that fits their business model. Loads range from single pallets to full truckloads and ocean containers.
+                Amazon loads are fully manifested customer return merchandise spanning virtually every consumer product category. Although marketed as Customer Returns, the large majority of items are typically Brand New, Poly Bagged, and with Retail Tags. Retail values for the majority of items are provided by Amazon. Loads range from single pallets to full truckloads and ocean containers.
               </p>
             </div>
 
@@ -86,7 +90,11 @@ export function AmazonPrograms() {
               <ul className="space-y-1.5">
                 <li className="flex items-start gap-2 text-sm text-via-text">
                   <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 mt-1.5 shrink-0" />
-                  Multiple manifested and unmanifested options
+                  <strong>All lots are manifested</strong> with retail values provided by Amazon
+                </li>
+                <li className="flex items-start gap-2 text-sm text-via-text">
+                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 mt-1.5 shrink-0" />
+                  Large majority of items are Brand New, Poly Bagged &amp; with Retail Tags
                 </li>
                 <li className="flex items-start gap-2 text-sm text-via-text">
                   <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 mt-1.5 shrink-0" />
@@ -94,19 +102,19 @@ export function AmazonPrograms() {
                 </li>
                 <li className="flex items-start gap-2 text-sm text-via-text">
                   <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 mt-1.5 shrink-0" />
-                  Shelf-Pull items in good condition
+                  Two main load types: Apparel &amp; Shoes, or Home, Wireless, Toys &amp; Drugstore
                 </li>
                 <li className="flex items-start gap-2 text-sm text-via-text">
                   <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 mt-1.5 shrink-0" />
-                  Flexible sizing for different buyer needs
+                  <strong>Similar smaller listings available</strong>
+                </li>
+                <li className="flex items-start gap-2 text-sm text-via-text">
+                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 mt-1.5 shrink-0" />
+                  <strong>Can be viewed in warehouse</strong>
                 </li>
                 <li className="flex items-start gap-2 text-sm text-via-text">
                   <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 mt-1.5 shrink-0" />
                   Consistent ongoing program
-                </li>
-                <li className="flex items-start gap-2 text-sm text-via-text">
-                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 mt-1.5 shrink-0" />
-                  Viewable at warehouse
                 </li>
                 <li className="flex items-start gap-2 text-sm text-via-text">
                   <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 mt-1.5 shrink-0" />
@@ -119,15 +127,15 @@ export function AmazonPrograms() {
             <div className="grid grid-cols-2 gap-3">
               <div className="bg-via-bg-subtle rounded-lg p-3">
                 <p className="text-xs text-via-text-light uppercase tracking-wide">Condition</p>
-                <p className="text-sm font-semibold text-via-navy mt-0.5">Shelf Pulls & Customer Returns</p>
+                <p className="text-sm font-semibold text-via-navy mt-0.5">Customer Returns (mostly Brand New)</p>
               </div>
               <div className="bg-via-bg-subtle rounded-lg p-3">
-                <p className="text-xs text-via-text-light uppercase tracking-wide">Pricing</p>
-                <p className="text-sm font-semibold text-via-navy mt-0.5">Varies by load type</p>
+                <p className="text-xs text-via-text-light uppercase tracking-wide">Price Range</p>
+                <p className="text-sm font-semibold text-via-navy mt-0.5">From 6.50% of Retail; $1,333 – $155,181</p>
               </div>
               <div className="bg-via-bg-subtle rounded-lg p-3">
                 <p className="text-xs text-via-text-light uppercase tracking-wide">FOB</p>
-                <p className="text-sm font-semibold text-via-navy mt-0.5">Multiple US locations</p>
+                <p className="text-sm font-semibold text-via-navy mt-0.5">CA — Los Angeles</p>
               </div>
               <div className="bg-via-bg-subtle rounded-lg p-3">
                 <p className="text-xs text-via-text-light uppercase tracking-wide">Parent SKU</p>

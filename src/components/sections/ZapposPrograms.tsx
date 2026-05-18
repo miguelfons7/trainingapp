@@ -36,6 +36,10 @@ export function ZapposPrograms() {
         <p className="text-sm text-via-text leading-relaxed">
           Parent SKU: <strong>ZAP</strong>. Manifested footwear and apparel loads priced as a percentage of retail value.
         </p>
+        <div className="mt-4 rounded-lg overflow-hidden border border-via-border">
+          <img src={`${import.meta.env.BASE_URL}images/program-zap.webp`} alt="Zappos brand name shoes on pallets" className="w-full h-48 object-cover" />
+          <p className="text-xs text-via-text-light p-2 text-center">Sample Zappos footwear pallet</p>
+        </div>
       </div>
 
       {/* Program Card */}
@@ -44,8 +48,8 @@ export function ZapposPrograms() {
       </h3>
       <div className="space-y-3 mb-6">
         <ExpandableCard
-          title="Zappos (ZAP)"
-          subtitle="Manifested Footwear & Apparel"
+          title="ZAP-SHOEPAL (Zappos)"
+          subtitle="Shelf-Pull Footwear Pallets"
           icon={<Footprints className="w-5 h-5" />}
           badge={<Badge text="Manifested" color="emerald" />}
           isExpanded={expandedIds.has('zap')}
@@ -56,7 +60,7 @@ export function ZapposPrograms() {
             <div>
               <p className="text-xs font-semibold text-via-navy uppercase tracking-wide mb-2">Overview</p>
               <p className="text-sm text-via-text leading-relaxed">
-                Zappos customer return loads with full item-level manifests. The program is primarily footwear-focused, with a wide range of lot sizes available to accommodate buyers at different scales.
+                Zappos shelf-pull footwear pallets with full item-level manifests. Each pallet includes <strong>100 pairs</strong> at <strong>$17.49 per pair</strong>. Shelf-pull condition means items were exposed for sale but then removed from shelves — generally very clean merchandise.
               </p>
             </div>
 
@@ -69,15 +73,15 @@ export function ZapposPrograms() {
                 </li>
                 <li className="flex items-start gap-2 text-sm text-via-text">
                   <span className="w-1.5 h-1.5 rounded-full bg-teal-500 mt-1.5 shrink-0" />
-                  Footwear-focused program
+                  <strong>$17.49 per pair</strong> — 100 pairs per pallet
                 </li>
                 <li className="flex items-start gap-2 text-sm text-via-text">
                   <span className="w-1.5 h-1.5 rounded-full bg-teal-500 mt-1.5 shrink-0" />
-                  Wide range of lot sizes
+                  Shelf-pull condition — generally very clean
                 </li>
                 <li className="flex items-start gap-2 text-sm text-via-text">
                   <span className="w-1.5 h-1.5 rounded-full bg-teal-500 mt-1.5 shrink-0" />
-                  Regular availability
+                  Wide range of lot sizes and regular availability
                 </li>
               </ul>
             </div>
@@ -86,15 +90,15 @@ export function ZapposPrograms() {
             <div className="grid grid-cols-2 gap-3">
               <div className="bg-via-bg-subtle rounded-lg p-3">
                 <p className="text-xs text-via-text-light uppercase tracking-wide">Condition</p>
-                <p className="text-sm font-semibold text-via-navy mt-0.5">Customer Returns</p>
+                <p className="text-sm font-semibold text-via-navy mt-0.5">Shelf Pull</p>
               </div>
               <div className="bg-via-bg-subtle rounded-lg p-3">
-                <p className="text-xs text-via-text-light uppercase tracking-wide">Pricing Model</p>
-                <p className="text-sm font-semibold text-via-navy mt-0.5">% of Retail</p>
+                <p className="text-xs text-via-text-light uppercase tracking-wide">Pricing</p>
+                <p className="text-sm font-semibold text-via-navy mt-0.5">$17.49/pair</p>
               </div>
               <div className="bg-via-bg-subtle rounded-lg p-3">
-                <p className="text-xs text-via-text-light uppercase tracking-wide">Price Range</p>
-                <p className="text-sm font-semibold text-via-navy mt-0.5">$1,100 – $127,000</p>
+                <p className="text-xs text-via-text-light uppercase tracking-wide">Pairs per Pallet</p>
+                <p className="text-sm font-semibold text-via-navy mt-0.5">100 pairs</p>
               </div>
               <div className="bg-via-bg-subtle rounded-lg p-3">
                 <p className="text-xs text-via-text-light uppercase tracking-wide">FOB</p>
@@ -102,11 +106,19 @@ export function ZapposPrograms() {
               </div>
             </div>
 
-            {/* Products */}
+            {/* Brands */}
             <div>
-              <p className="text-xs font-semibold text-via-navy uppercase tracking-wide mb-1">Products</p>
+              <p className="text-xs font-semibold text-via-navy uppercase tracking-wide mb-1">Brands</p>
               <p className="text-xs text-via-text-light leading-relaxed">
-                Shoes, footwear, and apparel
+                Naturalizer, Sam Edelman, Steve Madden, Jordan (Nike), Nine West, Madewell, Columbia, Cole Haan, GUESS, Clarks, Dolce Vita, Calvin Klein, Aerosoles, ALDO, The North Face, Rockport, Michael Kors, Nike Golf, Sperry, KEEN, Stuart Weitzman, Vince Camuto, COACH, Nike, adidas, Lucky Brand, Ted Baker, and more
+              </p>
+            </div>
+
+            {/* Styles */}
+            <div>
+              <p className="text-xs font-semibold text-via-navy uppercase tracking-wide mb-1">Styles</p>
+              <p className="text-xs text-via-text-light leading-relaxed">
+                Closed-toe heels, open-toe heels, flats, casual sandals, dress sandals, slides, slip-ons, casual sneakers, loafers, mules, wedges, platform shoes, espadrilles, ankle strap sandals, comfort footwear, golf shoes, boots
               </p>
             </div>
           </div>

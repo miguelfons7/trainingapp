@@ -52,7 +52,7 @@ const otherPrograms = [
     name: 'THF Tools',
     icon: <Wrench className="w-4 h-4 text-via-text-light" />,
     badge: { text: 'Manifested', color: 'emerald' },
-    description: 'Manifested tools and hardware loads priced at 23% of retail. A specialty program for buyers focused on the tools category.',
+    description: 'Manifested tools and hardware loads priced at 23% of retail. Export only — these loads are available exclusively for international export buyers. A specialty program for buyers focused on the tools category who operate outside the US.',
     price: '23% of Retail',
     fob: 'Various US Locations',
   },

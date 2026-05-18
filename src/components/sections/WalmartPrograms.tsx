@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ShoppingCart, Shirt, Globe } from 'lucide-react'
+import { ShoppingCart, Shirt, Globe, Package } from 'lucide-react'
 import { SectionWrapper } from '../shared/SectionWrapper'
 import { ExpandableCard } from '../shared/ExpandableCard'
 import { Badge } from '../shared/Badge'
@@ -33,11 +33,19 @@ export function WalmartPrograms() {
           Walmart at Via Trading
         </h3>
         <p className="text-sm text-via-text leading-relaxed mb-3">
-          Walmart is one of Via Trading's largest retail partners. Programs cover <strong>apparel (WMAPP)</strong> and <strong>general merchandise / online returns (WMCOM)</strong>, providing buyers with a range of product types and price points.
+          Walmart is one of Via Trading's largest retail partners. Programs cover <strong>apparel (WMAPP)</strong>, <strong>general merchandise hardgoods (WMGM)</strong>, and <strong>online returns / new overstock (WMCOM)</strong>, providing buyers with a range of product types and price points.
         </p>
         <p className="text-sm text-via-text leading-relaxed">
           Unlike some programs that ship exclusively from Los Angeles, Walmart programs ship <strong>FOB from various US locations</strong>. These loads offer different manifest types and product mixes, giving buyers flexibility depending on their business model.
         </p>
+        <div className="mt-4 rounded-lg overflow-hidden border border-via-border">
+          <img
+            src={`${import.meta.env.BASE_URL}images/program-wmgm.webp`}
+            alt="Walmart General Merchandise loads — mixed hardgoods on pallets"
+            className="w-full h-48 object-cover"
+          />
+          <p className="text-xs text-via-text-light p-2 text-center">Sample Walmart General Merchandise load</p>
+        </div>
       </div>
 
       {/* Program Cards */}
@@ -109,10 +117,96 @@ export function WalmartPrograms() {
           </div>
         </ExpandableCard>
 
+        {/* WMGM */}
+        <ExpandableCard
+          title="WMGM (Walmart General Merchandise)"
+          subtitle="Customer Returns — Mostly Hardgoods"
+          icon={<Package className="w-5 h-5" />}
+          badge={<Badge text="Unmanifested" color="amber" />}
+          isExpanded={expandedIds.has('wm-gm')}
+          onToggle={() => toggle('wm-gm')}
+          accentColor="border-blue-500"
+        >
+          <div className="space-y-4">
+            <div>
+              <p className="text-xs font-semibold text-via-navy uppercase tracking-wide mb-2">Overview</p>
+              <p className="text-sm text-via-text leading-relaxed">
+                WM Customer Return General Merchandise Loads. One of Via Trading's most popular truckload programs. Loads are predominantly made up of hardgoods and sold at a flat price per load. While classified as Customer Returns, loads will include varying percentages of New Overstock and Shelf-Pull merchandise.
+              </p>
+            </div>
+
+            <div>
+              <p className="text-xs font-semibold text-via-navy uppercase tracking-wide mb-2">Key Features</p>
+              <ul className="space-y-1.5">
+                <li className="flex items-start gap-2 text-sm text-via-text">
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-1.5 shrink-0" />
+                  <strong>Unmanifested</strong> — loads predominantly hardgoods
+                </li>
+                <li className="flex items-start gap-2 text-sm text-via-text">
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-1.5 shrink-0" />
+                  One of Via Trading's most popular truckload programs
+                </li>
+                <li className="flex items-start gap-2 text-sm text-via-text">
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-1.5 shrink-0" />
+                  Sold at a flat price per load
+                </li>
+                <li className="flex items-start gap-2 text-sm text-via-text">
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-1.5 shrink-0" />
+                  Loads include varying % of New Overstock and Shelf-Pull items
+                </li>
+                <li className="flex items-start gap-2 text-sm text-via-text">
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-1.5 shrink-0" />
+                  Can be viewed at warehouse (FOB LA loads)
+                </li>
+                <li className="flex items-start gap-2 text-sm text-via-text">
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-1.5 shrink-0" />
+                  Available from multiple FOB locations (LA, NV, IN, SC)
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <p className="text-xs font-semibold text-via-navy uppercase tracking-wide mb-2">Products</p>
+              <p className="text-sm text-via-text leading-relaxed">
+                Toys, kitchen and cookware, camping gear, indoor and outdoor furniture, exercise equipment, baby products, bedding, automotive, sporting goods, hardware, lighting, pet supplies, health & beauty, tools, outdoor goods, lawn & garden, and more.
+              </p>
+            </div>
+
+            <div>
+              <p className="text-xs font-semibold text-via-navy uppercase tracking-wide mb-2">Brands</p>
+              <p className="text-sm text-via-text leading-relaxed">
+                Fisher Price, Playskool, Little Tikes, Disney, Coleman, Acme Furniture, and many other national and private label brands.
+              </p>
+            </div>
+
+            <div>
+              <p className="text-xs font-semibold text-via-navy uppercase tracking-wide mb-2">Details</p>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="bg-via-bg-subtle rounded-lg p-3 border border-via-border">
+                  <p className="text-xs text-via-text-light mb-0.5">Price Range</p>
+                  <p className="text-sm font-semibold text-via-navy">From $10,990</p>
+                </div>
+                <div className="bg-via-bg-subtle rounded-lg p-3 border border-via-border">
+                  <p className="text-xs text-via-text-light mb-0.5">FOB</p>
+                  <p className="text-sm font-semibold text-via-navy">LA, NV, IN, SC</p>
+                </div>
+                <div className="bg-via-bg-subtle rounded-lg p-3 border border-via-border">
+                  <p className="text-xs text-via-text-light mb-0.5">Category</p>
+                  <p className="text-sm font-semibold text-via-navy">General Merchandise</p>
+                </div>
+                <div className="bg-via-bg-subtle rounded-lg p-3 border border-via-border">
+                  <p className="text-xs text-via-text-light mb-0.5">Pricing Model</p>
+                  <p className="text-sm font-semibold text-via-navy">Flat per Load</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ExpandableCard>
+
         {/* WMCOM */}
         <ExpandableCard
           title="WMCOM (Walmart Exits / Walmart.com)"
-          subtitle="Customer Returns from Walmart.com Marketplace"
+          subtitle="Box Damage & New Overstock Clearance"
           icon={<Globe className="w-5 h-5" />}
           badge={<Badge text="Manifested" color="emerald" />}
           isExpanded={expandedIds.has('wm-com')}
@@ -123,7 +217,7 @@ export function WalmartPrograms() {
             <div>
               <p className="text-xs font-semibold text-via-navy uppercase tracking-wide mb-2">Overview</p>
               <p className="text-sm text-via-text leading-relaxed">
-                WMCOM loads consist of customer returns from the Walmart.com marketplace. This is a <strong>manifested program</strong>, giving buyers item-level detail on what they are purchasing. The wide price range makes this program accessible to buyers at all budget levels.
+                WMCOM & Stores Box Damage & New Overstock Clearance Program. Mix of Deep SKU and/or Assorted Loads. <strong>Fully Manifested.</strong> New Overstock Merchandise. This is a manifested program giving buyers item-level detail on what they are purchasing. The wide price range makes this program accessible to buyers at all budget levels.
               </p>
             </div>
 
@@ -136,7 +230,15 @@ export function WalmartPrograms() {
                 </li>
                 <li className="flex items-start gap-2 text-sm text-via-text">
                   <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-1.5 shrink-0" />
-                  Customer returns from Walmart.com online marketplace
+                  Mix of Deep SKU and/or Assorted Loads
+                </li>
+                <li className="flex items-start gap-2 text-sm text-via-text">
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-1.5 shrink-0" />
+                  Deep SKU items are typically brand new master case
+                </li>
+                <li className="flex items-start gap-2 text-sm text-via-text">
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-1.5 shrink-0" />
+                  More assorted items may include merchandise with slightly damaged master case
                 </li>
                 <li className="flex items-start gap-2 text-sm text-via-text">
                   <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-1.5 shrink-0" />
@@ -144,9 +246,23 @@ export function WalmartPrograms() {
                 </li>
                 <li className="flex items-start gap-2 text-sm text-via-text">
                   <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-1.5 shrink-0" />
-                  Box Damage & New Overstock Clearance also available
+                  Box Damage & New Overstock Clearance
                 </li>
               </ul>
+            </div>
+
+            <div>
+              <p className="text-xs font-semibold text-via-navy uppercase tracking-wide mb-2">Products</p>
+              <p className="text-sm text-via-text leading-relaxed">
+                Toys, Baby Items, Electronics, Cellphones, Gadgets & Cutlery, Watches, Bedding & Domestics, Cosmetics, Fitness & Sporting Goods, Outdoor, Health Care, Pet Supplies, Hardware, Home Decor, Apparel, Shoes, Hair Care, Bath & Accessories, School Supplies, and more.
+              </p>
+            </div>
+
+            <div>
+              <p className="text-xs font-semibold text-via-navy uppercase tracking-wide mb-2">Brands</p>
+              <p className="text-sm text-via-text leading-relaxed">
+                Samsung, Disney, Honeywell, Google, Little Tikes, Cuisinart, GE, Graco, Under Armour, Canon, Nerf, Skechers, Hot Wheels, GoPro, Champion, Barbie, and many more.
+              </p>
             </div>
 
             <div>
@@ -154,7 +270,7 @@ export function WalmartPrograms() {
               <div className="grid grid-cols-2 gap-3">
                 <div className="bg-via-bg-subtle rounded-lg p-3 border border-via-border">
                   <p className="text-xs text-via-text-light mb-0.5">Price Range</p>
-                  <p className="text-sm font-semibold text-via-navy">$1,400 – $58,000</p>
+                  <p className="text-sm font-semibold text-via-navy">From $3,164.65</p>
                 </div>
                 <div className="bg-via-bg-subtle rounded-lg p-3 border border-via-border">
                   <p className="text-xs text-via-text-light mb-0.5">FOB</p>
@@ -182,10 +298,13 @@ export function WalmartPrograms() {
             <strong>WM</strong> — General Walmart loads
           </li>
           <li className="text-sm text-orange-700">
+            <strong>WMGM</strong> — Walmart General Merchandise (hardgoods)
+          </li>
+          <li className="text-sm text-orange-700">
             <strong>WMAPP</strong> — Walmart Apparel
           </li>
           <li className="text-sm text-orange-700">
-            <strong>WMCOM</strong> — Walmart.com exits / returns
+            <strong>WMCOM</strong> — Walmart.com exits / New Overstock
           </li>
         </ul>
       </div>

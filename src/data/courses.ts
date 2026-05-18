@@ -190,13 +190,6 @@ export const courses: Course[] = [
         description: "Explore Via Trading's Sam's Club program — manifested general merchandise loads priced at 20-35% of retail value.",
       },
       {
-        id: 'lowes-programs',
-        title: 'Lowes Programs',
-        estimatedTime: '6 min',
-        contentType: 'lesson',
-        description: 'Learn about the Lowes home improvement liquidation program, with multiple FOB locations and flexible load sizes.',
-      },
-      {
         id: 'other-programs',
         title: 'Additional Retail Partners',
         estimatedTime: '6 min',
