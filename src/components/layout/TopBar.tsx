@@ -127,6 +127,14 @@ function buildBreadcrumbs(pathname: string): Breadcrumb[] {
     }
   }
 
+  if (parts[0] === 'profile') {
+    if (parts[1]) {
+      crumbs.push({ label: 'Profile', path: `/profile/${parts[1]}` })
+    } else {
+      crumbs.push({ label: 'My Profile', path: '/profile' })
+    }
+  }
+
   if (parts[0] === 'admin') {
     crumbs.push({ label: 'Admin Dashboard', path: '/admin' })
   }

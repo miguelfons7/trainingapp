@@ -1,49 +1,46 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { GraduationCap, Mail } from 'lucide-react'
+import { GraduationCap, Mail, Lock, Loader2 } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 
-/**
- * DEV-ONLY: Explicit admin allowlist.
- * In production this would be driven by a real auth provider / role system.
- */
-const DEV_ADMIN_EMAILS = ['miguel@viatrading.com']
-
 export function Login() {
-  const { login } = useAuth()
+  const { signIn } = useAuth()
   const navigate = useNavigate()
-  const [showPicker, setShowPicker] = useState(false)
+
   const [email, setEmail] = useState('')
-  const [name, setName] = useState('')
+  const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const [submitting, setSubmitting] = useState(false)
 
-  const handleEmailClick = () => {
-    setShowPicker(true)
-    setEmail('')
-    setName('')
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    const trimmedEmail = email.trim().toLowerCase()
+
+    if (!trimmedEmail) {
+      setError('Please enter your email')
+      return
+    }
+    if (!password) {
+      setError('Please enter your password')
+      return
+    }
+
+    setSubmitting(true)
     setError('')
-  }
 
-  const handleSignIn = () => {
-    const normalizedEmail = email.trim().toLowerCase()
-    const trimmedName = name.trim()
+    const result = await signIn(trimmedEmail, password)
 
-    if (!normalizedEmail.endsWith('@viatrading.com')) {
-      setError('Please use your @viatrading.com email')
+    if (result.error) {
+      setError(
+        result.error === 'Invalid login credentials'
+          ? 'Invalid email or password. Contact your admin if you need access.'
+          : result.error,
+      )
+      setSubmitting(false)
       return
     }
-    if (!trimmedName) {
-      setError('Please enter your name')
-      return
-    }
 
-    const isAdmin = DEV_ADMIN_EMAILS.includes(normalizedEmail)
-
-    login({
-      email: normalizedEmail,
-      name: trimmedName,
-      role: isAdmin ? 'admin' : 'learner',
-    })
+    // Auth state change listener in AuthContext will update user state
     navigate('/')
   }
 
@@ -73,94 +70,85 @@ export function Login() {
 
         {/* Card */}
         <div className="bg-via-card rounded-2xl border border-via-border p-8 shadow-sm">
-          {!showPicker ? (
-            <>
-              <h2 className="text-lg font-semibold text-via-navy text-center mb-6">
-                Sign in to continue
-              </h2>
+          <h2 className="text-lg font-semibold text-via-navy text-center mb-1">
+            Welcome to VIAcademy
+          </h2>
+          <p className="text-xs text-via-text-light text-center mb-6">
+            Sign in with your credentials
+          </p>
 
-              <button
-                onClick={handleEmailClick}
-                className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-white border border-via-border rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
-              >
-                <Mail className="w-5 h-5 text-via-navy" />
-                <span className="text-sm font-medium text-gray-700">
-                  Continue with Email
-                </span>
-              </button>
+          <form className="space-y-4" onSubmit={handleSubmit}>
+            <div>
+              <label className="block text-xs font-medium text-via-text mb-1.5">
+                Email
+              </label>
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-via-text-light/50" />
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value)
+                    setError('')
+                  }}
+                  placeholder="you@viatrading.com"
+                  autoComplete="email"
+                  disabled={submitting}
+                  className="w-full pl-10 pr-3 py-2.5 rounded-lg border border-via-border bg-white text-sm text-via-text placeholder:text-via-text-light/50 focus:outline-none focus:ring-2 focus:ring-via-orange/30 focus:border-via-orange disabled:opacity-50"
+                />
+              </div>
+            </div>
 
-              <p className="text-xs text-via-text-light text-center mt-4">
-                Use your <span className="font-medium">@viatrading.com</span>{' '}
-                email to sign in
-              </p>
-            </>
-          ) : (
-            <>
-              <h2 className="text-lg font-semibold text-via-navy text-center mb-1">
-                Welcome to VIAcademy
-              </h2>
-              <p className="text-xs text-via-text-light text-center mb-6">
-                Enter your Via Trading credentials
-              </p>
+            <div>
+              <label className="block text-xs font-medium text-via-text mb-1.5">
+                Password
+              </label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-via-text-light/50" />
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value)
+                    setError('')
+                  }}
+                  placeholder="Enter your password"
+                  autoComplete="current-password"
+                  disabled={submitting}
+                  className="w-full pl-10 pr-3 py-2.5 rounded-lg border border-via-border bg-white text-sm text-via-text placeholder:text-via-text-light/50 focus:outline-none focus:ring-2 focus:ring-via-orange/30 focus:border-via-orange disabled:opacity-50"
+                />
+              </div>
+            </div>
 
-              <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); handleSignIn() }}>
-                <div>
-                  <label className="block text-xs font-medium text-via-text mb-1.5">
-                    Full Name
-                  </label>
-                  <input
-                    type="text"
-                    value={name}
-                    onChange={(e) => {
-                      setName(e.target.value)
-                      setError('')
-                    }}
-                    placeholder="e.g. John Smith"
-                    className="w-full px-3 py-2.5 rounded-lg border border-via-border bg-white text-sm text-via-text placeholder:text-via-text-light/50 focus:outline-none focus:ring-2 focus:ring-via-orange/30 focus:border-via-orange"
-                  />
-                </div>
+            {error && (
+              <p className="text-xs text-via-danger font-medium">{error}</p>
+            )}
 
-                <div>
-                  <label className="block text-xs font-medium text-via-text mb-1.5">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => {
-                      setEmail(e.target.value)
-                      setError('')
-                    }}
-                    placeholder="you@viatrading.com"
-                    className="w-full px-3 py-2.5 rounded-lg border border-via-border bg-white text-sm text-via-text placeholder:text-via-text-light/50 focus:outline-none focus:ring-2 focus:ring-via-orange/30 focus:border-via-orange"
-                  />
-                </div>
+            <button
+              type="submit"
+              disabled={submitting}
+              className="w-full py-2.5 bg-via-navy text-white text-sm font-medium rounded-lg hover:bg-via-navy-light transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            >
+              {submitting ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  Signing in...
+                </>
+              ) : (
+                'Sign In'
+              )}
+            </button>
+          </form>
 
-                {error && (
-                  <p className="text-xs text-via-danger font-medium">{error}</p>
-                )}
-
-                <button
-                  type="submit"
-                  className="w-full py-2.5 bg-via-navy text-white text-sm font-medium rounded-lg hover:bg-via-navy-light transition-colors cursor-pointer"
-                >
-                  Sign In
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setShowPicker(false)}
-                  className="w-full text-xs text-via-text-light hover:text-via-text transition-colors cursor-pointer"
-                >
-                  Back to sign in options
-                </button>
-              </form>
-            </>
-          )}
+          <p className="text-[10px] text-via-text-light/60 text-center mt-4">
+            Accounts are created by invitation only.
+            <br />
+            Contact your admin if you need access.
+          </p>
         </div>
 
         <p className="text-[10px] text-via-text-light/50 text-center mt-6">
-          Via Trading &middot; Internal Use Only &middot; Dev Build
+          Via Trading &middot; Internal Use Only
         </p>
       </div>
     </div>

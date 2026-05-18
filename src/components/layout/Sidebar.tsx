@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { NavLink } from 'react-router-dom'
-import { Home, BookOpen, Award, FileCheck, Shield, ScrollText, LogOut, ChevronLeft, GraduationCap } from 'lucide-react'
+import { NavLink, useNavigate } from 'react-router-dom'
+import { Home, BookOpen, Award, FileCheck, Shield, ScrollText, LogOut, ChevronLeft, GraduationCap, UserCircle } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 import { useCompliance } from '../../context/ComplianceContext'
 import { APP_VERSION } from '../../version'
@@ -13,11 +13,13 @@ interface SidebarProps {
 export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   const { user, logout, isAdmin } = useAuth()
   const { pendingItems } = useCompliance()
+  const navigate = useNavigate()
   const navItems = [
     { to: '/', icon: Home, label: 'Home', end: true },
     { to: '/course/intro-to-industry', icon: BookOpen, label: 'My Courses', end: false },
     { to: '/acknowledgements', icon: FileCheck, label: 'Acks', end: true },
     { to: '/certificates', icon: Award, label: 'Certificates', end: true },
+    { to: '/profile', icon: UserCircle, label: 'Profile', end: true },
     ...(isAdmin
       ? [
           { to: '/admin', icon: Shield, label: 'Admin', end: false },
@@ -77,16 +79,24 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
       {user && (
         <div className="border-t border-white/10 p-3">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-via-orange/30 flex items-center justify-center text-xs font-bold text-via-orange shrink-0">
+            <button
+              onClick={() => navigate('/profile')}
+              className="w-8 h-8 rounded-full bg-via-orange/30 flex items-center justify-center text-xs font-bold text-via-orange shrink-0 hover:bg-via-orange/40 transition-colors cursor-pointer"
+              title="View profile"
+            >
               {user.name.split(' ').map((n) => n[0]).join('')}
-            </div>
+            </button>
             {!collapsed && (
-              <div className="flex-1 min-w-0">
+              <button
+                onClick={() => navigate('/profile')}
+                className="flex-1 min-w-0 text-left hover:opacity-80 transition-opacity cursor-pointer"
+                title="View profile"
+              >
                 <p className="text-xs font-medium text-white truncate">
                   {user.name}
                 </p>
                 <p className="text-[10px] text-white/40 truncate">{user.email}</p>
-              </div>
+              </button>
             )}
             {!collapsed && (
               <button

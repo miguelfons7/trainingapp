@@ -17,7 +17,7 @@ export function AssignCourses() {
   const [assignments, setAssignments] = useState<Assignment[]>([])
   const [showUserList, setShowUserList] = useState(false)
 
-  const learners = mockUsers.filter((u) => u.role === 'learner')
+  const learners = mockUsers.filter((u) => u.role === 'user')
 
   function toggleUser(email: string) {
     setSelectedUsers((prev) => {

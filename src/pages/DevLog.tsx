@@ -10,6 +10,28 @@ interface LogEntry {
 
 const changelog: LogEntry[] = [
   {
+    version: '0.8.0',
+    date: '2026-05-18',
+    title: 'Supabase Auth, Invite System, Admin Management, User Profiles',
+    changes: [
+      'Fixed critical AuthContext deadlock: separated sync auth listener from async profile fetch to avoid Supabase v2 internal lock contention',
+      'Migrated ProgressContext from localStorage to Supabase module_progress table with optimistic updates',
+      'Built invite-only signup system: admin creates invitation, generates link with token, new user signs up at /signup?token=xxx',
+      'Created Signup page with token validation, auto-provisioned profiles via handle_new_user() trigger',
+      'Added validate_invitation_token SECURITY DEFINER function for anon-accessible token validation',
+      'Built Invite Users admin tab: create invitations with role/team selection, view pending/accepted/expired invites, copy signup links',
+      'Built Manage Teams admin tab: create, rename, and delete teams with member counts from Supabase',
+      'Built Manage Users admin tab: sortable table of all users with inline role/team editing, click row to view profile',
+      'Built User Profile page (/profile and /profile/:userId): hero section, stats cards, course progress bars, certifications, recent activity timeline',
+      'Profile shows courses completed, modules completed, avg quiz score, acks signed',
+      'Admin/leadership can view any user profile; acknowledgement data shown only on own profile (localStorage limitation)',
+      'Added Profile nav item to sidebar with UserCircle icon',
+      'Made sidebar avatar and name clickable to navigate to /profile',
+      'Updated TopBar breadcrumbs for profile paths',
+      'Disabled email confirmation in Supabase Auth for internal invite-only app',
+    ],
+  },
+  {
     version: '0.7.0',
     date: '2026-05-14',
     title: 'Shipping Terms, Quiz Restructure, Final Exam, Additional Resources',

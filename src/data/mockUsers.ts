@@ -22,7 +22,7 @@ export const mockUsers: MockUser[] = [
   {
     email: 'sarah@viatrading.com',
     name: 'Sarah Chen',
-    role: 'learner',
+    role: 'user',
     avatar: 'SC',
     programProgress: 72,
     currentCourse: 'Sales Philosophy & Process',
@@ -33,7 +33,7 @@ export const mockUsers: MockUser[] = [
   {
     email: 'james@viatrading.com',
     name: 'James Rodriguez',
-    role: 'learner',
+    role: 'user',
     avatar: 'JR',
     programProgress: 45,
     currentCourse: 'Product Knowledge',
@@ -44,7 +44,7 @@ export const mockUsers: MockUser[] = [
   {
     email: 'rachel@viatrading.com',
     name: 'Rachel Kim',
-    role: 'learner',
+    role: 'user',
     avatar: 'RK',
     programProgress: 28,
     currentCourse: 'Who Is Via Trading',
@@ -55,7 +55,7 @@ export const mockUsers: MockUser[] = [
   {
     email: 'david@viatrading.com',
     name: 'David Thompson',
-    role: 'learner',
+    role: 'user',
     avatar: 'DT',
     programProgress: 85,
     currentCourse: 'BDR Role Training',
@@ -71,7 +71,7 @@ export const mockUsers: MockUser[] = [
   {
     email: 'maria@viatrading.com',
     name: 'Maria Santos',
-    role: 'learner',
+    role: 'user',
     avatar: 'MS',
     programProgress: 14,
     currentCourse: 'Intro to the Liquidation Industry',
@@ -82,7 +82,7 @@ export const mockUsers: MockUser[] = [
   {
     email: 'alex@viatrading.com',
     name: 'Alex Petrov',
-    role: 'learner',
+    role: 'user',
     avatar: 'AP',
     programProgress: 57,
     currentCourse: 'Product Knowledge',
@@ -93,7 +93,7 @@ export const mockUsers: MockUser[] = [
   {
     email: 'lisa@viatrading.com',
     name: 'Lisa Nakamura',
-    role: 'learner',
+    role: 'user',
     avatar: 'LN',
     programProgress: 0,
     currentCourse: 'Intro to the Liquidation Industry',

@@ -31,10 +31,12 @@ export interface CourseModule {
 // --- User & Progress ---
 
 export interface User {
+  id: string
   email: string
   name: string
   avatar?: string
-  role: 'learner' | 'admin'
+  role: 'user' | 'leadership' | 'admin'
+  teamId?: string
 }
 
 export interface ModuleProgress {
@@ -179,7 +181,7 @@ export interface SectionedQuiz {
 export interface MockUser {
   email: string
   name: string
-  role: 'learner' | 'admin'
+  role: 'user' | 'leadership' | 'admin'
   avatar: string
   programProgress: number
   currentCourse: string

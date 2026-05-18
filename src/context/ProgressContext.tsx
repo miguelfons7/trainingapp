@@ -4,12 +4,12 @@ import {
   useState,
   useCallback,
   useEffect,
-  useRef,
   type ReactNode,
 } from 'react'
 import type { ModuleProgress } from '../types'
 import { courses } from '../data/courses'
 import { useAuth } from './AuthContext'
+import { supabase } from '../lib/supabase'
 
 interface CourseProgressSummary {
   completed: number
@@ -33,49 +33,42 @@ const ProgressContext = createContext<ProgressContextValue | undefined>(
   undefined,
 )
 
-/**
- * DEV-ONLY: Progress is stored in localStorage, namespaced by user email
- * so that multiple testers on the same browser get separate progress.
- */
-function getStorageKey(email: string): string {
-  return `via-academy-progress:${email}`
-}
-
-function loadProgress(email: string): Record<string, ModuleProgress> {
-  if (!email) return {}
-  try {
-    const stored = localStorage.getItem(getStorageKey(email))
-    return stored
-      ? (JSON.parse(stored) as Record<string, ModuleProgress>)
-      : {}
-  } catch {
-    return {}
-  }
-}
-
-function saveProgress(email: string, progress: Record<string, ModuleProgress>): void {
-  if (!email) return
-  localStorage.setItem(getStorageKey(email), JSON.stringify(progress))
-}
-
 export function ProgressProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth()
-  const userEmail = user?.email ?? ''
-  const emailRef = useRef(userEmail)
+  const userId = user?.id ?? ''
 
-  const [progress, setProgress] = useState<Record<string, ModuleProgress>>(
-    () => loadProgress(userEmail),
-  )
+  const [progress, setProgress] = useState<Record<string, ModuleProgress>>({})
 
-  // Keep the ref in sync so callbacks can read the current email
+  // Load all progress from Supabase when user changes
   useEffect(() => {
-    emailRef.current = userEmail
-  }, [userEmail])
+    if (!userId) {
+      setProgress({})
+      return
+    }
 
-  // Re-load progress when user changes (login / logout / switch user)
-  useEffect(() => {
-    setProgress(loadProgress(userEmail))
-  }, [userEmail])
+    supabase
+      .from('module_progress')
+      .select('*')
+      .eq('user_id', userId)
+      .then(({ data }) => {
+        if (!data) {
+          setProgress({})
+          return
+        }
+        const map: Record<string, ModuleProgress> = {}
+        for (const row of data) {
+          const key = `${row.course_id}/${row.module_id}`
+          map[key] = {
+            moduleId: row.module_id,
+            courseId: row.course_id,
+            status: row.status as ModuleProgress['status'],
+            score: row.score ?? undefined,
+            completedAt: row.completed_at ?? undefined,
+          }
+        }
+        setProgress(map)
+      })
+  }, [userId])
 
   const getModuleStatus = useCallback(
     (
@@ -90,31 +83,56 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
 
   const completeModule = useCallback(
     (courseId: string, moduleId: string, score?: number) => {
-      setProgress((prev) => {
-        const key = `${courseId}/${moduleId}`
-        const next: Record<string, ModuleProgress> = {
-          ...prev,
-          [key]: {
-            moduleId,
-            courseId,
-            status: 'completed',
-            score,
-            completedAt: new Date().toISOString(),
-          },
-        }
-        saveProgress(emailRef.current, next)
-        return next
-      })
+      const key = `${courseId}/${moduleId}`
+      const now = new Date().toISOString()
+
+      // Optimistic update
+      setProgress((prev) => ({
+        ...prev,
+        [key]: {
+          moduleId,
+          courseId,
+          status: 'completed',
+          score,
+          completedAt: now,
+        },
+      }))
+
+      // Persist to Supabase
+      if (userId) {
+        supabase
+          .from('module_progress')
+          .upsert(
+            {
+              user_id: userId,
+              course_id: courseId,
+              module_id: moduleId,
+              status: 'completed',
+              score: score ?? null,
+              started_at: now,
+              completed_at: now,
+            },
+            { onConflict: 'user_id,course_id,module_id' },
+          )
+          .then(({ error }) => {
+            if (error) console.error('Failed to save progress:', error.message)
+          })
+      }
     },
-    [],
+    [userId],
   )
 
   const startModule = useCallback(
     (courseId: string, moduleId: string) => {
+      const key = `${courseId}/${moduleId}`
+
       setProgress((prev) => {
-        const key = `${courseId}/${moduleId}`
-        if (prev[key]?.status === 'completed' || prev[key]?.status === 'in-progress') return prev
-        const next: Record<string, ModuleProgress> = {
+        if (
+          prev[key]?.status === 'completed' ||
+          prev[key]?.status === 'in-progress'
+        )
+          return prev
+        return {
           ...prev,
           [key]: {
             moduleId,
@@ -122,11 +140,32 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
             status: 'in-progress',
           },
         }
-        saveProgress(emailRef.current, next)
-        return next
       })
+
+      // Persist to Supabase (only if not already started/completed)
+      if (userId) {
+        const existing = progress[`${courseId}/${moduleId}`]
+        if (existing?.status === 'completed' || existing?.status === 'in-progress')
+          return
+
+        supabase
+          .from('module_progress')
+          .upsert(
+            {
+              user_id: userId,
+              course_id: courseId,
+              module_id: moduleId,
+              status: 'in-progress',
+              started_at: new Date().toISOString(),
+            },
+            { onConflict: 'user_id,course_id,module_id' },
+          )
+          .then(({ error }) => {
+            if (error) console.error('Failed to save progress:', error.message)
+          })
+      }
     },
-    [],
+    [userId, progress],
   )
 
   const getCourseProgress = useCallback(
@@ -165,11 +204,18 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
   )
 
   const resetProgress = useCallback(() => {
-    if (emailRef.current) {
-      localStorage.removeItem(getStorageKey(emailRef.current))
-    }
     setProgress({})
-  }, [])
+
+    if (userId) {
+      supabase
+        .from('module_progress')
+        .delete()
+        .eq('user_id', userId)
+        .then(({ error }) => {
+          if (error) console.error('Failed to reset progress:', error.message)
+        })
+    }
+  }, [userId])
 
   return (
     <ProgressContext.Provider

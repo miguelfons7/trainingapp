@@ -4,29 +4,50 @@ import { ProgressProvider } from './context/ProgressContext'
 import { ComplianceProvider } from './context/ComplianceContext'
 import { AppShell } from './components/layout/AppShell'
 import { Login } from './pages/Login'
+import { Signup } from './pages/Signup'
 import { Home } from './pages/Home'
 import { CourseView } from './pages/CourseView'
 import { ModuleView } from './pages/ModuleView'
 import { Admin } from './pages/Admin'
 import { Certificates } from './pages/Certificates'
+import { UserProfile } from './pages/UserProfile'
 import { Acknowledgements } from './pages/Acknowledgements'
 import { DevLog } from './pages/DevLog'
 import { FinalExam } from './pages/FinalExam'
+import { Loader2 } from 'lucide-react'
+
+function LoadingScreen() {
+  return (
+    <div className="min-h-screen bg-via-bg flex items-center justify-center">
+      <div className="text-center">
+        <Loader2 className="w-8 h-8 text-via-navy animate-spin mx-auto mb-3" />
+        <p className="text-sm text-via-text-light">Loading VIAcademy...</p>
+      </div>
+    </div>
+  )
+}
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { user } = useAuth()
+  const { user, loading } = useAuth()
+  if (loading) return <LoadingScreen />
   if (!user) return <Navigate to="/login" replace />
   return <>{children}</>
 }
 
 function AppRoutes() {
-  const { user } = useAuth()
+  const { user, loading } = useAuth()
+
+  if (loading) return <LoadingScreen />
 
   return (
     <Routes>
       <Route
         path="/login"
         element={user ? <Navigate to="/" replace /> : <Login />}
+      />
+      <Route
+        path="/signup"
+        element={user ? <Navigate to="/" replace /> : <Signup />}
       />
       <Route
         path="/"
@@ -42,6 +63,8 @@ function AppRoutes() {
         <Route path="acknowledgements" element={<Acknowledgements />} />
         <Route path="certificates" element={<Certificates />} />
         <Route path="final-exam" element={<FinalExam />} />
+        <Route path="profile" element={<UserProfile />} />
+        <Route path="profile/:userId" element={<UserProfile />} />
         <Route path="admin" element={<Admin />} />
         <Route path="dev-log" element={<DevLog />} />
       </Route>
@@ -52,7 +75,7 @@ function AppRoutes() {
 
 function App() {
   return (
-    <BrowserRouter basename="/trainingapp">
+    <BrowserRouter>
       <AuthProvider>
         <ProgressProvider>
           <ComplianceProvider>

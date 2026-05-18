@@ -11,6 +11,7 @@ A React-based training platform for Via Trading Corporation (wholesale liquidati
 - **react-router-dom v7** (client-side routing)
 - **lucide-react** (icon library — always import individual icons)
 - **framer-motion** (animations for ExpandableCard, QuizBlock)
+- **Supabase** (PostgreSQL + Auth + Row Level Security)
 - **GitHub Pages** deployment: `git push origin main:deploy`
 
 ## Project Structure
@@ -18,41 +19,150 @@ A React-based training platform for Via Trading Corporation (wholesale liquidati
 ```
 src/
   components/
-    sections/       ← One component per lesson module (e.g., BdrRoleOverview.tsx)
-    shared/         ← Reusable UI components (SectionWrapper, ExpandableCard, etc.)
-    interactive/    ← Exercise/quiz components (ScenarioCard, FillInBlank, QuizBlock)
+    admin/          <- Admin dashboard tabs (InviteUsers, ManageTeams, ManageUsers, etc.)
+    sections/       <- One component per lesson module (e.g., BdrRoleOverview.tsx)
+    shared/         <- Reusable UI components (SectionWrapper, ExpandableCard, etc.)
+    interactive/    <- Exercise/quiz components (ScenarioCard, FillInBlank, QuizBlock)
   data/
-    courses.ts      ← Master course registry (id, title, modules[], status)
-    programs.ts     ← Training program groupings
+    courses.ts      <- Master course registry (id, title, modules[], status)
+    programs.ts     <- Training program groupings
     modules/
-      industry/         ← Course 1 data files
-      via-trading/      ← Course 2 data files
-      product-knowledge/← Course 3 data files
-      consultative-sales/ ← Course 4 data files
-      bdr-role/         ← Course 5 data files
+      industry/         <- Course 1 data files
+      via-trading/      <- Course 2 data files
+      product-knowledge/<- Course 3 data files
+      consultative-sales/ <- Course 4 data files
+      bdr-role/         <- Course 5 data files
+  lib/
+    supabase.ts     <- Supabase client initialization (typed with Database)
   pages/
-    ModuleView.tsx  ← Central routing: imports all section components, maps moduleId → component
+    ModuleView.tsx  <- Central routing: imports all section components, maps moduleId -> component
+    Login.tsx       <- Email + password login via Supabase Auth
+    Signup.tsx      <- Invite-only signup with token validation
+    UserProfile.tsx <- User profile page with stats, progress, certs, activity
   types/
-    index.ts        ← All TypeScript interfaces
+    index.ts        <- All TypeScript interfaces (User, Course, quiz types, etc.)
+    database.ts     <- Supabase Database types (Row/Insert/Update for all tables)
   context/
-    ProgressContext.tsx ← User progress tracking (localStorage-based)
+    AuthContext.tsx  <- Supabase auth: session, profile, signIn/logout, isAdmin/isLeadership
+    ProgressContext.tsx <- User progress tracking (Supabase module_progress table)
+supabase/
+  migrations/
+    001_initial_schema.sql <- Full DB schema (tables, RLS, triggers, seed data)
+    002_invitation_validation.sql <- validate_invitation_token() SECURITY DEFINER function
 public/
-  images/           ← All images (hero images, inline images, logos)
+  images/           <- All images (hero images, inline images, logos)
+.env.local          <- Supabase credentials (VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY)
 ```
+
+## Database & Authentication
+
+### Supabase Project
+
+- **Project URL**: Stored in `.env.local` as `VITE_SUPABASE_URL`
+- **Anon Key**: Stored in `.env.local` as `VITE_SUPABASE_ANON_KEY`
+- `.env.local` is gitignored via `*.local` pattern
+
+### Database Schema (6 tables)
+
+| Table | Purpose | Key Fields |
+|-------|---------|------------|
+| `teams` | Departments (Sales, Operations, Leadership, New Hires) | `id`, `name` |
+| `profiles` | User profiles (extends auth.users) | `id` (FK to auth.users), `email`, `full_name`, `role`, `team_id` |
+| `course_assignments` | Who needs to take what | `user_id`, `course_id`, `assigned_by`, `due_date` |
+| `module_progress` | Per-module completion tracking | `user_id`, `course_id`, `module_id`, `status`, `score` |
+| `invitations` | Invite-only signup tokens | `email`, `role`, `team_id`, `invited_by`, `token`, `expires_at` |
+| `content_requests` | Leadership content change requests | `requested_by`, `title`, `description`, `status`, `reviewed_by` |
+
+### Roles & Permissions
+
+Three roles: `'user'`, `'leadership'`, `'admin'`
+
+| Capability | user | leadership | admin |
+|------------|------|------------|-------|
+| View own profile/progress | Yes | Yes | Yes |
+| View team members' data | No | Yes (own team) | Yes (all) |
+| Assign courses | No | Yes (own team) | Yes (all) |
+| Submit content requests | No | Yes | Yes |
+| Manage invitations | No | Yes (user role, own team) | Yes (all) |
+| Manage all data | No | No | Yes |
+
+### Row Level Security (RLS)
+
+All tables have RLS enabled. Policies scope data visibility:
+- **Users** see only their own data
+- **Leadership** see their team's data (via `get_my_team_id()` helper function)
+- **Admins** see everything (via `is_admin()` helper function)
+
+Helper functions (SECURITY DEFINER): `get_my_role()`, `get_my_team_id()`, `is_admin()`, `is_leadership_or_admin()`
+
+### Auth Flow
+
+1. **Login**: `supabase.auth.signInWithPassword({ email, password })` in `AuthContext.tsx`
+2. **Session**: Supabase handles JWT tokens automatically; `onAuthStateChange` listener updates React state
+3. **Profile**: After auth, `fetchProfileAsUser()` queries the `profiles` table and maps to the `User` type
+4. **Signup**: Invite-only. The `handle_new_user()` trigger on `auth.users` auto-creates a profile from the matching invitation (role, team_id, invited_by).
+5. **Logout**: `supabase.auth.signOut()` clears session
+
+### AuthContext API
+
+```typescript
+interface AuthContextValue {
+  user: User | null       // null when not logged in
+  loading: boolean        // true during initial session check
+  signIn: (email: string, password: string) => Promise<{ error?: string }>
+  logout: () => Promise<void>
+  isAdmin: boolean        // user?.role === 'admin'
+  isLeadership: boolean   // user?.role === 'leadership' || isAdmin
+  refreshProfile: () => Promise<void>  // re-fetch profile from DB
+}
+```
+
+**Consumers of `useAuth()`**: App.tsx, Sidebar.tsx, Login.tsx, ComplianceContext.tsx, Home.tsx, Acknowledgements.tsx, AnnouncementManager.tsx, Admin.tsx, ProgressContext.tsx
+
+### Database Types (src/types/database.ts)
+
+**Critical**: Supabase JS v2 requires each table in the Database type to include a `Relationships` array, and the schema must include `Views` (even if empty: `Record<string, never>`). Without these, query results type as `never`.
+
+```typescript
+// Correct structure for Supabase JS v2
+interface Database {
+  public: {
+    Tables: {
+      tablename: {
+        Row: { ... }
+        Insert: { ... }
+        Update: { ... }
+        Relationships: [...]  // Required! Empty [] if no relations needed for types
+      }
+    }
+    Views: Record<string, never>  // Required even if no views
+    Functions: { ... }
+  }
+}
+```
+
+Convenience aliases: `Profile`, `Team`, `CourseAssignment`, `ModuleProgressRow`, `Invitation`, `ContentRequest`
+
+### Bootstrap / First Admin
+
+To bootstrap a new environment:
+1. Run `supabase/migrations/001_initial_schema.sql` in Supabase SQL Editor
+2. Create user via Dashboard > Auth > Users > Add user > Create new user
+3. Promote to admin: `UPDATE profiles SET role = 'admin' WHERE email = 'the@email.com';`
 
 ## Source Material Location
 
 Training content source documents live outside the repo at:
 ```
 C:\Users\MiguelFonseca\Desktop\Claude - Context\Training App\
-  01_Industry_Knowledge\   ← eBooks, guides
-  02_Via_Company_Profile\  ← Company docs, strategy transcripts
-  03_Product_Knowledge\    ← Product data, lead forms
-  04_HubSpot\              ← CRM sequences, snippets, subscription info
-  08_Consultative_Sales\   ← Sales framework (primary: VIA_TRADING_SALES_TRAINING_FRAMEWORK.md)
-  09_BDR_Role\             ← BDR call training, mock call scripts
-  10_AM_Role\              ← AM training powerpoint (legacy)
-  MD\                      ← Context/reference docs for development
+  01_Industry_Knowledge\   <- eBooks, guides
+  02_Via_Company_Profile\  <- Company docs, strategy transcripts
+  03_Product_Knowledge\    <- Product data, lead forms
+  04_HubSpot\              <- CRM sequences, snippets, subscription info
+  08_Consultative_Sales\   <- Sales framework (primary: VIA_TRADING_SALES_TRAINING_FRAMEWORK.md)
+  09_BDR_Role\             <- BDR call training, mock call scripts
+  10_AM_Role\              <- AM training powerpoint (legacy)
+  MD\                      <- Context/reference docs for development
 ```
 
 Always read source documents before writing course content. Don't invent training material.
@@ -180,7 +290,7 @@ export function MyModule() {
 - Don't show stock photos labeled as "Via Trading operations" unless they're real
 - Real company photos are available from Via Trading's careers page
 - Use Pexels for stock photos — use unique search queries per image to avoid visual repetition
-- Hero images: 1280×720 crop. Inline images: 640×480 crop.
+- Hero images: 1280x720 crop. Inline images: 640x480 crop.
 
 **Fetching from Pexels via browser:**
 ```javascript
@@ -205,13 +315,13 @@ git push origin main:deploy  # Deploy to GitHub Pages
 
 | # | Course | ID | Status | Accent Color | Modules |
 |---|--------|----|--------|-------------|---------|
-| 1 | Intro to the Liquidation Industry | `intro-to-industry` | ✅ Available | `border-blue-500` | 6 lessons + quiz |
-| 2 | Who Is Via Trading | `who-is-via` | ✅ Available | `border-orange-500` | 6 lessons + quiz |
-| 3 | Product Knowledge | `product-knowledge` | ✅ Available | varies by retailer | 10 lessons + quiz |
-| 4 | Consultative Sales | `sales-philosophy` | ✅ Available | `border-teal-500` | 9 lessons + quiz |
-| 5 | BDR Role Training | `bdr-role` | ✅ Available | `border-sky-500` | 7 lessons + quiz |
-| 6 | Tools & Systems | `tools-systems` | 🔜 Coming Soon | — | — |
-| 7 | Ongoing Development | `ongoing-development` | 🔜 Coming Soon | — | — |
+| 1 | Intro to the Liquidation Industry | `intro-to-industry` | Available | `border-blue-500` | 6 lessons + quiz |
+| 2 | Who Is Via Trading | `who-is-via` | Available | `border-orange-500` | 6 lessons + quiz |
+| 3 | Product Knowledge | `product-knowledge` | Available | varies by retailer | 10 lessons + quiz |
+| 4 | Consultative Sales | `sales-philosophy` | Available | `border-teal-500` | 9 lessons + quiz |
+| 5 | BDR Role Training | `bdr-role` | Available | `border-sky-500` | 7 lessons + quiz |
+| 6 | Tools & Systems | `tools-systems` | Coming Soon | — | — |
+| 7 | Ongoing Development | `ongoing-development` | Coming Soon | — | — |
 
 **Planned but not yet in `courses.ts`:** AM Role Training (after BDR, covers AM-specific day-to-day)
 
@@ -236,12 +346,21 @@ These Tailwind classes are used consistently:
 - **"Win Without Pitching" and "Crucial Accountability"** concepts are woven in naturally — books never named
 - **Tone**: Teach the WHY behind techniques. Genuine curiosity over interrogation. Relationship-based over transactional.
 - **Via Trading specifics**: 250,000+ sq ft warehouse in Lynwood CA, 800 pallets/day, 10,000+ in stock, 129+ countries, 90%+ repeat buyer rate, open to public Mon-Fri
-- **Key frameworks**: 5-Step Consultative Method (Summarize→State Idea→Explain→Reinforce Benefits→Close), K.L.A.P.D.O.C. (objection handling), 30% Rule (you talk 30%, buyer 70%)
+- **Key frameworks**: 5-Step Consultative Method (Summarize->State Idea->Explain->Reinforce Benefits->Close), K.L.A.P.D.O.C. (objection handling), 30% Rule (you talk 30%, buyer 70%)
 
 ## TypeScript Types (key ones)
 
 ```typescript
 // src/types/index.ts
+interface User {
+  id: string              // Supabase auth.uid
+  email: string
+  name: string
+  avatar?: string
+  role: 'user' | 'leadership' | 'admin'
+  teamId?: string         // FK to teams table
+}
+
 interface SectionedQuiz {
   termMatch: TermMatchPair[]
   multipleChoice: QuizQuestion[]
@@ -286,3 +405,16 @@ interface CourseModule {
 - **ExpandableCard needs state** — Always pair with `useState<Set<string>>` and a `toggle` function.
 - **Course-5-bdr.png was a placeholder** — original was AI-generated 1.4MB, replaced with Pexels photo.
 - **Image src in InlineImage** is just the filename — the component prepends `import.meta.env.BASE_URL + "images/"`.
+- **Supabase Database types need `Relationships`** — Each table in the Database interface must include a `Relationships: []` array or Supabase JS v2 types resolve to `never`. Also needs `Views: Record<string, never>` in the schema.
+- **Old role was `'learner'`, now `'user'`** — The User type role changed from `'learner' | 'admin'` to `'user' | 'leadership' | 'admin'`. MockUser was also updated. If adding new code, always use the new role names.
+- **AuthContext is async** — `loading` must be checked before accessing `user`. The `ProtectedRoute` and `AppRoutes` in App.tsx handle this with a `LoadingScreen`.
+- **AuthContext deadlock risk** — Never do async work inside `onAuthStateChange` callback. Supabase v2's internal auth lock will deadlock. Capture state synchronously, fetch data in a separate `useEffect`. See three-state pattern: `authUserId: string | null | undefined`.
+- **ProgressContext uses Supabase** — Migrated from localStorage to `module_progress` table with optimistic updates and upsert on `user_id,course_id,module_id`.
+- **ComplianceContext still uses localStorage** — Acknowledgement data is only available for the current user's browser session. Cannot show another user's acks on their profile page.
+
+## Pending Work
+
+- **Migrate ComplianceContext** from localStorage to Supabase (enables viewing other users' acks on profile pages)
+- **Migrate hosting** from GitHub Pages to Vercel
+- **Build AM Role Training course** (rough draft, same pattern as BDR)
+- **Migrate UserProgressTable** from mockUsers to real Supabase data (admin tab still uses mock data)
