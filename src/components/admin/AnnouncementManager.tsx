@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   Plus,
   Trash2,
@@ -10,7 +10,7 @@ import {
 } from 'lucide-react'
 import { useCompliance } from '../../context/ComplianceContext'
 import { useAuth } from '../../context/AuthContext'
-import { mockUsers } from '../../data/mockUsers'
+import { supabase } from '../../lib/supabase'
 
 function formatDate(iso: string): string {
   const d = new Date(iso)
@@ -33,8 +33,16 @@ export function AnnouncementManager() {
   const [requiredBy, setRequiredBy] = useState('')
   const [formError, setFormError] = useState('')
   const [department, setDepartment] = useState<string>('all')
+  const [totalUsers, setTotalUsers] = useState(0)
 
-  const totalUsers = mockUsers.length
+  useEffect(() => {
+    supabase
+      .from('profiles')
+      .select('id', { count: 'exact', head: true })
+      .then(({ count }) => {
+        setTotalUsers(count ?? 0)
+      })
+  }, [])
 
   function resetForm() {
     setTitle('')

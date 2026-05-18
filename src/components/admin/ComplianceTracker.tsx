@@ -1,7 +1,8 @@
-import { useState } from 'react'
-import { ChevronDown, ChevronRight, AlertTriangle, CheckCircle2, Clock } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { ChevronDown, ChevronRight, AlertTriangle, CheckCircle2, Clock, Loader2 } from 'lucide-react'
 import { useCompliance } from '../../context/ComplianceContext'
-import { mockUsers } from '../../data/mockUsers'
+import { supabase } from '../../lib/supabase'
+import type { Profile } from '../../types/database'
 
 function formatDate(iso: string): string {
   const d = new Date(iso)
@@ -11,11 +12,32 @@ function formatDate(iso: string): string {
 export function ComplianceTracker() {
   const { items } = useCompliance()
   const [expanded, setExpanded] = useState<Record<string, boolean>>({})
+  const [profiles, setProfiles] = useState<Profile[]>([])
+  const [loading, setLoading] = useState(true)
 
-  const totalUsers = mockUsers.length
+  useEffect(() => {
+    supabase
+      .from('profiles')
+      .select('*')
+      .order('full_name')
+      .then(({ data }) => {
+        setProfiles(data ?? [])
+        setLoading(false)
+      })
+  }, [])
+
+  const totalUsers = profiles.length
 
   function toggleExpanded(id: string) {
     setExpanded((prev) => ({ ...prev, [id]: !prev[id] }))
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <Loader2 className="w-6 h-6 text-via-navy animate-spin" />
+      </div>
+    )
   }
 
   return (
@@ -27,8 +49,8 @@ export function ComplianceTracker() {
         const isHigh = item.priority === 'high'
 
         const acknowledgedEmails = new Set(item.acknowledgedBy)
-        const acknowledgedUsers = mockUsers.filter((u) => acknowledgedEmails.has(u.email))
-        const pendingUsers = mockUsers.filter((u) => !acknowledgedEmails.has(u.email))
+        const acknowledgedUsers = profiles.filter((u) => acknowledgedEmails.has(u.email))
+        const pendingUsers = profiles.filter((u) => !acknowledgedEmails.has(u.email))
 
         return (
           <div key={item.id} className="bg-via-card rounded-xl p-6 border border-via-border">
@@ -99,7 +121,7 @@ export function ComplianceTracker() {
                           className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-via-success/10 text-sm text-via-text"
                         >
                           <CheckCircle2 className="w-3.5 h-3.5 text-via-success" />
-                          {u.name}
+                          {u.full_name}
                         </span>
                       ))}
                     </div>
@@ -118,7 +140,7 @@ export function ComplianceTracker() {
                           className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-via-warning/10 text-sm text-via-text"
                         >
                           <Clock className="w-3.5 h-3.5 text-via-warning" />
-                          {u.name}
+                          {u.full_name}
                         </span>
                       ))}
                     </div>

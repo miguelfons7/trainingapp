@@ -1,78 +1,83 @@
-import { BookOpen, Users, Award, Clock } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { BookOpen, Users, Award, Clock, Loader2 } from 'lucide-react'
 import { courses } from '../../data/courses'
+import { supabase } from '../../lib/supabase'
 
-interface CourseStat {
+interface ComputedCourseStat {
   courseId: string
   title: string
   enrolled: number
   completed: number
-  avgScore: number
-  avgCompletionTime: string
+  avgScore: number | null
+  totalModules: number
 }
 
-const courseStats: CourseStat[] = [
-  {
-    courseId: 'intro-to-industry',
-    title: 'Intro to the Liquidation Industry',
-    enrolled: 8,
-    completed: 6,
-    avgScore: 87,
-    avgCompletionTime: '42 min',
-  },
-  {
-    courseId: 'who-is-via',
-    title: 'Who Is Via Trading',
-    enrolled: 7,
-    completed: 5,
-    avgScore: 91,
-    avgCompletionTime: '28 min',
-  },
-  {
-    courseId: 'product-knowledge',
-    title: 'Product Knowledge',
-    enrolled: 5,
-    completed: 3,
-    avgScore: 82,
-    avgCompletionTime: '54 min',
-  },
-  {
-    courseId: 'sales-philosophy',
-    title: 'Sales Philosophy & Process',
-    enrolled: 4,
-    completed: 2,
-    avgScore: 78,
-    avgCompletionTime: '1h 12min',
-  },
-  {
-    courseId: 'bdr-role',
-    title: 'BDR Role Training',
-    enrolled: 3,
-    completed: 2,
-    avgScore: 85,
-    avgCompletionTime: '51 min',
-  },
-  {
-    courseId: 'tools-systems',
-    title: 'Tools & Systems',
-    enrolled: 2,
-    completed: 1,
-    avgScore: 90,
-    avgCompletionTime: '38 min',
-  },
-  {
-    courseId: 'ongoing-development',
-    title: 'Ongoing Development',
-    enrolled: 1,
-    completed: 1,
-    avgScore: 95,
-    avgCompletionTime: 'Ongoing',
-  },
-]
-
-// Only show stats for courses that exist in the actual course list
-const stats = courseStats.filter((s) => courses.some((c) => c.id === s.courseId))
+const availableCourses = courses.filter((c) => c.status === 'available')
 
 export function CourseStats() {
+  const [stats, setStats] = useState<ComputedCourseStat[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    async function loadStats() {
+      const { data: progressRows } = await supabase
+        .from('module_progress')
+        .select('*')
+
+      const rows = progressRows ?? []
+
+      const computed: ComputedCourseStat[] = availableCourses.map((course) => {
+        const courseRows = rows.filter((r) => r.course_id === course.id)
+
+        // Unique users who have at least 1 module touched in this course
+        const enrolledUsers = new Set(courseRows.map((r) => r.user_id))
+
+        // Users who completed ALL modules in this course
+        let completedCount = 0
+        for (const userId of enrolledUsers) {
+          const userCompleted = courseRows.filter(
+            (r) => r.user_id === userId && r.status === 'completed',
+          )
+          if (userCompleted.length >= course.modules.length) {
+            completedCount++
+          }
+        }
+
+        // Average quiz score (from rows that have a score)
+        const scoredRows = courseRows.filter((r) => r.score !== null)
+        const avgScore =
+          scoredRows.length > 0
+            ? Math.round(
+                scoredRows.reduce((sum, r) => sum + (r.score ?? 0), 0) /
+                  scoredRows.length,
+              )
+            : null
+
+        return {
+          courseId: course.id,
+          title: course.title,
+          enrolled: enrolledUsers.size,
+          completed: completedCount,
+          avgScore,
+          totalModules: course.modules.length,
+        }
+      })
+
+      setStats(computed)
+      setLoading(false)
+    }
+
+    loadStats()
+  }, [])
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <Loader2 className="w-6 h-6 text-via-navy animate-spin" />
+      </div>
+    )
+  }
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {stats.map((stat) => (
@@ -91,7 +96,7 @@ export function CourseStats() {
               </div>
               <div>
                 <p className="text-lg font-bold text-via-navy leading-none">{stat.enrolled}</p>
-                <p className="text-xs text-via-text-light">Enrolled</p>
+                <p className="text-xs text-via-text-light">Started</p>
               </div>
             </div>
 
@@ -110,7 +115,9 @@ export function CourseStats() {
                 <Award className="w-4 h-4 text-via-orange" />
               </div>
               <div>
-                <p className="text-lg font-bold text-via-orange leading-none">{stat.avgScore}%</p>
+                <p className="text-lg font-bold text-via-orange leading-none">
+                  {stat.avgScore !== null ? `${stat.avgScore}%` : '--'}
+                </p>
                 <p className="text-xs text-via-text-light">Avg Score</p>
               </div>
             </div>
@@ -120,8 +127,8 @@ export function CourseStats() {
                 <Clock className="w-4 h-4 text-via-navy-light" />
               </div>
               <div>
-                <p className="text-sm font-bold text-via-navy leading-none">{stat.avgCompletionTime}</p>
-                <p className="text-xs text-via-text-light">Avg Time</p>
+                <p className="text-sm font-bold text-via-navy leading-none">{stat.totalModules}</p>
+                <p className="text-xs text-via-text-light">Modules</p>
               </div>
             </div>
           </div>

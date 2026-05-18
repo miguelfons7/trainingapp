@@ -10,6 +10,21 @@ interface LogEntry {
 
 const changelog: LogEntry[] = [
   {
+    version: '0.8.1',
+    date: '2026-05-18',
+    title: 'Remove Mock Data, Migrate Admin Tabs to Supabase, Vercel Deployment',
+    changes: [
+      'Deleted mockUsers.ts and MockUser type: all admin tabs now use real Supabase data',
+      'Rewrote User Progress tab: fetches real profiles + module_progress, computes overall %, current course, last active, status',
+      'Rewrote Course Stats tab: computes enrolled, completed, and avg quiz scores from real module_progress data',
+      'Rewrote Assign Courses tab: lists real profiles, persists assignments to course_assignments table',
+      'Updated Compliance Tracker: loads real profiles for acknowledged/pending user lists',
+      'Updated Announcement Manager: fetches real user count from Supabase',
+      'User Progress rows now link to user profile pages',
+      'Migrated hosting from GitHub Pages to Vercel with SPA rewrites',
+    ],
+  },
+  {
     version: '0.8.0',
     date: '2026-05-18',
     title: 'Supabase Auth, Invite System, Admin Management, User Profiles',

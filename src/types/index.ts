@@ -176,16 +176,3 @@ export interface SectionedQuiz {
   passThreshold?: number // defaults to 0.85
 }
 
-// --- Mock user for admin ---
-
-export interface MockUser {
-  email: string
-  name: string
-  role: 'user' | 'leadership' | 'admin'
-  avatar: string
-  programProgress: number
-  currentCourse: string
-  lastActive: string
-  status: 'active' | 'inactive' | 'overdue'
-  completedCourses: string[]
-}
