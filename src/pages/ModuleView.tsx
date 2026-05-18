@@ -83,7 +83,7 @@ const moduleImageMap: Record<string, { src: string; alt: string }> = {
   'secondary-market': { src: 'module-channels.png', alt: 'Secondary Market Sales Channels' },
   'reverse-logistics': { src: 'module-reverse-logistics.png', alt: 'Reverse Logistics Flow' },
   'product-conditions': { src: 'module-conditions.png', alt: 'Product Conditions Spectrum' },
-  'shipping-terms': { src: 'module-load-types.png', alt: 'Shipping Terms & Formats' },
+  // shipping-terms: hero removed — same image appears inside the LoadTypes component
   'buyer-types': { src: 'module-buyer-types.png', alt: 'Buyer Types Overview' },
   'key-terminology': { src: 'module-dealer-levels.png', alt: 'Industry Terminology & Dealer Levels' },
   // Course 2 — Via Trading
@@ -111,7 +111,7 @@ const moduleImageMap: Record<string, { src: string; alt: string }> = {
   'five-step-method': { src: 'module-five-step-method.jpg', alt: 'The Number 5' },
   'when-patients-push-back': { src: 'module-when-patients-push-back.jpg', alt: 'Doctor-Patient Conversation' },
   'art-of-the-close': { src: 'module-art-of-the-close.jpg', alt: 'Professional Handshake' },
-  'transaction-to-partnership': { src: 'module-transaction-to-partnership.jpg', alt: 'Epic Handshake — Partnership' },
+  'transaction-to-partnership': { src: 'module-transaction-to-partnership.jpg', alt: 'Tying the Knot — From Transaction to Partnership' },
   'triage-and-diagnosis': { src: 'module-triage-and-diagnosis.jpg', alt: 'Customer Service Team' },
 }
 
