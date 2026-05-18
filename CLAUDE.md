@@ -12,7 +12,8 @@ A React-based training platform for Via Trading Corporation (wholesale liquidati
 - **lucide-react** (icon library — always import individual icons)
 - **framer-motion** (animations for ExpandableCard, QuizBlock)
 - **Supabase** (PostgreSQL + Auth + Row Level Security)
-- **GitHub Pages** deployment: `git push origin main:deploy`
+- **Vercel** deployment: `git push origin main` (auto-deploys from main branch)
+- **Production URL**: `https://trainingapp-sepia.vercel.app`
 
 ## Project Structure
 
@@ -45,10 +46,12 @@ src/
   context/
     AuthContext.tsx  <- Supabase auth: session, profile, signIn/logout, isAdmin/isLeadership
     ProgressContext.tsx <- User progress tracking (Supabase module_progress table)
+    ComplianceContext.tsx <- Compliance items + acknowledgements (Supabase, optimistic updates)
 supabase/
   migrations/
     001_initial_schema.sql <- Full DB schema (tables, RLS, triggers, seed data)
     002_invitation_validation.sql <- validate_invitation_token() SECURITY DEFINER function
+    003_compliance_tables.sql <- compliance_items + compliance_acknowledgements tables, RLS, seed data
 public/
   images/           <- All images (hero images, inline images, logos)
 .env.local          <- Supabase credentials (VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY)
@@ -62,7 +65,7 @@ public/
 - **Anon Key**: Stored in `.env.local` as `VITE_SUPABASE_ANON_KEY`
 - `.env.local` is gitignored via `*.local` pattern
 
-### Database Schema (6 tables)
+### Database Schema (8 tables)
 
 | Table | Purpose | Key Fields |
 |-------|---------|------------|
@@ -72,6 +75,8 @@ public/
 | `module_progress` | Per-module completion tracking | `user_id`, `course_id`, `module_id`, `status`, `score` |
 | `invitations` | Invite-only signup tokens | `email`, `role`, `team_id`, `invited_by`, `token`, `expires_at` |
 | `content_requests` | Leadership content change requests | `requested_by`, `title`, `description`, `status`, `reviewed_by` |
+| `compliance_items` | Announcements/compliance items (seed + admin-created) | `id` (text PK), `title`, `description`, `details`, `priority`, `is_seed`, `created_by` |
+| `compliance_acknowledgements` | Who acknowledged which item | `item_id` (FK), `user_id` (FK), `acknowledged_at`, UNIQUE(item_id, user_id) |
 
 ### Roles & Permissions
 
@@ -141,14 +146,17 @@ interface Database {
 }
 ```
 
-Convenience aliases: `Profile`, `Team`, `CourseAssignment`, `ModuleProgressRow`, `Invitation`, `ContentRequest`
+Convenience aliases: `Profile`, `Team`, `CourseAssignment`, `ModuleProgressRow`, `Invitation`, `ContentRequest`, `ComplianceItemRow`, `ComplianceAcknowledgementRow`
 
 ### Bootstrap / First Admin
 
 To bootstrap a new environment:
 1. Run `supabase/migrations/001_initial_schema.sql` in Supabase SQL Editor
-2. Create user via Dashboard > Auth > Users > Add user > Create new user
-3. Promote to admin: `UPDATE profiles SET role = 'admin' WHERE email = 'the@email.com';`
+2. Run `supabase/migrations/002_invitation_validation.sql`
+3. Run `supabase/migrations/003_compliance_tables.sql`
+4. Create user via Dashboard > Auth > Users > Add user > Create new user
+5. Promote to admin: `UPDATE profiles SET role = 'admin' WHERE email = 'the@email.com';`
+6. Set Site URL + Redirect URL in Auth > URL Configuration to your production domain
 
 ## Source Material Location
 
@@ -308,7 +316,7 @@ Download URL: `https://images.pexels.com/photos/{id}/pexels-photo-{id}.jpeg?auto
 ```bash
 npm run build          # TypeScript check + Vite build
 npm run dev            # Local dev server
-git push origin main:deploy  # Deploy to GitHub Pages
+git push origin main   # Deploy to Vercel (auto-deploys from main)
 ```
 
 ## Current Course Status
@@ -406,15 +414,15 @@ interface CourseModule {
 - **Course-5-bdr.png was a placeholder** — original was AI-generated 1.4MB, replaced with Pexels photo.
 - **Image src in InlineImage** is just the filename — the component prepends `import.meta.env.BASE_URL + "images/"`.
 - **Supabase Database types need `Relationships`** — Each table in the Database interface must include a `Relationships: []` array or Supabase JS v2 types resolve to `never`. Also needs `Views: Record<string, never>` in the schema.
-- **Old role was `'learner'`, now `'user'`** — The User type role changed from `'learner' | 'admin'` to `'user' | 'leadership' | 'admin'`. MockUser was also updated. If adding new code, always use the new role names.
+- **Old role was `'learner'`, now `'user'`** — The User type role changed from `'learner' | 'admin'` to `'user' | 'leadership' | 'admin'`. If adding new code, always use the new role names.
 - **AuthContext is async** — `loading` must be checked before accessing `user`. The `ProtectedRoute` and `AppRoutes` in App.tsx handle this with a `LoadingScreen`.
 - **AuthContext deadlock risk** — Never do async work inside `onAuthStateChange` callback. Supabase v2's internal auth lock will deadlock. Capture state synchronously, fetch data in a separate `useEffect`. See three-state pattern: `authUserId: string | null | undefined`.
 - **ProgressContext uses Supabase** — Migrated from localStorage to `module_progress` table with optimistic updates and upsert on `user_id,course_id,module_id`.
-- **ComplianceContext still uses localStorage** — Acknowledgement data is only available for the current user's browser session. Cannot show another user's acks on their profile page.
+- **ComplianceContext uses Supabase** — Migrated from localStorage to `compliance_items` + `compliance_acknowledgements` tables with optimistic updates and rollback. Seed items protected via `is_seed` flag. `acknowledgedBy` stores user IDs (UUIDs), not emails.
+- **Compliance seed data lives in DB** — The old `src/data/compliance.ts` was deleted. Seed items are inserted via migration 003 with `ON CONFLICT DO NOTHING`.
+- **Supabase Auth URLs** — Site URL and redirect URL configured for Vercel production domain. Update these if the domain changes.
 
 ## Pending Work
 
-- **Migrate ComplianceContext** from localStorage to Supabase (enables viewing other users' acks on profile pages)
-- **Migrate hosting** from GitHub Pages to Vercel
 - **Build AM Role Training course** (rough draft, same pattern as BDR)
-- **Migrate UserProgressTable** from mockUsers to real Supabase data (admin tab still uses mock data)
+- **Code splitting** — Bundle is >1.2MB; consider dynamic imports for course section components
