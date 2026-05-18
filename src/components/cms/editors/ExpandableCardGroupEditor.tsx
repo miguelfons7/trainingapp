@@ -20,7 +20,6 @@ export function ExpandableCardGroupEditor({ block, onChange }: Props) {
   }
 
   const updateBadge = (index: number, text: string, color: BadgeColor) => {
-    const card = cards[index]
     const badge = text ? { text, color } : undefined
     updateCard(index, { badge })
     // Need to handle removal differently since partial merge keeps old badge

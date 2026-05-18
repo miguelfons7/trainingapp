@@ -32,7 +32,7 @@ const ComplianceContext = createContext<ComplianceContextValue | undefined>(
 )
 
 export function ComplianceProvider({ children }: { children: ReactNode }) {
-  const { user, isAdmin } = useAuth()
+  const { user } = useAuth()
   const [items, setItems] = useState<ComplianceItem[]>([])
   const [seedIds, setSeedIds] = useState<Set<string>>(new Set())
 
@@ -255,7 +255,8 @@ export function ComplianceProvider({ children }: { children: ReactNode }) {
       )
 
       // Build DB update object
-      const dbUpdates: Record<string, unknown> = {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const dbUpdates: any = {
         updated_at: new Date().toISOString(),
         updated_by: userId || null,
       }

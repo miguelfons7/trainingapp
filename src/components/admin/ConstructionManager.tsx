@@ -5,7 +5,6 @@ import {
   ChevronRight,
   MessageSquare,
   Loader2,
-  Plus,
   Megaphone,
 } from 'lucide-react'
 import { Link } from 'react-router-dom'

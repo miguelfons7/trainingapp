@@ -1,5 +1,5 @@
 import type { ComponentType } from 'react'
-import type { BlockType, ContentBlock } from '../../../types/blocks'
+import type { BlockType } from '../../../types/blocks'
 
 import { ParagraphEditor } from './ParagraphEditor'
 import { HeadingEditor } from './HeadingEditor'

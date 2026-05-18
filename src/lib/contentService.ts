@@ -43,7 +43,7 @@ export async function fetchModuleContent(
     id: data.id,
     courseId: data.course_id,
     moduleId: data.module_id,
-    content: data.content as PageContent,
+    content: data.content as unknown as PageContent,
     status: data.status as 'draft' | 'published',
     version: data.version,
     createdBy: data.created_by,
