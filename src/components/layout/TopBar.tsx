@@ -31,7 +31,7 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
       <div className="flex items-center gap-3">
         <button
           onClick={onMenuToggle}
-          className="lg:hidden text-via-text-light hover:text-via-text transition-colors cursor-pointer"
+          className="md:hidden text-via-text-light hover:text-via-text transition-colors cursor-pointer"
         >
           <Menu className="w-5 h-5" />
         </button>

@@ -1,24 +1,22 @@
 import { useState } from 'react'
-import { Shield, Users, ClipboardCheck, BarChart3, BookPlus, Megaphone, UserPlus, Building2, UserCog } from 'lucide-react'
+import { Shield, Users, BarChart3, BookPlus, Megaphone, UserPlus, Building2, UserCog } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { UserProgressTable } from '../components/admin/UserProgressTable'
-import { ComplianceTracker } from '../components/admin/ComplianceTracker'
 import { CourseStats } from '../components/admin/CourseStats'
 import { AssignCourses } from '../components/admin/AssignCourses'
-import { AnnouncementManager } from '../components/admin/AnnouncementManager'
+import { ComplianceManager } from '../components/admin/ComplianceManager'
 import { InviteUsers } from '../components/admin/InviteUsers'
 import { ManageTeams } from '../components/admin/ManageTeams'
 import { ManageUsers } from '../components/admin/ManageUsers'
 
-type TabKey = 'progress' | 'announcements' | 'compliance' | 'stats' | 'assign' | 'invite' | 'teams' | 'users'
+type TabKey = 'progress' | 'compliance' | 'stats' | 'assign' | 'invite' | 'teams' | 'users'
 
 const tabs: { key: TabKey; label: string; icon: typeof Users }[] = [
   { key: 'progress', label: 'User Progress', icon: Users },
   { key: 'users', label: 'Manage Users', icon: UserCog },
   { key: 'teams', label: 'Manage Teams', icon: Building2 },
   { key: 'invite', label: 'Invite Users', icon: UserPlus },
-  { key: 'announcements', label: 'Announcements', icon: Megaphone },
-  { key: 'compliance', label: 'Compliance', icon: ClipboardCheck },
+  { key: 'compliance', label: 'Announcements', icon: Megaphone },
   { key: 'stats', label: 'Course Stats', icon: BarChart3 },
   { key: 'assign', label: 'Assign Courses', icon: BookPlus },
 ]
@@ -56,7 +54,7 @@ export function Admin() {
 
       {/* Tab navigation */}
       <div className="border-b border-via-border mb-6">
-        <nav className="-mb-px flex gap-1 overflow-x-auto" aria-label="Admin tabs">
+        <nav className="-mb-px flex flex-wrap gap-1" aria-label="Admin tabs">
           {tabs.map((tab) => {
             const Icon = tab.icon
             const isActive = activeTab === tab.key
@@ -83,8 +81,7 @@ export function Admin() {
       {activeTab === 'progress' && <UserProgressTable />}
       {activeTab === 'users' && <ManageUsers />}
       {activeTab === 'teams' && <ManageTeams />}
-      {activeTab === 'announcements' && <AnnouncementManager />}
-      {activeTab === 'compliance' && <ComplianceTracker />}
+      {activeTab === 'compliance' && <ComplianceManager />}
       {activeTab === 'stats' && <CourseStats />}
       {activeTab === 'assign' && <AssignCourses />}
       {activeTab === 'invite' && <InviteUsers />}

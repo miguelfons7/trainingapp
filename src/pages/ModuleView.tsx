@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom'
 import { ArrowLeft, ChevronLeft, ChevronRight } from 'lucide-react'
 import { getCourseById } from '../data/courses'
 import { useProgress } from '../context/ProgressContext'
+import { useAuth } from '../context/AuthContext'
 import { SecondaryMarket } from '../components/sections/SecondaryMarket'
 import { ReverseLogistics } from '../components/sections/ReverseLogistics'
 import { ProductConditions } from '../components/sections/ProductConditions'
@@ -146,6 +147,8 @@ export function ModuleView() {
   }>()
   const navigate = useNavigate()
   const { startModule, completeModule } = useProgress()
+  const { isAdmin, isLeadership } = useAuth()
+  const canBypass = isAdmin || isLeadership
 
   const course = courseId ? getCourseById(courseId) : undefined
 
@@ -264,16 +267,21 @@ export function ModuleView() {
         )}
 
         {nextModule ? (
-          <button
-            onClick={() => {
-              completeModule(courseId, moduleId)
-              navigate(`/course/${courseId}/module/${nextModule.id}`)
-            }}
-            className="inline-flex items-center gap-2 px-6 py-3 bg-via-orange text-white font-semibold rounded-xl hover:bg-via-orange-light transition-colors cursor-pointer"
-          >
-            Continue
-            <ChevronRight className="w-5 h-5" />
-          </button>
+          // Hide the Continue button on quiz modules for regular users —
+          // they must complete the quiz (QuizBlock handles marking it complete).
+          // Admins and leadership can always skip ahead.
+          !(isQuiz && !canBypass) && (
+            <button
+              onClick={() => {
+                completeModule(courseId, moduleId)
+                navigate(`/course/${courseId}/module/${nextModule.id}`)
+              }}
+              className="inline-flex items-center gap-2 px-6 py-3 bg-via-orange text-white font-semibold rounded-xl hover:bg-via-orange-light transition-colors cursor-pointer"
+            >
+              Continue
+              <ChevronRight className="w-5 h-5" />
+            </button>
+          )
         ) : (
           <button
             onClick={() => {

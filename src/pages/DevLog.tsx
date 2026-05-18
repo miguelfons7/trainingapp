@@ -10,6 +10,23 @@ interface LogEntry {
 
 const changelog: LogEntry[] = [
   {
+    version: '0.9.0',
+    date: '2026-05-18',
+    title: 'Module Gating, Admin UX Overhaul, Responsive Sidebar',
+    changes: [
+      'Module gating: regular users must complete modules in order (locked with Lock icon). Admins and leadership can skip freely.',
+      'Quiz modules hide the Continue button for regular users, forcing quiz completion before progressing.',
+      'Merged Announcements and Compliance Tracker into a single "Announcements" admin tab with table format.',
+      'Announcements table includes search, sortable columns, clickable ack/pending counts with user list popups.',
+      'Scalable for 40+ items: table layout replaces card grid, with search filter and item counts.',
+      'Course Stats rewritten as table format with clickable Started/Completed/Avg Score values showing user popups.',
+      'Admin dashboard tabs now wrap to multiple rows instead of requiring horizontal scroll.',
+      'Responsive sidebar: auto-collapses to icon-only on medium screens (768-1024px), always pushes content.',
+      'Mobile hamburger menu now activates below 768px instead of 1024px.',
+      'Sidebar never overlays main content: margin always matches sidebar width.',
+    ],
+  },
+  {
     version: '0.8.2',
     date: '2026-05-18',
     title: 'Compliance Migration to Supabase, Auth URL Configuration',
