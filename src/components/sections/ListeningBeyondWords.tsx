@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Ear, Pause, PenLine, ThumbsUp, EyeOff, ListChecks } from 'lucide-react'
 import { SectionWrapper } from '../shared/SectionWrapper'
+import { InlineImage } from '../shared/InlineImage'
 import { ExpandableCard } from '../shared/ExpandableCard'
 import { ScenarioCard } from '../interactive/ScenarioCard'
 import { activeListeningRules } from '../../data/modules/consultative-sales/consultativeData'
@@ -35,7 +36,8 @@ export function ListeningBeyondWords() {
       icon={<Ear className="w-5 h-5" />}
     >
       {/* Opening */}
-      <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6">
+      <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6 overflow-hidden">
+        <InlineImage src="inline-doctor-patient.jpg" alt="Doctor listening to patient" float="right" size="small" caption="Two ears, one mouth" />
         <h3 className="text-sm font-semibold text-via-navy uppercase tracking-wide mb-3">
           The Other Half of the Equation
         </h3>
@@ -81,7 +83,8 @@ export function ListeningBeyondWords() {
       </div>
 
       {/* Reading the gaps */}
-      <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6">
+      <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6 overflow-hidden">
+        <InlineImage src="inline-medical-notes.jpg" alt="Taking medical notes" float="left" size="small" caption="Listen for what they don't say" />
         <h3 className="text-sm font-semibold text-via-navy uppercase tracking-wide mb-3">
           Reading the Gaps
         </h3>

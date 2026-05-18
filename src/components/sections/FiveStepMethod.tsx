@@ -7,6 +7,7 @@ import { FlowDiagram } from '../shared/FlowDiagram'
 import { ScenarioCard } from '../interactive/ScenarioCard'
 import { fiveSteps } from '../../data/modules/consultative-sales/consultativeData'
 import { fiveStepScenarios } from '../../data/modules/consultative-sales/inlineExercises'
+import { InlineImage } from '../shared/InlineImage'
 
 const stepIcons: Record<string, React.ReactNode> = {
   'summarize': <ClipboardList className="w-5 h-5" />,
@@ -44,7 +45,8 @@ export function FiveStepMethod() {
       icon={<ClipboardList className="w-5 h-5" />}
     >
       {/* Opening */}
-      <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6">
+      <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6 overflow-hidden">
+        <InlineImage src="inline-doctor-teaching.jpg" alt="Doctor teaching clinical method" float="right" size="small" caption="A structured clinical approach" />
         <h3 className="text-sm font-semibold text-via-navy uppercase tracking-wide mb-3">
           The Clinical Method
         </h3>

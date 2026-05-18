@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Repeat, TrendingUp, Layers, RefreshCw } from 'lucide-react'
 import { SectionWrapper } from '../shared/SectionWrapper'
+import { InlineImage } from '../shared/InlineImage'
 import { ExpandableCard } from '../shared/ExpandableCard'
 import { FillInBlank } from '../interactive/FillInBlank'
 import { growthStrategies, dormantResponses } from '../../data/modules/consultative-sales/consultativeData'
@@ -142,10 +143,11 @@ export function TransactionToPartnership() {
       </div>
 
       {/* Trust and transparency */}
-      <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6">
+      <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6 overflow-hidden">
         <h3 className="text-sm font-semibold text-via-navy uppercase tracking-wide mb-3">
           Trust Is the Product
         </h3>
+        <InlineImage src="inline-doctor-trust.jpg" alt="Doctor building patient trust" float="right" size="small" caption="Trust is the product" />
         <p className="text-sm text-via-text leading-relaxed mb-4">
           In liquidation, buyers are not just buying inventory. They are buying the person they
           are speaking to. Many buyers have been burned before: they purchased a bad load, did not

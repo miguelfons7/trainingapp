@@ -1,5 +1,6 @@
 import { Globe, ExternalLink, ShoppingCart, RotateCcw, DollarSign, Building2, Network } from 'lucide-react'
 import { SectionWrapper } from '../shared/SectionWrapper'
+import { InlineImage } from '../shared/InlineImage'
 import { platforms, retailerPartners } from '../../data/companyData'
 
 const platformDetails = [
@@ -39,7 +40,8 @@ export function OurPlatforms() {
       icon={<Globe className="w-5 h-5" />}
     >
       {/* Platform Overview */}
-      <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6">
+      <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6 overflow-hidden">
+        <InlineImage src="inline-ecommerce.jpg" alt="E-commerce platform" float="right" size="small" caption="Reaching buyers worldwide" />
         <p className="text-sm text-via-text leading-relaxed">
           Via Trading Corporation operates three distinct platforms, each serving a different part of the liquidation ecosystem. Understanding how they connect is important for every employee, regardless of your role. Everything is powered by <strong>Via Trading</strong>, the wholesale liquidation company that established the buyer network and marketplace that makes the other two platforms possible.
         </p>

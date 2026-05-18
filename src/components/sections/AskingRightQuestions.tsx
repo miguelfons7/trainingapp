@@ -6,6 +6,7 @@ import {
   ArrowRight,
 } from 'lucide-react'
 import { SectionWrapper } from '../shared/SectionWrapper'
+import { InlineImage } from '../shared/InlineImage'
 import { ExpandableCard } from '../shared/ExpandableCard'
 import { FlowDiagram } from '../shared/FlowDiagram'
 import { TermMatch } from '../interactive/TermMatch'
@@ -40,7 +41,8 @@ export function AskingRightQuestions() {
       icon={<Search className="w-5 h-5" />}
     >
       {/* Opening */}
-      <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6">
+      <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6 overflow-hidden">
+        <InlineImage src="inline-stethoscope.jpg" alt="Stethoscope" float="right" size="small" caption="Questions are your diagnostic tool" />
         <h3 className="text-sm font-semibold text-via-navy uppercase tracking-wide mb-3">
           The Stethoscope
         </h3>
@@ -141,7 +143,8 @@ export function AskingRightQuestions() {
       </div>
 
       {/* Funnelling technique */}
-      <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6">
+      <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6 overflow-hidden">
+        <InlineImage src="inline-doctor-examining.jpg" alt="Doctor examining patient" float="left" size="small" caption="Good intake questions lead to good discovery" />
         <h3 className="text-sm font-semibold text-via-navy uppercase tracking-wide mb-4">
           The Funnelling Technique
         </h3>

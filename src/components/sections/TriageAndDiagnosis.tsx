@@ -7,6 +7,7 @@ import {
   FileText,
 } from 'lucide-react'
 import { SectionWrapper } from '../shared/SectionWrapper'
+import { InlineImage } from '../shared/InlineImage'
 import { Badge } from '../shared/Badge'
 import { FlowDiagram } from '../shared/FlowDiagram'
 import { ScenarioCard } from '../interactive/ScenarioCard'
@@ -45,7 +46,7 @@ export function TriageAndDiagnosis() {
       </div>
 
       {/* BDR: The Triage Nurse */}
-      <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6">
+      <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6 overflow-hidden">
         <div className="flex items-center gap-2 mb-3">
           <Headphones className="w-5 h-5 text-teal-500" />
           <h3 className="text-sm font-semibold text-via-navy uppercase tracking-wide">
@@ -53,6 +54,8 @@ export function TriageAndDiagnosis() {
           </h3>
           <Badge text="BDR" color="blue" />
         </div>
+
+        <InlineImage src="inline-nurse-triage.jpg" alt="Nurse performing triage" float="right" size="small" caption="BDR: The triage nurse" />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
           <div>
@@ -104,7 +107,7 @@ export function TriageAndDiagnosis() {
       </div>
 
       {/* AM: The Doctor */}
-      <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6">
+      <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6 overflow-hidden">
         <div className="flex items-center gap-2 mb-3">
           <Stethoscope className="w-5 h-5 text-teal-500" />
           <h3 className="text-sm font-semibold text-via-navy uppercase tracking-wide">
@@ -112,6 +115,9 @@ export function TriageAndDiagnosis() {
           </h3>
           <Badge text="AM" color="teal" />
         </div>
+
+        <InlineImage src="inline-medical-team.jpg" alt="Medical team collaborating" float="left" size="small" caption="AM: The specialist physician" />
+
         <p className="text-sm text-via-text leading-relaxed mb-4">
           The Account Manager owns the buyer relationship from the first substantive conversation
           through ongoing account management. They work through <strong>all five steps</strong> of

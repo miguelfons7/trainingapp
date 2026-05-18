@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { ShieldAlert, Pause, Ear, Heart, Search, Target, Zap, CheckCircle } from 'lucide-react'
 import { SectionWrapper } from '../shared/SectionWrapper'
+import { InlineImage } from '../shared/InlineImage'
 import { ExpandableCard } from '../shared/ExpandableCard'
 import { Badge } from '../shared/Badge'
 import { ScenarioCard } from '../interactive/ScenarioCard'
@@ -38,10 +39,11 @@ export function WhenPatientsPushBack() {
       icon={<ShieldAlert className="w-5 h-5" />}
     >
       {/* Opening */}
-      <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6">
+      <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6 overflow-hidden">
         <h3 className="text-sm font-semibold text-via-navy uppercase tracking-wide mb-3">
           Objections Are Symptoms
         </h3>
+        <InlineImage src="inline-prescription.jpg" alt="Prescription medicine" float="right" size="small" caption="Treat the root cause, not the symptom" />
         <p className="text-sm text-via-text leading-relaxed mb-4">
           When a patient says "I don't want surgery," a good doctor does not argue. They ask
           <em> why</em>. The fear might be about anesthesia. Or recovery time. Or cost. Or a bad

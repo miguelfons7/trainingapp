@@ -12,6 +12,7 @@ import {
 import { SectionWrapper } from '../shared/SectionWrapper'
 import { ExpandableCard } from '../shared/ExpandableCard'
 import { AdditionalResources } from '../shared/AdditionalResources'
+import { InlineImage } from '../shared/InlineImage'
 import { advantages } from '../../data/advantagesData'
 
 const iconMap: Record<string, React.ReactNode> = {
@@ -44,7 +45,8 @@ export function WhyVia() {
       accentColor="border-violet-500"
       icon={<Star className="w-5 h-5" />}
     >
-      <div className="bg-via-card rounded-xl border border-via-border p-5 mb-6">
+      <div className="bg-via-card rounded-xl border border-via-border p-5 mb-6 overflow-hidden">
+        <InlineImage src="inline-customer-service.jpg" alt="Customer service" float="right" size="small" caption="Customer-service centered" />
         <p className="text-sm text-via-text leading-relaxed">
           Here is what makes Via Trading different from other companies in the liquidation space. These are not marketing slogans; they are <strong>real operational advantages</strong> that make a tangible difference for business owners. Many customers work with multiple suppliers simultaneously, and Via often becomes their <strong>primary source</strong> because of consistent pricing, reliable inventory, and the dedicated <strong>Account Manager relationship</strong>.
         </p>
