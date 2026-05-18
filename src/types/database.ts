@@ -387,6 +387,91 @@ export interface Database {
           },
         ]
       }
+      module_content: {
+        Row: {
+          id: string
+          course_id: string
+          module_id: string
+          content: Record<string, unknown>
+          status: string
+          version: number
+          created_by: string | null
+          updated_by: string | null
+          created_at: string
+          updated_at: string
+          published_at: string | null
+        }
+        Insert: {
+          id?: string
+          course_id: string
+          module_id: string
+          content?: Record<string, unknown>
+          status?: string
+          version?: number
+          created_by?: string | null
+          updated_by?: string | null
+          created_at?: string
+          updated_at?: string
+          published_at?: string | null
+        }
+        Update: {
+          id?: string
+          course_id?: string
+          module_id?: string
+          content?: Record<string, unknown>
+          status?: string
+          version?: number
+          created_by?: string | null
+          updated_by?: string | null
+          created_at?: string
+          updated_at?: string
+          published_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'module_content_created_by_fkey'
+            columns: ['created_by']
+            isOneToOne: false
+            referencedRelation: 'profiles'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      module_content_versions: {
+        Row: {
+          id: string
+          module_content_id: string
+          content: Record<string, unknown>
+          version: number
+          published_by: string | null
+          published_at: string
+        }
+        Insert: {
+          id?: string
+          module_content_id: string
+          content: Record<string, unknown>
+          version: number
+          published_by?: string | null
+          published_at?: string
+        }
+        Update: {
+          id?: string
+          module_content_id?: string
+          content?: Record<string, unknown>
+          version?: number
+          published_by?: string | null
+          published_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'module_content_versions_module_content_id_fkey'
+            columns: ['module_content_id']
+            isOneToOne: false
+            referencedRelation: 'module_content'
+            referencedColumns: ['id']
+          },
+        ]
+      }
     }
     Views: Record<string, never>
     Functions: {

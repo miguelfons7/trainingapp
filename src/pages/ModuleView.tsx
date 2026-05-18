@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useCallback, type ComponentType } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
-import { ArrowLeft, ChevronLeft, ChevronRight } from 'lucide-react'
+import { ArrowLeft, ChevronLeft, ChevronRight, Pencil, Loader2 } from 'lucide-react'
 import { getCourseById } from '../data/courses'
 import { useProgress } from '../context/ProgressContext'
 import { useAuth } from '../context/AuthContext'
+import { useModuleContent } from '../hooks/useModuleContent'
+import { BlockRenderer } from '../components/cms/BlockRenderer'
 import { SecondaryMarket } from '../components/sections/SecondaryMarket'
 import { ReverseLogistics } from '../components/sections/ReverseLogistics'
 import { ProductConditions } from '../components/sections/ProductConditions'
@@ -147,10 +149,20 @@ export function ModuleView() {
   }>()
   const navigate = useNavigate()
   const { startModule, completeModule } = useProgress()
-  const { isAdmin, isLeadership } = useAuth()
+  const { user, isAdmin, isLeadership } = useAuth()
   const canBypass = isAdmin || isLeadership
 
   const course = courseId ? getCourseById(courseId) : undefined
+
+  // CMS content — only fetched if no hardcoded component exists
+  const hasHardcoded = moduleId ? !!contentMap[moduleId] : false
+  const isQuizModule = moduleId ? quizModules.has(moduleId) : false
+  const shouldFetchCms = !hasHardcoded && !isQuizModule
+  const { content: cmsContent, loading: cmsLoading } = useModuleContent(
+    shouldFetchCms ? courseId : undefined,
+    shouldFetchCms ? moduleId : undefined,
+    user?.id,
+  )
 
   const currentIndex = useMemo(() => {
     if (!course || !moduleId) return -1
@@ -164,7 +176,7 @@ export function ModuleView() {
       ? course.modules[currentIndex + 1]
       : undefined
 
-  const isQuiz = moduleId ? quizModules.has(moduleId) : false
+  const isQuiz = isQuizModule
 
   useEffect(() => {
     if (courseId && moduleId && currentModule) {
@@ -239,12 +251,31 @@ export function ModuleView() {
         </div>
       )}
 
+      {/* Admin: Edit content button */}
+      {isAdmin && !isQuiz && (
+        <div className="mb-4">
+          <Link
+            to={`/admin/content/${courseId}/${moduleId}`}
+            className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-via-navy bg-via-navy/10 rounded-lg hover:bg-via-navy/20 transition-colors"
+          >
+            <Pencil className="w-3.5 h-3.5" />
+            Edit in CMS
+          </Link>
+        </div>
+      )}
+
       {/* Module content */}
       <div className="mb-8">
         {isQuiz ? (
           <QuizBlock quizId={moduleId} onComplete={handleQuizComplete} />
         ) : ContentComponent ? (
           <ContentComponent />
+        ) : cmsLoading ? (
+          <div className="flex items-center justify-center py-20">
+            <Loader2 className="w-6 h-6 text-via-navy animate-spin" />
+          </div>
+        ) : cmsContent ? (
+          <BlockRenderer content={cmsContent} />
         ) : (
           <div className="bg-via-card rounded-xl border border-via-border p-12 text-center">
             <p className="text-via-text-light">Content coming soon.</p>

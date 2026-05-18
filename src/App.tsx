@@ -9,6 +9,7 @@ import { Home } from './pages/Home'
 import { CourseView } from './pages/CourseView'
 import { ModuleView } from './pages/ModuleView'
 import { Admin } from './pages/Admin'
+import { ContentEditorPage } from './pages/ContentEditorPage'
 import { Certificates } from './pages/Certificates'
 import { UserProfile } from './pages/UserProfile'
 import { Acknowledgements } from './pages/Acknowledgements'
@@ -66,6 +67,7 @@ function AppRoutes() {
         <Route path="profile" element={<UserProfile />} />
         <Route path="profile/:userId" element={<UserProfile />} />
         <Route path="admin" element={<Admin />} />
+        <Route path="admin/content/:courseId/:moduleId" element={<ContentEditorPage />} />
         <Route path="dev-log" element={<DevLog />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />

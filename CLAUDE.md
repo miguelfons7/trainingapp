@@ -14,13 +14,17 @@ A React-based training platform for Via Trading Corporation (wholesale liquidati
 - **Supabase** (PostgreSQL + Auth + Row Level Security)
 - **Vercel** deployment: `git push origin main` (auto-deploys from main branch)
 - **Production URL**: `https://trainingapp-sepia.vercel.app`
+- **@monaco-editor/react** (code editor for CMS JSON editing)
+- **@dnd-kit** (drag-and-drop for CMS block reordering)
+- **dompurify** (HTML sanitization for CMS rich text rendering)
 
 ## Project Structure
 
 ```
 src/
   components/
-    admin/          <- Admin dashboard tabs (InviteUsers, ManageTeams, ManageUsers, etc.)
+    admin/          <- Admin dashboard tabs (InviteUsers, ManageTeams, ManageUsers, ContentManager, etc.)
+    cms/            <- CMS block editor (BlockEditor, BlockRenderer, BlockPalette, editors/, etc.)
     sections/       <- One component per lesson module (e.g., BdrRoleOverview.tsx)
     shared/         <- Reusable UI components (SectionWrapper, ExpandableCard, etc.)
     interactive/    <- Exercise/quiz components (ScenarioCard, FillInBlank, QuizBlock)
@@ -35,8 +39,12 @@ src/
       bdr-role/         <- Course 5 data files
   lib/
     supabase.ts     <- Supabase client initialization (typed with Database)
+    contentService.ts <- Supabase CRUD for CMS module content (fetch, save, publish, rollback)
+  hooks/
+    useModuleContent.ts <- React hook wrapping contentService for CMS content
   pages/
-    ModuleView.tsx  <- Central routing: imports all section components, maps moduleId -> component
+    ModuleView.tsx  <- Central routing: imports all section components, maps moduleId -> component; CMS fallback
+    ContentEditorPage.tsx <- Admin CMS editor page (/admin/content/:courseId/:moduleId)
     Login.tsx       <- Email + password login via Supabase Auth
     Signup.tsx      <- Invite-only signup with token validation
     UserProfile.tsx <- User profile page with stats, progress, certs, activity
@@ -66,7 +74,7 @@ public/
 - **Anon Key**: Stored in `.env.local` as `VITE_SUPABASE_ANON_KEY`
 - `.env.local` is gitignored via `*.local` pattern
 
-### Database Schema (9 tables)
+### Database Schema (11 tables)
 
 | Table | Purpose | Key Fields |
 |-------|---------|------------|
@@ -79,6 +87,8 @@ public/
 | `compliance_items` | Announcements/compliance items (seed + admin-created) | `id`, `title`, `description`, `details`, `priority`, `is_seed`, `status`, `scheduled_at`, `departments[]`, `updated_at`, `updated_by` |
 | `compliance_acknowledgements` | Who acknowledged which item | `item_id` (FK), `user_id` (FK), `acknowledged_at`, UNIQUE(item_id, user_id) |
 | `audit_log` | Admin action tracking | `actor_id`, `action`, `entity_type`, `entity_id`, `entity_title`, `details` (jsonb) |
+| `module_content` | CMS block content per module (one row per module) | `course_id`, `module_id`, `content` (jsonb PageContent), `status` (draft/published), `version`, `created_by`, `updated_by` |
+| `module_content_versions` | Immutable version snapshots (created on publish) | `module_content_id` (FK), `content` (jsonb), `version`, `published_by`, `published_at` |
 
 ### Roles & Permissions
 
@@ -430,11 +440,12 @@ interface CourseModule {
 - **Search in admin tables** — UserProgressTable and ManageUsers both have search bars filtering by name or email.
 - **Program stats** — CourseStats shows a Program Overview table above the per-course table, with enrolled/completed/avg progress.
 - **Audit log** — `audit_log` table with RLS (admins read, all insert own actions). ComplianceContext auto-logs create, update, status_change, delete actions.
+- **Admin CMS** — Block-based content editor with visual, code, and preview modes. 18 block types matching existing shared/interactive components. Content stored as JSONB in `module_content` table with draft/publish workflow and version history with rollback. Content resolution: hardcoded TSX first → CMS published content → "coming soon" placeholder. Admin "Edit in CMS" button on every module page. Content Editor tab in Admin dashboard lists all modules with CMS status. Editor page at `/admin/content/:courseId/:moduleId`. DB migration 005.
 
 ## Pending Work
 
 - **Build AM Role Training course** (rough draft, same pattern as BDR)
 - **Code splitting** — Bundle is >1.2MB; consider dynamic imports for course section components
 - **Delete old admin components** — `AnnouncementManager.tsx` and `ComplianceTracker.tsx` are unused but still in repo
-- **Admin CMS** — Visual block editor (Notion-like) + code editor toggle for course content editing within the app (deferred)
+- **CMS enhancements** — Drag-and-drop block reordering (dnd-kit is installed but not yet wired into BlockEditor), Monaco editor integration (installed but code mode uses textarea), rich text editor for paragraph blocks (currently plain HTML strings)
 - **Color palette expansion** — Add tasteful, complementary colors beyond blue/orange for visual variety

@@ -10,6 +10,26 @@ interface LogEntry {
 
 const changelog: LogEntry[] = [
   {
+    version: '0.11.0',
+    date: '2026-05-18',
+    title: 'Admin CMS: Visual Block Editor + Code Editor',
+    changes: [
+      'Block-based CMS with 18 content block types: paragraph, heading, callout, bullet list, numbered list, content card, two-column list, stat grid, flow diagram, inline image, hero image, expandable card group, icon card grid, scenario exercise, fill-in-blank, term match, additional resources, divider.',
+      'Visual block editor with drag-to-reorder, add/delete/duplicate blocks, collapse/expand, and categorized block palette with search.',
+      'Code editor mode with live JSON validation — edit the raw PageContent document directly.',
+      'Preview mode renders CMS content using existing shared components (SectionWrapper, ExpandableCard, FlowDiagram, etc.).',
+      'Auto-save: drafts automatically save 5 seconds after the last edit.',
+      'Publish workflow: save as draft, then publish to make content visible to learners. Version history with one-click rollback.',
+      'Content resolution in ModuleView: hardcoded TSX modules take priority, then CMS published content, then "coming soon" placeholder.',
+      'Admin "Edit in CMS" button appears on every module page for admins.',
+      'New "Content Editor" tab in Admin dashboard: lists all courses and modules with CMS status (draft/published/no CMS).',
+      'Dedicated content editor page at /admin/content/:courseId/:moduleId with version history panel.',
+      'BlockRenderer: renders all 18 block types using existing components, with DOMPurify HTML sanitization.',
+      'DB migration 005: module_content + module_content_versions tables with RLS (published readable by all, admins manage), updated_at trigger.',
+      'Packages added: @monaco-editor/react, @dnd-kit/core, @dnd-kit/sortable, @dnd-kit/utilities, dompurify, @types/dompurify.',
+    ],
+  },
+  {
     version: '0.10.0',
     date: '2026-05-18',
     title: 'Announcement Lifecycle, Search, Program Stats, Audit Log',
