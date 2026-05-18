@@ -37,7 +37,7 @@ export function SamsClubPrograms() {
           Parent SKU: <strong>SMS</strong>. The program covers a broad assortment of general merchandise sourced from Sam's Club stores and distribution centers.
         </p>
         <div className="mt-4 rounded-lg overflow-hidden border border-via-border">
-          <img src={`${import.meta.env.BASE_URL}images/program-sms.webp`} alt="Sam's Club liquidation loads" className="w-full h-48 object-cover" />
+          <img src={`${import.meta.env.BASE_URL}images/program-sms.webp`} alt="Sam's Club liquidation loads" className="w-full aspect-video object-contain bg-[#e8eaee]" />
           <p className="text-xs text-via-text-light p-2 text-center">Sample Sam's Club load</p>
         </div>
       </div>

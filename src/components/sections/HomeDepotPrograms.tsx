@@ -39,7 +39,7 @@ export function HomeDepotPrograms() {
           Home Depot is a great example of how the same retailer can offer both manifested and unmanifested options. The key tradeoff is <strong>transparency vs. pricing</strong>: manifested loads let the buyer see exactly what they are getting, while unmanifested loads come at a lower per-unit cost with more potential upside.
         </p>
         <div className="mt-4 rounded-lg overflow-hidden border border-via-border">
-          <img src={`${import.meta.env.BASE_URL}images/program-hd.webp`} alt="Home Depot tools and hardware liquidation loads" className="w-full h-48 object-cover" />
+          <img src={`${import.meta.env.BASE_URL}images/program-hd.webp`} alt="Home Depot tools and hardware liquidation loads" className="w-full aspect-video object-contain bg-[#e8eaee]" />
           <p className="text-xs text-via-text-light p-2 text-center">Sample Home Depot load</p>
         </div>
       </div>

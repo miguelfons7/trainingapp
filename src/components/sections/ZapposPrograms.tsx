@@ -37,7 +37,7 @@ export function ZapposPrograms() {
           Parent SKU: <strong>ZAP</strong>. Manifested footwear and apparel loads priced as a percentage of retail value.
         </p>
         <div className="mt-4 rounded-lg overflow-hidden border border-via-border">
-          <img src={`${import.meta.env.BASE_URL}images/program-zap.webp`} alt="Zappos brand name shoes on pallets" className="w-full h-48 object-cover" />
+          <img src={`${import.meta.env.BASE_URL}images/program-zap.webp`} alt="Zappos brand name shoes on pallets" className="w-full aspect-video object-contain bg-[#e8eaee]" />
           <p className="text-xs text-via-text-light p-2 text-center">Sample Zappos footwear pallet</p>
         </div>
       </div>

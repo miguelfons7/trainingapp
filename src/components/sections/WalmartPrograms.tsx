@@ -42,7 +42,7 @@ export function WalmartPrograms() {
           <img
             src={`${import.meta.env.BASE_URL}images/program-wmgm.webp`}
             alt="Walmart General Merchandise loads — mixed hardgoods on pallets"
-            className="w-full h-48 object-cover"
+            className="w-full aspect-video object-contain bg-[#e8eaee]"
           />
           <p className="text-xs text-via-text-light p-2 text-center">Sample Walmart General Merchandise load</p>
         </div>

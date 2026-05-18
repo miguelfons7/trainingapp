@@ -56,7 +56,7 @@ export function WayfairPrograms() {
           Parent SKU: <strong>WYF</strong>. Multiple FOB locations: <strong>California, Florida, Illinois, Maryland, and Texas</strong>. These loads cover a wide range of home furnishings across four distinct load types, from small home d&eacute;cor items to large furniture pieces.
         </p>
         <div className="mt-4 rounded-lg overflow-hidden border border-via-border">
-          <img src={`${import.meta.env.BASE_URL}images/program-wyf.webp`} alt="Wayfair furniture and home goods liquidation" className="w-full h-48 object-cover" />
+          <img src={`${import.meta.env.BASE_URL}images/program-wyf.webp`} alt="Wayfair furniture and home goods liquidation" className="w-full aspect-video object-contain bg-[#e8eaee]" />
           <p className="text-xs text-via-text-light p-2 text-center">Sample Wayfair load</p>
         </div>
       </div>

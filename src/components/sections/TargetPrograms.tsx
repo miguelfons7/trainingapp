@@ -57,15 +57,15 @@ export function TargetPrograms() {
       {/* Product Images */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
         <div className="rounded-lg overflow-hidden border border-via-border">
-          <img src={`${import.meta.env.BASE_URL}images/program-tgt-salvage.webp`} alt="TGT Salvage loads" className="w-full h-32 object-cover" />
+          <img src={`${import.meta.env.BASE_URL}images/program-tgt-salvage.webp`} alt="TGT Salvage loads" className="w-full aspect-[4/3] object-contain bg-[#e8eaee]" />
           <p className="text-xs text-via-text-light p-2 text-center">TGT Salvage</p>
         </div>
         <div className="rounded-lg overflow-hidden border border-via-border">
-          <img src={`${import.meta.env.BASE_URL}images/program-tgt-premium.webp`} alt="TGT Premium loads" className="w-full h-32 object-cover" />
+          <img src={`${import.meta.env.BASE_URL}images/program-tgt-premium.webp`} alt="TGT Premium loads" className="w-full aspect-[4/3] object-contain bg-[#e8eaee]" />
           <p className="text-xs text-via-text-light p-2 text-center">TGT Premium</p>
         </div>
         <div className="rounded-lg overflow-hidden border border-via-border">
-          <img src={`${import.meta.env.BASE_URL}images/program-tgt-dc.webp`} alt="TGT DC loads" className="w-full h-32 object-cover" />
+          <img src={`${import.meta.env.BASE_URL}images/program-tgt-dc.webp`} alt="TGT DC loads" className="w-full aspect-[4/3] object-contain bg-[#e8eaee]" />
           <p className="text-xs text-via-text-light p-2 text-center">TGT DC / New Mastercase</p>
         </div>
       </div>

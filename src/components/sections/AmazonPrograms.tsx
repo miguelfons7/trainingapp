@@ -56,7 +56,7 @@ export function AmazonPrograms() {
           There are two main types of AMZ loads: (1) <strong>Predominantly Apparel &amp; Shoes</strong>, and (2) <strong>Predominantly Home, Wireless, Toys &amp; Drugstore</strong>. The percentage-of-retail sales price can vary per load based on the commodity mix. The parent SKU for all Amazon programs is <strong>AMZ</strong>.
         </p>
         <div className="mt-4 rounded-lg overflow-hidden border border-via-border">
-          <img src={`${import.meta.env.BASE_URL}images/program-amz.webp`} alt="Amazon shelf-pull loads on pallets" className="w-full h-48 object-cover" />
+          <img src={`${import.meta.env.BASE_URL}images/program-amz.webp`} alt="Amazon shelf-pull loads on pallets" className="w-full aspect-video object-contain bg-[#e8eaee]" />
           <p className="text-xs text-via-text-light p-2 text-center">Sample Amazon load</p>
         </div>
       </div>
