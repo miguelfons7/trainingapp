@@ -45,7 +45,7 @@ export function AskingRightQuestions() {
           The Stethoscope
         </h3>
         <p className="text-sm text-via-text leading-relaxed mb-4">
-          A doctor's first tool is not a prescription pad — it is a question. "Where does it hurt?
+          A doctor's first tool is not a prescription pad. It is a question. "Where does it hurt?
           When did it start? Has this happened before?" Each question narrows the diagnosis. Each
           answer reveals something the doctor could not have assumed.
         </p>
@@ -124,10 +124,10 @@ export function AskingRightQuestions() {
               Open Question
             </p>
             <p className="text-sm text-emerald-700 italic">
-              "Tell me about what you're looking for."
+              "What are you looking for in a supplier?"
             </p>
             <p className="text-xs text-emerald-500 mt-2">
-              Lets the buyer share what actually matters — which might include things you had not
+              Lets the buyer share what actually matters, which might include things you had not
               considered.
             </p>
           </div>
@@ -146,7 +146,7 @@ export function AskingRightQuestions() {
           The Funnelling Technique
         </h3>
         <p className="text-sm text-via-text leading-relaxed mb-4">
-          Great discovery conversations follow a natural funnel — starting broad and getting
+          Great discovery conversations follow a natural funnel, starting broad and getting
           progressively more specific. Each level uses different question types:
         </p>
         <FlowDiagram
@@ -161,7 +161,7 @@ export function AskingRightQuestions() {
             <div>
               <p className="text-sm font-semibold text-via-navy">Broad</p>
               <p className="text-xs text-via-text-light">
-                "Tell me about your business and how you usually sell product."
+                "What does your business look like? How do you usually sell product?"
               </p>
             </div>
           </div>
@@ -207,8 +207,8 @@ export function AskingRightQuestions() {
           they face, and what success looks like for them, the right questions emerge naturally.
         </p>
         <p className="text-sm text-via-text leading-relaxed">
-          The moment a conversation starts feeling like an interview — one question after another
-          with no connection between them — curiosity has left the room. Instead of reading off
+          The moment a conversation starts feeling like an interview, one question after another
+          with no connection between them, curiosity has left the room. Instead of reading off
           a mental checklist, <strong>let each answer guide your next question</strong>. That is
           what makes a conversation feel consultative rather than transactional.
         </p>
@@ -221,7 +221,7 @@ export function AskingRightQuestions() {
           A doctor's intake form asks broad questions first ("What brings you in today?"), then
           narrows based on answers ("When did the pain start? Is it constant or intermittent?"),
           then confirms ("So it's a sharp pain in the lower right side that started three days ago?").
-          Your discovery conversation follows the exact same funnel — broad, narrow, specific, confirm.
+          Your discovery conversation follows the exact same funnel: broad, narrow, specific, confirm.
         </p>
       </div>
 

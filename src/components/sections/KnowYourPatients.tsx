@@ -63,16 +63,20 @@ export function KnowYourPatients() {
         <p className="text-sm text-via-text leading-relaxed">
           As an Account Manager or BDR at Via Trading, your patients are <strong>buyers</strong>.
           And just as doctors see certain conditions over and over, you will see certain
-          <strong> buyer profiles</strong> repeatedly. Understanding these archetypes — what
-          drives them, what they worry about, and what signals they give — allows you to diagnose
+          <strong> buyer profiles</strong> repeatedly. Understanding these archetypes (what
+          drives them, what they worry about, and what signals they give) allows you to diagnose
           faster and recommend better.
         </p>
       </div>
 
-      {/* 8 Buyer Archetypes */}
+      {/* Buyer Archetypes */}
       <h3 className="text-sm font-semibold text-via-text uppercase tracking-wide mb-3">
-        The 8 Buyer Archetypes
+        Common Buyer Archetypes
       </h3>
+      <p className="text-xs text-via-text-light mb-3">
+        These are some of the most common profiles you will encounter. This is a starting point,
+        not an exhaustive list. Real buyers often blend traits from multiple archetypes.
+      </p>
       <div className="space-y-3 mb-6">
         {salesArchetypes.map((archetype) => (
           <ExpandableCard
@@ -184,11 +188,17 @@ export function KnowYourPatients() {
         <h3 className="text-sm font-semibold text-via-navy uppercase tracking-wide mb-3">
           Meeting Buyers Where They Are
         </h3>
-        <p className="text-sm text-via-text leading-relaxed">
+        <p className="text-sm text-via-text leading-relaxed mb-4">
           Via Trading is nimble. A first-time bin store owner with $5,000 to invest needs a
           fundamentally different conversation than a 10-truckload-per-month exporter. The
           archetypes help you calibrate, but every buyer is an individual. Use the profiles as
           starting points, not scripts. Let the buyer's actual words guide your response.
+        </p>
+        <p className="text-sm text-via-text leading-relaxed">
+          Remember: at the end of the day, we are not just selling product. We are{' '}
+          <strong>solving a problem</strong> for buyers. Whether they need consistent inventory for
+          their shelves, high-margin goods for online resale, or container loads for export, our job
+          is to understand the problem and build value around the solution we offer.
         </p>
       </div>
 

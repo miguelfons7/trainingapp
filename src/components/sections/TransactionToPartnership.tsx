@@ -45,7 +45,7 @@ export function TransactionToPartnership() {
         <p className="text-sm text-via-text leading-relaxed">
           The Account Manager relationship works the same way. The first sale is just the
           beginning. <strong>Growing accounts</strong>, <strong>re-engaging dormant buyers</strong>,
-          and <strong>building lasting partnerships</strong> is where the real value lives — for
+          and <strong>building lasting partnerships</strong> is where the real value lives, for
           both Via Trading and the buyer. This is what transforms a transaction into a partnership.
         </p>
       </div>
@@ -141,7 +141,32 @@ export function TransactionToPartnership() {
         </div>
       </div>
 
-      {/* Relationship philosophy */}
+      {/* Trust and transparency */}
+      <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6">
+        <h3 className="text-sm font-semibold text-via-navy uppercase tracking-wide mb-3">
+          Trust Is the Product
+        </h3>
+        <p className="text-sm text-via-text leading-relaxed mb-4">
+          In liquidation, buyers are not just buying inventory. They are buying the person they
+          are speaking to. Many buyers have been burned before: they purchased a bad load, did not
+          get what they paid for, or dealt with a supplier who disappeared after the sale. That
+          history shapes how they approach every new relationship.
+        </p>
+        <p className="text-sm text-via-text leading-relaxed mb-4">
+          This is why <strong>transparency and setting proper expectations</strong> matter more than
+          making a sale. We do not oversell. It does not benefit us to sell one thing, one time, to
+          one buyer. We want their business to succeed so that we can continue to scale with them.
+          That means being honest about what a load contains, what condition to expect, and what the
+          realistic outcomes are.
+        </p>
+        <p className="text-sm text-via-text leading-relaxed">
+          Via Trading is customer-service centered. Across every stage of the buyer journey, we show
+          our values and provide a good experience. That is why the <strong>90%+ repeat buyer
+          rate</strong> exists. Buyers come back because they trust the relationship.
+        </p>
+      </div>
+
+      {/* Proactive approach */}
       <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6">
         <h3 className="text-sm font-semibold text-via-navy uppercase tracking-wide mb-3">
           Proactive, Not Reactive
@@ -153,10 +178,8 @@ export function TransactionToPartnership() {
         </p>
         <p className="text-sm text-via-text leading-relaxed">
           When you know a buyer's business well enough to send them a message like "We just got
-          in a load that's exactly what you described last month — want me to hold it for you?" —
-          that is the consultative relationship at its best. It is also why Via Trading's{' '}
-          <strong>90%+ repeat buyer rate</strong> is not an accident. It is the result of
-          thousands of Account Managers investing in relationships, not just transactions.
+          in a load that fits exactly what you described last month, want me to hold it for you?"
+          that is the consultative relationship at its best.
         </p>
       </div>
 
@@ -167,7 +190,8 @@ export function TransactionToPartnership() {
           The buyer who starts with one pallet today might be ordering truckloads in six months.
           The exporter who is "just exploring" might become a recurring container buyer. Every
           relationship starts somewhere. How you treat the first conversation determines whether
-          there is a second one.
+          there is a second one. We are not just selling product. We are solving a problem for
+          buyers and building value on what we offer.
         </p>
       </div>
 

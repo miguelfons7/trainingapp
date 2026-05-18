@@ -7,6 +7,8 @@ import {
   GitBranch,
   Clock,
   AlertTriangle,
+  Stethoscope,
+  Eye,
 } from 'lucide-react'
 import { SectionWrapper } from '../shared/SectionWrapper'
 import { ExpandableCard } from '../shared/ExpandableCard'
@@ -19,6 +21,8 @@ const iconMap: Record<string, React.ReactNode> = {
   GitBranch: <GitBranch className="w-5 h-5" />,
   Clock: <Clock className="w-5 h-5" />,
   AlertTriangle: <AlertTriangle className="w-5 h-5" />,
+  Stethoscope: <Stethoscope className="w-5 h-5" />,
+  Eye: <Eye className="w-5 h-5" />,
 }
 
 export function ArtOfTheClose() {
@@ -55,7 +59,7 @@ export function ArtOfTheClose() {
         <p className="text-sm text-via-text leading-relaxed">
           Closing in consultative sales works the same way. If Steps 1 through 4 were done well —
           you understood the buyer's business, made a targeted recommendation, explained how it
-          works, and connected the benefits to their specific needs — the close should feel like
+          works, and connected the benefits to their specific needs, the close should feel like
           the <strong>natural next step</strong>, not a high-pressure moment. If you find yourself
           straining to close, it usually means you did not do enough work in the earlier steps.
         </p>
@@ -63,7 +67,7 @@ export function ArtOfTheClose() {
 
       {/* Six techniques */}
       <h3 className="text-sm font-semibold text-via-text uppercase tracking-wide mb-3">
-        Six Closing Techniques
+        Eight Closing Techniques
       </h3>
       <div className="space-y-3 mb-6">
         {closingTechniques.map((technique) => (
@@ -162,6 +166,30 @@ export function ArtOfTheClose() {
               </div>
             </div>
           </div>
+          <div className="bg-via-bg-subtle rounded-lg p-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+              <div>
+                <p className="font-semibold text-via-navy uppercase tracking-wide mb-0.5">Situation</p>
+                <p className="text-via-text">Thorough discovery, clear problem identified</p>
+              </div>
+              <div>
+                <p className="font-semibold text-teal-600 uppercase tracking-wide mb-0.5">Try</p>
+                <p className="text-via-text">Consultative Close</p>
+              </div>
+            </div>
+          </div>
+          <div className="bg-via-bg-subtle rounded-lg p-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+              <div>
+                <p className="font-semibold text-via-navy uppercase tracking-wide mb-0.5">Situation</p>
+                <p className="text-via-text">Buyer seems interested but something is holding them back</p>
+              </div>
+              <div>
+                <p className="font-semibold text-teal-600 uppercase tracking-wide mb-0.5">Try</p>
+                <p className="text-via-text">Level With Me Close</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -178,7 +206,7 @@ export function ArtOfTheClose() {
         </p>
         <p className="text-sm text-via-text leading-relaxed">
           This is why Via Trading maintains a <strong>90%+ repeat buyer rate</strong>. Buyers do
-          not return year after year for the cheapest price — they return because they trust the
+          not return year after year for the cheapest price. They return because they trust the
           Account Manager, the quality is consistent, and the experience is worth the investment.
         </p>
       </div>

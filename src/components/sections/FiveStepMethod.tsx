@@ -39,7 +39,7 @@ export function FiveStepMethod() {
     <SectionWrapper
       id="five-step-method"
       title="The 5-Step Method"
-      subtitle="The clinical method — from diagnosis to treatment plan"
+      subtitle="The clinical method: from diagnosis to treatment plan"
       accentColor="border-teal-500"
       icon={<ClipboardList className="w-5 h-5" />}
     >
@@ -55,7 +55,7 @@ export function FiveStepMethod() {
         </p>
         <p className="text-sm text-via-text leading-relaxed">
           Via Trading's <strong>5-Step Consultative Method</strong> follows the same logic. Each
-          step builds on the one before it. Skip a step, and the conversation falls apart — just
+          step builds on the one before it. Skip a step, and the conversation falls apart, just
           like a doctor who prescribes antibiotics without checking if it is actually an infection.
         </p>
       </div>
@@ -79,7 +79,7 @@ export function FiveStepMethod() {
           Step 1: The Diagnostic Phase
         </h3>
         <p className="text-sm text-via-text leading-relaxed mb-4">
-          Step 1 — Summarize — gets <strong>approximately 40%</strong> of the conversation time.
+          Step 1 (Summarize) gets <strong>approximately 40%</strong> of the conversation time.
           That is not a typo. Nearly half of a great consultative conversation is spent understanding
           the buyer before making any recommendation. This is the phase where most salespeople fail:
           they rush through it to get to their pitch.
@@ -170,7 +170,7 @@ export function FiveStepMethod() {
           95% talking about their product. In consultative selling, that ratio is inverted. If you
           have done the diagnosis correctly, the prescription sells itself. The buyer hears their own
           needs reflected back, sees how your solution addresses each one, and the close feels like
-          a natural conclusion — not a pressure moment.
+          a natural conclusion, not a pressure moment.
         </p>
       </div>
 

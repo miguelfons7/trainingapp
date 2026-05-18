@@ -26,7 +26,7 @@ export const fiveSteps: ConsultativeStep[] = [
     description:
       'This is the diagnostic phase. You ask open-ended questions, listen carefully, and summarize what you hear to confirm understanding. The goal is to understand their business, what they sell, who they sell to, what challenges they face, and what they need from a supplier. If you do this step well, everything that follows will feel natural.',
     examples: [
-      '"Tell me about your business — how do you usually sell product?"',
+      '"What does your business look like? How do you usually sell product?"',
       '"What\'s been working well with your current supplier? What hasn\'t?"',
       '"So it sounds like you\'re running a discount store in Phoenix, doing about 3-4 pallets a month, and the main frustration is inconsistent quality from your current broker. Is that right?"',
     ],
@@ -39,10 +39,10 @@ export const fiveSteps: ConsultativeStep[] = [
     timeAllocation: '~10%',
     role: 'Direct suggestion',
     description:
-      'Based on your diagnosis, present one clear, tailored recommendation. Not a catalog dump — a specific suggestion that connects directly to what they told you. This is the moment where your expertise becomes visible.',
+      'Based on your diagnosis, present one clear, tailored recommendation. Not a catalog dump, but a specific suggestion that connects directly to what they told you. This is the moment where your expertise becomes visible.',
     examples: [
       '"Based on what you\'re telling me, I think our Target general merchandise program would be a strong fit for your store."',
-      '"For what you\'re describing, I\'d recommend starting with a mixed New Overstock pallet — it gives you variety to test what moves."',
+      '"For what you\'re describing, I\'d recommend starting with a mixed New Overstock pallet. It gives you variety to test what moves."',
     ],
   },
   {
@@ -53,10 +53,10 @@ export const fiveSteps: ConsultativeStep[] = [
     timeAllocation: '~15%',
     role: 'Practical mechanics',
     description:
-      'Walk through the relevant mechanics — only the details that matter to this buyer. A bin store operator needs to know about weekly flow and category mix. An exporter needs to know about container loading and FOB pricing. Don\'t explain everything; explain what\'s relevant.',
+      'Walk through the relevant mechanics, focusing only on the details that matter to this buyer. A bin store operator needs to know about weekly flow and category mix. An exporter needs to know about container loading and FOB pricing. Don\'t explain everything; explain what\'s relevant.',
     examples: [
       '"You\'d receive a 24-pallet truckload with a manifest ahead of time, and we typically ship within 24 hours."',
-      '"Each pallet runs about 200-300 units of mixed general merchandise — housewares, small electronics, toys, seasonal."',
+      '"Each pallet runs about 200-300 units of mixed general merchandise: housewares, small electronics, toys, seasonal."',
     ],
   },
   {
@@ -69,7 +69,7 @@ export const fiveSteps: ConsultativeStep[] = [
     description:
       'Connect what you just explained to what they told you in Step 1. This is where the conversation comes full circle. Every benefit you mention should tie back to a need they expressed. If they said consistency matters, show how your program delivers consistency.',
     examples: [
-      '"The advantage for you is steady supply without the inconsistency you\'ve had with your broker, and because we\'re direct — no middleman — your per-unit cost should come in significantly lower."',
+      '"The advantage for you is steady supply without the inconsistency you\'ve had with your broker, and because we\'re direct with no middleman, your per-unit cost should come in significantly lower."',
       '"What that means for your online store is you can list new products every week without worrying about sourcing gaps."',
     ],
   },
@@ -107,7 +107,7 @@ export const questionTypes: QuestionType[] = [
     definition: 'Invite broad, detailed answers that give the buyer room to share.',
     whenToUse: 'Early in the conversation to understand the big picture. These are your primary diagnostic tool.',
     examples: [
-      '"Tell me about your business."',
+      '"What does your business look like day to day?"',
       '"What\'s working well with your current supplier?"',
       '"What does a typical week look like for you in terms of foot traffic and sell-through?"',
     ],
@@ -164,13 +164,13 @@ export const activeListeningRules: ListeningRule[] = [
     id: 'dont-interrupt',
     rule: 'Don\'t Interrupt',
     description: 'Let them finish completely, even if you already know where they\'re going. Cutting someone off signals that your agenda matters more than theirs.',
-    example: 'A buyer starts explaining a problem with their current supplier. Wait for the full story before responding — the last sentence often reveals the real issue.',
+    example: 'A buyer starts explaining a problem with their current supplier. Wait for the full story before responding. The last sentence often reveals the real issue.',
     icon: 'Pause',
   },
   {
     id: 'take-notes',
     rule: 'Take Notes',
-    description: 'Write down key details: names, numbers, pain points, specific products mentioned. Notes are your patient chart — they allow you to reference specifics later and show the buyer you were paying attention.',
+    description: 'Write down key details: names, numbers, pain points, specific products mentioned. Notes are your patient chart. They allow you to reference specifics later and show the buyer you were paying attention.',
     example: 'When they mention "I usually do about 4 pallets a month," jot it down. Referencing it later ("You mentioned 4 pallets a month…") builds trust.',
     icon: 'PenLine',
   },
@@ -185,7 +185,7 @@ export const activeListeningRules: ListeningRule[] = [
     id: 'listen-for-gaps',
     rule: 'Listen for What They Don\'t Say',
     description: 'Gaps in what a buyer shares are often more revealing than what they say out loud. If someone never mentions profitability, they may be struggling. If they keep redirecting to price, margins are tight. If they\'re hesitant about volume, cash flow may be a constraint.',
-    example: 'A buyer talks enthusiastically about their business growth but avoids the topic of margins. That silence is a signal — their volume might be growing but profitability isn\'t keeping pace.',
+    example: 'A buyer talks enthusiastically about their business growth but avoids the topic of margins. That silence is a signal. Their volume might be growing but profitability isn\'t keeping pace.',
     icon: 'EyeOff',
   },
   {
@@ -218,14 +218,14 @@ export const klapdocSteps: KlapdocStep[] = [
     id: 'listen',
     letter: 'L',
     title: 'Listen',
-    description: 'Let them finish completely. Two ears, one mouth — use them in that ratio. The buyer often reveals the real issue in the second or third sentence, not the first.',
+    description: 'Let them finish completely. Two ears, one mouth: use them in that ratio. The buyer often reveals the real issue in the second or third sentence, not the first.',
     example: 'Let the buyer explain their full concern without jumping in. They might start with price but end up revealing that shipping costs are the real issue.',
   },
   {
     id: 'acknowledge',
     letter: 'A',
     title: 'Acknowledge',
-    description: 'Validate their concern before doing anything else. This is not agreeing with them — it\'s showing you heard them and respect their perspective. Without this step, anything you say next will feel dismissive.',
+    description: 'Validate their concern before doing anything else. This is not agreeing with them. It\'s showing you heard them and respect their perspective. Without this step, anything you say next will feel dismissive.',
     example: '"I totally understand that concern — price is a big factor, and you need to make sure the numbers work for your business."',
   },
   {
@@ -253,7 +253,7 @@ export const klapdocSteps: KlapdocStep[] = [
     id: 'close',
     letter: 'C',
     title: 'Close',
-    description: 'Attempt to move forward after overcoming. Don\'t leave the objection hanging — transition naturally into the next step or the close. If the buyer still has concerns, cycle back to Probe.',
+    description: 'Attempt to move forward after overcoming. Don\'t leave the objection hanging. Transition naturally into the next step or the close. If the buyer still has concerns, cycle back to Probe.',
     example: '"Does that address your concern? Great — let me pull up a truckload manifest and we can see what\'s available this week."',
   },
 ]
@@ -310,6 +310,13 @@ export const commonObjections: CommonObjection[] = [
     keyProbe: '"What are you paying now for freight?"',
     likelyOvercome: 'Truckload economics, local pickup, FOB options',
   },
+  {
+    id: 'too-much-of-item',
+    objection: '"There\'s too much of one item in the load"',
+    rootIssue: 'Perceived imbalance',
+    keyProbe: '"Which items are you concerned about?"',
+    likelyOvercome: 'The actual value is in the other items. The concentrated item is a small percentage of the total load value.',
+  },
 ]
 
 // ─── Closing Techniques ──────────────────────────────────────────
@@ -337,7 +344,7 @@ export const closingTechniques: ClosingTechnique[] = [
   {
     id: 'summary',
     name: 'Summary Close',
-    description: 'Recap the buyer\'s needs, your recommendation, and the key benefits — then ask. This is powerful because it demonstrates you listened and shows a clear thread from their problem to your solution.',
+    description: 'Recap the buyer\'s needs, your recommendation, and the key benefits, then ask. This is powerful because it demonstrates you listened and shows a clear thread from their problem to your solution.',
     whenToUse: 'After a thorough discovery conversation where you\'ve identified clear needs.',
     examples: [
       '"So just to pull this together — you\'re a bin store in Dallas needing two truckloads a month of general merchandise, variety and consistent supply are your priorities. Our Target GM program hits all of those. Should I pull a manifest for you to review?"',
@@ -358,7 +365,7 @@ export const closingTechniques: ClosingTechnique[] = [
   {
     id: 'alternative',
     name: 'Alternative Close',
-    description: 'Give two positive options instead of a yes/no question. Both choices move the buyer forward — they\'re just choosing which path.',
+    description: 'Give two positive options instead of a yes/no question. Both choices move the buyer forward, and they\'re just choosing which path.',
     whenToUse: 'When the buyer seems interested but hasn\'t committed. The choice gives them control while keeping momentum.',
     examples: [
       '"Would you rather start with the GM truckload or the electronics pallet?"',
@@ -369,8 +376,8 @@ export const closingTechniques: ClosingTechnique[] = [
   {
     id: 'special',
     name: 'Special Close',
-    description: 'Leverage genuine scarcity or a time-limited opportunity. Only use when the urgency is real — manufactured scarcity destroys trust.',
-    whenToUse: 'When a specific load or deal genuinely won\'t be available long — not as a pressure tactic.',
+    description: 'Leverage genuine scarcity or a time-limited opportunity. Only use when the urgency is real. Manufactured scarcity destroys trust.',
+    whenToUse: 'When a specific load or deal genuinely won\'t be available long. Never as a pressure tactic.',
     examples: [
       '"We just got in a load from [retailer] that\'s exactly what you described. These tend to move fast — within a day or two. Want me to hold it while you review the manifest?"',
     ],
@@ -379,12 +386,34 @@ export const closingTechniques: ClosingTechnique[] = [
   {
     id: 'fear',
     name: 'Fear Close',
-    description: 'Highlight what the buyer loses by not acting. This connects to pain they\'ve already expressed — you\'re reflecting their own words back, not creating new pressure.',
+    description: 'Highlight what the buyer loses by not acting. This connects to pain they\'ve already expressed. You\'re reflecting their own words back, not creating new pressure.',
     whenToUse: 'Sparingly. Only when the buyer has explicitly described a pain point that not acting will perpetuate.',
     examples: [
       '"You mentioned your current broker has been unreliable and it\'s costing you sales when shelves are empty. Every week without consistent supply is revenue you\'re not making. Would it make sense to run a test order with us while you evaluate?"',
     ],
     icon: 'AlertTriangle',
+  },
+  {
+    id: 'consultative',
+    name: 'Consultative Close',
+    description: 'State the buyer\'s problem, offer your solution, and explain why it fits. This close works because it ties directly to what the buyer told you. The structure is simple: Because you need X, I recommend Y, and here is how it helps you with Z.',
+    whenToUse: 'After a thorough discovery where you clearly understand the buyer\'s needs. This is the default close for a consultative conversation.',
+    examples: [
+      '"Because you\'re looking for consistent general merchandise to restock your bin store weekly, I\'d recommend our Target GM truckload program. It gives you variety across categories with weekly availability, so your bins stay full without gaps."',
+      '"Because you need high-margin footwear for your online store, I\'d recommend our Zappos shelf-pull program. The manifested loads let you list items immediately, and at 13.5% of retail, your margins should be strong."',
+    ],
+    icon: 'Stethoscope',
+  },
+  {
+    id: 'level-with-me',
+    name: 'Level With Me Close',
+    description: 'A direct, honest check-in when you sense hesitation. This close works because it creates psychological safety for the buyer to share their real concern. It signals that you would rather address the real issue than pretend everything is fine.',
+    whenToUse: 'When the buyer seems interested but something is holding them back and you cannot pinpoint what it is.',
+    examples: [
+      '"Level with me, what part of this are you not seeing value in? I\'d rather address it directly than have you walk away unsure."',
+      '"I want to make sure this actually works for you. What\'s the hesitation?"',
+    ],
+    icon: 'Eye',
   },
 ]
 
@@ -399,7 +428,7 @@ export const tonePrinciples: TonePrinciple[] = [
   {
     id: 'welcoming',
     principle: 'Welcoming',
-    description: 'Like a smart, organized colleague who\'s genuinely glad to help. Not overly enthusiastic — warm and natural.',
+    description: 'Like a smart, organized colleague who\'s genuinely glad to help. Not overly enthusiastic, just warm and natural.',
   },
   {
     id: 'professional',
@@ -419,7 +448,7 @@ export const tonePrinciples: TonePrinciple[] = [
   {
     id: 'confident',
     principle: 'Confident',
-    description: 'Know Via\'s offering inside and out. When you don\'t know something, say so and find out — that\'s confidence, not weakness.',
+    description: 'Know Via\'s offering inside and out. When you don\'t know something, say so and find out. That\'s confidence, not weakness.',
   },
 ]
 
@@ -534,7 +563,7 @@ export const featureBenefitNeeds: FeatureBenefitNeed[] = [
   {
     id: 'manifested-loads',
     feature: 'Manifested loads include a detailed item list before purchase',
-    benefit: 'You know exactly what you\'re getting — brands, quantities, retail values',
+    benefit: 'You know exactly what you\'re getting: brands, quantities, retail values',
     need: 'Predictable inventory for planning and pricing',
   },
   {
@@ -594,7 +623,7 @@ export const dormantResponses: DormantResponse[] = [
   {
     id: 'wrong-products',
     buyerSays: '"You don\'t have the right products"',
-    approach: 'Ask which categories they need. Inventory changes constantly — what wasn\'t available six months ago might be in stock today.',
+    approach: 'Ask which categories they need. Inventory changes constantly, and what wasn\'t available six months ago might be in stock today.',
   },
   {
     id: 'shipping-slow',

@@ -7,20 +7,24 @@ import { AdditionalResources } from '../shared/AdditionalResources'
 
 const loadTypes = [
   {
-    title: 'Liquidation Returns — Small Items',
+    title: 'Liquidation Returns: Small Items',
     description: '350+ units per load: nightstands, ceiling fans, lamps, rugs, tiles, wall art, curtains, outdoor décor, pet furniture, bar stools.',
   },
   {
-    title: 'Liquidation Returns — Large Items',
+    title: 'Liquidation Returns: Large Items',
     description: '40+ large items per load: sofas, dining tables, vanities, beds, patio sets, TV stands.',
   },
   {
-    title: 'Imperfection — Shelf Pull',
+    title: 'Imperfection: Shelf Pull',
     description: 'Like-new items with minor cosmetic flaws. Fully functional. Great margins for buyers who can overlook small imperfections.',
   },
   {
     title: 'Excess & Clearance Inventory',
     description: 'Shelf-pulls and new items from discontinued or seasonal product lines. No customer return wear.',
+  },
+  {
+    title: 'Salvage',
+    description: 'Unmanifested loads sold at a flat rate per truck. Items may have missing boxes from a set, chipped edges, cracked glass, or other cosmetic defects. Ideal for buyers who can sort and repair.',
   },
 ]
 
@@ -40,7 +44,7 @@ export function WayfairPrograms() {
     <SectionWrapper
       id="wayfair-programs"
       title="Wayfair Programs"
-      subtitle="Manifested furniture and home goods loads"
+      subtitle="Furniture and home goods loads across five load types"
       accentColor="border-violet-500"
       icon={<Sofa className="w-5 h-5" />}
     >
@@ -50,10 +54,10 @@ export function WayfairPrograms() {
           About the Wayfair Program
         </h3>
         <p className="text-sm text-via-text leading-relaxed mb-3">
-          Wayfair is a leading online furniture and home goods retailer. Via Trading's Wayfair program (<strong>WYF</strong>) offers manifested loads priced at a <strong>flat percentage of retail</strong>, giving buyers full visibility into what they are purchasing. Manifests are available within <strong>48 hours</strong>. Inventory is available on a <strong>consistent weekly</strong> basis.
+          Wayfair is a leading online furniture and home goods retailer. Via Trading's Wayfair program (<strong>WYF</strong>) offers loads priced at a <strong>flat percentage of retail</strong>. Most load types include full item-level manifests available within <strong>48 hours</strong>, giving buyers visibility into what they are purchasing. Inventory is available on a <strong>consistent weekly</strong> basis.
         </p>
         <p className="text-sm text-via-text leading-relaxed">
-          Parent SKU: <strong>WYF</strong>. Multiple FOB locations: <strong>California, Florida, Illinois, Maryland, and Texas</strong>. These loads cover a wide range of home furnishings across four distinct load types, from small home d&eacute;cor items to large furniture pieces.
+          Parent SKU: <strong>WYF</strong>. Multiple FOB locations: <strong>California, Florida, Illinois, Maryland, and Texas</strong>. These loads cover a wide range of home furnishings across five distinct load types, from small home d&eacute;cor items to large furniture pieces.
         </p>
         <div className="mt-4 rounded-lg overflow-hidden border border-via-border">
           <img src={`${import.meta.env.BASE_URL}images/program-wyf.webp`} alt="Wayfair furniture and home goods liquidation" className="w-full aspect-video object-contain bg-[#e8eaee]" />
@@ -79,7 +83,7 @@ export function WayfairPrograms() {
             <div>
               <p className="text-xs font-semibold text-via-navy uppercase tracking-wide mb-2">Overview</p>
               <p className="text-sm text-via-text leading-relaxed">
-                Wayfair loads come with full item-level manifests available within 48 hours. The program covers furniture, home d&eacute;cor, and related categories across four distinct load types — from small-item returns (350+ units) to large furniture returns (40+ items), plus shelf-pull imperfections and excess/clearance inventory.
+                Wayfair loads cover furniture, home d&eacute;cor, and related categories across five distinct load types, from small-item returns (350+ units) to large furniture returns (40+ items), plus shelf-pull imperfections, excess/clearance inventory, and salvage loads. Most load types come with full manifests available within 48 hours.
               </p>
             </div>
 
@@ -96,7 +100,7 @@ export function WayfairPrograms() {
                 </li>
                 <li className="flex items-start gap-2 text-sm text-via-text">
                   <span className="w-1.5 h-1.5 rounded-full bg-violet-500 mt-1.5 shrink-0" />
-                  4 distinct load types: Returns (Small &amp; Large), Imperfection Shelf Pull, and Excess &amp; Clearance
+                  5 distinct load types: Returns (Small &amp; Large), Imperfection Shelf Pull, Excess &amp; Clearance, and Salvage
                 </li>
                 <li className="flex items-start gap-2 text-sm text-via-text">
                   <span className="w-1.5 h-1.5 rounded-full bg-violet-500 mt-1.5 shrink-0" />
@@ -113,7 +117,7 @@ export function WayfairPrograms() {
             <div className="grid grid-cols-2 gap-3">
               <div className="bg-via-bg-subtle rounded-lg p-3">
                 <p className="text-xs text-via-text-light uppercase tracking-wide">Condition</p>
-                <p className="text-sm font-semibold text-via-navy mt-0.5">Returns, Shelf Pull, Excess &amp; Clearance</p>
+                <p className="text-sm font-semibold text-via-navy mt-0.5">Returns, Shelf Pull, Excess, Clearance &amp; Salvage</p>
               </div>
               <div className="bg-via-bg-subtle rounded-lg p-3">
                 <p className="text-xs text-via-text-light uppercase tracking-wide">Pricing Model</p>

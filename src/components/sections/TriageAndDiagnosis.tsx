@@ -18,7 +18,7 @@ export function TriageAndDiagnosis() {
     <SectionWrapper
       id="triage-and-diagnosis"
       title="Triage & Diagnosis: BDR + AM"
-      subtitle="Two roles, one team — the hospital model"
+      subtitle="Two roles, one team. The hospital model."
       accentColor="border-teal-500"
       icon={<Hospital className="w-5 h-5" />}
     >
@@ -30,12 +30,12 @@ export function TriageAndDiagnosis() {
         <p className="text-sm text-via-text leading-relaxed mb-4">
           When you walk into a hospital, the first person you see is not the surgeon. It is the
           triage nurse. They greet you, ask about your symptoms, take your vitals, and determine
-          which specialist you need. Their job is not to diagnose or treat — it is to{' '}
+          which specialist you need. Their job is not to diagnose or treat. It is to{' '}
           <strong>gather the right information and route you to the right expert</strong>.
         </p>
         <p className="text-sm text-via-text leading-relaxed mb-4">
           Then the doctor takes over. They already have context from the nurse's notes. They do not
-          ask you to repeat your entire story. They go <em>deeper</em> — asking follow-up questions,
+          ask you to repeat your entire story. They go <em>deeper</em>, asking follow-up questions,
           running tests, forming a diagnosis, and prescribing a treatment plan.
         </p>
         <p className="text-sm text-via-text leading-relaxed">
@@ -115,7 +115,7 @@ export function TriageAndDiagnosis() {
         <p className="text-sm text-via-text leading-relaxed mb-4">
           The Account Manager owns the buyer relationship from the first substantive conversation
           through ongoing account management. They work through <strong>all five steps</strong> of
-          the consultative method — they can diagnose, prescribe, close, and follow up.
+          the consultative method. They can diagnose, prescribe, close, and follow up.
         </p>
 
         <div className="mb-4">
@@ -135,7 +135,7 @@ export function TriageAndDiagnosis() {
           </p>
           <p className="text-sm text-via-text italic">
             "Hi [Name], this is [Your Name], your Account Manager at Via Trading. I got some
-            great notes from my colleague about your business — it sounds like you're running a
+            great notes from my colleague about your business, it sounds like you're running a
             discount store in Phoenix and looking to source general merchandise at pallet volume.
             I'd love to hear more about what you're doing and see how we can help."
           </p>
@@ -225,7 +225,7 @@ export function TriageAndDiagnosis() {
               <strong>Acknowledge → Brief Answer → Redirect to AM</strong>
             </p>
             <p className="text-xs text-blue-600 italic">
-              "Great question — pricing depends on the program and what you're looking for. Your
+              "Great question, pricing depends on the program and what you're looking for. Your
               Account Manager will be the best person to walk you through options that fit your
               business."
             </p>
@@ -256,7 +256,7 @@ export function TriageAndDiagnosis() {
       <div className="bg-teal-50 rounded-lg border border-teal-200 p-4 mb-6">
         <p className="text-sm text-teal-700 font-medium mb-1">Two Roles, One Mission</p>
         <p className="text-sm text-teal-700">
-          The BDR and AM are not competing — they are collaborating. The triage nurse makes the
+          The BDR and AM are not competing. They are collaborating. The triage nurse makes the
           doctor more effective by providing context. The doctor makes the nurse's work meaningful
           by delivering on the promise of expert care. When both roles are done well, the buyer
           experiences a seamless journey from first contact to lasting partnership.

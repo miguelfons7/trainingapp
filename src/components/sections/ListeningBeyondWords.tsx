@@ -30,7 +30,7 @@ export function ListeningBeyondWords() {
     <SectionWrapper
       id="listening-beyond-words"
       title="Listening Beyond Words"
-      subtitle="Two ears, one mouth — use them in that ratio"
+      subtitle="Two ears, one mouth. Use them in that ratio."
       accentColor="border-teal-500"
       icon={<Ear className="w-5 h-5" />}
     >
@@ -40,7 +40,7 @@ export function ListeningBeyondWords() {
           The Other Half of the Equation
         </h3>
         <p className="text-sm text-via-text leading-relaxed mb-4">
-          Questions are half the equation. The other half is hearing what the buyer says — and
+          Questions are half the equation. The other half is hearing what the buyer says, and
           what they <em>do not</em> say. A doctor who asks the right questions but ignores the
           answers is not diagnosing anything. They are going through the motions.
         </p>
@@ -61,7 +61,7 @@ export function ListeningBeyondWords() {
           <ExpandableCard
             key={rule.id}
             title={rule.rule}
-            subtitle={rule.description.slice(0, 80) + '…'}
+            subtitle={rule.description.slice(0, 120) + '…'}
             icon={iconMap[rule.icon]}
             isExpanded={expandedIds.has(rule.id)}
             onToggle={() => toggle(rule.id)}
@@ -95,7 +95,7 @@ export function ListeningBeyondWords() {
             <span className="w-2 h-2 rounded-full bg-teal-500 mt-1.5 shrink-0" />
             <div>
               <p className="text-sm text-via-text">
-                <strong>Never mentions profitability</strong> — They may be growing in volume but
+                <strong>Never mentions profitability:</strong> They may be growing in volume but
                 struggling with margins. A gentle probe: "How are your margins holding up as you scale?"
               </p>
             </div>
@@ -104,7 +104,7 @@ export function ListeningBeyondWords() {
             <span className="w-2 h-2 rounded-full bg-teal-500 mt-1.5 shrink-0" />
             <div>
               <p className="text-sm text-via-text">
-                <strong>Keeps redirecting to price</strong> — Margins are tight, and every dollar
+                <strong>Keeps redirecting to price:</strong> Margins are tight, and every dollar
                 matters. Instead of getting frustrated, acknowledge it and ask: "What per-unit cost
                 do you need to hit for your numbers to work?"
               </p>
@@ -114,8 +114,8 @@ export function ListeningBeyondWords() {
             <span className="w-2 h-2 rounded-full bg-teal-500 mt-1.5 shrink-0" />
             <div>
               <p className="text-sm text-via-text">
-                <strong>Hesitant about volume</strong> — Cash flow may be a constraint. Do not push
-                larger orders — explore what volume feels comfortable and build from there.
+                <strong>Hesitant about volume:</strong> Cash flow may be a constraint. Do not push
+                larger orders. Instead, explore what volume feels comfortable and build from there.
               </p>
             </div>
           </div>
@@ -123,7 +123,7 @@ export function ListeningBeyondWords() {
             <span className="w-2 h-2 rounded-full bg-teal-500 mt-1.5 shrink-0" />
             <div>
               <p className="text-sm text-via-text">
-                <strong>Avoids talking about their current supplier</strong> — They may be locked
+                <strong>Avoids talking about their current supplier:</strong> They may be locked
                 in an uncomfortable arrangement or comparing you without wanting to show their hand.
               </p>
             </div>
@@ -158,7 +158,7 @@ export function ListeningBeyondWords() {
         <p className="text-sm text-via-text leading-relaxed mb-4">
           Before any conversation, especially a difficult one, take a moment to consider why a
           reasonable person might behave the way this buyer is behaving. This is not about making
-          excuses — it is about <strong>understanding context</strong>.
+          excuses. It is about <strong>understanding context</strong>.
         </p>
         <p className="text-sm text-via-text leading-relaxed mb-4">
           A buyer who seems "difficult" may have been burned by a previous liquidation supplier.

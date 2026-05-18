@@ -125,12 +125,12 @@ export function WhenPatientsPushBack() {
             Example: "Your competitor offered a lower price"
           </p>
           <div className="space-y-2 text-sm text-via-text">
-            <p><Badge text="K" color="teal" /> <strong>Keep Calm</strong> — Don't get defensive or immediately discount.</p>
-            <p><Badge text="L" color="teal" /> <strong>Listen</strong> — Let them explain the full situation.</p>
-            <p><Badge text="A" color="teal" /> <strong>Acknowledge</strong> — "That's fair — price matters, especially when you're comparing suppliers."</p>
+            <p><Badge text="K" color="teal" /> <strong>Keep Calm</strong> Don't get defensive or immediately discount.</p>
+            <p><Badge text="L" color="teal" /> <strong>Listen</strong> Let them explain the full situation.</p>
+            <p><Badge text="A" color="teal" /> <strong>Acknowledge</strong> — "That's fair, price matters, especially when you're comparing suppliers."</p>
             <p><Badge text="P" color="teal" /> <strong>Probe</strong> — "Can you tell me more about what they're offering? Is it the same condition, same retailer source, manifested?"</p>
             <p><Badge text="D" color="teal" /> <strong>Define</strong> — "So the issue is the per-pallet price is higher, but we're comparing different conditions and sourcing levels?"</p>
-            <p><Badge text="O" color="teal" /> <strong>Overcome</strong> — "Here's the thing — our loads come directly from the retailer, no middleman. That means fresher inventory and more consistent quality. When you factor in the resale rate, the per-unit economics often come out ahead."</p>
+            <p><Badge text="O" color="teal" /> <strong>Overcome</strong> — "Here's the thing: our loads come directly from the retailer, no middleman. That means fresher inventory and more consistent quality. When you factor in the resale rate, the per-unit economics often come out ahead."</p>
             <p><Badge text="C" color="teal" /> <strong>Close</strong> — "Would it help if I pulled a manifest so you can compare item-for-item?"</p>
           </div>
         </div>
@@ -141,15 +141,44 @@ export function WhenPatientsPushBack() {
             Example: "I've been burned before by quality"
           </p>
           <div className="space-y-2 text-sm text-via-text">
-            <p><Badge text="K" color="teal" /> <strong>Keep Calm</strong> — This is a trust issue, not an attack.</p>
-            <p><Badge text="L" color="teal" /> <strong>Listen</strong> — Let them tell the full story of what happened.</p>
-            <p><Badge text="A" color="teal" /> <strong>Acknowledge</strong> — "I'm sorry that happened — bad experiences with quality are frustrating, especially when you've invested money."</p>
+            <p><Badge text="K" color="teal" /> <strong>Keep Calm</strong> This is a trust issue, not an attack.</p>
+            <p><Badge text="L" color="teal" /> <strong>Listen</strong> Let them tell the full story of what happened.</p>
+            <p><Badge text="A" color="teal" /> <strong>Acknowledge</strong> — "I'm sorry that happened. Bad experiences with quality are frustrating, especially when you've invested money."</p>
             <p><Badge text="P" color="teal" /> <strong>Probe</strong> — "Was it the condition of the items, the mix of categories, or something else?"</p>
             <p><Badge text="D" color="teal" /> <strong>Define</strong> — "So the core issue was buying unmanifested loads and not knowing what you were getting until it arrived?"</p>
             <p><Badge text="O" color="teal" /> <strong>Overcome</strong> — "Our manifested programs list every item before you buy — brands, quantities, retail values. You can review the manifest and only purchase if it fits. Plus, you're welcome to visit the warehouse and see merchandise in person before committing."</p>
             <p><Badge text="C" color="teal" /> <strong>Close</strong> — "Would you like me to send you a sample manifest so you can see the level of detail?"</p>
           </div>
         </div>
+      </div>
+
+      {/* Industry knowledge as a tool */}
+      <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6">
+        <h3 className="text-sm font-semibold text-via-navy uppercase tracking-wide mb-3">
+          Industry Knowledge Is Your Best Tool
+        </h3>
+        <p className="text-sm text-via-text leading-relaxed mb-4">
+          Many objections can be addressed simply by knowing the industry well. When a buyer says
+          "there's too much of one item in this load," someone without industry knowledge might get
+          stuck. But an expert can reframe the conversation:
+        </p>
+        <div className="bg-via-bg-subtle rounded-lg p-3 mb-4">
+          <p className="text-xs font-semibold text-via-text-light uppercase tracking-wide mb-1">
+            Example
+          </p>
+          <p className="text-sm text-via-text italic">
+            "There is a lot of that item, but the actual value of the load is in the other items.
+            That concentrated item is a small percentage of the total load value. The margin on the
+            rest more than makes up for it."
+          </p>
+        </div>
+        <p className="text-sm text-via-text leading-relaxed">
+          Similarly, when a load seems "more expensive" than what a buyer is used to, your knowledge
+          of the supply chain matters. If we hold a direct contract with consistent product, that
+          consistency has real value:{' '}
+          <em>"Some people would pay a premium for having something as consistent as this.
+          Especially in liquidation, where consistency is rare."</em>
+        </p>
       </div>
 
       {/* Picking battles */}

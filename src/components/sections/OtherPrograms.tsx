@@ -5,12 +5,32 @@ import {
   Wrench,
   ShoppingCart,
   Package,
+  Footprints,
+  Shirt,
 } from 'lucide-react'
 import { SectionWrapper } from '../shared/SectionWrapper'
 import { Badge } from '../shared/Badge'
 import { AdditionalResources } from '../shared/AdditionalResources'
 
 const otherPrograms = [
+  {
+    id: 'he-shoes',
+    name: "HE Designer Shoes",
+    icon: <Footprints className="w-4 h-4 text-via-text-light" />,
+    badge: { text: 'Manifested', color: 'emerald' },
+    description: "Assorted shelf-pull women's designer shoe lots from a major department store. About 90% designer brands and 10% well-known private label. Loads include boots, heels, sandals, flats, sneakers, wedges, and more. Manifested and sold as a percentage of retail value.",
+    price: 'From 8% of Retail ($720+)',
+    fob: 'CA-Los Angeles',
+  },
+  {
+    id: 'he-clothing',
+    name: "HE Designer Clothing",
+    icon: <Shirt className="w-4 h-4 text-via-text-light" />,
+    badge: { text: 'Manifested', color: 'emerald' },
+    description: "Shelf-pull women's designer clothing from a major department store. Mix of casual and formal wear across all seasons. Brands include Calvin Klein, GUESS, DKNY, Levi's, Jessica Simpson, Lucky Brand, BCBG, Anne Klein, and more. Loads typically available from 1 pallet and up.",
+    price: 'From 12% of Retail ($4,500+)',
+    fob: 'CA-Los Angeles',
+  },
   {
     id: 'costway',
     name: 'Costway',
@@ -34,7 +54,7 @@ const otherPrograms = [
     name: "Boscov's (BV)",
     icon: <ShoppingCart className="w-4 h-4 text-via-text-light" />,
     badge: { text: 'Manifested', color: 'emerald' },
-    description: 'Manifested department store merchandise at 9-12% of retail — among the lowest pricing models across all Via Trading programs.',
+    description: 'Manifested department store merchandise at 9-12% of retail - among the lowest pricing models across all Via Trading programs.',
     price: '9-12% of Retail',
     fob: 'Various US Locations',
   },
@@ -52,7 +72,7 @@ const otherPrograms = [
     name: 'THF Tools',
     icon: <Wrench className="w-4 h-4 text-via-text-light" />,
     badge: { text: 'Manifested', color: 'emerald' },
-    description: 'Manifested tools and hardware loads priced at 23% of retail. Export only — these loads are available exclusively for international export buyers. A specialty program for buyers focused on the tools category who operate outside the US.',
+    description: 'Manifested tools and hardware loads priced at 23% of retail. Export only - these loads are available exclusively for international export buyers. A specialty program for buyers focused on the tools category who operate outside the US.',
     price: '23% of Retail',
     fob: 'Various US Locations',
   },
@@ -113,7 +133,7 @@ export function OtherPrograms() {
       <div className="bg-via-orange/10 rounded-lg border border-via-orange/30 p-4 mb-0">
         <p className="text-sm text-orange-700 font-medium mb-1">Program Breadth</p>
         <p className="text-sm text-orange-700">
-          Via Trading's strength is breadth — whatever a buyer is looking for, there's likely a program that fits. From furniture and footwear to tools and department store goods, these specialty programs complement the major partnerships and ensure every buyer can find the right product at the right price point.
+          Via Trading's strength is breadth - whatever a buyer is looking for, there's likely a program that fits. From furniture and footwear to tools and department store goods, these specialty programs complement the major partnerships and ensure every buyer can find the right product at the right price point.
         </p>
       </div>
 
