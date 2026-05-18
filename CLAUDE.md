@@ -52,6 +52,7 @@ supabase/
     001_initial_schema.sql <- Full DB schema (tables, RLS, triggers, seed data)
     002_invitation_validation.sql <- validate_invitation_token() SECURITY DEFINER function
     003_compliance_tables.sql <- compliance_items + compliance_acknowledgements tables, RLS, seed data
+    004_announcement_lifecycle.sql <- status/scheduled_at/departments/updated_at/updated_by on compliance_items, audit_log table
 public/
   images/           <- All images (hero images, inline images, logos)
 .env.local          <- Supabase credentials (VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY)
@@ -65,7 +66,7 @@ public/
 - **Anon Key**: Stored in `.env.local` as `VITE_SUPABASE_ANON_KEY`
 - `.env.local` is gitignored via `*.local` pattern
 
-### Database Schema (8 tables)
+### Database Schema (9 tables)
 
 | Table | Purpose | Key Fields |
 |-------|---------|------------|
@@ -75,8 +76,9 @@ public/
 | `module_progress` | Per-module completion tracking | `user_id`, `course_id`, `module_id`, `status`, `score` |
 | `invitations` | Invite-only signup tokens | `email`, `role`, `team_id`, `invited_by`, `token`, `expires_at` |
 | `content_requests` | Leadership content change requests | `requested_by`, `title`, `description`, `status`, `reviewed_by` |
-| `compliance_items` | Announcements/compliance items (seed + admin-created) | `id` (text PK), `title`, `description`, `details`, `priority`, `is_seed`, `created_by` |
+| `compliance_items` | Announcements/compliance items (seed + admin-created) | `id`, `title`, `description`, `details`, `priority`, `is_seed`, `status`, `scheduled_at`, `departments[]`, `updated_at`, `updated_by` |
 | `compliance_acknowledgements` | Who acknowledged which item | `item_id` (FK), `user_id` (FK), `acknowledged_at`, UNIQUE(item_id, user_id) |
+| `audit_log` | Admin action tracking | `actor_id`, `action`, `entity_type`, `entity_id`, `entity_title`, `details` (jsonb) |
 
 ### Roles & Permissions
 
@@ -146,7 +148,7 @@ interface Database {
 }
 ```
 
-Convenience aliases: `Profile`, `Team`, `CourseAssignment`, `ModuleProgressRow`, `Invitation`, `ContentRequest`, `ComplianceItemRow`, `ComplianceAcknowledgementRow`
+Convenience aliases: `Profile`, `Team`, `CourseAssignment`, `ModuleProgressRow`, `Invitation`, `ContentRequest`, `ComplianceItemRow`, `ComplianceAcknowledgementRow`, `AuditLogRow`
 
 ### Bootstrap / First Admin
 
@@ -418,15 +420,21 @@ interface CourseModule {
 - **AuthContext is async** — `loading` must be checked before accessing `user`. The `ProtectedRoute` and `AppRoutes` in App.tsx handle this with a `LoadingScreen`.
 - **AuthContext deadlock risk** — Never do async work inside `onAuthStateChange` callback. Supabase v2's internal auth lock will deadlock. Capture state synchronously, fetch data in a separate `useEffect`. See three-state pattern: `authUserId: string | null | undefined`.
 - **ProgressContext uses Supabase** — Migrated from localStorage to `module_progress` table with optimistic updates and upsert on `user_id,course_id,module_id`.
-- **ComplianceContext uses Supabase** — Migrated from localStorage to `compliance_items` + `compliance_acknowledgements` tables with optimistic updates and rollback. Seed items protected via `is_seed` flag. `acknowledgedBy` stores user IDs (UUIDs), not emails.
+- **ComplianceContext uses Supabase** — Migrated from localStorage to `compliance_items` + `compliance_acknowledgements` tables with optimistic updates and rollback. Seed items protected via `is_seed` flag. `acknowledgedBy` stores user IDs (UUIDs), not emails. Supports full lifecycle: draft/scheduled/live/archived statuses. `updateItem` for editing, `logAudit` for tracking actions. Regular users only see `status='live'` via RLS.
 - **Compliance seed data lives in DB** — The old `src/data/compliance.ts` was deleted. Seed items are inserted via migration 003 with `ON CONFLICT DO NOTHING`.
 - **Supabase Auth URLs** — Site URL and redirect URL configured for Vercel production domain. Update these if the domain changes.
 - **Module gating** — Regular users can only access modules sequentially (previous must be completed). Quiz modules hide the "Continue" button, forcing quiz completion. Admins and leadership (`isAdmin || isLeadership`) bypass all gating. Logic in `ModuleList.tsx` and `ModuleView.tsx`.
 - **Admin tabs merged** — "Announcements" and "Compliance" are now one tab (`ComplianceManager.tsx`). Old `AnnouncementManager.tsx` and `ComplianceTracker.tsx` are still in the repo but no longer imported from Admin.tsx.
 - **Responsive sidebar** — AppShell uses `window.innerWidth` tracking with breakpoints: `<768px` = mobile hamburger, `768-1024px` = auto-collapsed (icon-only), `>1024px` = user-togglable expanded/collapsed. Content always has margin matching sidebar width.
+- **Announcement lifecycle** — Announcements support draft/scheduled/live/archived statuses. ComplianceManager has status tab navigation. Edit modal for updating announcements. Multi-checkbox department targeting. Scheduled publish date. Audit log tracks all admin actions.
+- **Search in admin tables** — UserProgressTable and ManageUsers both have search bars filtering by name or email.
+- **Program stats** — CourseStats shows a Program Overview table above the per-course table, with enrolled/completed/avg progress.
+- **Audit log** — `audit_log` table with RLS (admins read, all insert own actions). ComplianceContext auto-logs create, update, status_change, delete actions.
 
 ## Pending Work
 
 - **Build AM Role Training course** (rough draft, same pattern as BDR)
 - **Code splitting** — Bundle is >1.2MB; consider dynamic imports for course section components
 - **Delete old admin components** — `AnnouncementManager.tsx` and `ComplianceTracker.tsx` are unused but still in repo
+- **Admin CMS** — Visual block editor (Notion-like) + code editor toggle for course content editing within the app (deferred)
+- **Color palette expansion** — Add tasteful, complementary colors beyond blue/orange for visual variety

@@ -10,6 +10,25 @@ interface LogEntry {
 
 const changelog: LogEntry[] = [
   {
+    version: '0.10.0',
+    date: '2026-05-18',
+    title: 'Announcement Lifecycle, Search, Program Stats, Audit Log',
+    changes: [
+      'Announcement lifecycle: draft, scheduled, live, and archived statuses with tab navigation.',
+      'Create announcements as drafts, schedule for later, or publish immediately.',
+      'Edit existing announcements with modal editor (title, description, details, priority, due date, departments).',
+      'Archive and republish announcements without deleting them.',
+      'Department targeting: multi-checkbox selector replaces single dropdown (Sales, Operations, Warehouse, Marketing, Management).',
+      'Schedule publish date with datetime picker for future announcements.',
+      'Search functionality added to User Progress admin tab (filter by name or email).',
+      'Search functionality added to Manage Users admin tab (filter by name or email).',
+      'Course Stats now includes Program Overview section with enrolled, completed, and average progress.',
+      'Audit log table tracks all admin actions on announcements (create, update, status change, delete).',
+      'DB migration 004: added status, scheduled_at, departments[], updated_at, updated_by to compliance_items; created audit_log table with RLS.',
+      'Regular users only see live announcements; admins see all statuses via RLS policy update.',
+    ],
+  },
+  {
     version: '0.9.0',
     date: '2026-05-18',
     title: 'Module Gating, Admin UX Overhaul, Responsive Sidebar',

@@ -47,6 +47,8 @@ export interface ModuleProgress {
   completedAt?: string
 }
 
+export type ComplianceStatus = 'draft' | 'scheduled' | 'live' | 'archived'
+
 export interface ComplianceItem {
   id: string
   title: string
@@ -55,8 +57,13 @@ export interface ComplianceItem {
   requiredBy: string
   priority: 'high' | 'medium'
   acknowledgedBy: string[]
-  createdBy?: string   // admin email (absent for seed items)
-  createdAt?: string   // ISO date string
+  createdBy?: string      // admin email (absent for seed items)
+  createdAt?: string      // ISO date string
+  status: ComplianceStatus
+  scheduledAt?: string    // ISO date string for scheduled publish
+  departments: string[]   // empty = all departments
+  updatedAt?: string      // ISO date string
+  updatedBy?: string      // admin email who last edited
 }
 
 // --- Existing content types ---

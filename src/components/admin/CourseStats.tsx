@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
-import { Loader2, X } from 'lucide-react'
+import { Loader2, X, BarChart3 } from 'lucide-react'
 import { courses } from '../../data/courses'
+import { programs } from '../../data/programs'
 import { supabase } from '../../lib/supabase'
 import type { Profile } from '../../types/database'
 
@@ -30,10 +31,21 @@ interface ComputedCourseStat {
   avgScore: number | null
 }
 
+interface ProgramStat {
+  programId: string
+  title: string
+  totalCourses: number
+  totalModules: number
+  enrolled: number            // users who started at least 1 course in program
+  completed: number           // users who completed ALL available courses in program
+  avgOverallProgress: number  // average % across enrolled users
+}
+
 const availableCourses = courses.filter((c) => c.status === 'available')
 
 export function CourseStats() {
   const [stats, setStats] = useState<ComputedCourseStat[]>([])
+  const [programStats, setProgramStats] = useState<ProgramStat[]>([])
   const [profiles, setProfiles] = useState<Map<string, string>>(new Map())
   const [loading, setLoading] = useState(true)
   const [popup, setPopup] = useState<PopupState | null>(null)
@@ -105,6 +117,62 @@ export function CourseStats() {
       })
 
       setStats(computed)
+
+      // Compute program-level stats
+      const pStats: ProgramStat[] = programs.map((program) => {
+        const programCourses = program.courseIds
+          .map((cid) => availableCourses.find((c) => c.id === cid))
+          .filter(Boolean) as typeof availableCourses
+        const totalModules = programCourses.reduce((sum, c) => sum + c.modules.length, 0)
+
+        // Find all unique users who have started at least 1 course in this program
+        const enrolledSet = new Set<string>()
+        for (const course of programCourses) {
+          const courseRows = rows.filter((r) => r.course_id === course.id)
+          for (const r of courseRows) enrolledSet.add(r.user_id)
+        }
+
+        // Completed = users who completed ALL modules across ALL available courses in the program
+        const completedSet = new Set<string>()
+        for (const userId of enrolledSet) {
+          let allComplete = true
+          for (const course of programCourses) {
+            const userCompleted = rows.filter(
+              (r) => r.user_id === userId && r.course_id === course.id && r.status === 'completed',
+            ).length
+            if (userCompleted < course.modules.length) {
+              allComplete = false
+              break
+            }
+          }
+          if (allComplete) completedSet.add(userId)
+        }
+
+        // Average overall progress for enrolled users
+        let avgProgress = 0
+        if (enrolledSet.size > 0) {
+          let totalProgress = 0
+          for (const userId of enrolledSet) {
+            const userCompleted = rows.filter(
+              (r) => r.user_id === userId && programCourses.some((c) => c.id === r.course_id) && r.status === 'completed',
+            ).length
+            totalProgress += totalModules > 0 ? (userCompleted / totalModules) * 100 : 0
+          }
+          avgProgress = Math.round(totalProgress / enrolledSet.size)
+        }
+
+        return {
+          programId: program.id,
+          title: program.title,
+          totalCourses: programCourses.length,
+          totalModules,
+          enrolled: enrolledSet.size,
+          completed: completedSet.size,
+          avgOverallProgress: avgProgress,
+        }
+      })
+
+      setProgramStats(pStats)
       setLoading(false)
     }
 
@@ -149,7 +217,73 @@ export function CourseStats() {
   }
 
   return (
-    <>
+    <div className="space-y-6">
+      {/* Program Overview */}
+      {programStats.length > 0 && (
+        <div>
+          <div className="flex items-center gap-2 mb-3">
+            <BarChart3 className="w-5 h-5 text-via-navy" />
+            <h3 className="text-sm font-semibold text-via-navy uppercase tracking-wide">
+              Program Overview
+            </h3>
+          </div>
+          <div className="bg-via-card rounded-xl border border-via-border overflow-hidden">
+            <table className="w-full">
+              <thead>
+                <tr className="bg-via-bg-subtle">
+                  <th className="text-left px-4 py-3 text-xs font-semibold text-via-text-light uppercase tracking-wide">
+                    Program
+                  </th>
+                  <th className="text-center px-4 py-3 text-xs font-semibold text-via-text-light uppercase tracking-wide">
+                    Courses
+                  </th>
+                  <th className="text-center px-4 py-3 text-xs font-semibold text-via-text-light uppercase tracking-wide">
+                    Modules
+                  </th>
+                  <th className="text-center px-4 py-3 text-xs font-semibold text-via-text-light uppercase tracking-wide">
+                    Enrolled
+                  </th>
+                  <th className="text-center px-4 py-3 text-xs font-semibold text-via-text-light uppercase tracking-wide">
+                    Completed
+                  </th>
+                  <th className="text-center px-4 py-3 text-xs font-semibold text-via-text-light uppercase tracking-wide">
+                    Avg Progress
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {programStats.map((ps) => (
+                  <tr
+                    key={ps.programId}
+                    className="border-b border-via-border last:border-b-0 hover:bg-via-card-hover transition-colors"
+                  >
+                    <td className="px-4 py-3">
+                      <span className="text-sm text-via-navy font-medium">{ps.title}</span>
+                    </td>
+                    <td className="px-4 py-3 text-center text-sm text-via-text">{ps.totalCourses}</td>
+                    <td className="px-4 py-3 text-center text-sm text-via-text">{ps.totalModules}</td>
+                    <td className="px-4 py-3 text-center text-sm font-semibold text-via-navy">{ps.enrolled}</td>
+                    <td className="px-4 py-3 text-center text-sm font-semibold text-via-navy">{ps.completed}</td>
+                    <td className="px-4 py-3 text-center">
+                      <span className={`text-sm font-semibold ${
+                        ps.avgOverallProgress >= 80
+                          ? 'text-via-success'
+                          : ps.avgOverallProgress >= 40
+                            ? 'text-via-warning'
+                            : 'text-via-text'
+                      }`}>
+                        {ps.enrolled > 0 ? `${ps.avgOverallProgress}%` : '--'}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* Course Stats */}
       <div className="bg-via-card rounded-xl border border-via-border overflow-hidden">
         <table className="w-full">
           <thead>
@@ -271,6 +405,6 @@ export function CourseStats() {
           </div>
         </div>
       )}
-    </>
+    </div>
   )
 }

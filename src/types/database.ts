@@ -223,6 +223,11 @@ export interface Database {
           created_by: string | null
           is_seed: boolean
           created_at: string
+          status: string
+          scheduled_at: string | null
+          departments: string[]
+          updated_at: string
+          updated_by: string | null
         }
         Insert: {
           id: string
@@ -234,6 +239,11 @@ export interface Database {
           created_by?: string | null
           is_seed?: boolean
           created_at?: string
+          status?: string
+          scheduled_at?: string | null
+          departments?: string[]
+          updated_at?: string
+          updated_by?: string | null
         }
         Update: {
           id?: string
@@ -245,6 +255,11 @@ export interface Database {
           created_by?: string | null
           is_seed?: boolean
           created_at?: string
+          status?: string
+          scheduled_at?: string | null
+          departments?: string[]
+          updated_at?: string
+          updated_by?: string | null
         }
         Relationships: []
       }
@@ -273,6 +288,47 @@ export interface Database {
             columns: ['item_id']
             isOneToOne: false
             referencedRelation: 'compliance_items'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      audit_log: {
+        Row: {
+          id: string
+          actor_id: string
+          action: string
+          entity_type: string
+          entity_id: string
+          entity_title: string | null
+          details: Record<string, unknown>
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          actor_id: string
+          action: string
+          entity_type: string
+          entity_id: string
+          entity_title?: string | null
+          details?: Record<string, unknown>
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          actor_id?: string
+          action?: string
+          entity_type?: string
+          entity_id?: string
+          entity_title?: string | null
+          details?: Record<string, unknown>
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'audit_log_actor_id_fkey'
+            columns: ['actor_id']
+            isOneToOne: false
+            referencedRelation: 'profiles'
             referencedColumns: ['id']
           },
         ]
@@ -372,3 +428,4 @@ export type Invitation = Database['public']['Tables']['invitations']['Row']
 export type ContentRequest = Database['public']['Tables']['content_requests']['Row']
 export type ComplianceItemRow = Database['public']['Tables']['compliance_items']['Row']
 export type ComplianceAcknowledgementRow = Database['public']['Tables']['compliance_acknowledgements']['Row']
+export type AuditLogRow = Database['public']['Tables']['audit_log']['Row']

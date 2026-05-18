@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   ArrowUpDown,
@@ -7,6 +7,7 @@ import {
   X,
   Loader2,
   ExternalLink,
+  Search,
 } from 'lucide-react'
 import { supabase } from '../../lib/supabase'
 import type { Profile, Team } from '../../types/database'
@@ -39,6 +40,7 @@ export function ManageUsers() {
   const [editTeamId, setEditTeamId] = useState<string | null>(null)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
+  const [search, setSearch] = useState('')
 
   const loadData = useCallback(async () => {
     const [usersRes, teamsRes] = await Promise.all([
@@ -117,7 +119,17 @@ export function ManageUsers() {
     setSaving(false)
   }
 
-  const sorted = [...users].sort((a, b) => {
+  const filtered = useMemo(() => {
+    if (!search.trim()) return users
+    const q = search.toLowerCase()
+    return users.filter(
+      (u) =>
+        u.full_name.toLowerCase().includes(q) ||
+        u.email.toLowerCase().includes(q),
+    )
+  }, [users, search])
+
+  const sorted = [...filtered].sort((a, b) => {
     const mul = sortDir === 'asc' ? 1 : -1
     switch (sortKey) {
       case 'full_name':
@@ -169,10 +181,32 @@ export function ManageUsers() {
         </p>
       )}
 
+      {/* Search bar */}
+      <div className="relative">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-via-text-light" />
+        <input
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search by name or email..."
+          className="w-full pl-10 pr-9 py-2.5 rounded-lg border border-via-border bg-white text-sm text-via-text placeholder:text-via-text-light/50 focus:outline-none focus:ring-2 focus:ring-via-orange/30 focus:border-via-orange"
+        />
+        {search && (
+          <button
+            onClick={() => setSearch('')}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-via-text-light hover:text-via-text cursor-pointer"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        )}
+      </div>
+
       <div className="bg-via-card rounded-xl border border-via-border overflow-hidden">
         <div className="px-4 py-3 border-b border-via-border flex items-center justify-between">
           <p className="text-sm font-semibold text-via-navy">
-            {users.length} user{users.length !== 1 ? 's' : ''}
+            {filtered.length === users.length
+              ? `${users.length} user${users.length !== 1 ? 's' : ''}`
+              : `${filtered.length} of ${users.length} users`}
           </p>
           <p className="text-xs text-via-text-light">
             Click a row to view profile

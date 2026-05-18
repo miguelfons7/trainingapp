@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from 'react'
-import { ArrowUpDown, Loader2, ExternalLink } from 'lucide-react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
+import { ArrowUpDown, Loader2, ExternalLink, Search, X } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { ProgressBar } from '../shared/ProgressBar'
 import { supabase } from '../../lib/supabase'
@@ -41,6 +41,7 @@ export function UserProgressTable() {
   const [loading, setLoading] = useState(true)
   const [sortKey, setSortKey] = useState<SortKey>('name')
   const [sortDir, setSortDir] = useState<SortDir>('asc')
+  const [search, setSearch] = useState('')
 
   const loadData = useCallback(async () => {
     const [profilesRes, progressRes] = await Promise.all([
@@ -128,7 +129,17 @@ export function UserProgressTable() {
     }
   }
 
-  const sorted = [...users].sort((a, b) => {
+  const filtered = useMemo(() => {
+    if (!search.trim()) return users
+    const q = search.toLowerCase()
+    return users.filter(
+      (u) =>
+        u.name.toLowerCase().includes(q) ||
+        u.email.toLowerCase().includes(q),
+    )
+  }, [users, search])
+
+  const sorted = [...filtered].sort((a, b) => {
     const mul = sortDir === 'asc' ? 1 : -1
     const av = a[sortKey]
     const bv = b[sortKey]
@@ -154,10 +165,33 @@ export function UserProgressTable() {
   }
 
   return (
-    <div className="bg-via-card rounded-xl border border-via-border overflow-hidden">
+    <div className="space-y-4">
+      {/* Search bar */}
+      <div className="relative">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-via-text-light" />
+        <input
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search by name or email..."
+          className="w-full pl-10 pr-9 py-2.5 rounded-lg border border-via-border bg-white text-sm text-via-text placeholder:text-via-text-light/50 focus:outline-none focus:ring-2 focus:ring-via-orange/30 focus:border-via-orange"
+        />
+        {search && (
+          <button
+            onClick={() => setSearch('')}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-via-text-light hover:text-via-text cursor-pointer"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        )}
+      </div>
+
+      <div className="bg-via-card rounded-xl border border-via-border overflow-hidden">
       <div className="px-4 py-3 border-b border-via-border">
         <p className="text-sm font-semibold text-via-navy">
-          {users.length} user{users.length !== 1 ? 's' : ''}
+          {filtered.length === users.length
+            ? `${users.length} user${users.length !== 1 ? 's' : ''}`
+            : `${filtered.length} of ${users.length} users`}
         </p>
       </div>
       <div className="overflow-x-auto">
@@ -227,6 +261,7 @@ export function UserProgressTable() {
           </tbody>
         </table>
       </div>
+    </div>
     </div>
   )
 }

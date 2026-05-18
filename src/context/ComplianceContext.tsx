@@ -6,7 +6,7 @@ import {
   useCallback,
   type ReactNode,
 } from 'react'
-import type { ComplianceItem } from '../types'
+import type { ComplianceItem, ComplianceStatus } from '../types'
 import { useAuth } from './AuthContext'
 import { supabase } from '../lib/supabase'
 
@@ -15,12 +15,16 @@ interface ComplianceContextValue {
   pendingItems: ComplianceItem[]
   acknowledgeItem: (itemId: string) => void
   isAcknowledged: (itemId: string) => boolean
-  /** Admin only: create a new announcement visible to all users */
-  createItem: (item: Omit<ComplianceItem, 'id' | 'acknowledgedBy' | 'createdAt'>) => void
+  /** Admin only: create a new announcement */
+  createItem: (item: Omit<ComplianceItem, 'id' | 'acknowledgedBy' | 'createdAt' | 'updatedAt' | 'updatedBy'>) => void
+  /** Admin only: update an existing announcement */
+  updateItem: (itemId: string, updates: Partial<Pick<ComplianceItem, 'title' | 'description' | 'details' | 'priority' | 'requiredBy' | 'status' | 'scheduledAt' | 'departments'>>) => void
   /** Admin only: delete a custom announcement (seed items cannot be deleted) */
   deleteItem: (itemId: string) => void
   /** Returns true if the item was created by an admin (not a seed item) */
   isCustomItem: (itemId: string) => boolean
+  /** Log an action to the audit trail */
+  logAudit: (action: string, entityType: string, entityId: string, entityTitle?: string, details?: Record<string, unknown>) => void
 }
 
 const ComplianceContext = createContext<ComplianceContextValue | undefined>(
@@ -28,7 +32,7 @@ const ComplianceContext = createContext<ComplianceContextValue | undefined>(
 )
 
 export function ComplianceProvider({ children }: { children: ReactNode }) {
-  const { user } = useAuth()
+  const { user, isAdmin } = useAuth()
   const [items, setItems] = useState<ComplianceItem[]>([])
   const [seedIds, setSeedIds] = useState<Set<string>>(new Set())
 
@@ -39,7 +43,7 @@ export function ComplianceProvider({ children }: { children: ReactNode }) {
     if (!user) return
 
     async function load() {
-      // Fetch items
+      // Fetch items — RLS filters: users see only 'live', admins see all
       const { data: itemRows } = await supabase
         .from('compliance_items')
         .select('*')
@@ -63,18 +67,20 @@ export function ComplianceProvider({ children }: { children: ReactNode }) {
         acksByItem[ack.item_id].push(ack.user_id)
       }
 
-      // Resolve creator names for non-seed items
-      const creatorIds = itemRows
-        .filter((r) => r.created_by && !r.is_seed)
-        .map((r) => r.created_by!)
-      let creatorMap: Record<string, string> = {}
-      if (creatorIds.length > 0) {
-        const { data: creators } = await supabase
+      // Resolve creator and updater names for non-seed items
+      const personIds = new Set<string>()
+      for (const r of itemRows) {
+        if (r.created_by && !r.is_seed) personIds.add(r.created_by)
+        if (r.updated_by) personIds.add(r.updated_by)
+      }
+      let personMap: Record<string, string> = {}
+      if (personIds.size > 0) {
+        const { data: people } = await supabase
           .from('profiles')
           .select('id, email')
-          .in('id', creatorIds)
-        creators?.forEach((c) => {
-          creatorMap[c.id] = c.email
+          .in('id', [...personIds])
+        people?.forEach((c) => {
+          personMap[c.id] = c.email
         })
       }
 
@@ -87,8 +93,13 @@ export function ComplianceProvider({ children }: { children: ReactNode }) {
         requiredBy: row.required_by,
         priority: row.priority as 'high' | 'medium',
         acknowledgedBy: acksByItem[row.id] ?? [],
-        createdBy: row.created_by ? creatorMap[row.created_by] : undefined,
+        createdBy: row.created_by ? personMap[row.created_by] : undefined,
         createdAt: row.created_at,
+        status: (row.status || 'live') as ComplianceStatus,
+        scheduledAt: row.scheduled_at ?? undefined,
+        departments: row.departments ?? [],
+        updatedAt: row.updated_at,
+        updatedBy: row.updated_by ? personMap[row.updated_by] : undefined,
       }))
 
       setItems(mapped)
@@ -105,8 +116,29 @@ export function ComplianceProvider({ children }: { children: ReactNode }) {
     [items, userId],
   )
 
+  // For regular users, only show live items as pending
   const pendingItems = items.filter(
-    (item) => !item.acknowledgedBy.includes(userId),
+    (item) => item.status === 'live' && !item.acknowledgedBy.includes(userId),
+  )
+
+  const logAudit = useCallback(
+    (action: string, entityType: string, entityId: string, entityTitle?: string, details?: Record<string, unknown>) => {
+      if (!userId) return
+      supabase
+        .from('audit_log')
+        .insert({
+          actor_id: userId,
+          action,
+          entity_type: entityType,
+          entity_id: entityId,
+          entity_title: entityTitle ?? null,
+          details: details ?? {},
+        })
+        .then(() => {
+          // Fire and forget — audit failures shouldn't block the UI
+        })
+    },
+    [userId],
   )
 
   const acknowledgeItem = useCallback(
@@ -151,7 +183,7 @@ export function ComplianceProvider({ children }: { children: ReactNode }) {
 
   const createItem = useCallback(
     (
-      itemData: Omit<ComplianceItem, 'id' | 'acknowledgedBy' | 'createdAt'>,
+      itemData: Omit<ComplianceItem, 'id' | 'acknowledgedBy' | 'createdAt' | 'updatedAt' | 'updatedBy'>,
     ) => {
       const newId = `custom-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`
 
@@ -161,6 +193,7 @@ export function ComplianceProvider({ children }: { children: ReactNode }) {
         id: newId,
         acknowledgedBy: [],
         createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       }
       setItems((prev) => [optimistic, ...prev])
 
@@ -176,15 +209,95 @@ export function ComplianceProvider({ children }: { children: ReactNode }) {
           priority: itemData.priority,
           created_by: userId || null,
           is_seed: false,
+          status: itemData.status || 'live',
+          scheduled_at: itemData.scheduledAt ?? null,
+          departments: itemData.departments ?? [],
+          updated_by: userId || null,
         })
         .then(({ error }) => {
           if (error) {
             // Rollback
             setItems((prev) => prev.filter((i) => i.id !== newId))
+          } else {
+            logAudit('create', 'announcement', newId, itemData.title, {
+              status: itemData.status || 'live',
+              priority: itemData.priority,
+            })
           }
         })
     },
-    [userId],
+    [userId, logAudit],
+  )
+
+  const updateItem = useCallback(
+    (itemId: string, updates: Partial<Pick<ComplianceItem, 'title' | 'description' | 'details' | 'priority' | 'requiredBy' | 'status' | 'scheduledAt' | 'departments'>>) => {
+      // Don't allow editing seed items (except status changes like archive)
+      const isSeed = seedIds.has(itemId)
+      if (isSeed && updates.title) return
+
+      // Capture old item for rollback + audit
+      const oldItem = items.find((i) => i.id === itemId)
+      if (!oldItem) return
+
+      // Optimistic update
+      setItems((prev) =>
+        prev.map((item) => {
+          if (item.id === itemId) {
+            return {
+              ...item,
+              ...updates,
+              updatedAt: new Date().toISOString(),
+              updatedBy: user?.email,
+            }
+          }
+          return item
+        }),
+      )
+
+      // Build DB update object
+      const dbUpdates: Record<string, unknown> = {
+        updated_at: new Date().toISOString(),
+        updated_by: userId || null,
+      }
+      if (updates.title !== undefined) dbUpdates.title = updates.title
+      if (updates.description !== undefined) dbUpdates.description = updates.description
+      if (updates.details !== undefined) dbUpdates.details = updates.details
+      if (updates.priority !== undefined) dbUpdates.priority = updates.priority
+      if (updates.requiredBy !== undefined) dbUpdates.required_by = updates.requiredBy
+      if (updates.status !== undefined) dbUpdates.status = updates.status
+      if (updates.scheduledAt !== undefined) dbUpdates.scheduled_at = updates.scheduledAt || null
+      if (updates.departments !== undefined) dbUpdates.departments = updates.departments
+
+      // Persist to Supabase
+      supabase
+        .from('compliance_items')
+        .update(dbUpdates)
+        .eq('id', itemId)
+        .then(({ error }) => {
+          if (error) {
+            // Rollback to old item
+            setItems((prev) =>
+              prev.map((item) => (item.id === itemId ? oldItem : item)),
+            )
+          } else {
+            // Log what changed
+            const changedFields: Record<string, { old: unknown; new: unknown }> = {}
+            if (updates.title !== undefined && updates.title !== oldItem.title)
+              changedFields.title = { old: oldItem.title, new: updates.title }
+            if (updates.status !== undefined && updates.status !== oldItem.status)
+              changedFields.status = { old: oldItem.status, new: updates.status }
+            if (updates.priority !== undefined && updates.priority !== oldItem.priority)
+              changedFields.priority = { old: oldItem.priority, new: updates.priority }
+
+            const action = updates.status && updates.status !== oldItem.status
+              ? 'status_change'
+              : 'update'
+
+            logAudit(action, 'announcement', itemId, oldItem.title, { changes: changedFields })
+          }
+        })
+    },
+    [seedIds, items, userId, user?.email, logAudit],
   )
 
   const deleteItem = useCallback(
@@ -208,10 +321,12 @@ export function ComplianceProvider({ children }: { children: ReactNode }) {
           if (error) {
             // Rollback
             setItems((prev) => [...prev, deletedItem])
+          } else {
+            logAudit('delete', 'announcement', itemId, deletedItem.title)
           }
         })
     },
-    [seedIds, items],
+    [seedIds, items, logAudit],
   )
 
   const isCustomItem = useCallback(
@@ -227,8 +342,10 @@ export function ComplianceProvider({ children }: { children: ReactNode }) {
         acknowledgeItem,
         isAcknowledged,
         createItem,
+        updateItem,
         deleteItem,
         isCustomItem,
+        logAudit,
       }}
     >
       {children}
