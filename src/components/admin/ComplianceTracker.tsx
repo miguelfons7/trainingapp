@@ -48,9 +48,9 @@ export function ComplianceTracker() {
         const isOpen = expanded[item.id] ?? false
         const isHigh = item.priority === 'high'
 
-        const acknowledgedEmails = new Set(item.acknowledgedBy)
-        const acknowledgedUsers = profiles.filter((u) => acknowledgedEmails.has(u.email))
-        const pendingUsers = profiles.filter((u) => !acknowledgedEmails.has(u.email))
+        const acknowledgedIds = new Set(item.acknowledgedBy)
+        const acknowledgedUsers = profiles.filter((u) => acknowledgedIds.has(u.id))
+        const pendingUsers = profiles.filter((u) => !acknowledgedIds.has(u.id))
 
         return (
           <div key={item.id} className="bg-via-card rounded-xl p-6 border border-via-border">

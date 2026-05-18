@@ -10,6 +10,23 @@ interface LogEntry {
 
 const changelog: LogEntry[] = [
   {
+    version: '0.8.2',
+    date: '2026-05-18',
+    title: 'Compliance Migration to Supabase, Auth URL Configuration',
+    changes: [
+      'Migrated ComplianceContext from localStorage to Supabase: compliance_items + compliance_acknowledgements tables',
+      'Created migration 003: compliance tables with RLS policies, seed data, and CASCADE deletes',
+      'Acknowledgements now stored per-user in Supabase (no longer browser-specific)',
+      'Admin-created announcements persist in Supabase with proper RLS (admins create/delete, users read)',
+      'Seed items (system announcements) are protected from deletion via is_seed flag',
+      'Optimistic updates with rollback on all compliance operations (acknowledge, create, delete)',
+      'User Profile now shows acknowledgement data for all users (not just own profile)',
+      'ComplianceTracker admin view matches on user IDs instead of emails',
+      'Updated Supabase Auth: Site URL and Redirect URL set to Vercel production domain',
+      'Deleted localStorage seed data file (data/compliance.ts), all data now in Supabase',
+    ],
+  },
+  {
     version: '0.8.1',
     date: '2026-05-18',
     title: 'Remove Mock Data, Migrate Admin Tabs to Supabase, Vercel Deployment',

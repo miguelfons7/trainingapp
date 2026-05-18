@@ -2,12 +2,13 @@ import {
   createContext,
   useContext,
   useState,
+  useEffect,
   useCallback,
   type ReactNode,
 } from 'react'
 import type { ComplianceItem } from '../types'
-import { complianceItems as seedItems } from '../data/compliance'
 import { useAuth } from './AuthContext'
+import { supabase } from '../lib/supabase'
 
 interface ComplianceContextValue {
   items: ComplianceItem[]
@@ -26,141 +27,196 @@ const ComplianceContext = createContext<ComplianceContextValue | undefined>(
   undefined,
 )
 
-/**
- * DEV-ONLY: Compliance data is stored in localStorage.
- *
- * - Seed items come from data/compliance.ts (hardcoded, ship with the app).
- * - Admin-created announcements are stored in CUSTOM_KEY.
- * - Acknowledgements are tracked per-item (acknowledgedBy array stores emails),
- *   which naturally scopes them per-user even on the same browser.
- */
-const CUSTOM_KEY = 'via-academy-custom-announcements'
-const ACK_KEY = 'via-academy-compliance-acks'
-
-/** Seed item IDs (these cannot be deleted by admins) */
-const SEED_IDS = new Set(seedItems.map((i) => i.id))
-
-function loadCustomItems(): ComplianceItem[] {
-  try {
-    const stored = localStorage.getItem(CUSTOM_KEY)
-    return stored ? (JSON.parse(stored) as ComplianceItem[]) : []
-  } catch {
-    return []
-  }
-}
-
-function saveCustomItems(items: ComplianceItem[]): void {
-  localStorage.setItem(CUSTOM_KEY, JSON.stringify(items))
-}
-
-function loadAcks(): Record<string, string[]> {
-  try {
-    const stored = localStorage.getItem(ACK_KEY)
-    return stored ? (JSON.parse(stored) as Record<string, string[]>) : {}
-  } catch {
-    return {}
-  }
-}
-
-function saveAcks(acks: Record<string, string[]>): void {
-  localStorage.setItem(ACK_KEY, JSON.stringify(acks))
-}
-
-/** Merge seed items + custom items, applying stored acknowledgements */
-function buildItemList(): ComplianceItem[] {
-  const custom = loadCustomItems()
-  const acks = loadAcks()
-  const all = [...seedItems, ...custom]
-  return all.map((item) => ({
-    ...item,
-    acknowledgedBy: acks[item.id] ?? item.acknowledgedBy ?? [],
-  }))
-}
-
 export function ComplianceProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth()
-  const [items, setItems] = useState<ComplianceItem[]>(buildItemList)
+  const [items, setItems] = useState<ComplianceItem[]>([])
+  const [seedIds, setSeedIds] = useState<Set<string>>(new Set())
 
-  const userEmail = user?.email ?? ''
+  const userId = user?.id ?? ''
+
+  // Fetch all compliance items + acknowledgements from Supabase
+  useEffect(() => {
+    if (!user) return
+
+    async function load() {
+      // Fetch items
+      const { data: itemRows } = await supabase
+        .from('compliance_items')
+        .select('*')
+        .order('created_at', { ascending: false })
+
+      // Fetch all acknowledgements
+      const { data: ackRows } = await supabase
+        .from('compliance_acknowledgements')
+        .select('item_id, user_id')
+
+      if (!itemRows) return
+
+      // Track seed IDs
+      const seeds = new Set(itemRows.filter((r) => r.is_seed).map((r) => r.id))
+      setSeedIds(seeds)
+
+      // Group acks by item_id
+      const acksByItem: Record<string, string[]> = {}
+      for (const ack of ackRows ?? []) {
+        if (!acksByItem[ack.item_id]) acksByItem[ack.item_id] = []
+        acksByItem[ack.item_id].push(ack.user_id)
+      }
+
+      // Resolve creator names for non-seed items
+      const creatorIds = itemRows
+        .filter((r) => r.created_by && !r.is_seed)
+        .map((r) => r.created_by!)
+      let creatorMap: Record<string, string> = {}
+      if (creatorIds.length > 0) {
+        const { data: creators } = await supabase
+          .from('profiles')
+          .select('id, email')
+          .in('id', creatorIds)
+        creators?.forEach((c) => {
+          creatorMap[c.id] = c.email
+        })
+      }
+
+      // Map to ComplianceItem shape
+      const mapped: ComplianceItem[] = itemRows.map((row) => ({
+        id: row.id,
+        title: row.title,
+        description: row.description,
+        details: row.details,
+        requiredBy: row.required_by,
+        priority: row.priority as 'high' | 'medium',
+        acknowledgedBy: acksByItem[row.id] ?? [],
+        createdBy: row.created_by ? creatorMap[row.created_by] : undefined,
+        createdAt: row.created_at,
+      }))
+
+      setItems(mapped)
+    }
+
+    load()
+  }, [user])
 
   const isAcknowledged = useCallback(
     (itemId: string): boolean => {
       const item = items.find((i) => i.id === itemId)
-      return item ? item.acknowledgedBy.includes(userEmail) : false
+      return item ? item.acknowledgedBy.includes(userId) : false
     },
-    [items, userEmail],
+    [items, userId],
   )
 
   const pendingItems = items.filter(
-    (item) => !item.acknowledgedBy.includes(userEmail),
+    (item) => !item.acknowledgedBy.includes(userId),
   )
 
   const acknowledgeItem = useCallback(
     (itemId: string) => {
-      if (!userEmail) return
-      setItems((prev) => {
-        const next = prev.map((item) => {
-          if (
-            item.id === itemId &&
-            !item.acknowledgedBy.includes(userEmail)
-          ) {
-            return {
-              ...item,
-              acknowledgedBy: [...item.acknowledgedBy, userEmail],
-            }
+      if (!userId) return
+
+      // Optimistic update
+      setItems((prev) =>
+        prev.map((item) => {
+          if (item.id === itemId && !item.acknowledgedBy.includes(userId)) {
+            return { ...item, acknowledgedBy: [...item.acknowledgedBy, userId] }
           }
           return item
-        })
-        // Persist acknowledgements
-        const acks: Record<string, string[]> = {}
-        next.forEach((item) => {
-          if (item.acknowledgedBy.length > 0) {
-            acks[item.id] = item.acknowledgedBy
+        }),
+      )
+
+      // Persist to Supabase
+      supabase
+        .from('compliance_acknowledgements')
+        .insert({ item_id: itemId, user_id: userId })
+        .then(({ error }) => {
+          if (error) {
+            // Rollback on error
+            setItems((prev) =>
+              prev.map((item) => {
+                if (item.id === itemId) {
+                  return {
+                    ...item,
+                    acknowledgedBy: item.acknowledgedBy.filter(
+                      (id) => id !== userId,
+                    ),
+                  }
+                }
+                return item
+              }),
+            )
           }
         })
-        saveAcks(acks)
-        return next
-      })
     },
-    [userEmail],
+    [userId],
   )
 
   const createItem = useCallback(
     (
       itemData: Omit<ComplianceItem, 'id' | 'acknowledgedBy' | 'createdAt'>,
     ) => {
-      const newItem: ComplianceItem = {
+      const newId = `custom-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`
+
+      // Optimistic update
+      const optimistic: ComplianceItem = {
         ...itemData,
-        id: `custom-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+        id: newId,
         acknowledgedBy: [],
         createdAt: new Date().toISOString(),
       }
-      // Save to custom items storage
-      const customItems = loadCustomItems()
-      customItems.push(newItem)
-      saveCustomItems(customItems)
-      // Update state
-      setItems((prev) => [...prev, newItem])
+      setItems((prev) => [optimistic, ...prev])
+
+      // Persist to Supabase
+      supabase
+        .from('compliance_items')
+        .insert({
+          id: newId,
+          title: itemData.title,
+          description: itemData.description,
+          details: itemData.details,
+          required_by: itemData.requiredBy,
+          priority: itemData.priority,
+          created_by: userId || null,
+          is_seed: false,
+        })
+        .then(({ error }) => {
+          if (error) {
+            // Rollback
+            setItems((prev) => prev.filter((i) => i.id !== newId))
+          }
+        })
     },
-    [],
+    [userId],
   )
 
-  const deleteItem = useCallback((itemId: string) => {
-    if (SEED_IDS.has(itemId)) return // Cannot delete seed items
-    // Remove from custom storage
-    const customItems = loadCustomItems().filter((i) => i.id !== itemId)
-    saveCustomItems(customItems)
-    // Remove acknowledgements for this item
-    const acks = loadAcks()
-    delete acks[itemId]
-    saveAcks(acks)
-    // Update state
-    setItems((prev) => prev.filter((i) => i.id !== itemId))
-  }, [])
+  const deleteItem = useCallback(
+    (itemId: string) => {
+      // Don't allow deleting seed items
+      if (seedIds.has(itemId)) return
+
+      // Capture for rollback
+      const deletedItem = items.find((i) => i.id === itemId)
+      if (!deletedItem) return
+
+      // Optimistic removal
+      setItems((prev) => prev.filter((i) => i.id !== itemId))
+
+      // Persist to Supabase (CASCADE deletes acknowledgements)
+      supabase
+        .from('compliance_items')
+        .delete()
+        .eq('id', itemId)
+        .then(({ error }) => {
+          if (error) {
+            // Rollback
+            setItems((prev) => [...prev, deletedItem])
+          }
+        })
+    },
+    [seedIds, items],
+  )
 
   const isCustomItem = useCallback(
-    (itemId: string): boolean => !SEED_IDS.has(itemId),
-    [],
+    (itemId: string): boolean => !seedIds.has(itemId),
+    [seedIds],
   )
 
   return (

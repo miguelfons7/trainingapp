@@ -151,10 +151,10 @@ export function UserProfile() {
     (cp) => cp.percentage === 100,
   )
 
-  // Acknowledgements (only available for own profile due to localStorage)
+  // Acknowledgements (stored in Supabase, visible for all profiles)
   const acknowledgedItems = isOwnProfile
     ? items.filter((item) => isAcknowledged(item.id))
-    : []
+    : items.filter((item) => item.acknowledgedBy.includes(targetUserId!))
 
   // Recent activity: last 10 completed modules sorted by date
   const recentActivity = [...completedModules]

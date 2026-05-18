@@ -212,6 +212,71 @@ export interface Database {
           },
         ]
       }
+      compliance_items: {
+        Row: {
+          id: string
+          title: string
+          description: string
+          details: string
+          required_by: string
+          priority: string
+          created_by: string | null
+          is_seed: boolean
+          created_at: string
+        }
+        Insert: {
+          id: string
+          title: string
+          description: string
+          details: string
+          required_by: string
+          priority?: string
+          created_by?: string | null
+          is_seed?: boolean
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          title?: string
+          description?: string
+          details?: string
+          required_by?: string
+          priority?: string
+          created_by?: string | null
+          is_seed?: boolean
+          created_at?: string
+        }
+        Relationships: []
+      }
+      compliance_acknowledgements: {
+        Row: {
+          id: string
+          item_id: string
+          user_id: string
+          acknowledged_at: string
+        }
+        Insert: {
+          id?: string
+          item_id: string
+          user_id: string
+          acknowledged_at?: string
+        }
+        Update: {
+          id?: string
+          item_id?: string
+          user_id?: string
+          acknowledged_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'compliance_acknowledgements_item_id_fkey'
+            columns: ['item_id']
+            isOneToOne: false
+            referencedRelation: 'compliance_items'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       content_requests: {
         Row: {
           id: string
@@ -305,3 +370,5 @@ export type CourseAssignment = Database['public']['Tables']['course_assignments'
 export type ModuleProgressRow = Database['public']['Tables']['module_progress']['Row']
 export type Invitation = Database['public']['Tables']['invitations']['Row']
 export type ContentRequest = Database['public']['Tables']['content_requests']['Row']
+export type ComplianceItemRow = Database['public']['Tables']['compliance_items']['Row']
+export type ComplianceAcknowledgementRow = Database['public']['Tables']['compliance_acknowledgements']['Row']
