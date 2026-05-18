@@ -3,6 +3,7 @@ import { AuthProvider, useAuth } from './context/AuthContext'
 import { ProgressProvider } from './context/ProgressContext'
 import { ComplianceProvider } from './context/ComplianceContext'
 import { ConstructionProvider } from './context/ConstructionContext'
+import { CoursesProvider } from './context/CoursesContext'
 import { AppShell } from './components/layout/AppShell'
 import { Login } from './pages/Login'
 import { Signup } from './pages/Signup'
@@ -83,7 +84,9 @@ function App() {
         <ProgressProvider>
           <ComplianceProvider>
             <ConstructionProvider>
-              <AppRoutes />
+              <CoursesProvider>
+                <AppRoutes />
+              </CoursesProvider>
             </ConstructionProvider>
           </ComplianceProvider>
         </ProgressProvider>

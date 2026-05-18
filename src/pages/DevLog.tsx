@@ -10,6 +10,26 @@ interface LogEntry {
 
 const changelog: LogEntry[] = [
   {
+    version: '0.13.0',
+    date: '2026-05-18',
+    title: 'Admin Course Management, User Editing, CMS Content Override',
+    changes: [
+      'New "Manage Courses" admin tab: full CRUD for programs, courses, and modules from the admin dashboard.',
+      'Create new courses with title, description, icon, status, estimated time, and image path.',
+      'Add, edit, and delete modules within any course — set title, time, content type, and description.',
+      'Create and manage training programs: select which courses to include and set program metadata.',
+      'CoursesContext: app-wide React context loads course/program data from Supabase (managed_courses, managed_modules, managed_programs tables).',
+      'DB migration 007: managed_courses, managed_modules, and managed_programs tables with RLS, triggers, and seed data matching existing courses.',
+      'Admin can now edit user name and email inline (previously only role and team were editable in Manage Users).',
+      'CMS content override: published CMS content now takes priority over built-in hardcoded module content.',
+      'Content Editor shows "Create CMS Override" for modules with built-in content, explaining that CMS takes priority once published.',
+      'Content Manager shows "Built-in" badge (blue) for hardcoded modules instead of "No CMS" — clearer distinction.',
+      'Deleted unused AnnouncementManager.tsx and ComplianceTracker.tsx to fix Vercel build errors.',
+      'Fixed TypeScript strict errors in ConstructionManager, CMS editors, ComplianceContext, and contentService that were blocking Vercel deployment.',
+      'Synced deploy branch with main — all versions from v0.10.0 through v0.13.0 now live on production.',
+    ],
+  },
+  {
     version: '0.12.0',
     date: '2026-05-18',
     title: 'Construction Status Manager + Acknowledgement Access',

@@ -472,6 +472,137 @@ export interface Database {
           },
         ]
       }
+      managed_courses: {
+        Row: {
+          id: string
+          title: string
+          description: string
+          icon: string
+          estimated_time: string
+          status: string
+          image_path: string | null
+          sort_order: number
+          created_by: string | null
+          updated_by: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id: string
+          title: string
+          description?: string
+          icon?: string
+          estimated_time?: string
+          status?: string
+          image_path?: string | null
+          sort_order?: number
+          created_by?: string | null
+          updated_by?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          title?: string
+          description?: string
+          icon?: string
+          estimated_time?: string
+          status?: string
+          image_path?: string | null
+          sort_order?: number
+          created_by?: string | null
+          updated_by?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      managed_modules: {
+        Row: {
+          id: string
+          course_id: string
+          title: string
+          estimated_time: string
+          content_type: string
+          description: string | null
+          sort_order: number
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id: string
+          course_id: string
+          title: string
+          estimated_time?: string
+          content_type?: string
+          description?: string | null
+          sort_order?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          course_id?: string
+          title?: string
+          estimated_time?: string
+          content_type?: string
+          description?: string | null
+          sort_order?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'managed_modules_course_id_fkey'
+            columns: ['course_id']
+            isOneToOne: false
+            referencedRelation: 'managed_courses'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      managed_programs: {
+        Row: {
+          id: string
+          title: string
+          description: string
+          course_ids: string[]
+          estimated_time: string
+          icon: string
+          sort_order: number
+          created_by: string | null
+          updated_by: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id: string
+          title: string
+          description?: string
+          course_ids?: string[]
+          estimated_time?: string
+          icon?: string
+          sort_order?: number
+          created_by?: string | null
+          updated_by?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          title?: string
+          description?: string
+          course_ids?: string[]
+          estimated_time?: string
+          icon?: string
+          sort_order?: number
+          created_by?: string | null
+          updated_by?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       construction_overrides: {
         Row: {
           id: string

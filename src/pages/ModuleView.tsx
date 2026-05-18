@@ -158,11 +158,10 @@ export function ModuleView() {
   const isModuleConstruction = moduleId ? isUnderConstruction('module', moduleId) : false
   const moduleConstructionMsg = moduleId ? getConstructionMessage('module', moduleId) : null
 
-  // CMS content — only fetched if no hardcoded component exists
-  const hasHardcoded = moduleId ? !!contentMap[moduleId] : false
+  // CMS content — always fetched for non-quiz modules (published CMS overrides hardcoded)
   const isQuizModule = moduleId ? quizModules.has(moduleId) : false
-  const shouldFetchCms = !hasHardcoded && !isQuizModule
-  const { content: cmsContent, loading: cmsLoading } = useModuleContent(
+  const shouldFetchCms = !isQuizModule
+  const { content: cmsContent, loading: cmsLoading, isPublished: cmsIsPublished } = useModuleContent(
     shouldFetchCms ? courseId : undefined,
     shouldFetchCms ? moduleId : undefined,
     user?.id,
@@ -297,13 +296,18 @@ export function ModuleView() {
         <div className="mb-8">
           {isQuiz ? (
             <QuizBlock quizId={moduleId} onComplete={handleQuizComplete} />
-          ) : ContentComponent ? (
-            <ContentComponent />
           ) : cmsLoading ? (
             <div className="flex items-center justify-center py-20">
               <Loader2 className="w-6 h-6 text-via-navy animate-spin" />
             </div>
+          ) : cmsContent && cmsIsPublished ? (
+            // Published CMS content takes priority over hardcoded components
+            <BlockRenderer content={cmsContent} />
+          ) : ContentComponent ? (
+            // Fall back to hardcoded TSX component
+            <ContentComponent />
           ) : cmsContent ? (
+            // Draft CMS content shown when no hardcoded component exists
             <BlockRenderer content={cmsContent} />
           ) : (
             <div className="bg-via-card rounded-xl border border-via-border p-12 text-center">

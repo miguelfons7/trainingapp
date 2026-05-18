@@ -1,5 +1,5 @@
 import { useParams, Link } from 'react-router-dom'
-import { ArrowLeft, Loader2, AlertCircle, History } from 'lucide-react'
+import { ArrowLeft, Loader2, AlertCircle, History, Layers } from 'lucide-react'
 import { useState } from 'react'
 import { getCourseById } from '../data/courses'
 import { useAuth } from '../context/AuthContext'
@@ -7,6 +7,7 @@ import { useModuleContent } from '../hooks/useModuleContent'
 import { BlockEditor } from '../components/cms/BlockEditor'
 import { VersionHistory } from '../components/cms/VersionHistory'
 import { createBlankContent } from '../lib/contentService'
+import { hardcodedModuleIds } from '../data/hardcodedModules'
 import type { PageContent } from '../types/blocks'
 
 export function ContentEditorPage() {
@@ -62,7 +63,9 @@ export function ContentEditorPage() {
     )
   }
 
-  // No CMS content yet — offer to create blank
+  // No CMS content yet — offer to create
+  const hasBuiltIn = moduleId ? hardcodedModuleIds.has(moduleId) : false
+
   if (!content) {
     async function handleCreate() {
       if (!courseId || !moduleId || !user?.id) return
@@ -95,10 +98,23 @@ export function ContentEditorPage() {
         </Link>
 
         <div className="bg-via-card rounded-xl border border-via-border p-12 text-center">
-          <h2 className="text-xl font-bold text-via-navy mb-2">No CMS Content Yet</h2>
-          <p className="text-sm text-via-text-light mb-6 max-w-md mx-auto">
-            This module doesn&apos;t have CMS content. Create a blank document to start building with the visual editor.
-          </p>
+          {hasBuiltIn ? (
+            <>
+              <Layers className="w-12 h-12 text-blue-500 mx-auto mb-4" />
+              <h2 className="text-xl font-bold text-via-navy mb-2">Create CMS Override</h2>
+              <p className="text-sm text-via-text-light mb-6 max-w-md mx-auto">
+                This module has built-in content. Create CMS content to customize or replace it.
+                Once published, the CMS version will take priority over the built-in version.
+              </p>
+            </>
+          ) : (
+            <>
+              <h2 className="text-xl font-bold text-via-navy mb-2">No CMS Content Yet</h2>
+              <p className="text-sm text-via-text-light mb-6 max-w-md mx-auto">
+                This module doesn&apos;t have any content. Create a blank document to start building with the visual editor.
+              </p>
+            </>
+          )}
           <button
             onClick={handleCreate}
             disabled={creating}
@@ -109,6 +125,8 @@ export function ContentEditorPage() {
                 <Loader2 className="w-4 h-4 animate-spin" />
                 Creating...
               </>
+            ) : hasBuiltIn ? (
+              'Create CMS Content'
             ) : (
               'Create Blank Content'
             )}

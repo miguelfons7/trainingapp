@@ -9,9 +9,11 @@ import {
   Loader2,
   ChevronDown,
   ChevronRight,
+  Layers,
 } from 'lucide-react'
 import { courses } from '../../data/courses'
 import { supabase } from '../../lib/supabase'
+import { hardcodedModuleIds } from '../../data/hardcodedModules'
 
 interface ContentStatus {
   courseId: string
@@ -182,10 +184,20 @@ export function ContentManager() {
                                 Draft
                               </span>
                             )
+                          ) : isQuiz ? (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 text-[10px] font-bold">
+                              <Minus className="w-3 h-3" />
+                              Quiz
+                            </span>
+                          ) : hardcodedModuleIds.has(mod.id) ? (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 text-[10px] font-bold">
+                              <Layers className="w-3 h-3" />
+                              Built-in
+                            </span>
                           ) : (
                             <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 text-[10px] font-bold">
                               <Minus className="w-3 h-3" />
-                              {isQuiz ? 'Quiz' : 'No CMS'}
+                              No CMS
                             </span>
                           )}
 

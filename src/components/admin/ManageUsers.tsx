@@ -38,6 +38,8 @@ export function ManageUsers() {
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editRole, setEditRole] = useState<UserRole>('user')
   const [editTeamId, setEditTeamId] = useState<string | null>(null)
+  const [editName, setEditName] = useState('')
+  const [editEmail, setEditEmail] = useState('')
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
   const [search, setSearch] = useState('')
@@ -84,6 +86,8 @@ export function ManageUsers() {
     setEditingId(user.id)
     setEditRole(user.role)
     setEditTeamId(user.team_id)
+    setEditName(user.full_name)
+    setEditEmail(user.email)
     setError('')
   }
 
@@ -101,6 +105,8 @@ export function ManageUsers() {
       .update({
         role: editRole,
         team_id: editTeamId,
+        full_name: editName,
+        email: editEmail,
       })
       .eq('id', userId)
 
@@ -112,7 +118,7 @@ export function ManageUsers() {
 
     setUsers((prev) =>
       prev.map((u) =>
-        u.id === userId ? { ...u, role: editRole, team_id: editTeamId } : u,
+        u.id === userId ? { ...u, role: editRole, team_id: editTeamId, full_name: editName, email: editEmail } : u,
       ),
     )
     setEditingId(null)
@@ -248,18 +254,43 @@ export function ManageUsers() {
                   >
                     {/* Name */}
                     <td className="px-4 py-3 font-medium text-via-navy whitespace-nowrap">
-                      <div className="flex items-center gap-2">
-                        <span className="flex-shrink-0 w-7 h-7 rounded-full bg-via-navy text-white text-xs flex items-center justify-center font-semibold">
-                          {getInitials(user.full_name)}
-                        </span>
-                        <span>{user.full_name}</span>
-                        <ExternalLink className="w-3 h-3 text-via-text-light" />
-                      </div>
+                      {isEditing ? (
+                        <div className="flex items-center gap-2">
+                          <span className="flex-shrink-0 w-7 h-7 rounded-full bg-via-navy text-white text-xs flex items-center justify-center font-semibold">
+                            {getInitials(editName || user.full_name)}
+                          </span>
+                          <input
+                            type="text"
+                            value={editName}
+                            onChange={(e) => setEditName(e.target.value)}
+                            onClick={(e) => e.stopPropagation()}
+                            className="rounded-lg border border-via-orange bg-white px-2 py-1 text-xs text-via-text focus:outline-none focus:ring-2 focus:ring-via-orange/40"
+                          />
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-2">
+                          <span className="flex-shrink-0 w-7 h-7 rounded-full bg-via-navy text-white text-xs flex items-center justify-center font-semibold">
+                            {getInitials(user.full_name)}
+                          </span>
+                          <span>{user.full_name}</span>
+                          <ExternalLink className="w-3 h-3 text-via-text-light" />
+                        </div>
+                      )}
                     </td>
 
                     {/* Email */}
                     <td className="px-4 py-3 text-via-text-light hidden lg:table-cell">
-                      {user.email}
+                      {isEditing ? (
+                        <input
+                          type="text"
+                          value={editEmail}
+                          onChange={(e) => setEditEmail(e.target.value)}
+                          onClick={(e) => e.stopPropagation()}
+                          className="rounded-lg border border-via-orange bg-white px-2 py-1 text-xs text-via-text focus:outline-none focus:ring-2 focus:ring-via-orange/40"
+                        />
+                      ) : (
+                        user.email
+                      )}
                     </td>
 
                     {/* Role */}
@@ -353,7 +384,7 @@ export function ManageUsers() {
                             type="button"
                             onClick={() => startEdit(user)}
                             className="p-1.5 rounded-lg hover:bg-via-bg-subtle text-via-text-light hover:text-via-navy transition-colors cursor-pointer"
-                            title="Edit role & team"
+                            title="Edit user"
                           >
                             <Pencil className="w-4 h-4" />
                           </button>
