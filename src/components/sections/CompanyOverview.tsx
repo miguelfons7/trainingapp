@@ -140,7 +140,7 @@ export function CompanyOverview() {
         <img
           src={`${import.meta.env.BASE_URL}images/Warehouse aerial.png`}
           alt="Aerial view of Via Trading's 250,000 sq ft warehouse in Lynwood, California"
-          className="rounded-xl w-full object-cover"
+          className="rounded-xl w-full object-contain"
         />
         <p className="text-xs text-via-text-light mt-1 text-center italic">
           Via Trading's 250,000 sq ft warehouse in Lynwood, California

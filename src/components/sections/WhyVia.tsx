@@ -51,7 +51,7 @@ export function WhyVia() {
         <img
           src={`${import.meta.env.BASE_URL}images/personalized-service.jpg`}
           alt="Via Trading's Account Management team at work"
-          className="mt-4 rounded-lg w-full object-cover max-h-64"
+          className="mt-4 rounded-lg w-full aspect-video object-contain bg-[#e8eaee]"
         />
         <p className="text-xs text-via-text-light mt-1 text-center italic">
           Via Trading's Account Management team

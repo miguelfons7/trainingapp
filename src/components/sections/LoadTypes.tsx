@@ -155,9 +155,9 @@ export function LoadTypes() {
         {/* Hand-loaded truck photo */}
         <div className="mt-4">
           <img
-            src={`${import.meta.env.BASE_URL}images/module-load-types.jpg`}
+            src={`${import.meta.env.BASE_URL}images/module-load-types.png`}
             alt="Sample hand-loaded trucks from Via Trading's facility"
-            className="rounded-lg w-full object-cover"
+            className="rounded-lg w-full object-contain"
           />
           <p className="text-xs text-via-text-light mt-1 text-center italic">
             Sample hand-loaded trucks from Via Trading's facility
@@ -244,7 +244,7 @@ export function LoadTypes() {
             <img
               src={`${import.meta.env.BASE_URL}images/liftgate.jpg`}
               alt="A hydraulic lift-gate on the rear of a delivery truck"
-              className="mt-2 rounded-lg w-full max-w-md object-cover"
+              className="mt-2 rounded-lg w-full max-w-md aspect-video object-contain bg-[#e8eaee]"
             />
           </div>
           <div className="border-l-3 border-emerald-500 pl-4">

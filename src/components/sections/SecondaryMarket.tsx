@@ -215,7 +215,7 @@ export function SecondaryMarket() {
             <img
               src={`${import.meta.env.BASE_URL}images/course-2-via-trading.jpg`}
               alt="Via Trading's booth at the ASD Market Week trade show"
-              className="rounded-lg w-full h-40 object-cover"
+              className="rounded-lg w-full aspect-video object-contain bg-[#e8eaee]"
             />
             <p className="text-xs text-via-text-light mt-1 text-center italic">Via Trading at ASD Market Week</p>
           </div>
@@ -223,7 +223,7 @@ export function SecondaryMarket() {
             <img
               src={`${import.meta.env.BASE_URL}images/course-1-industry.jpg`}
               alt="A live liquidation auction at Via Trading's warehouse"
-              className="rounded-lg w-full h-40 object-cover"
+              className="rounded-lg w-full aspect-video object-contain bg-[#e8eaee]"
             />
             <p className="text-xs text-via-text-light mt-1 text-center italic">Live auction at Via Trading's warehouse</p>
           </div>
