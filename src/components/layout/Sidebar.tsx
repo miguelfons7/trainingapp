@@ -1,9 +1,40 @@
-import { useState } from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
-import { Home, BookOpen, Award, FileCheck, Shield, ScrollText, LogOut, ChevronLeft, GraduationCap, UserCircle } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { NavLink, useNavigate, useLocation } from 'react-router-dom'
+import {
+  Home,
+  BookOpen,
+  Award,
+  FileCheck,
+  Shield,
+  ScrollText,
+  LogOut,
+  ChevronLeft,
+  GraduationCap,
+  UserCircle,
+  Layers,
+  ClipboardCheck,
+  Construction,
+  Bug,
+  AlertCircle,
+} from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 import { useCompliance } from '../../context/ComplianceContext'
+import { supabase } from '../../lib/supabase'
 import { APP_VERSION } from '../../version'
+import { ReportIssueModal } from '../shared/ReportIssueModal'
+
+interface NavItem {
+  to: string
+  icon: typeof Home
+  label: string
+  end: boolean
+  badge?: number
+}
+
+interface NavSection {
+  label: string
+  items: NavItem[]
+}
 
 interface SidebarProps {
   collapsed: boolean
@@ -14,18 +45,54 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   const { user, logout, isAdmin } = useAuth()
   const { pendingItems } = useCompliance()
   const navigate = useNavigate()
-  const navItems = [
+  const location = useLocation()
+  const [showReportModal, setShowReportModal] = useState(false)
+  const [openIssueCount, setOpenIssueCount] = useState(0)
+
+  // Fetch open issue count for admins
+  useEffect(() => {
+    if (!isAdmin) return
+    async function fetchCount() {
+      const { count } = await supabase
+        .from('issue_reports')
+        .select('*', { count: 'exact', head: true })
+        .eq('status', 'open')
+      setOpenIssueCount(count ?? 0)
+    }
+    fetchCount()
+    // Refresh every 60 seconds
+    const interval = setInterval(fetchCount, 60000)
+    return () => clearInterval(interval)
+  }, [isAdmin])
+
+  const mainItems: NavItem[] = [
     { to: '/', icon: Home, label: 'Home', end: true },
     { to: '/course/intro-to-industry', icon: BookOpen, label: 'My Courses', end: false },
-    { to: '/acknowledgements', icon: FileCheck, label: 'Acks', end: true },
+    { to: '/acknowledgements', icon: FileCheck, label: 'Acks', end: true, badge: pendingItems.length || undefined },
     { to: '/certificates', icon: Award, label: 'Certificates', end: true },
     { to: '/profile', icon: UserCircle, label: 'Profile', end: true },
-    ...(isAdmin
-      ? [
-          { to: '/admin', icon: Shield, label: 'Admin', end: false },
-          { to: '/dev-log', icon: ScrollText, label: 'Dev Log', end: true },
-        ]
-      : []),
+  ]
+
+  const toolItems: NavItem[] = isAdmin
+    ? [
+        { to: '/content', icon: Layers, label: 'Content', end: false },
+        { to: '/quiz-creator', icon: ClipboardCheck, label: 'Quiz Creator', end: true },
+        { to: '/construction', icon: Construction, label: 'Construction', end: true },
+      ]
+    : []
+
+  const adminItems: NavItem[] = isAdmin
+    ? [
+        { to: '/admin', icon: Shield, label: 'Dashboard', end: true },
+        { to: '/admin/issues', icon: AlertCircle, label: 'Issues', end: true, badge: openIssueCount || undefined },
+        { to: '/dev-log', icon: ScrollText, label: 'Dev Log', end: true },
+      ]
+    : []
+
+  const sections: NavSection[] = [
+    { label: '', items: mainItems },
+    ...(toolItems.length > 0 ? [{ label: 'Tools', items: toolItems }] : []),
+    ...(adminItems.length > 0 ? [{ label: 'Admin', items: adminItems }] : []),
   ]
 
   return (
@@ -40,28 +107,46 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 py-4 px-2 space-y-1">
-        {navItems.map((item) => (
-          <NavLink
-            key={item.to}
-            to={item.to}
-            end={item.end}
-            className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                isActive
-                  ? 'bg-white/15 text-white'
-                  : 'text-white/60 hover:text-white hover:bg-white/5'
-              }`
-            }
-          >
-            <item.icon className="w-5 h-5 shrink-0" />
-            {!collapsed && <span>{item.label}</span>}
-            {!collapsed && item.label === 'Acks' && pendingItems.length > 0 && (
-              <span className="ml-auto bg-via-danger text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center">
-                {pendingItems.length}
-              </span>
+      <nav className="flex-1 py-4 px-2 space-y-1 overflow-y-auto">
+        {sections.map((section, sIdx) => (
+          <div key={section.label || 'main'}>
+            {/* Section divider + label */}
+            {sIdx > 0 && (
+              <div className={collapsed ? 'my-2 mx-2' : 'mt-4 mb-2 mx-1'}>
+                {collapsed ? (
+                  <hr className="border-white/10" />
+                ) : (
+                  <p className="text-[10px] text-white/30 uppercase tracking-wider font-semibold px-2">
+                    {section.label}
+                  </p>
+                )}
+              </div>
             )}
-          </NavLink>
+
+            {/* Items */}
+            {section.items.map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                end={item.end}
+                className={({ isActive }) =>
+                  `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                    isActive
+                      ? 'bg-white/15 text-white'
+                      : 'text-white/60 hover:text-white hover:bg-white/5'
+                  }`
+                }
+              >
+                <item.icon className="w-5 h-5 shrink-0" />
+                {!collapsed && <span>{item.label}</span>}
+                {!collapsed && item.badge && item.badge > 0 && (
+                  <span className="ml-auto bg-via-danger text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                    {item.badge}
+                  </span>
+                )}
+              </NavLink>
+            ))}
+          </div>
         ))}
       </nav>
 
@@ -111,11 +196,33 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
         </div>
       )}
 
+      {/* Report Issue link */}
+      <div className="px-2 pb-1">
+        <button
+          onClick={() => setShowReportModal(true)}
+          className={`flex items-center gap-2 w-full px-3 py-2 rounded-lg text-white/30 hover:text-white/60 hover:bg-white/5 transition-colors cursor-pointer ${
+            collapsed ? 'justify-center' : ''
+          }`}
+          title="Report an issue"
+        >
+          <Bug className="w-4 h-4 shrink-0" />
+          {!collapsed && <span className="text-xs">Report Issue</span>}
+        </button>
+      </div>
+
       {/* Version */}
       {!collapsed && (
         <div className="px-4 pb-3">
           <p className="text-[9px] text-white/25 text-center">v{APP_VERSION}</p>
         </div>
+      )}
+
+      {/* Report Issue Modal */}
+      {showReportModal && (
+        <ReportIssueModal
+          currentPath={location.pathname}
+          onClose={() => setShowReportModal(false)}
+        />
       )}
     </aside>
   )

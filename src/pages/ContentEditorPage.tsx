@@ -6,7 +6,7 @@ import { useCourses } from '../context/CoursesContext'
 import { useModuleContent } from '../hooks/useModuleContent'
 import { BlockEditor } from '../components/cms/BlockEditor'
 import { VersionHistory } from '../components/cms/VersionHistory'
-import { createBlankContent } from '../lib/contentService'
+import { createBlankContent, createBlankQuizContent } from '../lib/contentService'
 import { hardcodedModuleIds } from '../data/hardcodedModules'
 import type { PageContent } from '../types/blocks'
 
@@ -41,11 +41,11 @@ export function ContentEditorPage() {
     return (
       <div className="max-w-3xl mx-auto py-10 px-4">
         <Link
-          to="/admin"
+          to="/content"
           className="inline-flex items-center gap-1.5 text-sm text-via-text-light hover:text-via-navy transition-colors mb-6"
         >
           <ArrowLeft className="w-4 h-4" />
-          Back to Admin
+          Back to Content
         </Link>
         <div className="bg-via-card rounded-xl border border-via-border p-12 text-center">
           <p className="text-via-text-light">Course or module not found.</p>
@@ -83,7 +83,12 @@ export function ContentEditorPage() {
         ? 'border-sky-500'
         : 'border-blue-500'
 
-      await createBlankContent(courseId, moduleId, currentModule?.title ?? moduleId, accentColor, user.id)
+      const isQuiz = currentModule?.contentType === 'quiz'
+      if (isQuiz) {
+        await createBlankQuizContent(courseId, moduleId, currentModule?.title ?? moduleId, accentColor, user.id)
+      } else {
+        await createBlankContent(courseId, moduleId, currentModule?.title ?? moduleId, accentColor, user.id)
+      }
       await reload()
       setCreating(false)
     }

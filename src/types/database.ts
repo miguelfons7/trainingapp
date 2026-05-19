@@ -639,6 +639,69 @@ export interface Database {
         }
         Relationships: []
       }
+      issue_reports: {
+        Row: {
+          id: string
+          reported_by: string
+          title: string
+          description: string
+          page_url: string
+          screenshot_url: string | null
+          user_agent: string | null
+          viewport: string | null
+          status: string
+          admin_note: string | null
+          resolved_by: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          reported_by: string
+          title: string
+          description?: string
+          page_url?: string
+          screenshot_url?: string | null
+          user_agent?: string | null
+          viewport?: string | null
+          status?: string
+          admin_note?: string | null
+          resolved_by?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          reported_by?: string
+          title?: string
+          description?: string
+          page_url?: string
+          screenshot_url?: string | null
+          user_agent?: string | null
+          viewport?: string | null
+          status?: string
+          admin_note?: string | null
+          resolved_by?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'issue_reports_reported_by_fkey'
+            columns: ['reported_by']
+            isOneToOne: false
+            referencedRelation: 'profiles'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'issue_reports_resolved_by_fkey'
+            columns: ['resolved_by']
+            isOneToOne: false
+            referencedRelation: 'profiles'
+            referencedColumns: ['id']
+          },
+        ]
+      }
     }
     Views: Record<string, never>
     Functions: {
@@ -682,3 +745,4 @@ export type ComplianceItemRow = Database['public']['Tables']['compliance_items']
 export type ComplianceAcknowledgementRow = Database['public']['Tables']['compliance_acknowledgements']['Row']
 export type AuditLogRow = Database['public']['Tables']['audit_log']['Row']
 export type ConstructionOverrideRow = Database['public']['Tables']['construction_overrides']['Row']
+export type IssueReportRow = Database['public']['Tables']['issue_reports']['Row']

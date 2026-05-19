@@ -286,7 +286,7 @@ export function ModuleView() {
       {isAdmin && !isQuiz && !(isModuleConstruction && !canBypass) && (
         <div className="mb-4">
           <Link
-            to={`/admin/content/${courseId}/${moduleId}`}
+            to={`/content/${courseId}/${moduleId}`}
             className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-via-navy bg-via-navy/10 rounded-lg hover:bg-via-navy/20 transition-colors"
           >
             <Pencil className="w-3.5 h-3.5" />

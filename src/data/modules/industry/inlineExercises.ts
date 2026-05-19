@@ -31,7 +31,7 @@ export const reverseLogisticsFillBlanks: FillInBlankItem[] = [
     id: 'rl-fib-1',
     sentence: 'The process of moving goods backward through the supply chain is called _____.',
     blank: 'reverse logistics',
-    options: ['forward shipping', 'reverse logistics', 'backhaul delivery', 'direct sourcing'],
+    options: ['return processing', 'reverse logistics', 'secondary distribution', 'product recovery'],
     correctIndex: 1,
   },
   {
@@ -104,7 +104,7 @@ export const loadTypesFillBlanks: FillInBlankItem[] = [
     id: 'lt-fib-4',
     sentence: 'A standard 53-foot trailer holds _____ pallets, or up to 28 if pinwheeled.',
     blank: '26',
-    options: ['12', '26', '50', '6'],
+    options: ['22', '26', '30', '34'],
     correctIndex: 1,
   },
 ]

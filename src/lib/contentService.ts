@@ -209,3 +209,32 @@ export async function createBlankContent(
 
   return saveModuleContent(courseId, moduleId, blankContent, userId)
 }
+
+/** Create a blank content document pre-populated with empty quizData */
+export async function createBlankQuizContent(
+  courseId: string,
+  moduleId: string,
+  sectionTitle: string,
+  accentColor: string,
+  userId: string,
+): Promise<{ error?: string }> {
+  const content: PageContent = {
+    version: 1,
+    section: {
+      sectionId: moduleId,
+      title: sectionTitle,
+      subtitle: '',
+      accentColor,
+      icon: 'ClipboardCheck',
+    },
+    blocks: [],
+    quizData: {
+      termMatch: [],
+      multipleChoice: [],
+      fillInBlank: [],
+      passThreshold: 85,
+    },
+  }
+
+  return saveModuleContent(courseId, moduleId, content, userId)
+}

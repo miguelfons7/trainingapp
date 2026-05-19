@@ -1107,7 +1107,7 @@ function CourseRowGroup({
                     <div className="w-28 flex items-center justify-end gap-1 shrink-0">
                       {!isQuiz && (
                         <Link
-                          to={`/admin/content/${course.id}/${mod.id}`}
+                          to={`/content/${course.id}/${mod.id}`}
                           className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold text-via-orange bg-via-orange/10 rounded-md hover:bg-via-orange/20 transition-colors"
                           title="Edit content in CMS"
                         >

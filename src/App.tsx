@@ -18,6 +18,10 @@ import { Acknowledgements } from './pages/Acknowledgements'
 import { DevLog } from './pages/DevLog'
 import { FinalExam } from './pages/FinalExam'
 import { MigrationRunner } from './pages/MigrationRunner'
+import { ContentPage } from './pages/ContentPage'
+import { ConstructionPage } from './pages/ConstructionPage'
+import { QuizCreatorPage } from './pages/QuizCreatorPage'
+import { AdminIssuesPage } from './pages/AdminIssuesPage'
 import { Loader2 } from 'lucide-react'
 
 function LoadingScreen() {
@@ -69,7 +73,12 @@ function AppRoutes() {
         <Route path="final-exam" element={<FinalExam />} />
         <Route path="profile" element={<UserProfile />} />
         <Route path="profile/:userId" element={<UserProfile />} />
+        <Route path="content" element={<ContentPage />} />
+        <Route path="content/:courseId/:moduleId" element={<ContentEditorPage />} />
+        <Route path="quiz-creator" element={<QuizCreatorPage />} />
+        <Route path="construction" element={<ConstructionPage />} />
         <Route path="admin" element={<Admin />} />
+        <Route path="admin/issues" element={<AdminIssuesPage />} />
         <Route path="admin/content/:courseId/:moduleId" element={<ContentEditorPage />} />
         <Route path="admin/migrate" element={<MigrationRunner />} />
         <Route path="dev-log" element={<DevLog />} />
