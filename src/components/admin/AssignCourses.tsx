@@ -44,7 +44,7 @@ export function AssignCourses() {
     loadData()
   }, [loadData])
 
-  const learners = profiles.filter((p) => p.role === 'user')
+  const assignableUsers = profiles
 
   function toggleUser(id: string) {
     setSelectedUsers((prev) => {
@@ -204,7 +204,7 @@ export function AssignCourses() {
 
             {showUserList && (
               <div className="mt-1 rounded-lg border border-via-border bg-white shadow-lg max-h-52 overflow-y-auto">
-                {learners.map((p) => {
+                {assignableUsers.map((p) => {
                   const checked = selectedUsers.has(p.id)
                   return (
                     <label
@@ -221,10 +221,17 @@ export function AssignCourses() {
                         {getInitials(p.full_name)}
                       </span>
                       <span className="text-via-text">{p.full_name}</span>
+                      {p.role !== 'user' && (
+                        <span className={`ml-auto text-[10px] font-bold uppercase px-1.5 py-0.5 rounded-full ${
+                          p.role === 'admin' ? 'bg-purple-100 text-purple-600' : 'bg-sky-100 text-sky-600'
+                        }`}>
+                          {p.role}
+                        </span>
+                      )}
                     </label>
                   )
                 })}
-                {learners.length === 0 && (
+                {assignableUsers.length === 0 && (
                   <p className="px-3 py-2 text-sm text-via-text-light">No users found</p>
                 )}
               </div>
