@@ -252,11 +252,33 @@ export type ContentBlock =
 
 export type BlockType = ContentBlock['type']
 
+// ─── Quiz Data (CMS-editable quizzes) ─────────────────────
+export interface SectionedQuizData {
+  termMatch: Array<{ term: string; definition: string }>
+  multipleChoice: Array<{
+    id: string
+    question: string
+    options: string[]
+    correctIndex: number
+    explanation: string
+  }>
+  fillInBlank: Array<{
+    id: string
+    sentence: string
+    blank: string
+    options: string[]
+    correctIndex: number
+  }>
+  passThreshold: number
+  nextCourse?: { id: string; title: string }
+}
+
 // ─── Page Document ─────────────────────────────────────────
 export interface PageContent {
   version: 1
   section: SectionWrapperData
   blocks: ContentBlock[]
+  quizData?: SectionedQuizData
 }
 
 // ─── Block Metadata (for the palette/UI) ───────────────────

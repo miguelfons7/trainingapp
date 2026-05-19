@@ -17,6 +17,7 @@ import { UserProfile } from './pages/UserProfile'
 import { Acknowledgements } from './pages/Acknowledgements'
 import { DevLog } from './pages/DevLog'
 import { FinalExam } from './pages/FinalExam'
+import { MigrationRunner } from './pages/MigrationRunner'
 import { Loader2 } from 'lucide-react'
 
 function LoadingScreen() {
@@ -70,6 +71,7 @@ function AppRoutes() {
         <Route path="profile/:userId" element={<UserProfile />} />
         <Route path="admin" element={<Admin />} />
         <Route path="admin/content/:courseId/:moduleId" element={<ContentEditorPage />} />
+        <Route path="admin/migrate" element={<MigrationRunner />} />
         <Route path="dev-log" element={<DevLog />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />

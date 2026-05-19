@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { CheckCircle, XCircle, Award, ArrowRight, GripVertical } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import type { SectionedQuiz, TermMatchPair, FillInBlankItem } from '../../types'
+import type { SectionedQuizData } from '../../types/blocks'
 import { industrySectionedQuiz } from '../../data/modules/industry/courseQuiz'
 import { viaSectionedQuiz } from '../../data/modules/via-trading/courseQuiz'
 import { productKnowledgeSectionedQuiz } from '../../data/modules/product-knowledge/courseQuiz'
@@ -14,6 +15,8 @@ interface QuizBlockProps {
   quizId: string
   /** Called when the user submits all quiz answers. Receives (score, total). */
   onComplete?: (score: number, total: number) => void
+  /** CMS quiz data — takes priority over hardcoded data when provided */
+  cmsQuizData?: SectionedQuizData
 }
 
 const sectionedQuizMap: Record<string, SectionedQuiz> = {
@@ -339,9 +342,18 @@ function FillInBlankSection({
 // ─────────────────────────────────────────
 // Main QuizBlock Component
 // ─────────────────────────────────────────
-export function QuizBlock({ quizId, onComplete }: QuizBlockProps) {
-  const sectionedQuiz = sectionedQuizMap[quizId]
-  const nextCourse = nextCourseMap[quizId]
+export function QuizBlock({ quizId, onComplete, cmsQuizData }: QuizBlockProps) {
+  // CMS quiz data takes priority over hardcoded data
+  const hardcodedQuiz = sectionedQuizMap[quizId]
+  const sectionedQuiz: SectionedQuiz | undefined = cmsQuizData
+    ? {
+        termMatch: cmsQuizData.termMatch,
+        multipleChoice: cmsQuizData.multipleChoice,
+        fillInBlank: cmsQuizData.fillInBlank,
+        passThreshold: cmsQuizData.passThreshold,
+      }
+    : hardcodedQuiz
+  const nextCourse = cmsQuizData?.nextCourse ?? nextCourseMap[quizId]
 
   // --- MC state ---
   const mcQuestions = sectionedQuiz?.multipleChoice ?? []

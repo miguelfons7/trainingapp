@@ -159,14 +159,17 @@ export function ModuleView() {
   const isModuleConstruction = moduleId ? isUnderConstruction('module', moduleId) : false
   const moduleConstructionMsg = moduleId ? getConstructionMessage('module', moduleId) : null
 
-  // CMS content — always fetched for non-quiz modules (published CMS overrides hardcoded)
+  // CMS content — fetched for ALL modules (lesson + quiz)
   const isQuizModule = moduleId ? quizModules.has(moduleId) : false
-  const shouldFetchCms = !isQuizModule
   const { content: cmsContent, loading: cmsLoading, isPublished: cmsIsPublished } = useModuleContent(
-    shouldFetchCms ? courseId : undefined,
-    shouldFetchCms ? moduleId : undefined,
+    courseId,
+    moduleId,
     user?.id,
   )
+
+  // STAGING MODE: when true, draft CMS content takes priority over hardcoded TSX
+  // Set to true on the staging branch, false on production (main)
+  const STAGING_PREVIEW = true
 
   const currentIndex = useMemo(() => {
     if (!course || !moduleId) return -1
@@ -296,13 +299,20 @@ export function ModuleView() {
       {!(isModuleConstruction && !canBypass) && (
         <div className="mb-8">
           {isQuiz ? (
-            <QuizBlock quizId={moduleId} onComplete={handleQuizComplete} />
+            <QuizBlock
+              quizId={moduleId}
+              onComplete={handleQuizComplete}
+              cmsQuizData={cmsContent?.quizData}
+            />
           ) : cmsLoading ? (
             <div className="flex items-center justify-center py-20">
               <Loader2 className="w-6 h-6 text-via-navy animate-spin" />
             </div>
           ) : cmsContent && cmsIsPublished ? (
             // Published CMS content takes priority over hardcoded components
+            <BlockRenderer content={cmsContent} />
+          ) : STAGING_PREVIEW && cmsContent ? (
+            // STAGING: Draft CMS content previewed over hardcoded TSX
             <BlockRenderer content={cmsContent} />
           ) : ContentComponent ? (
             // Fall back to hardcoded TSX component
