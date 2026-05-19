@@ -1,11 +1,12 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
-import { Save, Send, Eye, Code, Pencil, Undo2 } from 'lucide-react'
-import type { PageContent, ContentBlock, BlockType } from '../../types/blocks'
+import { Save, Send, Eye, Code, Pencil, Undo2, ClipboardCheck } from 'lucide-react'
+import type { PageContent, ContentBlock, BlockType, SectionedQuizData } from '../../types/blocks'
 import { createDefaultBlock } from './blockDefaults'
 import { BlockPalette } from './BlockPalette'
 import { BlockWrapper } from './BlockWrapper'
 import { BlockRenderer } from './BlockRenderer'
 import { BLOCK_EDITORS } from './editors'
+import { QuizEditor } from './editors/QuizEditor'
 
 interface BlockEditorProps {
   initialContent: PageContent
@@ -309,6 +310,24 @@ export function BlockEditor({
               )
             })}
           </div>
+
+          {/* Quiz Data Editor (shown when quizData exists) */}
+          {content.quizData && (
+            <div className="space-y-2">
+              <div className="flex items-center gap-2 pt-4 pb-1">
+                <ClipboardCheck className="w-5 h-5 text-via-orange" />
+                <h2 className="text-sm font-bold text-via-navy uppercase tracking-wide">
+                  Quiz Data
+                </h2>
+              </div>
+              <QuizEditor
+                quizData={content.quizData}
+                onChange={(updated: SectionedQuizData) =>
+                  updateContent((prev) => ({ ...prev, quizData: updated }))
+                }
+              />
+            </div>
+          )}
 
           {/* Add block palette */}
           <BlockPalette onAdd={addBlock} />
