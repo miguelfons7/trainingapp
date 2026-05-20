@@ -185,7 +185,9 @@ C:\Users\MiguelFonseca\Desktop\Claude - Context\Training App\
   01_Industry_Knowledge\   <- eBooks, guides
   02_Via_Company_Profile\  <- Company docs, strategy transcripts
   03_Product_Knowledge\    <- Product data, lead forms
-  04_HubSpot\              <- CRM sequences, snippets, subscription info
+  04_HubSpot\              <- CRM sequences, snippets, subscription info (used in Tools & Systems)
+  05_Aircall\              <- Aircall setup, integration docs (used in Tools & Systems)
+  06_Via_Ops_ERP\          <- 10 MHTML webapp captures of ViaOps ERP screens (used in Tools & Systems)
   08_Consultative_Sales\   <- Sales framework (primary: VIA_TRADING_SALES_TRAINING_FRAMEWORK.md)
   09_BDR_Role\             <- BDR call training, mock call scripts
   10_AM_Role\              <- AM training powerpoint (legacy)
@@ -346,9 +348,13 @@ git push origin main   # Deploy to Vercel (auto-deploys from main)
 | 2 | Who Is Via Trading | `who-is-via` | Available | `border-orange-500` | 6 lessons + quiz |
 | 3 | Product Knowledge | `product-knowledge` | Available | varies by retailer | 10 lessons + quiz |
 | 4 | Consultative Sales | `sales-philosophy` | Available | `border-teal-500` | 9 lessons + quiz |
-| 5 | BDR Role Training | `bdr-role` | Available | `border-sky-500` | 7 lessons + quiz |
-| 6 | Tools & Systems | `tools-systems` | Coming Soon | — | — |
+| 5 | Tools & Systems | `tools-systems` | Available | `border-violet-500` | 7 lessons + quiz (CMS-only, no TSX sections) |
+| 6 | BDR Role Training | `bdr-role` | Available | `border-sky-500` | 7 lessons + quiz |
 | 7 | Ongoing Development | `ongoing-development` | Coming Soon | — | — |
+
+**Program order:** Tools & Systems was moved before BDR Role in `managed_programs` so new hires learn the tools before their role-specific course. The BDR course references HubSpot, Aircall, and ERP — tools-systems gives them the foundation first.
+
+**Tools & Systems is CMS-only:** All 7 lesson modules + 1 quiz module are stored as CMS content in Supabase (`module_content` table). There are no hardcoded TSX section components. Content was authored in code mode using `PageContent` JSON with the block system. The BlockRenderer handles field name variations (`data.html`/`data.content`, `data.variant`/`data.style`, string/numeric heading levels).
 
 **Planned but not yet in `courses.ts`:** AM Role Training (after BDR, covers AM-specific day-to-day)
 
@@ -459,6 +465,8 @@ interface CourseModule {
 ## Pending Work
 
 - **Build AM Role Training course** (rough draft, same pattern as BDR)
+- **Build Ongoing Development course** (placeholder, covers continuous learning topics)
 - **Code splitting** — Bundle is >1.2MB; consider dynamic imports for course section components
 - **CMS enhancements** — Drag-and-drop block reordering (dnd-kit is installed but not yet wired into BlockEditor), Monaco editor integration (installed but code mode uses textarea), rich text editor for paragraph blocks (currently plain HTML strings)
 - **Color palette expansion** — Add tasteful, complementary colors beyond blue/orange for visual variety
+- **BlockRenderer robustness** — The renderer now handles field name variations (html/content, variant/style, string/numeric heading levels) but could benefit from a formal content normalization layer
