@@ -127,6 +127,7 @@ export interface Database {
           score: number | null
           started_at: string | null
           completed_at: string | null
+          time_spent_seconds: number | null
           updated_at: string
         }
         Insert: {
@@ -138,6 +139,7 @@ export interface Database {
           score?: number | null
           started_at?: string | null
           completed_at?: string | null
+          time_spent_seconds?: number | null
           updated_at?: string
         }
         Update: {
@@ -149,6 +151,7 @@ export interface Database {
           score?: number | null
           started_at?: string | null
           completed_at?: string | null
+          time_spent_seconds?: number | null
           updated_at?: string
         }
         Relationships: [

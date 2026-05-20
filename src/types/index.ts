@@ -45,6 +45,8 @@ export interface ModuleProgress {
   status: 'not-started' | 'in-progress' | 'completed'
   score?: number
   completedAt?: string
+  startedAt?: string
+  timeSpentSeconds?: number
 }
 
 export type ComplianceStatus = 'draft' | 'scheduled' | 'live' | 'archived'

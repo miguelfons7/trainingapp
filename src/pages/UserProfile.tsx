@@ -11,6 +11,7 @@ import {
   FileCheck,
   TrendingUp,
   Calendar,
+  Timer,
 } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { useProgress } from '../context/ProgressContext'
@@ -18,6 +19,7 @@ import { useCompliance } from '../context/ComplianceContext'
 import { useCourses } from '../context/CoursesContext'
 import { supabase } from '../lib/supabase'
 import type { Profile, Team, ModuleProgressRow } from '../types/database'
+import { formatDuration, sumTimeSeconds } from '../lib/formatTime'
 
 const roleBadgeStyles: Record<string, string> = {
   admin: 'bg-indigo-100 text-indigo-700',
@@ -140,11 +142,18 @@ export function UserProfile() {
       ).length
     }
 
+    const courseTime = sumTimeSeconds(
+      progressRows
+        .filter((r) => r.course_id === course.id)
+        .map((r) => r.time_spent_seconds),
+    )
+
     return {
       course,
       completed,
       total,
       percentage: total > 0 ? Math.round((completed / total) * 100) : 0,
+      timeSpent: courseTime,
     }
   })
 
@@ -230,7 +239,7 @@ export function UserProfile() {
       </div>
 
       {/* Stats Row */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+      <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-6">
         <StatCard
           icon={<BookOpen className="w-4 h-4 text-sky-600" />}
           value={String(completedCourses.length)}
@@ -242,6 +251,12 @@ export function UserProfile() {
           value={String(completedModules.length)}
           label="Modules Completed"
           bgColor="bg-emerald-50"
+        />
+        <StatCard
+          icon={<Timer className="w-4 h-4 text-amber-600" />}
+          value={formatDuration(sumTimeSeconds(progressRows.map((r) => r.time_spent_seconds)))}
+          label="Time Spent"
+          bgColor="bg-amber-50"
         />
         <StatCard
           icon={<BarChart3 className="w-4 h-4 text-violet-600" />}
@@ -274,7 +289,7 @@ export function UserProfile() {
               </p>
             ) : (
               <div className="space-y-3">
-                {courseProgressList.map(({ course, completed, total, percentage }) => (
+                {courseProgressList.map(({ course, completed, total, percentage, timeSpent }) => (
                   <Link
                     key={course.id}
                     to={`/course/${course.id}`}
@@ -300,6 +315,7 @@ export function UserProfile() {
                         : percentage > 0
                           ? `${percentage}% complete`
                           : 'Not started'}
+                      {timeSpent > 0 && ` · ${formatDuration(timeSpent)}`}
                     </p>
                   </Link>
                 ))}
@@ -395,6 +411,9 @@ export function UserProfile() {
                       )}
                       <p className="text-[10px] text-via-text-light/60">
                         {row.completed_at ? formatDate(row.completed_at) : ''}
+                        {row.time_spent_seconds != null && row.time_spent_seconds > 0 && (
+                          <span className="ml-1">· {formatDuration(row.time_spent_seconds)}</span>
+                        )}
                       </p>
                     </div>
                   </div>

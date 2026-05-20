@@ -40,6 +40,7 @@ src/
   lib/
     supabase.ts     <- Supabase client initialization (typed with Database)
     contentService.ts <- Supabase CRUD for CMS module content (fetch, save, publish, rollback)
+    formatTime.ts   <- Time duration utilities (formatDuration, sumTimeSeconds, avgTimeSeconds)
   hooks/
     useModuleContent.ts <- React hook wrapping contentService for CMS content
   pages/
@@ -61,6 +62,11 @@ supabase/
     002_invitation_validation.sql <- validate_invitation_token() SECURITY DEFINER function
     003_compliance_tables.sql <- compliance_items + compliance_acknowledgements tables, RLS, seed data
     004_announcement_lifecycle.sql <- status/scheduled_at/departments/updated_at/updated_by on compliance_items, audit_log table
+    005_module_content.sql <- CMS module_content + module_content_versions tables
+    006_construction_overrides.sql <- construction_overrides table for admin toggles
+    007_managed_content.sql <- managed_courses, managed_modules, managed_programs tables
+    008_issue_reports.sql <- issue_reports table + RLS + trigger
+    009_time_spent.sql <- time_spent_seconds column on module_progress
 public/
   images/           <- All images (hero images, inline images, logos)
 .env.local          <- Supabase credentials (VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY)
@@ -81,7 +87,7 @@ public/
 | `teams` | Departments (Sales, Operations, Leadership, New Hires) | `id`, `name` |
 | `profiles` | User profiles (extends auth.users) | `id` (FK to auth.users), `email`, `full_name`, `role`, `team_id` |
 | `course_assignments` | Who needs to take what | `user_id`, `course_id`, `assigned_by`, `due_date` |
-| `module_progress` | Per-module completion tracking | `user_id`, `course_id`, `module_id`, `status`, `score` |
+| `module_progress` | Per-module completion tracking | `user_id`, `course_id`, `module_id`, `status`, `score`, `time_spent_seconds` |
 | `invitations` | Invite-only signup tokens | `email`, `role`, `team_id`, `invited_by`, `token`, `expires_at` |
 | `content_requests` | Leadership content change requests | `requested_by`, `title`, `description`, `status`, `reviewed_by` |
 | `compliance_items` | Announcements/compliance items (seed + admin-created) | `id`, `title`, `description`, `details`, `priority`, `is_seed`, `status`, `scheduled_at`, `departments[]`, `updated_at`, `updated_by` |
@@ -431,6 +437,8 @@ interface CourseModule {
 - **AuthContext is async** — `loading` must be checked before accessing `user`. The `ProtectedRoute` and `AppRoutes` in App.tsx handle this with a `LoadingScreen`.
 - **AuthContext deadlock risk** — Never do async work inside `onAuthStateChange` callback. Supabase v2's internal auth lock will deadlock. Capture state synchronously, fetch data in a separate `useEffect`. See three-state pattern: `authUserId: string | null | undefined`.
 - **ProgressContext uses Supabase** — Migrated from localStorage to `module_progress` table with optimistic updates and upsert on `user_id,course_id,module_id`.
+- **Time tracking (wall-clock)** — `module_progress.time_spent_seconds` records elapsed time from `started_at` to completion. Computed in `completeModule()` with a 24-hour (86400s) sanity cap. Old completions (before migration 009) show "—". `formatDuration()` in `src/lib/formatTime.ts` renders seconds as "< 1 min", "3 min", "1h 15m". UserProfile shows total time stat card + per-course breakdown. CourseStats shows "Avg Time" column. UserProgressTable shows "Time Spent" column.
+- **completeModule() must NOT include started_at** — The upsert in `ProgressContext.completeModule()` intentionally omits `started_at` from the payload. Including it overwrites the real start time with the completion time, making all duration data useless. Only `completed_at`, `time_spent_seconds`, `status`, and `score` are sent.
 - **ComplianceContext uses Supabase** — Migrated from localStorage to `compliance_items` + `compliance_acknowledgements` tables with optimistic updates and rollback. Seed items protected via `is_seed` flag. `acknowledgedBy` stores user IDs (UUIDs), not emails. Supports full lifecycle: draft/scheduled/live/archived statuses. `updateItem` for editing, `logAudit` for tracking actions. Regular users only see `status='live'` via RLS.
 - **Compliance seed data lives in DB** — The old `src/data/compliance.ts` was deleted. Seed items are inserted via migration 003 with `ON CONFLICT DO NOTHING`.
 - **Supabase Auth URLs** — Site URL and redirect URL configured for Vercel production domain. Update these if the domain changes.

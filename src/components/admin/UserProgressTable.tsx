@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { ProgressBar } from '../shared/ProgressBar'
 import { supabase } from '../../lib/supabase'
 import { useCourses } from '../../context/CoursesContext'
+import { formatDuration, sumTimeSeconds } from '../../lib/formatTime'
 import type { Profile } from '../../types/database'
 
 interface UserWithProgress {
@@ -12,12 +13,13 @@ interface UserWithProgress {
   email: string
   initials: string
   overallProgress: number
+  totalTime: number
   currentCourse: string
   lastActive: string
   status: 'active' | 'inactive' | 'not-started'
 }
 
-type SortKey = 'name' | 'email' | 'overallProgress' | 'currentCourse' | 'lastActive' | 'status'
+type SortKey = 'name' | 'email' | 'overallProgress' | 'totalTime' | 'currentCourse' | 'lastActive' | 'status'
 type SortDir = 'asc' | 'desc'
 
 const statusStyles: Record<string, string> = {
@@ -64,6 +66,9 @@ export function UserProgressTable() {
         ? Math.round((completedModules.length / totalModules) * 100)
         : 0
 
+      // Total time spent across all modules
+      const totalTime = sumTimeSeconds(userProgress.map((r) => r.time_spent_seconds))
+
       // Current course: first available course that's not 100% complete
       let currentCourse = 'All Complete'
       for (const course of availableCourses) {
@@ -106,6 +111,7 @@ export function UserProgressTable() {
         email: p.email,
         initials,
         overallProgress,
+        totalTime,
         currentCourse,
         lastActive,
         status,
@@ -151,6 +157,7 @@ export function UserProgressTable() {
     { key: 'name', label: 'Name' },
     { key: 'email', label: 'Email', className: 'hidden lg:table-cell' },
     { key: 'overallProgress', label: 'Progress' },
+    { key: 'totalTime', label: 'Time Spent', className: 'hidden md:table-cell' },
     { key: 'currentCourse', label: 'Current Course', className: 'hidden md:table-cell' },
     { key: 'lastActive', label: 'Last Active', className: 'hidden md:table-cell' },
     { key: 'status', label: 'Status' },
@@ -242,6 +249,9 @@ export function UserProgressTable() {
                       {user.overallProgress}%
                     </span>
                   </div>
+                </td>
+                <td className="px-4 py-3 text-via-text hidden md:table-cell whitespace-nowrap">
+                  {formatDuration(user.totalTime)}
                 </td>
                 <td className="px-4 py-3 text-via-text hidden md:table-cell whitespace-nowrap">
                   {user.currentCourse}

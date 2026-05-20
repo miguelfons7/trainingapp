@@ -2,14 +2,15 @@ import { useState, useEffect } from 'react'
 import { Loader2, X, BarChart3 } from 'lucide-react'
 import { useCourses } from '../../context/CoursesContext'
 import { supabase } from '../../lib/supabase'
+import { formatDuration, avgTimeSeconds } from '../../lib/formatTime'
 import type { Profile } from '../../types/database'
 
-type PopupKind = 'started' | 'completed' | 'scores'
+type PopupKind = 'started' | 'completed' | 'scores' | 'time'
 
 interface PopupState {
   courseTitle: string
   kind: PopupKind
-  users: { name: string; score?: number }[]
+  users: { name: string; score?: number; time?: string }[]
 }
 
 interface ModuleProgressRow {
@@ -18,6 +19,7 @@ interface ModuleProgressRow {
   module_id: string
   status: string
   score: number | null
+  time_spent_seconds: number | null
 }
 
 interface ComputedCourseStat {
@@ -28,6 +30,8 @@ interface ComputedCourseStat {
   completedUsers: string[]
   scoredUsers: { userId: string; score: number }[]
   avgScore: number | null
+  avgTimeSeconds: number | null
+  userTimes: { userId: string; totalSeconds: number }[]
 }
 
 interface ProgramStat {
@@ -104,6 +108,17 @@ export function CourseStats() {
               )
             : null
 
+        // Time tracking: per-user total time for this course
+        const userTimes: { userId: string; totalSeconds: number }[] = []
+        for (const userId of startedUsers) {
+          const userCourseRows = courseRows.filter((r) => r.user_id === userId)
+          const timeValues = userCourseRows.map((r) => r.time_spent_seconds)
+          const total = timeValues.reduce<number>((sum, v) => sum + (v ?? 0), 0)
+          if (total > 0) userTimes.push({ userId, totalSeconds: total })
+        }
+
+        const courseAvgTime = avgTimeSeconds(userTimes.map((u) => u.totalSeconds))
+
         return {
           courseId: course.id,
           title: course.title,
@@ -112,6 +127,8 @@ export function CourseStats() {
           completedUsers,
           scoredUsers,
           avgScore,
+          avgTimeSeconds: courseAvgTime,
+          userTimes,
         }
       })
 
@@ -194,6 +211,11 @@ export function CourseStats() {
         name: profiles.get(u.userId) ?? 'Unknown User',
         score: u.score,
       }))
+    } else if (kind === 'time') {
+      users = stat.userTimes.map((u) => ({
+        name: profiles.get(u.userId) ?? 'Unknown User',
+        time: formatDuration(u.totalSeconds),
+      }))
     }
 
     users.sort((a, b) => a.name.localeCompare(b.name))
@@ -204,6 +226,7 @@ export function CourseStats() {
   function kindLabel(kind: PopupKind): string {
     if (kind === 'started') return 'Users Started'
     if (kind === 'completed') return 'Users Completed'
+    if (kind === 'time') return 'Time Per User'
     return 'User Scores'
   }
 
@@ -300,6 +323,9 @@ export function CourseStats() {
                 Completed
               </th>
               <th className="text-center px-4 py-3 text-xs font-semibold text-via-text-light uppercase tracking-wide">
+                Avg Time
+              </th>
+              <th className="text-center px-4 py-3 text-xs font-semibold text-via-text-light uppercase tracking-wide">
                 Avg Score
               </th>
             </tr>
@@ -334,6 +360,16 @@ export function CourseStats() {
                     disabled={stat.completedUsers.length === 0}
                   >
                     {stat.completedUsers.length}
+                  </button>
+                </td>
+                <td className="px-4 py-3 text-center">
+                  <button
+                    type="button"
+                    onClick={() => openPopup(stat, 'time')}
+                    className="text-sm text-via-navy font-semibold cursor-pointer hover:text-via-orange transition-colors"
+                    disabled={stat.userTimes.length === 0}
+                  >
+                    {stat.avgTimeSeconds !== null ? formatDuration(stat.avgTimeSeconds) : '--'}
                   </button>
                 </td>
                 <td className="px-4 py-3 text-center">
@@ -394,6 +430,11 @@ export function CourseStats() {
                       {user.score !== undefined && (
                         <span className="text-sm font-semibold text-via-navy">
                           {user.score}%
+                        </span>
+                      )}
+                      {user.time !== undefined && (
+                        <span className="text-sm font-semibold text-via-navy">
+                          {user.time}
                         </span>
                       )}
                     </li>

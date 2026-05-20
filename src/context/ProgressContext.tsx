@@ -65,6 +65,8 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
             status: row.status as ModuleProgress['status'],
             score: row.score ?? undefined,
             completedAt: row.completed_at ?? undefined,
+            startedAt: row.started_at ?? undefined,
+            timeSpentSeconds: row.time_spent_seconds ?? undefined,
           }
         }
         setProgress(map)
@@ -86,6 +88,14 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
     (courseId: string, moduleId: string, score?: number) => {
       const key = `${courseId}/${moduleId}`
       const now = new Date().toISOString()
+      const existing = progress[key]
+
+      // Compute time spent from startedAt → now (cap at 24 hours)
+      let timeSpentSeconds: number | undefined
+      if (existing?.startedAt) {
+        const elapsed = Math.round((Date.now() - new Date(existing.startedAt).getTime()) / 1000)
+        timeSpentSeconds = elapsed > 0 && elapsed <= 86400 ? elapsed : undefined
+      }
 
       // Optimistic update
       setProgress((prev) => ({
@@ -96,10 +106,12 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
           status: 'completed',
           score,
           completedAt: now,
+          startedAt: existing?.startedAt,
+          timeSpentSeconds,
         },
       }))
 
-      // Persist to Supabase
+      // Persist to Supabase — do NOT include started_at (it would overwrite the real start time)
       if (userId) {
         supabase
           .from('module_progress')
@@ -110,8 +122,8 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
               module_id: moduleId,
               status: 'completed',
               score: score ?? null,
-              started_at: now,
               completed_at: now,
+              time_spent_seconds: timeSpentSeconds ?? null,
             },
             { onConflict: 'user_id,course_id,module_id' },
           )
@@ -120,7 +132,7 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
           })
       }
     },
-    [userId],
+    [userId, progress],
   )
 
   const startModule = useCallback(
