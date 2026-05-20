@@ -7,6 +7,7 @@ import { BlockWrapper } from './BlockWrapper'
 import { BlockRenderer } from './BlockRenderer'
 import { BLOCK_EDITORS } from './editors'
 import { QuizEditor } from './editors/QuizEditor'
+import { QuizBlock } from '../interactive/QuizBlock'
 
 interface BlockEditorProps {
   initialContent: PageContent
@@ -360,7 +361,7 @@ export function BlockEditor({
               value={codeValue}
               onChange={(e) => handleCodeChange(e.target.value)}
               spellCheck={false}
-              className="w-full h-[600px] px-4 py-3 font-mono text-xs text-via-text bg-[#1e1e1e] text-[#d4d4d4] focus:outline-none resize-none"
+              className="w-full h-[600px] px-4 py-3 font-mono text-xs bg-[#1e1e1e] text-[#d4d4d4] focus:outline-none resize-none caret-white"
               style={{ tabSize: 2 }}
             />
           </div>
@@ -371,6 +372,14 @@ export function BlockEditor({
       {mode === 'preview' && (
         <div className="bg-white rounded-xl border border-via-border p-6">
           <BlockRenderer content={content} />
+          {content.quizData && (
+            <div className="mt-6">
+              <QuizBlock
+                quizId="cms-preview"
+                cmsQuizData={content.quizData}
+              />
+            </div>
+          )}
         </div>
       )}
     </div>

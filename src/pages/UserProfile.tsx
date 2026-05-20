@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import {
   UserCircle,
   BookOpen,
@@ -12,6 +12,10 @@ import {
   TrendingUp,
   Calendar,
   Timer,
+  ChevronDown,
+  ChevronRight,
+  Circle,
+  PlayCircle,
 } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { useProgress } from '../context/ProgressContext'
@@ -38,7 +42,7 @@ export function UserProfile() {
   const { user: currentUser, isAdmin, isLeadership } = useAuth()
   const { getCourseProgress } = useProgress()
   const { items, isAcknowledged } = useCompliance()
-  const { courses } = useCourses()
+  const { courses, programs } = useCourses()
 
   const isOwnProfile = !userId || userId === currentUser?.id
   const targetUserId = userId || currentUser?.id
@@ -47,6 +51,7 @@ export function UserProfile() {
   const [team, setTeam] = useState<Team | null>(null)
   const [progressRows, setProgressRows] = useState<ModuleProgressRow[]>([])
   const [loading, setLoading] = useState(true)
+  const [expandedCourses, setExpandedCourses] = useState<Set<string>>(new Set())
 
   useEffect(() => {
     if (!targetUserId) return
@@ -148,18 +153,53 @@ export function UserProfile() {
         .map((r) => r.time_spent_seconds),
     )
 
+    // Per-module breakdown
+    const moduleDetails = course.modules.map((mod) => {
+      const row = progressRows.find(
+        (r) => r.course_id === course.id && r.module_id === mod.id,
+      )
+      return {
+        id: mod.id,
+        title: mod.title,
+        status: row?.status ?? 'not-started',
+        timeSpent: row?.time_spent_seconds ?? null,
+        score: row?.score ?? null,
+      }
+    })
+
     return {
       course,
       completed,
       total,
       percentage: total > 0 ? Math.round((completed / total) * 100) : 0,
       timeSpent: courseTime,
+      moduleDetails,
     }
   })
 
   const completedCourses = courseProgressList.filter(
     (cp) => cp.percentage === 100,
   )
+
+  // Program-level stats
+  const programProgressList = programs.map((program) => {
+    const programCourses = program.courseIds
+      .map((cid) => courseProgressList.find((cp) => cp.course.id === cid))
+      .filter(Boolean) as typeof courseProgressList
+    const totalModules = programCourses.reduce((sum, cp) => sum + cp.total, 0)
+    const completedModules = programCourses.reduce((sum, cp) => sum + cp.completed, 0)
+    const totalTime = programCourses.reduce((sum, cp) => sum + cp.timeSpent, 0)
+    const percentage = totalModules > 0 ? Math.round((completedModules / totalModules) * 100) : 0
+
+    return {
+      program,
+      totalModules,
+      completedModules,
+      percentage,
+      totalTime,
+      courseCount: programCourses.length,
+    }
+  })
 
   // Acknowledgements (stored in Supabase, visible for all profiles)
   const acknowledgedItems = isOwnProfile
@@ -188,6 +228,15 @@ export function UserProfile() {
       month: 'short',
       day: 'numeric',
       year: 'numeric',
+    })
+  }
+
+  function toggleCourse(courseId: string) {
+    setExpandedCourses((prev) => {
+      const next = new Set(prev)
+      if (next.has(courseId)) next.delete(courseId)
+      else next.add(courseId)
+      return next
     })
   }
 
@@ -277,6 +326,38 @@ export function UserProfile() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left column — Course Progress + Certifications */}
         <div className="lg:col-span-2 space-y-6">
+          {/* Program Overview */}
+          {programProgressList.length > 0 && (
+            <div className="bg-via-card rounded-xl border border-via-border p-6">
+              <h2 className="text-sm font-semibold text-via-navy uppercase tracking-wide mb-4 flex items-center gap-2">
+                <BookOpen className="w-4 h-4" />
+                Program Overview
+              </h2>
+              <div className="space-y-3">
+                {programProgressList.map(({ program, completedModules: pCompleted, totalModules: pTotal, percentage: pPct, totalTime: pTime, courseCount }) => (
+                  <div key={program.id} className="p-3 rounded-lg bg-via-bg-subtle border border-via-border">
+                    <div className="flex items-center justify-between mb-1.5">
+                      <p className="text-sm font-medium text-via-navy">{program.title}</p>
+                      <span className="text-xs text-via-text-light">
+                        {courseCount} course{courseCount !== 1 ? 's' : ''} · {pCompleted}/{pTotal} modules
+                      </span>
+                    </div>
+                    <div className="w-full h-2 bg-via-border rounded-full overflow-hidden">
+                      <div
+                        className={`h-full rounded-full transition-all ${pPct === 100 ? 'bg-emerald-500' : pPct > 0 ? 'bg-indigo-500' : 'bg-transparent'}`}
+                        style={{ width: `${pPct}%` }}
+                      />
+                    </div>
+                    <p className="text-[11px] text-via-text-light mt-1">
+                      {pPct === 100 ? 'Completed' : pPct > 0 ? `${pPct}% complete` : 'Not started'}
+                      {pTime > 0 && ` · ${formatDuration(pTime)}`}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Course Progress */}
           <div className="bg-via-card rounded-xl border border-via-border p-6">
             <h2 className="text-sm font-semibold text-via-navy uppercase tracking-wide mb-4 flex items-center gap-2">
@@ -289,36 +370,85 @@ export function UserProfile() {
               </p>
             ) : (
               <div className="space-y-3">
-                {courseProgressList.map(({ course, completed, total, percentage, timeSpent }) => (
-                  <Link
-                    key={course.id}
-                    to={`/course/${course.id}`}
-                    className="block p-3 rounded-lg bg-via-bg-subtle border border-via-border hover:bg-via-bg-subtle/80 transition-colors"
-                  >
-                    <div className="flex items-center justify-between mb-1.5">
-                      <p className="text-sm font-medium text-via-navy">
-                        {course.title}
-                      </p>
-                      <span className="text-xs font-semibold text-via-text-light">
-                        {completed}/{total}
-                      </span>
+                {courseProgressList.map(({ course, completed, total, percentage, timeSpent, moduleDetails }) => {
+                  const isExpanded = expandedCourses.has(course.id)
+                  return (
+                    <div key={course.id} className="rounded-lg bg-via-bg-subtle border border-via-border overflow-hidden">
+                      <button
+                        type="button"
+                        onClick={() => toggleCourse(course.id)}
+                        className="w-full p-3 text-left cursor-pointer hover:bg-via-bg-subtle/80 transition-colors"
+                      >
+                        <div className="flex items-center justify-between mb-1.5">
+                          <div className="flex items-center gap-2">
+                            {isExpanded ? (
+                              <ChevronDown className="w-3.5 h-3.5 text-via-text-light shrink-0" />
+                            ) : (
+                              <ChevronRight className="w-3.5 h-3.5 text-via-text-light shrink-0" />
+                            )}
+                            <p className="text-sm font-medium text-via-navy">
+                              {course.title}
+                            </p>
+                          </div>
+                          <span className="text-xs font-semibold text-via-text-light">
+                            {completed}/{total}
+                          </span>
+                        </div>
+                        <div className="w-full h-2 bg-via-border rounded-full overflow-hidden ml-5.5">
+                          <div
+                            className={`h-full rounded-full transition-all ${percentage === 100 ? 'bg-emerald-500' : percentage > 0 ? 'bg-via-orange' : 'bg-transparent'}`}
+                            style={{ width: `${percentage}%` }}
+                          />
+                        </div>
+                        <p className="text-[11px] text-via-text-light mt-1 ml-5.5">
+                          {percentage === 100
+                            ? 'Completed'
+                            : percentage > 0
+                              ? `${percentage}% complete`
+                              : 'Not started'}
+                          {timeSpent > 0 && ` · ${formatDuration(timeSpent)}`}
+                        </p>
+                      </button>
+
+                      {/* Expanded module breakdown */}
+                      {isExpanded && (
+                        <div className="border-t border-via-border bg-white px-3 py-2">
+                          <div className="space-y-1">
+                            {moduleDetails.map((mod) => (
+                              <div
+                                key={mod.id}
+                                className="flex items-center gap-2 py-1.5 px-2 rounded-md hover:bg-via-bg-subtle/50"
+                              >
+                                {mod.status === 'completed' ? (
+                                  <CheckCircle className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                                ) : mod.status === 'in-progress' ? (
+                                  <PlayCircle className="w-3.5 h-3.5 text-via-orange shrink-0" />
+                                ) : (
+                                  <Circle className="w-3.5 h-3.5 text-via-border shrink-0" />
+                                )}
+                                <span className="text-xs text-via-text flex-1 truncate">
+                                  {mod.title}
+                                </span>
+                                <div className="flex items-center gap-3 shrink-0">
+                                  {mod.score !== null && (
+                                    <span className="text-[10px] font-semibold text-via-orange">
+                                      {mod.score}%
+                                    </span>
+                                  )}
+                                  <span className="text-[10px] text-via-text-light tabular-nums w-14 text-right">
+                                    {mod.timeSpent != null && mod.timeSpent > 0
+                                      ? formatDuration(mod.timeSpent)
+                                      : '—'}
+                                  </span>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
-                    <div className="w-full h-2 bg-via-border rounded-full overflow-hidden">
-                      <div
-                        className={`h-full rounded-full transition-all ${percentage === 100 ? 'bg-emerald-500' : percentage > 0 ? 'bg-via-orange' : 'bg-transparent'}`}
-                        style={{ width: `${percentage}%` }}
-                      />
-                    </div>
-                    <p className="text-[11px] text-via-text-light mt-1">
-                      {percentage === 100
-                        ? 'Completed'
-                        : percentage > 0
-                          ? `${percentage}% complete`
-                          : 'Not started'}
-                      {timeSpent > 0 && ` · ${formatDuration(timeSpent)}`}
-                    </p>
-                  </Link>
-                ))}
+                  )
+                })}
               </div>
             )}
           </div>

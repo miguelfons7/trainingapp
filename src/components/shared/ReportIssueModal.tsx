@@ -165,7 +165,7 @@ export function ReportIssueModal({ currentPath, onClose }: ReportIssueModalProps
               onChange={(e) => setTitle(e.target.value)}
               placeholder="e.g. Quiz didn't load, button not working..."
               required
-              className="w-full px-3 py-2 text-sm border border-via-border rounded-lg focus:outline-none focus:ring-2 focus:ring-via-orange/30 focus:border-via-orange"
+              className="w-full px-3 py-2 text-sm text-via-text bg-white border border-via-border rounded-lg focus:outline-none focus:ring-2 focus:ring-via-orange/30 focus:border-via-orange"
             />
           </div>
 
@@ -180,7 +180,7 @@ export function ReportIssueModal({ currentPath, onClose }: ReportIssueModalProps
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Any extra info that might help us fix it..."
               rows={3}
-              className="w-full px-3 py-2 text-sm border border-via-border rounded-lg focus:outline-none focus:ring-2 focus:ring-via-orange/30 focus:border-via-orange resize-none"
+              className="w-full px-3 py-2 text-sm text-via-text bg-white border border-via-border rounded-lg focus:outline-none focus:ring-2 focus:ring-via-orange/30 focus:border-via-orange resize-none"
             />
           </div>
 
