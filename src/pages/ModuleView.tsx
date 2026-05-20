@@ -94,7 +94,7 @@ const contentMap: Record<string, ComponentType> = {
   'bdr-follow-ups': BdrFollowUps,
 }
 
-const quizModules = new Set(['industry-knowledge-check', 'via-knowledge-check', 'product-knowledge-check', 'sales-philosophy-quiz', 'bdr-role-quiz'])
+const quizModules = new Set(['industry-knowledge-check', 'via-knowledge-check', 'product-knowledge-check', 'sales-philosophy-quiz', 'tools-systems-quiz', 'bdr-role-quiz'])
 
 /** Maps module IDs to their hero image filenames in public/images/.
  *  Course 1 uses AI-generated .png images. Courses 2-4 use company photos and stock images. */
@@ -141,6 +141,14 @@ const moduleImageMap: Record<string, { src: string; alt: string }> = {
   'bdr-objections-routing': { src: 'module-bdr-objections-routing.jpg', alt: 'Signpost with Multiple Directions' },
   'bdr-tools-hubspot': { src: 'module-bdr-tools-hubspot.jpg', alt: 'CRM Dashboard on Screen' },
   'bdr-follow-ups': { src: 'module-bdr-follow-ups.jpg', alt: 'Calendar and Checklist' },
+  // Course 6 — Tools & Systems
+  'erp-overview': { src: 'module-erp-overview.jpg', alt: 'Enterprise Resource Planning Dashboard' },
+  'hubspot-overview': { src: 'module-hubspot-overview.jpg', alt: 'CRM Dashboard and Analytics' },
+  'hubspot-sequences': { src: 'module-hubspot-sequences.jpg', alt: 'Email Automation Workflow' },
+  'aircall-overview': { src: 'module-aircall-overview.jpg', alt: 'Professional Using Headset for Calls' },
+  'communication-tools': { src: 'module-communication-tools.jpg', alt: 'Team Collaboration and Messaging' },
+  'social-outreach': { src: 'module-social-outreach.jpg', alt: 'Social Media Networking' },
+  'ai-tools': { src: 'module-ai-tools.jpg', alt: 'AI Technology and Workflow Automation' },
 }
 
 export function ModuleView() {

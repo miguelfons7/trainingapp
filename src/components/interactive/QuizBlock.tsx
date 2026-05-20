@@ -34,7 +34,8 @@ const nextCourseMap: Record<string, { id: string; title: string }> = {
   'industry-knowledge-check': { id: 'who-is-via', title: 'Who Is Via Trading' },
   'via-knowledge-check': { id: 'product-knowledge', title: 'Product Knowledge' },
   'product-knowledge-check': { id: 'sales-philosophy', title: 'Consultative Sales' },
-  'sales-philosophy-quiz': { id: 'bdr-role', title: 'BDR Role Training' },
+  'sales-philosophy-quiz': { id: 'tools-systems', title: 'Tools & Systems' },
+  'tools-systems-quiz': { id: 'bdr-role', title: 'BDR Role Training' },
   'bdr-role-quiz': { id: 'am-role', title: 'AM Role Training' },
 }
 
