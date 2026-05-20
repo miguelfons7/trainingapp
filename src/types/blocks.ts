@@ -229,6 +229,16 @@ export interface DividerBlock extends BlockBase {
   }
 }
 
+/** Standalone expandable card (not part of a group). Used in CMS code-mode content. */
+export interface ExpandableCardBlock extends BlockBase {
+  type: 'expandable_card'
+  data: {
+    title: string
+    subtitle?: string
+    content: string
+  }
+}
+
 // ─── Union Type ────────────────────────────────────────────
 export type ContentBlock =
   | ParagraphBlock
@@ -242,6 +252,7 @@ export type ContentBlock =
   | FlowDiagramBlock
   | InlineImageBlock
   | HeroImageBlock
+  | ExpandableCardBlock
   | ExpandableCardGroupBlock
   | IconCardGridBlock
   | ScenarioCardBlock

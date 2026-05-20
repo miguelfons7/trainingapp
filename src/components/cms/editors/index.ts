@@ -39,6 +39,7 @@ export const BLOCK_EDITORS: Record<
   flow_diagram: FlowDiagramEditor,
   inline_image: InlineImageEditor,
   hero_image: HeroImageEditor,
+  expandable_card: ExpandableCardGroupEditor,  // Reuse group editor for standalone cards
   expandable_card_group: ExpandableCardGroupEditor,
   icon_card_grid: IconCardGridEditor,
   scenario_card: ScenarioCardEditor,

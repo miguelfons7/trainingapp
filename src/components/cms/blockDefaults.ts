@@ -12,6 +12,7 @@ import type {
   FlowDiagramBlock,
   InlineImageBlock,
   HeroImageBlock,
+  ExpandableCardBlock,
   ExpandableCardGroupBlock,
   IconCardGridBlock,
   ScenarioCardBlock,
@@ -144,6 +145,14 @@ export function createDefaultBlock(type: BlockType): ContentBlock {
           aspectRatio: '16:9',
         },
       } satisfies HeroImageBlock
+
+    case 'expandable_card':
+      return {
+        id: uid(),
+        type: 'expandable_card',
+        order: 0,
+        data: { title: 'Card Title', content: '<p>Card content goes here.</p>' },
+      } satisfies ExpandableCardBlock
 
     case 'expandable_card_group':
       return {

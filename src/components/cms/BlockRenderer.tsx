@@ -27,6 +27,7 @@ import type {
   FlowDiagramBlock,
   InlineImageBlock,
   HeroImageBlock,
+  ExpandableCardBlock,
   ExpandableCardGroupBlock,
   IconCardGridBlock,
   ScenarioCardBlock,
@@ -53,11 +54,12 @@ function buildBlockMap(blocks: ContentBlock[]): Map<string, ContentBlock> {
 }
 
 /** Map callout style to Tailwind color token. */
-const CALLOUT_COLORS: Record<CalloutBlock['data']['style'], string> = {
+const CALLOUT_COLORS: Record<string, string> = {
   info: 'blue',
   tip: 'emerald',
   warning: 'amber',
   orange: 'orange',
+  success: 'emerald',
 }
 
 /** Grid-column class per column count. */
@@ -78,20 +80,28 @@ const DIVIDER_SIZE: Record<string, string> = {
 // ─── Individual Block Renderers ───────────────────────────
 
 function ParagraphRenderer({ block }: { block: ParagraphBlock }) {
+  // Support both CMS editor field name (content) and alternative (html)
+  const html = block.data.content || (block.data as Record<string, string>).html || ''
   return (
     <div
       className="text-sm text-via-text leading-relaxed mb-4"
-      dangerouslySetInnerHTML={{ __html: sanitize(block.data.content) }}
+      dangerouslySetInnerHTML={{ __html: sanitize(html) }}
     />
   )
 }
 
 function HeadingRenderer({ block }: { block: HeadingBlock }) {
-  const Tag = block.data.level === 3 ? 'h3' : 'h4'
-  const classes =
-    block.data.level === 3
-      ? 'text-sm font-semibold text-via-text uppercase tracking-wide mb-3'
-      : 'text-sm font-semibold text-via-navy uppercase tracking-wide mb-3'
+  // Support both number (3/4) and string ("h2"/"h3"/"h4") level formats
+  const rawLevel = block.data.level
+  const isH2 = rawLevel === 'h2' as unknown as number
+  const isH3 = rawLevel === 3 || rawLevel === 'h3' as unknown as number
+  if (isH2) {
+    return <h2 className="text-lg font-bold text-via-navy mb-3 mt-2">{block.data.text}</h2>
+  }
+  const Tag = isH3 ? 'h3' : 'h4'
+  const classes = isH3
+    ? 'text-sm font-semibold text-via-text uppercase tracking-wide mb-3'
+    : 'text-sm font-semibold text-via-navy uppercase tracking-wide mb-3'
   return <Tag className={classes}>{block.data.text}</Tag>
 }
 
@@ -122,7 +132,11 @@ function ContentCardRenderer({
 }
 
 function CalloutRenderer({ block }: { block: CalloutBlock }) {
-  const color = CALLOUT_COLORS[block.data.style]
+  // Support both CMS editor field names (style/content) and alternatives (variant/html)
+  const d = block.data as Record<string, string | undefined>
+  const style = block.data.style || (d.variant as CalloutBlock['data']['style']) || 'info'
+  const content = block.data.content || d.html || ''
+  const color = CALLOUT_COLORS[style] || 'blue'
   return (
     <div className={`bg-${color}-50 rounded-lg border border-${color}-200 p-4 mb-6`}>
       {block.data.title && (
@@ -130,7 +144,7 @@ function CalloutRenderer({ block }: { block: CalloutBlock }) {
       )}
       <div
         className={`text-sm text-${color}-700`}
-        dangerouslySetInnerHTML={{ __html: sanitize(block.data.content) }}
+        dangerouslySetInnerHTML={{ __html: sanitize(content) }}
       />
     </div>
   )
@@ -143,7 +157,10 @@ function BulletListRenderer({ block }: { block: BulletListBlock }) {
       {block.data.items.map((item, i) => (
         <li key={i} className="flex items-start gap-2.5">
           <span className={`w-1.5 h-1.5 rounded-full bg-${dotColor} mt-1.5 shrink-0`} />
-          <span className="text-sm text-via-text leading-relaxed">{item}</span>
+          <span
+            className="text-sm text-via-text leading-relaxed"
+            dangerouslySetInnerHTML={{ __html: sanitize(item) }}
+          />
         </li>
       ))}
     </ul>
@@ -251,6 +268,23 @@ function HeroImageRenderer({ block }: { block: HeroImageBlock }) {
         alt={block.data.alt}
         aspectRatio={block.data.aspectRatio}
       />
+    </div>
+  )
+}
+
+/** Standalone expandable_card block (single card with its own state). */
+function ExpandableCardSingleRenderer({ block }: { block: ExpandableCardBlock }) {
+  const [isExpanded, setIsExpanded] = useState(false)
+  return (
+    <div className="mb-3">
+      <ExpandableCard
+        title={block.data.title}
+        subtitle={block.data.subtitle}
+        isExpanded={isExpanded}
+        onToggle={() => setIsExpanded((v) => !v)}
+      >
+        <div dangerouslySetInnerHTML={{ __html: sanitize(block.data.content) }} />
+      </ExpandableCard>
     </div>
   )
 }
@@ -369,6 +403,8 @@ function BlockSwitch({ block, blockMap }: BlockSwitchProps) {
       return <InlineImageRenderer block={block} />
     case 'hero_image':
       return <HeroImageRenderer block={block} />
+    case 'expandable_card':
+      return <ExpandableCardSingleRenderer block={block} />
     case 'expandable_card_group':
       return <ExpandableCardGroupRenderer block={block} />
     case 'icon_card_grid':
