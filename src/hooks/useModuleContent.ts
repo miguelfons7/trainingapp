@@ -6,6 +6,7 @@ import {
   publishModuleContent,
   type ModuleContentRecord,
 } from '../lib/contentService'
+import { normalizePageContent } from '../lib/normalizeContent'
 
 interface UseModuleContentReturn {
   record: ModuleContentRecord | null
@@ -93,7 +94,7 @@ export function useModuleContent(
 
   return {
     record,
-    content: record?.content ?? null,
+    content: record?.content ? normalizePageContent(record.content) : null,
     loading,
     error,
     isPublished: record?.status === 'published',

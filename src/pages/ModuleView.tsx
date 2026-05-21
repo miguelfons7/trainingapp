@@ -144,7 +144,6 @@ const moduleImageMap: Record<string, { src: string; alt: string }> = {
   // Course 6 — Tools & Systems
   'erp-overview': { src: 'module-erp-overview.jpg', alt: 'Enterprise Resource Planning Dashboard' },
   'hubspot-overview': { src: 'module-hubspot-overview.jpg', alt: 'CRM Dashboard and Analytics' },
-  'hubspot-sequences': { src: 'module-hubspot-sequences.jpg', alt: 'Email Automation Workflow' },
   'aircall-overview': { src: 'module-aircall-overview.jpg', alt: 'Professional Using Headset for Calls' },
   'communication-tools': { src: 'module-communication-tools.jpg', alt: 'Team Collaboration and Messaging' },
   'social-outreach': { src: 'module-social-outreach.jpg', alt: 'Social Media Networking' },

@@ -35,9 +35,9 @@ export const glossaryTerms: GlossaryTerm[] = [
     id: 'pallet',
     term: 'Pallet',
     category: 'Shipping & Sizing',
-    definition: 'Standard wooden shipping structure (48" x 48" base) loaded with merchandise, typically stacked 6-7 feet high.',
+    definition: 'Standard wooden shipping structure (40" x 48" base) loaded with merchandise, typically stacked 6-7 feet high.',
     details: 'The most common entry point for new buyers. Can be assorted or category-specific.',
-    searchTerms: ['pallet', '48x48', 'wooden', 'shipping structure'],
+    searchTerms: ['pallet', '40x48', 'wooden', 'shipping structure'],
   },
   {
     id: 'truckload',

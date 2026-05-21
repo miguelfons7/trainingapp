@@ -20,11 +20,11 @@ export const loadTypes: LoadType[] = [
     id: 'pallet',
     name: 'Pallet',
     description:
-      'A wooden or plastic structure (standard 48 inch by 48 inch base) loaded with merchandise. Pallets come in several formats, so it is important to understand the differences.',
+      'A wooden or plastic structure (standard 40 inch by 48 inch base) loaded with merchandise. Pallets come in several formats, so it is important to understand the differences.',
     details:
-      'Can contain assorted merchandise across categories or be category-specific. Common pallet formats include: Standard Pallets (wooden 48"x48" with merchandise stacked and shrink-wrapped), Gaylords (large corrugated cardboard boxes, typically 40"x48"x48", placed on a pallet, common for unsorted customer returns), Palletized Cases (individual case packs stacked on a pallet for organized category-specific lots), and Watermelon Bins (large open-top bins on pallets, used for bulk unsorted merchandise). The format affects how merchandise is received, sorted, and resold.',
+      'Can contain assorted merchandise across categories or be category-specific. Common pallet formats include: Standard Pallets (wooden 40"x48" with merchandise stacked and shrink-wrapped), Gaylords (large corrugated cardboard boxes, typically 40"x48"x48", placed on a pallet, common for unsorted customer returns), Palletized Cases (individual case packs stacked on a pallet for organized category-specific lots), and Watermelon Bins (large open-top bins on pallets, used for bulk unsorted merchandise). The format affects how merchandise is received, sorted, and resold.',
     icon: 'LayoutGrid',
-    searchTerms: ['pallet', '48x48', 'wooden', 'standard', 'gaylord', 'watermelon bin'],
+    searchTerms: ['pallet', '40x48', 'wooden', 'standard', 'gaylord', 'watermelon bin'],
   },
   {
     id: 'ltl',

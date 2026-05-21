@@ -284,7 +284,7 @@ function shippingTerms(): MigrationEntry {
     'Pallets come in several different formats. Understanding these differences matters because the format affects how merchandise is received, sorted, and resold.',
   )
   b.iconCardGrid(2, [
-    { icon: 'Package', title: 'Standard Pallet', description: 'Wooden 48"x48" base with merchandise stacked and shrink-wrapped on top.' },
+    { icon: 'Package', title: 'Standard Pallet', description: 'Wooden 40"x48" base with merchandise stacked and shrink-wrapped on top.' },
     { icon: 'Archive', title: 'Gaylord', description: 'Large corrugated cardboard box (typically 40"x48"x48") placed on a pallet. Common for unsorted Customer Returns.' },
     { icon: 'Layers', title: 'Palletized Cases', description: 'Individual case packs neatly stacked on a pallet, offering organized, category-specific lots.' },
     { icon: 'LayoutGrid', title: 'Watermelon Bin', description: 'Large open-top bin on a pallet, used for bulk unsorted merchandise.' },

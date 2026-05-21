@@ -19,7 +19,7 @@ const iconMap: Record<string, React.ReactNode> = {
 /** Domestic lot sizes shown in the visual comparison */
 const domesticSizeVisual = [
   { name: 'Case', width: 'w-12', label: '1 case' },
-  { name: 'Pallet', width: 'w-20', label: '48"x48"' },
+  { name: 'Pallet', width: 'w-20', label: '40"x48"' },
   { name: 'LTL', width: 'w-32', label: '1-6 pallets' },
   { name: 'Truckload', width: 'w-48', label: '26 pallets' },
 ]
@@ -111,7 +111,7 @@ export function LoadTypes() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div className="bg-via-bg-subtle rounded-lg p-4">
             <p className="text-sm font-semibold text-via-navy mb-1">Standard Pallet</p>
-            <p className="text-xs text-via-text-light">Wooden 48"x48" base with merchandise stacked and shrink-wrapped on top.</p>
+            <p className="text-xs text-via-text-light">Wooden 40"x48" base with merchandise stacked and shrink-wrapped on top.</p>
           </div>
           <div className="bg-via-bg-subtle rounded-lg p-4">
             <p className="text-sm font-semibold text-via-navy mb-1">Gaylord</p>
