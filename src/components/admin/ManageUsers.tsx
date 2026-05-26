@@ -8,7 +8,11 @@ import {
   Loader2,
   ExternalLink,
   Search,
+  KeyRound,
+  Copy,
+  CheckCircle2,
 } from 'lucide-react'
+import { useAuth } from '../../context/AuthContext'
 import { supabase } from '../../lib/supabase'
 import type { Profile, Team } from '../../types/database'
 import type { UserRole } from '../../types/database'
@@ -30,6 +34,7 @@ const roleLabels: Record<string, string> = {
 
 export function ManageUsers() {
   const navigate = useNavigate()
+  const { user: currentUser } = useAuth()
   const [users, setUsers] = useState<Profile[]>([])
   const [teams, setTeams] = useState<Team[]>([])
   const [loading, setLoading] = useState(true)
@@ -43,6 +48,12 @@ export function ManageUsers() {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
   const [search, setSearch] = useState('')
+
+  // Password reset state
+  const [resetGenerating, setResetGenerating] = useState<string | null>(null)
+  const [resetLinkUrl, setResetLinkUrl] = useState<string | null>(null)
+  const [resetLinkUser, setResetLinkUser] = useState<string | null>(null)
+  const [copied, setCopied] = useState(false)
 
   const loadData = useCallback(async () => {
     const [usersRes, teamsRes] = await Promise.all([
@@ -123,6 +134,56 @@ export function ManageUsers() {
     )
     setEditingId(null)
     setSaving(false)
+  }
+
+  async function handleGenerateResetLink(user: Profile) {
+    setResetGenerating(user.id)
+    setError('')
+
+    const { data, error: insertError } = await supabase
+      .from('password_resets')
+      .insert({
+        user_id: user.id,
+        created_by: currentUser?.id ?? null,
+      })
+      .select('token')
+      .single()
+
+    if (insertError || !data) {
+      setError(insertError?.message ?? 'Failed to generate reset link')
+      setResetGenerating(null)
+      return
+    }
+
+    const url = `${window.location.origin}/reset-password?token=${data.token}`
+    setResetLinkUrl(url)
+    setResetLinkUser(user.full_name)
+    setCopied(false)
+    setResetGenerating(null)
+  }
+
+  function closeResetModal() {
+    setResetLinkUrl(null)
+    setResetLinkUser(null)
+    setCopied(false)
+  }
+
+  async function handleCopyLink() {
+    if (!resetLinkUrl) return
+    try {
+      await navigator.clipboard.writeText(resetLinkUrl)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch {
+      // Fallback: select the input text
+      const input = document.getElementById('reset-link-input') as HTMLInputElement
+      if (input) {
+        input.select()
+        document.execCommand('copy')
+        setCopied(true)
+        setTimeout(() => setCopied(false), 2000)
+      }
+    }
   }
 
   const filtered = useMemo(() => {
@@ -380,14 +441,29 @@ export function ManageUsers() {
                             </button>
                           </>
                         ) : (
-                          <button
-                            type="button"
-                            onClick={() => startEdit(user)}
-                            className="p-1.5 rounded-lg hover:bg-via-bg-subtle text-via-text-light hover:text-via-navy transition-colors cursor-pointer"
-                            title="Edit user"
-                          >
-                            <Pencil className="w-4 h-4" />
-                          </button>
+                          <>
+                            <button
+                              type="button"
+                              onClick={() => startEdit(user)}
+                              className="p-1.5 rounded-lg hover:bg-via-bg-subtle text-via-text-light hover:text-via-navy transition-colors cursor-pointer"
+                              title="Edit user"
+                            >
+                              <Pencil className="w-4 h-4" />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleGenerateResetLink(user)}
+                              disabled={resetGenerating === user.id}
+                              className="p-1.5 rounded-lg hover:bg-amber-50 text-via-text-light hover:text-amber-600 transition-colors cursor-pointer disabled:opacity-40"
+                              title="Generate password reset link"
+                            >
+                              {resetGenerating === user.id ? (
+                                <Loader2 className="w-4 h-4 animate-spin" />
+                              ) : (
+                                <KeyRound className="w-4 h-4" />
+                              )}
+                            </button>
+                          </>
                         )}
                       </div>
                     </td>
@@ -398,6 +474,69 @@ export function ManageUsers() {
           </table>
         </div>
       </div>
+      {/* Password Reset Link Modal */}
+      {resetLinkUrl && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          <div className="bg-via-card rounded-2xl border border-via-border p-6 shadow-xl w-full max-w-md mx-4">
+            <div className="flex items-center gap-2 mb-4">
+              <KeyRound className="w-5 h-5 text-amber-500" />
+              <h3 className="text-sm font-semibold text-via-navy">
+                Password Reset Link
+              </h3>
+            </div>
+
+            <p className="text-xs text-via-text-light mb-3">
+              Share this link with <strong className="text-via-navy">{resetLinkUser}</strong> to let them set a new password:
+            </p>
+
+            <div className="flex gap-2 mb-3">
+              <input
+                id="reset-link-input"
+                type="text"
+                value={resetLinkUrl}
+                readOnly
+                className="flex-1 px-3 py-2 rounded-lg border border-via-border bg-via-bg-subtle text-xs text-via-text font-mono select-all"
+                onFocus={(e) => e.target.select()}
+              />
+              <button
+                type="button"
+                onClick={handleCopyLink}
+                className={`px-3 py-2 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer ${
+                  copied
+                    ? 'bg-emerald-100 text-emerald-700 border border-emerald-200'
+                    : 'bg-via-navy text-white hover:bg-via-navy-light'
+                }`}
+              >
+                {copied ? (
+                  <>
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                    Copied
+                  </>
+                ) : (
+                  <>
+                    <Copy className="w-3.5 h-3.5" />
+                    Copy
+                  </>
+                )}
+              </button>
+            </div>
+
+            <p className="text-[10px] text-via-text-light/60 mb-4">
+              This link expires in 24 hours and can only be used once.
+            </p>
+
+            <div className="flex justify-end">
+              <button
+                type="button"
+                onClick={closeResetModal}
+                className="px-4 py-2 rounded-lg border border-via-border text-xs font-medium text-via-text hover:bg-via-bg-subtle transition-colors cursor-pointer"
+              >
+                Done
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

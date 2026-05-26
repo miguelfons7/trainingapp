@@ -705,6 +705,36 @@ export interface Database {
           },
         ]
       }
+      password_resets: {
+        Row: {
+          id: string
+          user_id: string
+          token: string
+          expires_at: string
+          used_at: string | null
+          created_by: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          token?: string
+          expires_at?: string
+          used_at?: string | null
+          created_by?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          token?: string
+          expires_at?: string
+          used_at?: string | null
+          created_by?: string | null
+          created_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: Record<string, never>
     Functions: {
@@ -733,6 +763,18 @@ export interface Database {
           status: string
         }[]
       }
+      validate_password_reset_token: {
+        Args: { reset_token: string }
+        Returns: {
+          email: string
+          full_name: string
+          status: string
+        }[]
+      }
+      reset_password_with_token: {
+        Args: { reset_token: string; new_password: string }
+        Returns: { success: boolean; error?: string }
+      }
     }
   }
 }
@@ -749,3 +791,4 @@ export type ComplianceAcknowledgementRow = Database['public']['Tables']['complia
 export type AuditLogRow = Database['public']['Tables']['audit_log']['Row']
 export type ConstructionOverrideRow = Database['public']['Tables']['construction_overrides']['Row']
 export type IssueReportRow = Database['public']['Tables']['issue_reports']['Row']
+export type PasswordResetRow = Database['public']['Tables']['password_resets']['Row']

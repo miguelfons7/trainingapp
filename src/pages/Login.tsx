@@ -120,6 +120,10 @@ export function Login() {
               </div>
             </div>
 
+            <p className="text-[11px] text-via-text-light/60 text-right -mt-1">
+              Forgot your password? Contact your admin for a reset link.
+            </p>
+
             {error && (
               <p className="text-xs text-via-danger font-medium">{error}</p>
             )}

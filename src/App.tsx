@@ -7,6 +7,7 @@ import { CoursesProvider } from './context/CoursesContext'
 import { AppShell } from './components/layout/AppShell'
 import { Login } from './pages/Login'
 import { Signup } from './pages/Signup'
+import { ResetPassword } from './pages/ResetPassword'
 import { Home } from './pages/Home'
 import { CourseView } from './pages/CourseView'
 import { ModuleView } from './pages/ModuleView'
@@ -57,6 +58,7 @@ function AppRoutes() {
         path="/signup"
         element={user ? <Navigate to="/" replace /> : <Signup />}
       />
+      <Route path="/reset-password" element={<ResetPassword />} />
       <Route
         path="/"
         element={
