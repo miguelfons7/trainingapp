@@ -735,6 +735,42 @@ export interface Database {
         }
         Relationships: []
       }
+      course_feedback: {
+        Row: {
+          id: string
+          user_id: string
+          course_id: string
+          rating: number
+          relevance: 'very' | 'somewhat' | 'not-really'
+          difficulty: 'too-easy' | 'just-right' | 'too-hard'
+          comment: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          course_id: string
+          rating: number
+          relevance: 'very' | 'somewhat' | 'not-really'
+          difficulty: 'too-easy' | 'just-right' | 'too-hard'
+          comment?: string | null
+          created_at?: string
+        }
+        Update: {
+          rating?: number
+          relevance?: 'very' | 'somewhat' | 'not-really'
+          difficulty?: 'too-easy' | 'just-right' | 'too-hard'
+          comment?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "course_feedback_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
     }
     Views: Record<string, never>
     Functions: {
@@ -792,3 +828,4 @@ export type AuditLogRow = Database['public']['Tables']['audit_log']['Row']
 export type ConstructionOverrideRow = Database['public']['Tables']['construction_overrides']['Row']
 export type IssueReportRow = Database['public']['Tables']['issue_reports']['Row']
 export type PasswordResetRow = Database['public']['Tables']['password_resets']['Row']
+export type CourseFeedbackRow = Database['public']['Tables']['course_feedback']['Row']

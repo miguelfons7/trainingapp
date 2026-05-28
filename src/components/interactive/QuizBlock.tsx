@@ -10,9 +10,13 @@ import { productKnowledgeSectionedQuiz } from '../../data/modules/product-knowle
 import { salesPhilosophySectionedQuiz } from '../../data/modules/consultative-sales/courseQuiz'
 import { bdrRoleSectionedQuiz } from '../../data/modules/bdr-role/courseQuiz'
 import { Confetti } from './Confetti'
+import { CourseFeedbackForm } from './CourseFeedbackForm'
+import { useAuth } from '../../context/AuthContext'
 
 interface QuizBlockProps {
   quizId: string
+  /** The course this quiz belongs to — used for the feedback form */
+  courseId?: string
   /** Called when the user submits all quiz answers. Receives (score, total). */
   onComplete?: (score: number, total: number) => void
   /** CMS quiz data — takes priority over hardcoded data when provided */
@@ -343,7 +347,8 @@ function FillInBlankSection({
 // ─────────────────────────────────────────
 // Main QuizBlock Component
 // ─────────────────────────────────────────
-export function QuizBlock({ quizId, onComplete, cmsQuizData }: QuizBlockProps) {
+export function QuizBlock({ quizId, courseId, onComplete, cmsQuizData }: QuizBlockProps) {
+  const { user } = useAuth()
   // CMS quiz data takes priority over hardcoded data
   const hardcodedQuiz = sectionedQuizMap[quizId]
   const sectionedQuiz: SectionedQuiz | undefined = cmsQuizData
@@ -630,6 +635,9 @@ export function QuizBlock({ quizId, onComplete, cmsQuizData }: QuizBlockProps) {
                 <p className="text-sm text-emerald-700 mb-6">
                   Outstanding work! You've demonstrated a strong understanding of the material.
                 </p>
+                {courseId && user && (
+                  <CourseFeedbackForm courseId={courseId} userId={user.id} />
+                )}
                 {nextCourse && (
                   <Link
                     to={`/course/${nextCourse.id}`}

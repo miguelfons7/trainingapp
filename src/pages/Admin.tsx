@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Shield, Users, BarChart3, BookPlus, Megaphone, UserPlus, Building2, UserCog } from 'lucide-react'
+import { Shield, Users, BarChart3, BookPlus, Megaphone, UserPlus, Building2, UserCog, MessageSquareText } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { UserProgressTable } from '../components/admin/UserProgressTable'
 import { CourseStats } from '../components/admin/CourseStats'
@@ -8,8 +8,9 @@ import { ComplianceManager } from '../components/admin/ComplianceManager'
 import { InviteUsers } from '../components/admin/InviteUsers'
 import { ManageTeams } from '../components/admin/ManageTeams'
 import { ManageUsers } from '../components/admin/ManageUsers'
+import { FeedbackManager } from '../components/admin/FeedbackManager'
 
-type TabKey = 'progress' | 'compliance' | 'stats' | 'assign' | 'invite' | 'teams' | 'users'
+type TabKey = 'progress' | 'compliance' | 'stats' | 'assign' | 'invite' | 'teams' | 'users' | 'feedback'
 
 const tabs: { key: TabKey; label: string; icon: typeof Users }[] = [
   { key: 'progress', label: 'User Progress', icon: Users },
@@ -18,6 +19,7 @@ const tabs: { key: TabKey; label: string; icon: typeof Users }[] = [
   { key: 'invite', label: 'Invite Users', icon: UserPlus },
   { key: 'compliance', label: 'Announcements', icon: Megaphone },
   { key: 'stats', label: 'Course Stats', icon: BarChart3 },
+  { key: 'feedback', label: 'Feedback', icon: MessageSquareText },
   { key: 'assign', label: 'Assign Courses', icon: BookPlus },
 ]
 
@@ -84,6 +86,7 @@ export function Admin() {
       {activeTab === 'compliance' && <ComplianceManager />}
       {activeTab === 'stats' && <CourseStats />}
       {activeTab === 'assign' && <AssignCourses />}
+      {activeTab === 'feedback' && <FeedbackManager />}
       {activeTab === 'invite' && <InviteUsers />}
     </div>
   )

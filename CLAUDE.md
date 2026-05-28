@@ -48,6 +48,7 @@ src/
     ContentEditorPage.tsx <- Admin CMS editor page (/admin/content/:courseId/:moduleId)
     Login.tsx       <- Email + password login via Supabase Auth
     Signup.tsx      <- Invite-only signup with token validation
+    ResetPassword.tsx <- Token-based password reset (public, no auth)
     UserProfile.tsx <- User profile page with stats, progress, certs, activity
   types/
     index.ts        <- All TypeScript interfaces (User, Course, quiz types, etc.)
@@ -67,6 +68,7 @@ supabase/
     007_managed_content.sql <- managed_courses, managed_modules, managed_programs tables
     008_issue_reports.sql <- issue_reports table + RLS + trigger
     009_time_spent.sql <- time_spent_seconds column on module_progress
+    010_password_resets.sql <- password_resets table + RLS + SECURITY DEFINER reset functions
 public/
   images/           <- All images (hero images, inline images, logos)
 .env.local          <- Supabase credentials (VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY)
@@ -80,7 +82,7 @@ public/
 - **Anon Key**: Stored in `.env.local` as `VITE_SUPABASE_ANON_KEY`
 - `.env.local` is gitignored via `*.local` pattern
 
-### Database Schema (12 tables)
+### Database Schema (13 tables)
 
 | Table | Purpose | Key Fields |
 |-------|---------|------------|
@@ -96,6 +98,7 @@ public/
 | `module_content` | CMS block content per module (one row per module) | `course_id`, `module_id`, `content` (jsonb PageContent), `status` (draft/published), `version`, `created_by`, `updated_by` |
 | `module_content_versions` | Immutable version snapshots (created on publish) | `module_content_id` (FK), `content` (jsonb), `version`, `published_by`, `published_at` |
 | `construction_overrides` | Admin toggles for under-construction status | `entity_type` (course/module/program), `entity_id`, `is_active`, `message`, `updated_by` |
+| `password_resets` | Admin-generated password reset tokens | `user_id`, `token`, `expires_at`, `used_at`, `created_by` |
 
 ### Roles & Permissions
 
@@ -126,6 +129,7 @@ Helper functions (SECURITY DEFINER): `get_my_role()`, `get_my_team_id()`, `is_ad
 3. **Profile**: After auth, `fetchProfileAsUser()` queries the `profiles` table and maps to the `User` type
 4. **Signup**: Invite-only. The `handle_new_user()` trigger on `auth.users` auto-creates a profile from the matching invitation (role, team_id, invited_by).
 5. **Logout**: `supabase.auth.signOut()` clears session
+6. **Password Reset**: Admin generates token via ManageUsers → user visits `/reset-password?token=xxx` → SECURITY DEFINER function updates `auth.users` password → user signs in with new credentials. No email required.
 
 ### AuthContext API
 
@@ -461,6 +465,7 @@ interface CourseModule {
 - **Profile hero** — Gradient header (navy-to-indigo) with white text for name/email. Role badge, team badge, and join date display below in the card body. No negative margins or overlapping colors.
 - **Admin user editing** — ManageUsers tab supports editing name and email inline (previously only role and team).
 - **Consumer migration complete** — All 15+ components that previously imported from `courses.ts`/`programs.ts` now use `useCourses()` hook from CoursesContext. CoursesProvider wraps ProgressProvider in App.tsx so ProgressContext can access course data dynamically.
+- **Password reset route has no auth guard** — `/reset-password` is public like `/login` and `/signup`. Don't wrap it in ProtectedRoute or add a user redirect, because users who forgot their password can't be authenticated. Migration 010. Admin generates token in ManageUsers (KeyRound icon) → modal shows copyable link → user visits link → sets new password. Token expires in 24h, single-use.
 
 ## Pending Work
 

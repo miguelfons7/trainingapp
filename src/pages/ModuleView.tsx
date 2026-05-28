@@ -308,6 +308,7 @@ export function ModuleView() {
           {isQuiz ? (
             <QuizBlock
               quizId={moduleId}
+              courseId={courseId}
               onComplete={handleQuizComplete}
               cmsQuizData={cmsContent?.quizData}
             />
