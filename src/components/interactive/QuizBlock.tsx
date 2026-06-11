@@ -17,8 +17,10 @@ interface QuizBlockProps {
   quizId: string
   /** The course this quiz belongs to — used for the feedback form */
   courseId?: string
-  /** Called when the user submits all quiz answers. Receives (score, total). */
+  /** Called only when the user PASSES the quiz. Receives (score, total). */
   onComplete?: (score: number, total: number) => void
+  /** Called on every submission, pass or fail — for activity logging */
+  onAttempt?: (score: number, total: number, passed: boolean) => void
   /** CMS quiz data — takes priority over hardcoded data when provided */
   cmsQuizData?: SectionedQuizData
 }
@@ -376,7 +378,7 @@ function FillInBlankSection({
 // ─────────────────────────────────────────
 // Main QuizBlock Component
 // ─────────────────────────────────────────
-export function QuizBlock({ quizId, courseId, onComplete, cmsQuizData }: QuizBlockProps) {
+export function QuizBlock({ quizId, courseId, onComplete, onAttempt, cmsQuizData }: QuizBlockProps) {
   const { user } = useAuth()
   // CMS quiz data takes priority over hardcoded data
   const hardcodedQuiz = sectionedQuizMap[quizId]
@@ -477,7 +479,7 @@ export function QuizBlock({ quizId, courseId, onComplete, cmsQuizData }: QuizBlo
   const termMatchPairs = sectionedQuiz.termMatch
   const totalItems =
     termMatchPairs.length + mcQuestions.length + fibItems.length
-  const passCount = Math.ceil(totalItems * PASS_THRESHOLD)
+  const passCount = Math.ceil(totalItems * (sectionedQuiz.passThreshold ?? PASS_THRESHOLD))
 
   // --- MC helpers ---
   function handleMcSelect(questionId: string, optionIndex: number) {
@@ -500,7 +502,13 @@ export function QuizBlock({ quizId, courseId, onComplete, cmsQuizData }: QuizBlo
 
   function handleSubmit() {
     setSubmitted(true)
-    onComplete?.(totalScore, totalItems)
+    const didPass = totalScore >= passCount
+    onAttempt?.(totalScore, totalItems, didPass)
+    // Only a passing submission completes the module — failing must not
+    // mark the quiz module as completed (it would unlock the next course).
+    if (didPass) {
+      onComplete?.(totalScore, totalItems)
+    }
   }
 
   /** Reset for a fresh attempt — options reshuffle so answers can't be memorized by position */

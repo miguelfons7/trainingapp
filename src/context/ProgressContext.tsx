@@ -27,6 +27,8 @@ interface ProgressContextValue {
   getCourseProgress: (courseId: string) => CourseProgressSummary
   getNextModule: (courseId: string) => string | null
   resetProgress: () => void
+  /** Record a quiz submission (pass or fail) in the activity log */
+  logQuizAttempt: (courseId: string, moduleId: string, score: number) => void
 }
 
 const ProgressContext = createContext<ProgressContextValue | undefined>(
@@ -39,6 +41,38 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
   const userId = user?.id ?? ''
 
   const [progress, setProgress] = useState<Record<string, ModuleProgress>>({})
+
+  /** Fire-and-forget activity event for streaks + admin Active Learners view */
+  const logActivity = useCallback(
+    (
+      courseId: string,
+      moduleId: string,
+      event: 'module_started' | 'module_completed' | 'quiz_attempted',
+      score?: number,
+    ) => {
+      if (!userId) return
+      supabase
+        .from('learning_activity')
+        .insert({
+          user_id: userId,
+          course_id: courseId,
+          module_id: moduleId,
+          event,
+          score: score ?? null,
+        })
+        .then(({ error }) => {
+          if (error) console.error('Failed to log activity:', error.message)
+        })
+    },
+    [userId],
+  )
+
+  const logQuizAttempt = useCallback(
+    (courseId: string, moduleId: string, score: number) => {
+      logActivity(courseId, moduleId, 'quiz_attempted', score)
+    },
+    [logActivity],
+  )
 
   // Load all progress from Supabase when user changes
   useEffect(() => {
@@ -130,9 +164,14 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
           .then(({ error }) => {
             if (error) console.error('Failed to save progress:', error.message)
           })
+
+        // Only log a completion event the first time (not on re-completes)
+        if (existing?.status !== 'completed') {
+          logActivity(courseId, moduleId, 'module_completed', score)
+        }
       }
     },
-    [userId, progress],
+    [userId, progress, logActivity],
   )
 
   const startModule = useCallback(
@@ -176,9 +215,11 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
           .then(({ error }) => {
             if (error) console.error('Failed to save progress:', error.message)
           })
+
+        logActivity(courseId, moduleId, 'module_started')
       }
     },
-    [userId, progress],
+    [userId, progress, logActivity],
   )
 
   const getCourseProgress = useCallback(
@@ -239,6 +280,7 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
         getCourseProgress,
         getNextModule,
         resetProgress,
+        logQuizAttempt,
       }}
     >
       {children}

@@ -793,6 +793,37 @@ export interface Database {
         }
         Relationships: []
       }
+      learning_activity: {
+        Row: {
+          id: string
+          user_id: string
+          course_id: string
+          module_id: string
+          event: 'module_started' | 'module_completed' | 'quiz_attempted'
+          score: number | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          course_id: string
+          module_id: string
+          event: 'module_started' | 'module_completed' | 'quiz_attempted'
+          score?: number | null
+          created_at?: string
+        }
+        Update: {
+          score?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "learning_activity_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
     }
     Views: Record<string, never>
     Functions: {
@@ -852,3 +883,4 @@ export type IssueReportRow = Database['public']['Tables']['issue_reports']['Row'
 export type PasswordResetRow = Database['public']['Tables']['password_resets']['Row']
 export type CourseFeedbackRow = Database['public']['Tables']['course_feedback']['Row']
 export type CourseUnlockOverrideRow = Database['public']['Tables']['course_unlock_overrides']['Row']
+export type LearningActivityRow = Database['public']['Tables']['learning_activity']['Row']

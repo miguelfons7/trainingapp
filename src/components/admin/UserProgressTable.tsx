@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
-import { ArrowUpDown, Loader2, ExternalLink, Search, X } from 'lucide-react'
+import { ArrowUpDown, Loader2, ExternalLink, Search, X, Flame } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { ProgressBar } from '../shared/ProgressBar'
 import { supabase } from '../../lib/supabase'
@@ -14,18 +14,41 @@ interface UserWithProgress {
   initials: string
   overallProgress: number
   totalTime: number
+  weekTime: number
   currentCourse: string
+  quizAttempts: number
+  failedAttempts: number
+  streak: number
   lastActive: string
-  status: 'active' | 'inactive' | 'not-started'
+  status: 'active' | 'stalled' | 'inactive' | 'not-started'
 }
 
-type SortKey = 'name' | 'email' | 'overallProgress' | 'totalTime' | 'currentCourse' | 'lastActive' | 'status'
+type SortKey = 'name' | 'email' | 'overallProgress' | 'totalTime' | 'weekTime' | 'currentCourse' | 'quizAttempts' | 'streak' | 'lastActive' | 'status'
 type SortDir = 'asc' | 'desc'
 
 const statusStyles: Record<string, string> = {
   active: 'bg-via-success/15 text-via-success',
+  stalled: 'bg-amber-100 text-amber-700',
   inactive: 'bg-via-border text-via-text-light',
   'not-started': 'bg-via-warning/15 text-via-warning',
+}
+
+/** Consecutive-day streak ending today or yesterday, from activity timestamps */
+function computeStreak(timestamps: string[]): number {
+  if (timestamps.length === 0) return 0
+  const days = new Set(timestamps.map((t) => new Date(t).toDateString()))
+  let streak = 0
+  const cursor = new Date()
+  // A streak is alive if there's activity today OR yesterday
+  if (!days.has(cursor.toDateString())) {
+    cursor.setDate(cursor.getDate() - 1)
+    if (!days.has(cursor.toDateString())) return 0
+  }
+  while (days.has(cursor.toDateString())) {
+    streak++
+    cursor.setDate(cursor.getDate() - 1)
+  }
+  return streak
 }
 
 function formatDate(iso: string | null): string {
@@ -46,19 +69,23 @@ export function UserProgressTable() {
   const [search, setSearch] = useState('')
 
   const loadData = useCallback(async () => {
-    const [profilesRes, progressRes] = await Promise.all([
+    const [profilesRes, progressRes, activityRes] = await Promise.all([
       supabase.from('profiles').select('*'),
       supabase.from('module_progress').select('*'),
+      supabase.from('learning_activity').select('user_id, event, score, created_at'),
     ])
 
     const profiles = profilesRes.data ?? []
     const allProgress = progressRes.data ?? []
+    const allActivity = activityRes.data ?? []
 
     const now = Date.now()
     const sevenDaysAgo = now - 7 * 24 * 60 * 60 * 1000
+    const fiveDaysAgo = now - 5 * 24 * 60 * 60 * 1000
 
     const result: UserWithProgress[] = profiles.map((p: Profile) => {
       const userProgress = allProgress.filter((r) => r.user_id === p.id)
+      const userActivity = allActivity.filter((r) => r.user_id === p.id)
       const completedModules = userProgress.filter((r) => r.status === 'completed')
 
       // Overall progress: completed modules / total available modules
@@ -68,6 +95,21 @@ export function UserProgressTable() {
 
       // Total time spent across all modules
       const totalTime = sumTimeSeconds(userProgress.map((r) => r.time_spent_seconds))
+
+      // Time this week: modules completed within the last 7 days
+      const weekTime = sumTimeSeconds(
+        userProgress
+          .filter((r) => r.completed_at && new Date(r.completed_at).getTime() >= sevenDaysAgo)
+          .map((r) => r.time_spent_seconds),
+      )
+
+      // Quiz attempts (incl. failures, which module_progress can't show)
+      const attempts = userActivity.filter((a) => a.event === 'quiz_attempted')
+      const quizAttempts = attempts.length
+      const failedAttempts = attempts.filter((a) => (a.score ?? 0) < 85).length
+
+      // Learning streak from activity events
+      const streak = computeStreak(userActivity.map((a) => a.created_at))
 
       // Current course: first available course that's not 100% complete
       let currentCourse = 'All Complete'
@@ -81,21 +123,28 @@ export function UserProgressTable() {
         }
       }
 
-      // Last active: most recent updated_at from progress rows, or profile created_at
+      // Last active: most recent of progress rows and activity events
       const lastProgressDate = userProgress.length > 0
         ? userProgress.reduce((latest, r) => {
             const d = r.completed_at || r.started_at || r.updated_at
             return d && d > latest ? d : latest
           }, '')
         : null
+      const lastActivityDate = userActivity.length > 0
+        ? userActivity.reduce((latest, a) => (a.created_at > latest ? a.created_at : latest), '')
+        : null
+      const lastActive =
+        [lastProgressDate, lastActivityDate].filter(Boolean).sort().pop() || p.created_at
 
-      const lastActive = lastProgressDate || p.created_at
-
-      // Status
-      let status: 'active' | 'inactive' | 'not-started' = 'not-started'
+      // Status — "stalled" = started the program but no activity in 5+ days
+      let status: UserWithProgress['status'] = 'not-started'
       if (userProgress.length > 0) {
         const lastDate = new Date(lastActive).getTime()
-        status = lastDate >= sevenDaysAgo ? 'active' : 'inactive'
+        if (overallProgress > 0 && overallProgress < 100 && lastDate < fiveDaysAgo) {
+          status = 'stalled'
+        } else {
+          status = lastDate >= sevenDaysAgo ? 'active' : 'inactive'
+        }
       }
 
       const initials = p.full_name
@@ -112,7 +161,11 @@ export function UserProgressTable() {
         initials,
         overallProgress,
         totalTime,
+        weekTime,
         currentCourse,
+        quizAttempts,
+        failedAttempts,
+        streak,
         lastActive,
         status,
       }
@@ -155,10 +208,12 @@ export function UserProgressTable() {
 
   const columns: { key: SortKey; label: string; className?: string }[] = [
     { key: 'name', label: 'Name' },
-    { key: 'email', label: 'Email', className: 'hidden lg:table-cell' },
     { key: 'overallProgress', label: 'Progress' },
-    { key: 'totalTime', label: 'Time Spent', className: 'hidden md:table-cell' },
     { key: 'currentCourse', label: 'Current Course', className: 'hidden md:table-cell' },
+    { key: 'weekTime', label: 'This Week', className: 'hidden lg:table-cell' },
+    { key: 'totalTime', label: 'Total Time', className: 'hidden md:table-cell' },
+    { key: 'quizAttempts', label: 'Quiz Tries', className: 'hidden lg:table-cell' },
+    { key: 'streak', label: 'Streak', className: 'hidden lg:table-cell' },
     { key: 'lastActive', label: 'Last Active', className: 'hidden md:table-cell' },
     { key: 'status', label: 'Status' },
   ]
@@ -235,7 +290,6 @@ export function UserProgressTable() {
                     <ExternalLink className="w-3 h-3 text-via-text-light" />
                   </div>
                 </td>
-                <td className="px-4 py-3 text-via-text-light hidden lg:table-cell">{user.email}</td>
                 <td className="px-4 py-3 w-40">
                   <div className="flex items-center gap-2">
                     <div className="flex-1 min-w-[80px]">
@@ -251,10 +305,37 @@ export function UserProgressTable() {
                   </div>
                 </td>
                 <td className="px-4 py-3 text-via-text hidden md:table-cell whitespace-nowrap">
-                  {formatDuration(user.totalTime)}
+                  {user.currentCourse}
+                </td>
+                <td className="px-4 py-3 text-via-text hidden lg:table-cell whitespace-nowrap">
+                  {user.weekTime > 0 ? formatDuration(user.weekTime) : '—'}
                 </td>
                 <td className="px-4 py-3 text-via-text hidden md:table-cell whitespace-nowrap">
-                  {user.currentCourse}
+                  {formatDuration(user.totalTime)}
+                </td>
+                <td className="px-4 py-3 hidden lg:table-cell whitespace-nowrap">
+                  {user.quizAttempts > 0 ? (
+                    <span className="text-via-text">
+                      {user.quizAttempts}
+                      {user.failedAttempts > 0 && (
+                        <span className="text-amber-600 text-xs ml-1">
+                          ({user.failedAttempts} failed)
+                        </span>
+                      )}
+                    </span>
+                  ) : (
+                    <span className="text-via-text-light">—</span>
+                  )}
+                </td>
+                <td className="px-4 py-3 hidden lg:table-cell whitespace-nowrap">
+                  {user.streak > 0 ? (
+                    <span className="inline-flex items-center gap-1 text-via-text font-medium">
+                      <Flame className="w-3.5 h-3.5 text-orange-500" />
+                      {user.streak}d
+                    </span>
+                  ) : (
+                    <span className="text-via-text-light">—</span>
+                  )}
                 </td>
                 <td className="px-4 py-3 text-via-text-light hidden md:table-cell whitespace-nowrap">
                   {formatDate(user.lastActive)}

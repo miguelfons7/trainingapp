@@ -157,7 +157,7 @@ export function ModuleView() {
     moduleId: string
   }>()
   const navigate = useNavigate()
-  const { startModule, completeModule } = useProgress()
+  const { startModule, completeModule, logQuizAttempt } = useProgress()
   const { user, isAdmin, isLeadership } = useAuth()
   const { isUnderConstruction, getConstructionMessage } = useConstruction()
   const { getCourseById } = useCourses()
@@ -254,7 +254,7 @@ export function ModuleView() {
     )
   }
 
-  /** Called by QuizBlock when the quiz is submitted */
+  /** Called by QuizBlock only when the quiz is PASSED */
   const handleQuizComplete = useCallback(
     (score: number, total: number) => {
       if (!courseId || !moduleId) return
@@ -262,6 +262,16 @@ export function ModuleView() {
       completeModule(courseId, moduleId, pct)
     },
     [courseId, moduleId, completeModule],
+  )
+
+  /** Called by QuizBlock on every submission (pass or fail) for activity logging */
+  const handleQuizAttempt = useCallback(
+    (score: number, total: number) => {
+      if (!courseId || !moduleId) return
+      const pct = Math.round((score / total) * 100)
+      logQuizAttempt(courseId, moduleId, pct)
+    },
+    [courseId, moduleId, logQuizAttempt],
   )
 
   // Determine which content to render
@@ -349,6 +359,7 @@ export function ModuleView() {
               quizId={moduleId}
               courseId={courseId}
               onComplete={handleQuizComplete}
+              onAttempt={handleQuizAttempt}
               cmsQuizData={cmsContent?.quizData}
             />
           ) : cmsLoading ? (
