@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useMemo, useCallback, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { CheckCircle, XCircle, Award, ArrowRight, GripVertical } from 'lucide-react'
 import { Link } from 'react-router-dom'
@@ -55,6 +55,26 @@ function shuffle<T>(array: T[]): T[] {
   return shuffled
 }
 
+/** In-progress quiz answers saved so an accidental reload doesn't wipe work */
+interface SavedQuizState {
+  mc: Record<string, number>
+  fib: Record<string, number | null>
+  matched: string[]
+}
+
+function quizStateKey(userId: string | undefined, quizId: string): string {
+  return `viacademy-quiz:${userId ?? 'anon'}:${quizId}`
+}
+
+function loadQuizState(userId: string | undefined, quizId: string): SavedQuizState | null {
+  try {
+    const raw = localStorage.getItem(quizStateKey(userId, quizId))
+    return raw ? (JSON.parse(raw) as SavedQuizState) : null
+  } catch {
+    return null
+  }
+}
+
 // ─────────────────────────────────────────
 // Section 1: Term Match (inline)
 // ─────────────────────────────────────────
@@ -62,16 +82,24 @@ function TermMatchSection({
   pairs,
   onScoreChange,
   submitted,
+  initialMatched,
+  onMatchedChange,
 }: {
   pairs: TermMatchPair[]
   onScoreChange: (correct: number) => void
   submitted: boolean
+  /** Restored matches from a saved in-progress attempt */
+  initialMatched?: string[]
+  /** Reports matched terms upward for persistence */
+  onMatchedChange?: (terms: string[]) => void
 }) {
   const shuffledTerms = useMemo(() => shuffle(pairs.map((p) => p.term)), [pairs])
   const shuffledDefs = useMemo(() => shuffle(pairs.map((p) => p.definition)), [pairs])
 
   const [selectedTerm, setSelectedTerm] = useState<string | null>(null)
-  const [matchedPairs, setMatchedPairs] = useState<Set<string>>(new Set())
+  const [matchedPairs, setMatchedPairs] = useState<Set<string>>(
+    () => new Set((initialMatched ?? []).filter((t) => pairs.some((p) => p.term === t))),
+  )
   const [flashWrong, setFlashWrong] = useState<{ term: string; def: string } | null>(null)
 
   const pairMap = useMemo(() => {
@@ -98,6 +126,7 @@ function TermMatchSection({
       setMatchedPairs(next)
       setSelectedTerm(null)
       onScoreChange(next.size)
+      onMatchedChange?.([...next])
     } else {
       setFlashWrong({ term: selectedTerm, def })
       setTimeout(() => {
@@ -361,22 +390,80 @@ export function QuizBlock({ quizId, courseId, onComplete, cmsQuizData }: QuizBlo
     : hardcodedQuiz
   const nextCourse = cmsQuizData?.nextCourse ?? nextCourseMap[quizId]
 
+  // Restore any in-progress attempt (saved so reloads don't wipe answers)
+  const [savedState] = useState<SavedQuizState | null>(() =>
+    loadQuizState(user?.id, quizId),
+  )
+
+  // Attempt counter — bumping it reshuffles options and remounts term match
+  const [attempt, setAttempt] = useState(0)
+
   // --- MC state ---
   const mcQuestions = sectionedQuiz?.multipleChoice ?? []
-  const [mcAnswers, setMcAnswers] = useState<Record<string, number>>({})
+  const [mcAnswers, setMcAnswers] = useState<Record<string, number>>(
+    () => savedState?.mc ?? {},
+  )
   const [submitted, setSubmitted] = useState(false)
 
+  // Presentational shuffle: options render in a per-attempt random order, but
+  // answers are stored by ORIGINAL index so scoring and persistence are unaffected.
+  const mcOptionOrder = useMemo(() => {
+    const order: Record<string, number[]> = {}
+    for (const q of mcQuestions) {
+      order[q.id] = shuffle(q.options.map((_, i) => i))
+    }
+    return order
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mcQuestions, attempt])
+
   // --- Term match state (score tracked via callback) ---
-  const [termMatchScore, setTermMatchScore] = useState(0)
+  const [matchedTerms, setMatchedTerms] = useState<string[]>(
+    () => savedState?.matched ?? [],
+  )
+  const [termMatchScore, setTermMatchScore] = useState(
+    () => (savedState?.matched ?? []).length,
+  )
 
   // --- Fill-in-blank state ---
   const fibItems = sectionedQuiz?.fillInBlank ?? []
-  const [fibAnswers, setFibAnswers] = useState<Record<string, number | null>>({})
+  const [fibAnswers, setFibAnswers] = useState<Record<string, number | null>>(
+    () => savedState?.fib ?? {},
+  )
 
   const handleFibSelect = useCallback((id: string, optIdx: number) => {
     if (submitted) return
     setFibAnswers((prev) => ({ ...prev, [id]: optIdx }))
   }, [submitted])
+
+  const hasAnyAnswers =
+    Object.keys(mcAnswers).length > 0 ||
+    Object.keys(fibAnswers).length > 0 ||
+    matchedTerms.length > 0
+
+  // Persist in-progress answers; clear once submitted
+  useEffect(() => {
+    try {
+      const key = quizStateKey(user?.id, quizId)
+      if (submitted) {
+        localStorage.removeItem(key)
+      } else if (hasAnyAnswers) {
+        const state: SavedQuizState = { mc: mcAnswers, fib: fibAnswers, matched: matchedTerms }
+        localStorage.setItem(key, JSON.stringify(state))
+      }
+    } catch {
+      // localStorage unavailable — fail silently
+    }
+  }, [user?.id, quizId, mcAnswers, fibAnswers, matchedTerms, submitted, hasAnyAnswers])
+
+  // Warn before leaving the page with unsaved quiz work
+  useEffect(() => {
+    if (submitted || !hasAnyAnswers) return
+    const handler = (e: BeforeUnloadEvent) => {
+      e.preventDefault()
+    }
+    window.addEventListener('beforeunload', handler)
+    return () => window.removeEventListener('beforeunload', handler)
+  }, [submitted, hasAnyAnswers])
 
   if (!sectionedQuiz) {
     return (
@@ -416,6 +503,22 @@ export function QuizBlock({ quizId, courseId, onComplete, cmsQuizData }: QuizBlo
     onComplete?.(totalScore, totalItems)
   }
 
+  /** Reset for a fresh attempt — options reshuffle so answers can't be memorized by position */
+  function handleRetry() {
+    setMcAnswers({})
+    setFibAnswers({})
+    setMatchedTerms([])
+    setTermMatchScore(0)
+    setSubmitted(false)
+    setAttempt((a) => a + 1)
+    try {
+      localStorage.removeItem(quizStateKey(user?.id, quizId))
+    } catch {
+      // ignore
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
   return (
     <div className="space-y-6">
       {/* Quiz header */}
@@ -442,9 +545,12 @@ export function QuizBlock({ quizId, courseId, onComplete, cmsQuizData }: QuizBlo
 
       {/* Section 1: Term Match */}
       <TermMatchSection
+        key={attempt}
         pairs={termMatchPairs}
         onScoreChange={setTermMatchScore}
         submitted={submitted}
+        initialMatched={attempt === 0 ? matchedTerms : undefined}
+        onMatchedChange={setMatchedTerms}
       />
 
       {/* Section 2: Multiple Choice */}
@@ -490,7 +596,8 @@ export function QuizBlock({ quizId, courseId, onComplete, cmsQuizData }: QuizBlo
               </div>
 
               <div className="space-y-2">
-                {q.options.map((option, oi) => {
+                {(mcOptionOrder[q.id] ?? q.options.map((_, i) => i)).map((oi, displayIdx) => {
+                  const option = q.options[oi]
                   const isSelected = selectedIndex === oi
                   const isCorrectOption = oi === q.correctIndex
 
@@ -535,7 +642,7 @@ export function QuizBlock({ quizId, courseId, onComplete, cmsQuizData }: QuizBlo
                                   : 'bg-via-bg-subtle text-via-text-light'
                           }`}
                         >
-                          {String.fromCharCode(65 + oi)}
+                          {String.fromCharCode(65 + displayIdx)}
                         </span>
                         <span className="flex-1">{option}</span>
                         {submitted && isCorrectOption && (
@@ -662,9 +769,16 @@ export function QuizBlock({ quizId, courseId, onComplete, cmsQuizData }: QuizBlo
                   <p>Multiple Choice: {mcScore}/{mcQuestions.length}</p>
                   <p>Fill in the Blank: {fibScore}/{fibItems.length}</p>
                 </div>
-                <p className="text-sm text-amber-700">
+                <p className="text-sm text-amber-700 mb-6">
                   Review the material above and try again when you're ready. You've got this!
                 </p>
+                <button
+                  type="button"
+                  onClick={handleRetry}
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-amber-500 text-white font-bold rounded-xl hover:bg-amber-600 transition-colors shadow-lg cursor-pointer"
+                >
+                  Try Again
+                </button>
               </>
             )}
           </motion.div>

@@ -48,6 +48,16 @@ export function ProgramFinalExam({
     setAnswers((prev) => ({ ...prev, [questionId]: optionIndex }))
   }, [submitted])
 
+  // Warn before leaving mid-exam (timed — answers are not persisted across reloads)
+  useEffect(() => {
+    if (!started || submitted) return
+    const handler = (e: BeforeUnloadEvent) => {
+      e.preventDefault()
+    }
+    window.addEventListener('beforeunload', handler)
+    return () => window.removeEventListener('beforeunload', handler)
+  }, [started, submitted])
+
   function handleSubmit() {
     setSubmitted(true)
     const finalScore = questions.filter(
