@@ -4,6 +4,7 @@ import { useProgress } from '../context/ProgressContext'
 import { useCourses } from '../context/CoursesContext'
 import { useAuth } from '../context/AuthContext'
 import { useConstruction } from '../context/ConstructionContext'
+import { useCourseLock } from '../hooks/useCourseLock'
 import { CourseHeader } from '../components/course/CourseHeader'
 import { ModuleList } from '../components/course/ModuleList'
 
@@ -22,6 +23,44 @@ export function CourseView() {
 
   const isCourseConstruction = courseId ? isUnderConstruction('course', courseId) : false
   const constructionMsg = courseId ? getConstructionMessage('course', courseId) : null
+
+  const { getCourseLock, overridesLoaded } = useCourseLock()
+  const lockInfo = courseId ? getCourseLock(courseId) : { locked: false }
+
+  // Sequential gating: block direct URL access to locked courses.
+  // Wait for overrides to load so a legitimately-unlocked user doesn't flash the lock screen.
+  if (course && course.status !== 'coming-soon' && overridesLoaded && lockInfo.locked) {
+    return (
+      <div className="max-w-3xl mx-auto py-10 px-4">
+        <Link
+          to="/"
+          className="inline-flex items-center gap-1.5 text-sm text-via-text-light hover:text-via-navy transition-colors mb-6"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Back to Home
+        </Link>
+
+        <div className="bg-via-card rounded-xl border border-via-border p-12 text-center">
+          <Lock className="w-12 h-12 text-via-text-light mx-auto mb-4" />
+          <h1 className="text-2xl font-bold text-via-navy mb-2">Course Locked</h1>
+          <p className="text-sm text-via-text-light mb-6">
+            {lockInfo.blockedBy
+              ? `Complete "${lockInfo.blockedBy.title}" before starting this course.`
+              : 'Complete the previous courses in your program before starting this one.'}
+          </p>
+          {lockInfo.blockedBy && (
+            <Link
+              to={`/course/${lockInfo.blockedBy.id}`}
+              className="inline-flex items-center gap-2 px-6 py-3 bg-via-orange text-white font-bold rounded-xl hover:bg-via-orange-light transition-colors shadow-lg"
+            >
+              <Play className="w-5 h-5" />
+              Go to {lockInfo.blockedBy.title}
+            </Link>
+          )}
+        </div>
+      </div>
+    )
+  }
 
   // Block regular users from under-construction courses; admins/leadership can still access
   if (!course || course.status === 'coming-soon' || (isCourseConstruction && !canBypass)) {

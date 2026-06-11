@@ -17,10 +17,13 @@ import { ImagePlaceholder } from '../shared/ImagePlaceholder'
 import { useProgress } from '../../context/ProgressContext'
 import { useConstruction } from '../../context/ConstructionContext'
 import type { Course } from '../../types'
+import type { CourseLockInfo } from '../../hooks/useCourseLock'
 
 interface CourseCardProps {
   course: Course
   index: number
+  /** Sequential gating state — when locked, the card is not clickable */
+  lockInfo?: CourseLockInfo
 }
 
 const iconMap: Record<string, LucideIcon> = {
@@ -34,15 +37,55 @@ const iconMap: Record<string, LucideIcon> = {
   BookOpen,
 }
 
-export function CourseCard({ course }: CourseCardProps) {
+export function CourseCard({ course, lockInfo }: CourseCardProps) {
   const { getCourseProgress } = useProgress()
   const { isUnderConstruction, getConstructionMessage } = useConstruction()
   const isComingSoon = course.status === 'coming-soon'
   const isCourseConstruction = isUnderConstruction('course', course.id)
   const constructionMsg = getConstructionMessage('course', course.id)
+  const isLocked = lockInfo?.locked ?? false
 
   const Icon = iconMap[course.icon] ?? BookOpen
   const progress = getCourseProgress(course.id)
+
+  // Sequentially locked — grayed card with prerequisite hint
+  if (isLocked && !isComingSoon && !isCourseConstruction) {
+    return (
+      <div className="group relative flex flex-col overflow-hidden rounded-xl border border-via-border bg-via-card opacity-60">
+        <div className="relative">
+          <ImagePlaceholder
+            src={course.imagePath ?? ''}
+            alt={course.title}
+            aspectRatio="1:1"
+            icon={Icon}
+            className="rounded-none"
+          />
+          <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+            <div className="flex flex-col items-center gap-1">
+              <div className="flex items-center gap-2 rounded-full bg-black/60 px-4 py-2">
+                <Lock className="h-4 w-4 text-white" />
+                <span className="text-sm font-medium text-white">Locked</span>
+              </div>
+              {lockInfo?.blockedBy && (
+                <span className="text-xs text-white/80 bg-black/40 rounded-full px-3 py-1 max-w-[220px] text-center truncate">
+                  Complete "{lockInfo.blockedBy.title}" first
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-1 flex-col p-4">
+          <h3 className="text-sm font-semibold text-via-navy line-clamp-1">
+            {course.title}
+          </h3>
+          <p className="mt-1 text-xs text-via-text-light line-clamp-2">
+            {course.description}
+          </p>
+        </div>
+      </div>
+    )
+  }
 
   if (isComingSoon || isCourseConstruction) {
     const label = isCourseConstruction ? 'Under Construction' : 'Coming Soon'

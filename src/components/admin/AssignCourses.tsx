@@ -1,9 +1,10 @@
 import { useState, useEffect, useCallback } from 'react'
-import { Check, X, UserPlus, BookOpen, Loader2 } from 'lucide-react'
+import { Check, X, UserPlus, BookOpen, Loader2, KeyRound, Lock, Unlock, CheckCircle2 } from 'lucide-react'
 import { useCourses } from '../../context/CoursesContext'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../context/AuthContext'
-import type { Profile, CourseAssignment } from '../../types/database'
+import type { Profile, CourseAssignment, CourseUnlockOverrideRow, ModuleProgressRow } from '../../types/database'
+import type { Course } from '../../types'
 
 export function AssignCourses() {
   const { user } = useAuth()
@@ -146,6 +147,9 @@ export function AssignCourses() {
 
   return (
     <div className="space-y-6">
+      {/* Unlock overrides */}
+      <UnlockOverridesPanel profiles={profiles} />
+
       {/* Assignment form */}
       <div className="bg-via-card rounded-xl p-6 border border-via-border">
         <h3 className="text-lg font-bold text-via-navy mb-4 flex items-center gap-2">
@@ -295,6 +299,219 @@ export function AssignCourses() {
           </div>
         )}
       </div>
+    </div>
+  )
+}
+
+// ========================================================
+// UNLOCK OVERRIDES — per-user exceptions to course gating
+// ========================================================
+
+type CourseUserState = 'completed' | 'next' | 'locked' | 'override'
+
+function UnlockOverridesPanel({ profiles }: { profiles: Profile[] }) {
+  const { user: currentUser } = useAuth()
+  const { courses, programs } = useCourses()
+  const [selectedUserId, setSelectedUserId] = useState('')
+  const [overrides, setOverrides] = useState<CourseUnlockOverrideRow[]>([])
+  const [userProgress, setUserProgress] = useState<ModuleProgressRow[]>([])
+  const [loadingUser, setLoadingUser] = useState(false)
+  const [togglingId, setTogglingId] = useState<string | null>(null)
+
+  const program = programs[0]
+  const programCourses = (program?.courseIds ?? [])
+    .map((cid) => courses.find((c) => c.id === cid))
+    .filter((c): c is Course => !!c && c.status === 'available')
+
+  // Load the selected user's progress + overrides
+  useEffect(() => {
+    if (!selectedUserId) {
+      setOverrides([])
+      setUserProgress([])
+      return
+    }
+    let cancelled = false
+    setLoadingUser(true)
+    Promise.all([
+      supabase.from('course_unlock_overrides').select('*').eq('user_id', selectedUserId),
+      supabase.from('module_progress').select('*').eq('user_id', selectedUserId),
+    ])
+      .then(([overridesRes, progressRes]) => {
+        if (cancelled) return
+        setOverrides(overridesRes.data ?? [])
+        setUserProgress(progressRes.data ?? [])
+        setLoadingUser(false)
+      })
+      .catch((err) => {
+        console.error('Failed to load user unlock data:', err)
+        if (!cancelled) setLoadingUser(false)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [selectedUserId])
+
+  function courseCompletion(courseId: string): number {
+    const course = courses.find((c) => c.id === courseId)
+    if (!course || course.modules.length === 0) return 0
+    const completed = course.modules.filter((m) =>
+      userProgress.some(
+        (p) => p.course_id === courseId && p.module_id === m.id && p.status === 'completed',
+      ),
+    ).length
+    return Math.round((completed / course.modules.length) * 100)
+  }
+
+  function getCourseState(courseId: string, index: number): CourseUserState {
+    if (courseCompletion(courseId) === 100) return 'completed'
+    if (overrides.some((o) => o.course_id === courseId)) return 'override'
+    // Locked if any earlier available course is incomplete
+    for (let i = 0; i < index; i++) {
+      const prevId = programCourses[i].id
+      if (courseCompletion(prevId) < 100 && !overrides.some((o) => o.course_id === prevId)) {
+        return 'locked'
+      }
+    }
+    return 'next'
+  }
+
+  async function addOverride(courseId: string) {
+    if (!selectedUserId || !currentUser) return
+    setTogglingId(courseId)
+    const { data, error } = await supabase
+      .from('course_unlock_overrides')
+      .insert({ user_id: selectedUserId, course_id: courseId, created_by: currentUser.id })
+      .select()
+      .single()
+    if (!error && data) setOverrides((prev) => [...prev, data])
+    setTogglingId(null)
+  }
+
+  async function removeOverride(courseId: string) {
+    if (!selectedUserId) return
+    setTogglingId(courseId)
+    const { error } = await supabase
+      .from('course_unlock_overrides')
+      .delete()
+      .eq('user_id', selectedUserId)
+      .eq('course_id', courseId)
+    if (!error) setOverrides((prev) => prev.filter((o) => o.course_id !== courseId))
+    setTogglingId(null)
+  }
+
+  const stateBadge: Record<CourseUserState, { label: string; className: string }> = {
+    completed: { label: 'Completed', className: 'bg-emerald-100 text-emerald-700' },
+    next: { label: 'Unlocked', className: 'bg-sky-100 text-sky-700' },
+    locked: { label: 'Locked', className: 'bg-gray-100 text-gray-500' },
+    override: { label: 'Override Active', className: 'bg-violet-100 text-violet-700' },
+  }
+
+  return (
+    <div className="bg-via-card rounded-xl p-6 border border-via-border">
+      <h3 className="text-lg font-bold text-via-navy mb-1 flex items-center gap-2">
+        <KeyRound className="w-5 h-5" />
+        Course Unlock Overrides
+      </h3>
+      <p className="text-xs text-via-text-light mb-4">
+        Courses unlock in program order as users complete them. Use an override to let a specific
+        user skip ahead to a specific course.
+      </p>
+
+      <div className="max-w-sm mb-4">
+        <label
+          htmlFor="override-user-select"
+          className="block text-sm font-semibold text-via-navy mb-1.5"
+        >
+          User
+        </label>
+        <select
+          id="override-user-select"
+          value={selectedUserId}
+          onChange={(e) => setSelectedUserId(e.target.value)}
+          className="w-full rounded-lg border border-via-border bg-white px-3 py-2.5 text-sm text-via-text focus:outline-none focus:ring-2 focus:ring-via-orange/40 focus:border-via-orange"
+        >
+          <option value="">Select a user...</option>
+          {profiles.map((p) => (
+            <option key={p.id} value={p.id}>
+              {p.full_name} ({p.email})
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {selectedUserId && loadingUser && (
+        <div className="flex items-center justify-center py-8">
+          <Loader2 className="w-5 h-5 text-via-navy animate-spin" />
+        </div>
+      )}
+
+      {selectedUserId && !loadingUser && (
+        <div className="space-y-1.5">
+          {programCourses.map((course, index) => {
+            const state = getCourseState(course.id, index)
+            const pct = courseCompletion(course.id)
+            const badge = stateBadge[state]
+            const busy = togglingId === course.id
+            return (
+              <div
+                key={course.id}
+                className="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-via-bg-subtle border border-via-border"
+              >
+                <span className="text-xs font-bold text-via-text-light w-5 text-center shrink-0">
+                  {index + 1}
+                </span>
+                <div className="shrink-0">
+                  {state === 'completed' ? (
+                    <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                  ) : state === 'locked' ? (
+                    <Lock className="w-4 h-4 text-via-text-light/50" />
+                  ) : state === 'override' ? (
+                    <KeyRound className="w-4 h-4 text-violet-500" />
+                  ) : (
+                    <Unlock className="w-4 h-4 text-sky-500" />
+                  )}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-via-navy truncate">{course.title}</p>
+                  <p className="text-[11px] text-via-text-light">{pct}% complete</p>
+                </div>
+                <span
+                  className={`shrink-0 px-2 py-0.5 rounded-full text-[10px] font-bold ${badge.className}`}
+                >
+                  {badge.label}
+                </span>
+                {state === 'locked' && (
+                  <button
+                    type="button"
+                    onClick={() => addOverride(course.id)}
+                    disabled={busy}
+                    className="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-via-navy text-white text-xs font-semibold hover:bg-via-navy-light transition-colors disabled:opacity-50 cursor-pointer"
+                  >
+                    {busy ? <Loader2 className="w-3 h-3 animate-spin" /> : <Unlock className="w-3 h-3" />}
+                    Unlock
+                  </button>
+                )}
+                {state === 'override' && (
+                  <button
+                    type="button"
+                    onClick={() => removeOverride(course.id)}
+                    disabled={busy}
+                    className="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-via-border bg-white text-via-text-light text-xs font-semibold hover:text-via-danger hover:border-via-danger/40 transition-colors disabled:opacity-50 cursor-pointer"
+                  >
+                    {busy ? <Loader2 className="w-3 h-3 animate-spin" /> : <X className="w-3 h-3" />}
+                    Remove override
+                  </button>
+                )}
+              </div>
+            )
+          })}
+          {programCourses.length === 0 && (
+            <p className="text-sm text-via-text-light text-center py-4">
+              No program courses found.
+            </p>
+          )}
+        </div>
+      )}
     </div>
   )
 }

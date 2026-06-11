@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext'
 import { useCompliance } from '../context/ComplianceContext'
 import { useProgress } from '../context/ProgressContext'
 import { useCourses } from '../context/CoursesContext'
+import { useCourseLock } from '../hooks/useCourseLock'
 import { ComplianceBanner } from '../components/home/ComplianceBanner'
 import { ContinueLearning } from '../components/home/ContinueLearning'
 import { ProgramCard } from '../components/home/ProgramCard'
@@ -12,9 +13,18 @@ export function Home() {
   const { user } = useAuth()
   const { items, isAcknowledged } = useCompliance()
   const { getCourseProgress } = useProgress()
-  const { courses } = useCourses()
+  const { courses, programs } = useCourses()
+  const { getCourseLock } = useCourseLock()
 
   const firstName = user?.name?.split(' ')[0] ?? 'Learner'
+
+  // Order the course grid by program sequence; courses outside the program go last
+  const programOrder = programs[0]?.courseIds ?? []
+  const orderedCourses = [...courses].sort((a, b) => {
+    const ai = programOrder.indexOf(a.id)
+    const bi = programOrder.indexOf(b.id)
+    return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi)
+  })
 
   // Build certificates from completed courses + acknowledged compliance items
   const completedCourses = courses
@@ -101,8 +111,13 @@ export function Home() {
       <section>
         <h2 className="mb-4 text-lg font-bold text-via-navy">Courses</h2>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {courses.map((course, index) => (
-            <CourseCard key={course.id} course={course} index={index} />
+          {orderedCourses.map((course, index) => (
+            <CourseCard
+              key={course.id}
+              course={course}
+              index={index}
+              lockInfo={getCourseLock(course.id)}
+            />
           ))}
         </div>
       </section>

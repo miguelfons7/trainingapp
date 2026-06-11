@@ -8,6 +8,7 @@ import {
   X,
   ChevronDown,
   ChevronRight,
+  ChevronUp,
   Loader2,
   Save,
   BookOpen,
@@ -279,6 +280,94 @@ function TabButton({ active, onClick, icon, label, count }: {
 // PROGRAMS SECTION
 // ========================================================
 
+/**
+ * Ordered course editor for program forms.
+ * Selected courses appear as an ordered list with up/down/remove controls —
+ * this order IS the sequential gating order for learners.
+ * Unselected courses appear below as an "add" checkbox grid (appended to the end).
+ */
+function ProgramCourseOrderEditor({
+  courses, courseIds, onToggle, onMove,
+}: {
+  courses: Course[]
+  courseIds: string[]
+  onToggle: (cid: string) => void
+  onMove: (cid: string, direction: -1 | 1) => void
+}) {
+  const selected = courseIds
+    .map((cid) => courses.find((c) => c.id === cid))
+    .filter(Boolean) as Course[]
+  const unselected = courses.filter((c) => !courseIds.includes(c.id))
+
+  return (
+    <div className="space-y-3">
+      <div>
+        <p className="text-xs font-semibold text-via-text mb-1">Course order</p>
+        <p className="text-[10px] text-via-text-light mb-2">
+          Learners must complete courses in this order. Use the arrows to reorder.
+        </p>
+        {selected.length === 0 ? (
+          <p className="text-xs text-via-text-light italic">No courses yet — add some below.</p>
+        ) : (
+          <div className="space-y-1">
+            {selected.map((c, idx) => (
+              <div key={c.id} className="flex items-center gap-2 p-1.5 rounded-lg bg-white border border-via-border">
+                <span className="text-xs font-bold text-via-orange w-5 text-center shrink-0">{idx + 1}</span>
+                <span className="flex-1 text-xs font-medium text-via-navy truncate">{c.title}</span>
+                <button
+                  type="button"
+                  onClick={() => onMove(c.id, -1)}
+                  disabled={idx === 0}
+                  className="p-1 rounded hover:bg-via-bg-subtle text-via-text-light hover:text-via-navy disabled:opacity-25 disabled:cursor-not-allowed cursor-pointer"
+                  title="Move up"
+                >
+                  <ChevronUp className="w-3.5 h-3.5" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onMove(c.id, 1)}
+                  disabled={idx === selected.length - 1}
+                  className="p-1 rounded hover:bg-via-bg-subtle text-via-text-light hover:text-via-navy disabled:opacity-25 disabled:cursor-not-allowed cursor-pointer"
+                  title="Move down"
+                >
+                  <ChevronDown className="w-3.5 h-3.5" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onToggle(c.id)}
+                  className="p-1 rounded hover:bg-red-50 text-via-text-light hover:text-red-500 cursor-pointer"
+                  title="Remove from program"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {unselected.length > 0 && (
+        <div>
+          <p className="text-xs font-semibold text-via-text mb-2">Add courses</p>
+          <div className="grid grid-cols-2 gap-1.5">
+            {unselected.map((c) => (
+              <label key={c.id} className="inline-flex items-center gap-2 text-xs cursor-pointer p-1.5 rounded-lg hover:bg-via-bg-subtle">
+                <input
+                  type="checkbox"
+                  checked={false}
+                  onChange={() => onToggle(c.id)}
+                  className="accent-via-orange"
+                />
+                <span className="truncate">{c.title}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
 function ProgramsSection({
   programs, courses, expandedPrograms, toggleProgram,
   saving, setSaving, setError,
@@ -347,24 +436,16 @@ function ProgramsSection({
     }))
   }
 
-  const CourseCheckboxes = () => (
-    <div>
-      <p className="text-xs font-semibold text-via-text mb-2">Courses in this program:</p>
-      <div className="grid grid-cols-2 gap-1.5">
-        {courses.map((c) => (
-          <label key={c.id} className="inline-flex items-center gap-2 text-xs cursor-pointer p-1.5 rounded-lg hover:bg-via-bg-subtle">
-            <input
-              type="checkbox"
-              checked={form.courseIds.includes(c.id)}
-              onChange={() => toggleCourseInForm(c.id)}
-              className="accent-via-orange"
-            />
-            <span className="truncate">{c.title}</span>
-          </label>
-        ))}
-      </div>
-    </div>
-  )
+  function moveCourseInForm(cid: string, direction: -1 | 1) {
+    setForm((prev) => {
+      const ids = [...prev.courseIds]
+      const idx = ids.indexOf(cid)
+      const target = idx + direction
+      if (idx === -1 || target < 0 || target >= ids.length) return prev
+      ;[ids[idx], ids[target]] = [ids[target], ids[idx]]
+      return { ...prev, courseIds: ids }
+    })
+  }
 
   return (
     <div className="space-y-3">
@@ -392,7 +473,12 @@ function ProgramsSection({
             <label className="block text-xs font-medium text-via-text-light mb-1">Estimated Time</label>
             <input placeholder="e.g. ~6 hours" value={form.estimatedTime} onChange={(e) => setForm((p) => ({ ...p, estimatedTime: e.target.value }))} className={inputClass} />
           </div>
-          <CourseCheckboxes />
+          <ProgramCourseOrderEditor
+            courses={courses}
+            courseIds={form.courseIds}
+            onToggle={toggleCourseInForm}
+            onMove={moveCourseInForm}
+          />
           <div className="flex items-center gap-2 pt-1">
             <button onClick={handleCreate} disabled={saving || !form.title.trim()} className={btnPrimary}>
               {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
@@ -434,6 +520,7 @@ function ProgramsSection({
                   handleDelete={handleDelete}
                   cancelEdit={() => setEditingId(null)}
                   toggleCourseInForm={toggleCourseInForm}
+                  moveCourseInForm={moveCourseInForm}
                   saving={saving}
                   inputClass={inputClass}
                   btnPrimary={btnPrimary}
@@ -456,7 +543,7 @@ function ProgramsSection({
 
 function ProgramRow({
   program, courses, isExpanded, isEditing, form, setForm,
-  toggleProgram, startEdit, handleSave, handleDelete, cancelEdit, toggleCourseInForm,
+  toggleProgram, startEdit, handleSave, handleDelete, cancelEdit, toggleCourseInForm, moveCourseInForm,
   saving, inputClass, btnPrimary,
 }: {
   program: Program; courses: Course[]; isExpanded: boolean; isEditing: boolean
@@ -468,6 +555,7 @@ function ProgramRow({
   handleDelete: (id: string) => Promise<void>
   cancelEdit: () => void
   toggleCourseInForm: (cid: string) => void
+  moveCourseInForm: (cid: string, direction: -1 | 1) => void
   saving: boolean; inputClass: string; btnPrimary: string
 }) {
   const programCourses = program.courseIds
@@ -522,17 +610,12 @@ function ProgramRow({
                   <label className="block text-xs font-medium text-via-text-light mb-1">Estimated Time</label>
                   <input value={form.estimatedTime} onChange={(e) => setForm((p) => ({ ...p, estimatedTime: e.target.value }))} className={inputClass} placeholder="e.g. ~6 hours" />
                 </div>
-                <div>
-                  <p className="text-xs font-semibold text-via-text mb-2">Courses in this program:</p>
-                  <div className="grid grid-cols-2 gap-1.5">
-                    {courses.map((c) => (
-                      <label key={c.id} className="inline-flex items-center gap-2 text-xs cursor-pointer p-1.5 rounded-lg hover:bg-white">
-                        <input type="checkbox" checked={form.courseIds.includes(c.id)} onChange={() => toggleCourseInForm(c.id)} className="accent-via-orange" />
-                        <span className="truncate">{c.title}</span>
-                      </label>
-                    ))}
-                  </div>
-                </div>
+                <ProgramCourseOrderEditor
+                  courses={courses}
+                  courseIds={form.courseIds}
+                  onToggle={toggleCourseInForm}
+                  onMove={moveCourseInForm}
+                />
                 <div className="flex items-center gap-2">
                   <button onClick={handleSave} disabled={saving} className={btnPrimary}>
                     {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}

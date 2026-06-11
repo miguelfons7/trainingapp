@@ -771,6 +771,28 @@ export interface Database {
           }
         ]
       }
+      course_unlock_overrides: {
+        Row: {
+          id: string
+          user_id: string
+          course_id: string
+          created_by: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          course_id: string
+          created_by?: string | null
+          created_at?: string
+        }
+        Update: {
+          user_id?: string
+          course_id?: string
+          created_by?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: Record<string, never>
     Functions: {
@@ -829,3 +851,4 @@ export type ConstructionOverrideRow = Database['public']['Tables']['construction
 export type IssueReportRow = Database['public']['Tables']['issue_reports']['Row']
 export type PasswordResetRow = Database['public']['Tables']['password_resets']['Row']
 export type CourseFeedbackRow = Database['public']['Tables']['course_feedback']['Row']
+export type CourseUnlockOverrideRow = Database['public']['Tables']['course_unlock_overrides']['Row']

@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useCallback, type ComponentType } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
-import { ArrowLeft, ChevronLeft, ChevronRight, Pencil, Loader2, Construction } from 'lucide-react'
+import { ArrowLeft, ChevronLeft, ChevronRight, Pencil, Loader2, Construction, Lock as LockIcon } from 'lucide-react'
 import { useProgress } from '../context/ProgressContext'
 import { useCourses } from '../context/CoursesContext'
 import { useAuth } from '../context/AuthContext'
 import { useConstruction } from '../context/ConstructionContext'
+import { useCourseLock } from '../hooks/useCourseLock'
 import { useModuleContent } from '../hooks/useModuleContent'
 import { BlockRenderer } from '../components/cms/BlockRenderer'
 import { SecondaryMarket } from '../components/sections/SecondaryMarket'
@@ -166,6 +167,11 @@ export function ModuleView() {
   const isModuleConstruction = moduleId ? isUnderConstruction('module', moduleId) : false
   const moduleConstructionMsg = moduleId ? getConstructionMessage('module', moduleId) : null
 
+  // Sequential course gating — blocks direct module URLs in locked courses
+  const { getCourseLock, overridesLoaded } = useCourseLock()
+  const courseLock = courseId ? getCourseLock(courseId) : { locked: false }
+  const isCourseLocked = overridesLoaded && courseLock.locked
+
   // CMS content — fetched for ALL modules (lesson + quiz)
   const isQuizModule = moduleId ? quizModules.has(moduleId) : false
   const { content: cmsContent, loading: cmsLoading, isPublished: cmsIsPublished } = useModuleContent(
@@ -193,10 +199,11 @@ export function ModuleView() {
   const isQuiz = isQuizModule
 
   useEffect(() => {
-    if (courseId && moduleId && currentModule) {
+    // Don't mark a module as started if its course is locked for this user
+    if (courseId && moduleId && currentModule && !isCourseLocked) {
       startModule(courseId, moduleId)
     }
-  }, [courseId, moduleId, currentModule, startModule])
+  }, [courseId, moduleId, currentModule, startModule, isCourseLocked])
 
   if (!course || !currentModule || !courseId || !moduleId) {
     return (
@@ -210,6 +217,38 @@ export function ModuleView() {
         </Link>
         <div className="bg-via-card rounded-xl border border-via-border p-12 text-center">
           <p className="text-via-text-light">Module not found.</p>
+        </div>
+      </div>
+    )
+  }
+
+  // Course is sequentially locked — block module access entirely
+  if (isCourseLocked) {
+    return (
+      <div className="max-w-3xl mx-auto py-10 px-4">
+        <Link
+          to="/"
+          className="inline-flex items-center gap-1.5 text-sm text-via-text-light hover:text-via-navy transition-colors mb-6"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Back to Home
+        </Link>
+        <div className="bg-via-card rounded-xl border border-via-border p-12 text-center">
+          <LockIcon className="w-12 h-12 text-via-text-light mx-auto mb-4" />
+          <h1 className="text-2xl font-bold text-via-navy mb-2">Course Locked</h1>
+          <p className="text-sm text-via-text-light mb-6">
+            {courseLock.blockedBy
+              ? `Complete "${courseLock.blockedBy.title}" before starting this course.`
+              : 'Complete the previous courses in your program first.'}
+          </p>
+          {courseLock.blockedBy && (
+            <Link
+              to={`/course/${courseLock.blockedBy.id}`}
+              className="inline-flex items-center gap-2 px-6 py-3 bg-via-orange text-white font-bold rounded-xl hover:bg-via-orange-light transition-colors shadow-lg"
+            >
+              Go to {courseLock.blockedBy.title}
+            </Link>
+          )}
         </div>
       </div>
     )
