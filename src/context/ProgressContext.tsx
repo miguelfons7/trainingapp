@@ -85,7 +85,11 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
       .from('module_progress')
       .select('*')
       .eq('user_id', userId)
-      .then(({ data }) => {
+      .then(({ data, error }) => {
+        if (error) {
+          console.error('Failed to load progress:', error.message)
+          return
+        }
         if (!data) {
           setProgress({})
           return

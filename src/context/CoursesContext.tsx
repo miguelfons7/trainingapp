@@ -118,6 +118,10 @@ export function CoursesProvider({ children }: { children: ReactNode }) {
       supabase.from('managed_programs').select('*').order('sort_order'),
     ])
 
+    for (const res of [coursesRes, modulesRes, programsRes]) {
+      if (res.error) console.error('Failed to load managed content:', res.error.message)
+    }
+
     if (coursesRes.data && coursesRes.data.length > 0 && modulesRes.data) {
       setCourses(dbCoursesToApp(coursesRes.data as DBCourse[], modulesRes.data as DBModule[]))
     }
@@ -132,7 +136,10 @@ export function CoursesProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (user) {
-      loadFromDB()
+      loadFromDB().catch((err) => {
+        console.error('Failed to load courses from DB:', err)
+        setLoading(false)
+      })
     } else {
       // Not logged in — use hardcoded defaults
       setCourses(hardcodedCourses)

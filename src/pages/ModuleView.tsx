@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useCallback, type ComponentType } from 'react'
+import { useEffect, useMemo, useCallback, lazy, Suspense, type ComponentType } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { ArrowLeft, ChevronLeft, ChevronRight, Pencil, Loader2, Construction, Lock as LockIcon } from 'lucide-react'
 import { useProgress } from '../context/ProgressContext'
@@ -9,91 +9,65 @@ import { useCourseLock } from '../hooks/useCourseLock'
 import { celebrate } from '../lib/celebrate'
 import { useModuleContent } from '../hooks/useModuleContent'
 import { BlockRenderer } from '../components/cms/BlockRenderer'
-import { SecondaryMarket } from '../components/sections/SecondaryMarket'
-import { ReverseLogistics } from '../components/sections/ReverseLogistics'
-import { ProductConditions } from '../components/sections/ProductConditions'
-import { LoadTypes } from '../components/sections/LoadTypes'
-import { BuyerTypes } from '../components/sections/BuyerTypes'
-import { Glossary } from '../components/sections/Glossary'
-import { CompanyOverview } from '../components/sections/CompanyOverview'
-import { MissionValues } from '../components/sections/MissionValues'
-import { OurPlatforms } from '../components/sections/OurPlatforms'
-import { LiquidateNow } from '../components/sections/LiquidateNow'
-import { WeSolveReturns } from '../components/sections/WeSolveReturns'
-import { WhyVia } from '../components/sections/WhyVia'
-import { ProductOverview } from '../components/sections/ProductOverview'
-import { TargetPrograms } from '../components/sections/TargetPrograms'
-import { WalmartPrograms } from '../components/sections/WalmartPrograms'
-import { HomeDepotPrograms } from '../components/sections/HomeDepotPrograms'
-import { AmazonPrograms } from '../components/sections/AmazonPrograms'
-import { WayfairPrograms } from '../components/sections/WayfairPrograms'
-import { ZapposPrograms } from '../components/sections/ZapposPrograms'
-import { SamsClubPrograms } from '../components/sections/SamsClubPrograms'
-import { OtherPrograms } from '../components/sections/OtherPrograms'
-import { LiquidateNowOfferings } from '../components/sections/LiquidateNowOfferings'
-// Course 4 — Consultative Sales
-import { ConsultativeMindset } from '../components/sections/ConsultativeMindset'
-import { AskingRightQuestions } from '../components/sections/AskingRightQuestions'
-import { ListeningBeyondWords } from '../components/sections/ListeningBeyondWords'
-import { KnowYourPatients } from '../components/sections/KnowYourPatients'
-import { FiveStepMethod } from '../components/sections/FiveStepMethod'
-import { WhenPatientsPushBack } from '../components/sections/WhenPatientsPushBack'
-import { ArtOfTheClose } from '../components/sections/ArtOfTheClose'
-import { TransactionToPartnership } from '../components/sections/TransactionToPartnership'
-import { TriageAndDiagnosis } from '../components/sections/TriageAndDiagnosis'
-// Course 5 — BDR Role Training
-import { BdrRoleOverview } from '../components/sections/BdrRoleOverview'
-import { BdrDailyWorkflow } from '../components/sections/BdrDailyWorkflow'
-import { BdrOpeningCalls } from '../components/sections/BdrOpeningCalls'
-import { BdrDiscoveryFramework } from '../components/sections/BdrDiscoveryFramework'
-import { BdrObjectionsRouting } from '../components/sections/BdrObjectionsRouting'
-import { BdrToolsHubspot } from '../components/sections/BdrToolsHubspot'
-import { BdrFollowUps } from '../components/sections/BdrFollowUps'
 import { QuizBlock } from '../components/interactive/QuizBlock'
 import { ImagePlaceholder } from '../components/shared/ImagePlaceholder'
 
+/** Lazy-load a named export from a section module so each lesson ships as its own chunk */
+function lazySection(
+  loader: () => Promise<Record<string, unknown>>,
+  name: string,
+): ComponentType {
+  return lazy(async () => {
+    const mod = await loader()
+    return { default: mod[name] as ComponentType }
+  })
+}
+
+// Section components are code-split: only the viewed lesson's chunk downloads.
 const contentMap: Record<string, ComponentType> = {
-  'secondary-market': SecondaryMarket,
-  'reverse-logistics': ReverseLogistics,
-  'product-conditions': ProductConditions,
-  'shipping-terms': LoadTypes,
-  'buyer-types': BuyerTypes,
-  'key-terminology': Glossary,
-  'our-story': CompanyOverview,
-  'mission-values': MissionValues,
-  'our-platforms': OurPlatforms,
-  'liquidatenow': LiquidateNow,
-  'wesolvereturns': WeSolveReturns,
-  'why-via': WhyVia,
+  // Course 1 — Industry Knowledge
+  'secondary-market': lazySection(() => import('../components/sections/SecondaryMarket'), 'SecondaryMarket'),
+  'reverse-logistics': lazySection(() => import('../components/sections/ReverseLogistics'), 'ReverseLogistics'),
+  'product-conditions': lazySection(() => import('../components/sections/ProductConditions'), 'ProductConditions'),
+  'shipping-terms': lazySection(() => import('../components/sections/LoadTypes'), 'LoadTypes'),
+  'buyer-types': lazySection(() => import('../components/sections/BuyerTypes'), 'BuyerTypes'),
+  'key-terminology': lazySection(() => import('../components/sections/Glossary'), 'Glossary'),
+  // Course 2 — Who Is Via Trading
+  'our-story': lazySection(() => import('../components/sections/CompanyOverview'), 'CompanyOverview'),
+  'mission-values': lazySection(() => import('../components/sections/MissionValues'), 'MissionValues'),
+  'our-platforms': lazySection(() => import('../components/sections/OurPlatforms'), 'OurPlatforms'),
+  'liquidatenow': lazySection(() => import('../components/sections/LiquidateNow'), 'LiquidateNow'),
+  'wesolvereturns': lazySection(() => import('../components/sections/WeSolveReturns'), 'WeSolveReturns'),
+  'why-via': lazySection(() => import('../components/sections/WhyVia'), 'WhyVia'),
   // Course 3 — Product Knowledge
-  'product-overview': ProductOverview,
-  'target-programs': TargetPrograms,
-  'walmart-programs': WalmartPrograms,
-  'home-depot-programs': HomeDepotPrograms,
-  'amazon-programs': AmazonPrograms,
-  'wayfair-programs': WayfairPrograms,
-  'zappos-programs': ZapposPrograms,
-  'sams-club-programs': SamsClubPrograms,
-  'other-programs': OtherPrograms,
-  'ln-offerings': LiquidateNowOfferings,
+  'product-overview': lazySection(() => import('../components/sections/ProductOverview'), 'ProductOverview'),
+  'target-programs': lazySection(() => import('../components/sections/TargetPrograms'), 'TargetPrograms'),
+  'walmart-programs': lazySection(() => import('../components/sections/WalmartPrograms'), 'WalmartPrograms'),
+  'home-depot-programs': lazySection(() => import('../components/sections/HomeDepotPrograms'), 'HomeDepotPrograms'),
+  'amazon-programs': lazySection(() => import('../components/sections/AmazonPrograms'), 'AmazonPrograms'),
+  'wayfair-programs': lazySection(() => import('../components/sections/WayfairPrograms'), 'WayfairPrograms'),
+  'zappos-programs': lazySection(() => import('../components/sections/ZapposPrograms'), 'ZapposPrograms'),
+  'sams-club-programs': lazySection(() => import('../components/sections/SamsClubPrograms'), 'SamsClubPrograms'),
+  'other-programs': lazySection(() => import('../components/sections/OtherPrograms'), 'OtherPrograms'),
+  'ln-offerings': lazySection(() => import('../components/sections/LiquidateNowOfferings'), 'LiquidateNowOfferings'),
   // Course 4 — Consultative Sales
-  'consultative-mindset': ConsultativeMindset,
-  'asking-right-questions': AskingRightQuestions,
-  'listening-beyond-words': ListeningBeyondWords,
-  'know-your-patients': KnowYourPatients,
-  'five-step-method': FiveStepMethod,
-  'when-patients-push-back': WhenPatientsPushBack,
-  'art-of-the-close': ArtOfTheClose,
-  'transaction-to-partnership': TransactionToPartnership,
-  'triage-and-diagnosis': TriageAndDiagnosis,
+  'consultative-mindset': lazySection(() => import('../components/sections/ConsultativeMindset'), 'ConsultativeMindset'),
+  'asking-right-questions': lazySection(() => import('../components/sections/AskingRightQuestions'), 'AskingRightQuestions'),
+  'listening-beyond-words': lazySection(() => import('../components/sections/ListeningBeyondWords'), 'ListeningBeyondWords'),
+  'know-your-patients': lazySection(() => import('../components/sections/KnowYourPatients'), 'KnowYourPatients'),
+  'five-step-method': lazySection(() => import('../components/sections/FiveStepMethod'), 'FiveStepMethod'),
+  'when-patients-push-back': lazySection(() => import('../components/sections/WhenPatientsPushBack'), 'WhenPatientsPushBack'),
+  'art-of-the-close': lazySection(() => import('../components/sections/ArtOfTheClose'), 'ArtOfTheClose'),
+  'transaction-to-partnership': lazySection(() => import('../components/sections/TransactionToPartnership'), 'TransactionToPartnership'),
+  'triage-and-diagnosis': lazySection(() => import('../components/sections/TriageAndDiagnosis'), 'TriageAndDiagnosis'),
   // Course 5 — BDR Role Training
-  'bdr-role-overview': BdrRoleOverview,
-  'bdr-daily-workflow': BdrDailyWorkflow,
-  'bdr-opening-calls': BdrOpeningCalls,
-  'bdr-discovery-framework': BdrDiscoveryFramework,
-  'bdr-objections-routing': BdrObjectionsRouting,
-  'bdr-tools-hubspot': BdrToolsHubspot,
-  'bdr-follow-ups': BdrFollowUps,
+  'bdr-role-overview': lazySection(() => import('../components/sections/BdrRoleOverview'), 'BdrRoleOverview'),
+  'bdr-daily-workflow': lazySection(() => import('../components/sections/BdrDailyWorkflow'), 'BdrDailyWorkflow'),
+  'bdr-opening-calls': lazySection(() => import('../components/sections/BdrOpeningCalls'), 'BdrOpeningCalls'),
+  'bdr-discovery-framework': lazySection(() => import('../components/sections/BdrDiscoveryFramework'), 'BdrDiscoveryFramework'),
+  'bdr-objections-routing': lazySection(() => import('../components/sections/BdrObjectionsRouting'), 'BdrObjectionsRouting'),
+  'bdr-tools-hubspot': lazySection(() => import('../components/sections/BdrToolsHubspot'), 'BdrToolsHubspot'),
+  'bdr-follow-ups': lazySection(() => import('../components/sections/BdrFollowUps'), 'BdrFollowUps'),
 }
 
 const quizModules = new Set(['industry-knowledge-check', 'via-knowledge-check', 'product-knowledge-check', 'sales-philosophy-quiz', 'tools-systems-quiz', 'bdr-role-quiz'])
@@ -374,8 +348,16 @@ export function ModuleView() {
             // STAGING: Draft CMS content previewed over hardcoded TSX
             <BlockRenderer content={cmsContent} />
           ) : ContentComponent ? (
-            // Fall back to hardcoded TSX component
-            <ContentComponent />
+            // Fall back to hardcoded TSX component (lazy chunk)
+            <Suspense
+              fallback={
+                <div className="flex items-center justify-center py-20">
+                  <Loader2 className="w-6 h-6 text-via-navy animate-spin" />
+                </div>
+              }
+            >
+              <ContentComponent />
+            </Suspense>
           ) : cmsContent ? (
             // Draft CMS content shown when no hardcoded component exists
             <BlockRenderer content={cmsContent} />

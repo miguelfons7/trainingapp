@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider, useAuth } from './context/AuthContext'
 import { ProgressProvider } from './context/ProgressContext'
@@ -5,26 +6,29 @@ import { ComplianceProvider } from './context/ComplianceContext'
 import { ConstructionProvider } from './context/ConstructionContext'
 import { CoursesProvider } from './context/CoursesContext'
 import { AppShell } from './components/layout/AppShell'
+import { ErrorBoundary } from './components/ErrorBoundary'
 import { Login } from './pages/Login'
 import { Signup } from './pages/Signup'
 import { ResetPassword } from './pages/ResetPassword'
 import { Home } from './pages/Home'
 import { CourseView } from './pages/CourseView'
 import { ModuleView } from './pages/ModuleView'
-import { Admin } from './pages/Admin'
-import { ContentEditorPage } from './pages/ContentEditorPage'
 import { Certificates } from './pages/Certificates'
 import { CertificateView } from './pages/CertificateView'
 import { UserProfile } from './pages/UserProfile'
 import { Acknowledgements } from './pages/Acknowledgements'
-import { DevLog } from './pages/DevLog'
 import { FinalExam } from './pages/FinalExam'
-import { MigrationRunner } from './pages/MigrationRunner'
-import { ContentPage } from './pages/ContentPage'
-import { ConstructionPage } from './pages/ConstructionPage'
-import { QuizCreatorPage } from './pages/QuizCreatorPage'
-import { AdminIssuesPage } from './pages/AdminIssuesPage'
 import { Loader2 } from 'lucide-react'
+
+// Admin-only pages are code-split — regular users never download them
+const Admin = lazy(() => import('./pages/Admin').then((m) => ({ default: m.Admin })))
+const ContentEditorPage = lazy(() => import('./pages/ContentEditorPage').then((m) => ({ default: m.ContentEditorPage })))
+const ContentPage = lazy(() => import('./pages/ContentPage').then((m) => ({ default: m.ContentPage })))
+const ConstructionPage = lazy(() => import('./pages/ConstructionPage').then((m) => ({ default: m.ConstructionPage })))
+const QuizCreatorPage = lazy(() => import('./pages/QuizCreatorPage').then((m) => ({ default: m.QuizCreatorPage })))
+const AdminIssuesPage = lazy(() => import('./pages/AdminIssuesPage').then((m) => ({ default: m.AdminIssuesPage })))
+const MigrationRunner = lazy(() => import('./pages/MigrationRunner').then((m) => ({ default: m.MigrationRunner })))
+const DevLog = lazy(() => import('./pages/DevLog').then((m) => ({ default: m.DevLog })))
 
 function LoadingScreen() {
   return (
@@ -50,6 +54,7 @@ function AppRoutes() {
   if (loading) return <LoadingScreen />
 
   return (
+    <Suspense fallback={<LoadingScreen />}>
     <Routes>
       <Route
         path="/login"
@@ -97,11 +102,13 @@ function AppRoutes() {
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
+    </Suspense>
   )
 }
 
 function App() {
   return (
+    <ErrorBoundary>
     <BrowserRouter>
       <AuthProvider>
         <CoursesProvider>
@@ -115,6 +122,7 @@ function App() {
         </CoursesProvider>
       </AuthProvider>
     </BrowserRouter>
+    </ErrorBoundary>
   )
 }
 
