@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import {
   Lock,
   Construction,
+  CheckCircle2,
   Warehouse,
   Building2,
   Package,
@@ -24,6 +25,10 @@ interface CourseCardProps {
   index: number
   /** Sequential gating state — when locked, the card is not clickable */
   lockInfo?: CourseLockInfo
+  /** 1-based position in the program path — shown as a corner badge */
+  pathPosition?: number
+  /** The first unlocked-but-incomplete course gets a highlight ring + pill */
+  isUpNext?: boolean
 }
 
 const iconMap: Record<string, LucideIcon> = {
@@ -37,7 +42,17 @@ const iconMap: Record<string, LucideIcon> = {
   BookOpen,
 }
 
-export function CourseCard({ course, lockInfo }: CourseCardProps) {
+/** Small numbered badge showing the course's position in the program path */
+function PathBadge({ position }: { position?: number }) {
+  if (!position) return null
+  return (
+    <span className="absolute top-2 left-2 z-10 w-7 h-7 rounded-full bg-via-navy/85 text-white text-xs font-bold flex items-center justify-center shadow">
+      {position}
+    </span>
+  )
+}
+
+export function CourseCard({ course, lockInfo, pathPosition, isUpNext }: CourseCardProps) {
   const { getCourseProgress } = useProgress()
   const { isUnderConstruction, getConstructionMessage } = useConstruction()
   const isComingSoon = course.status === 'coming-soon'
@@ -53,6 +68,7 @@ export function CourseCard({ course, lockInfo }: CourseCardProps) {
     return (
       <div className="group relative flex flex-col overflow-hidden rounded-xl border border-via-border bg-via-card opacity-60">
         <div className="relative">
+          <PathBadge position={pathPosition} />
           <ImagePlaceholder
             src={course.imagePath ?? ''}
             alt={course.title}
@@ -93,6 +109,7 @@ export function CourseCard({ course, lockInfo }: CourseCardProps) {
     return (
       <div className="group relative flex flex-col overflow-hidden rounded-xl border border-via-border bg-via-card opacity-60">
         <div className="relative">
+          <PathBadge position={pathPosition} />
           <ImagePlaceholder
             src={course.imagePath ?? ''}
             alt={course.title}
@@ -127,18 +144,36 @@ export function CourseCard({ course, lockInfo }: CourseCardProps) {
     )
   }
 
+  const isCompleted = progress.total > 0 && progress.percentage === 100
+
   return (
     <Link
       to={`/course/${course.id}`}
-      className="group relative flex flex-col overflow-hidden rounded-xl border border-via-border bg-via-card transition-shadow hover:shadow-lg"
+      className={`group relative flex flex-col overflow-hidden rounded-xl border bg-via-card transition-shadow hover:shadow-lg ${
+        isUpNext ? 'border-via-orange ring-2 ring-via-orange/60' : 'border-via-border'
+      }`}
     >
-      <ImagePlaceholder
-        src={course.imagePath ?? ''}
-        alt={course.title}
-        aspectRatio="1:1"
-        icon={Icon}
-        className="rounded-none"
-      />
+      <div className="relative">
+        <PathBadge position={pathPosition} />
+        {isUpNext && (
+          <span className="absolute top-2 right-2 z-10 px-2.5 py-1 rounded-full bg-via-orange text-white text-[10px] font-bold uppercase tracking-wide shadow">
+            Up Next
+          </span>
+        )}
+        {isCompleted && (
+          <span className="absolute top-2 right-2 z-10 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-500 text-white text-[10px] font-bold uppercase tracking-wide shadow">
+            <CheckCircle2 className="w-3 h-3" />
+            Completed
+          </span>
+        )}
+        <ImagePlaceholder
+          src={course.imagePath ?? ''}
+          alt={course.title}
+          aspectRatio="1:1"
+          icon={Icon}
+          className="rounded-none"
+        />
+      </div>
 
       <div className="flex flex-1 flex-col p-4">
         <h3 className="text-sm font-semibold text-via-navy line-clamp-1 group-hover:text-via-orange transition-colors">

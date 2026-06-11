@@ -6,6 +6,7 @@ import { useCourses } from '../context/CoursesContext'
 import { useAuth } from '../context/AuthContext'
 import { useConstruction } from '../context/ConstructionContext'
 import { useCourseLock } from '../hooks/useCourseLock'
+import { celebrate } from '../lib/celebrate'
 import { useModuleContent } from '../hooks/useModuleContent'
 import { BlockRenderer } from '../components/cms/BlockRenderer'
 import { SecondaryMarket } from '../components/sections/SecondaryMarket'
@@ -157,7 +158,7 @@ export function ModuleView() {
     moduleId: string
   }>()
   const navigate = useNavigate()
-  const { startModule, completeModule, logQuizAttempt } = useProgress()
+  const { startModule, completeModule, logQuizAttempt, getModuleStatus } = useProgress()
   const { user, isAdmin, isLeadership } = useAuth()
   const { isUnderConstruction, getConstructionMessage } = useConstruction()
   const { getCourseById } = useCourses()
@@ -407,6 +408,9 @@ export function ModuleView() {
           !(isQuiz && !canBypass) && (
             <button
               onClick={() => {
+                if (getModuleStatus(courseId, moduleId) !== 'completed') {
+                  celebrate(`"${currentModule.title}" completed!`)
+                }
                 completeModule(courseId, moduleId)
                 navigate(`/course/${courseId}/module/${nextModule.id}`)
               }}
@@ -419,6 +423,9 @@ export function ModuleView() {
         ) : (
           <button
             onClick={() => {
+              if (getModuleStatus(courseId, moduleId) !== 'completed') {
+                celebrate(`"${currentModule.title}" completed!`)
+              }
               completeModule(courseId, moduleId)
               navigate(`/course/${courseId}`)
             }}

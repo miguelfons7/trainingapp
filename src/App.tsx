@@ -14,6 +14,7 @@ import { ModuleView } from './pages/ModuleView'
 import { Admin } from './pages/Admin'
 import { ContentEditorPage } from './pages/ContentEditorPage'
 import { Certificates } from './pages/Certificates'
+import { CertificateView } from './pages/CertificateView'
 import { UserProfile } from './pages/UserProfile'
 import { Acknowledgements } from './pages/Acknowledgements'
 import { DevLog } from './pages/DevLog'
@@ -59,6 +60,15 @@ function AppRoutes() {
         element={user ? <Navigate to="/" replace /> : <Signup />}
       />
       <Route path="/reset-password" element={<ResetPassword />} />
+      {/* Standalone (no AppShell chrome) so printing is clean */}
+      <Route
+        path="/certificate/:courseId"
+        element={
+          <ProtectedRoute>
+            <CertificateView />
+          </ProtectedRoute>
+        }
+      />
       <Route
         path="/"
         element={

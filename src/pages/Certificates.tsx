@@ -1,4 +1,5 @@
-import { Award, CheckCircle, FileCheck } from 'lucide-react'
+import { Award, CheckCircle, FileCheck, Printer } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { useProgress } from '../context/ProgressContext'
 import { useCompliance } from '../context/ComplianceContext'
 import { useCourses } from '../context/CoursesContext'
@@ -57,6 +58,13 @@ export function Certificates() {
                       </p>
                       <p className="text-xs text-via-success font-medium">Course Completed</p>
                     </div>
+                    <Link
+                      to={`/certificate/${course.id}`}
+                      className="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-via-border text-xs font-semibold text-via-navy hover:bg-via-bg-subtle transition-colors"
+                    >
+                      <Printer className="w-3.5 h-3.5" />
+                      View / Print
+                    </Link>
                   </div>
                 ))}
               </div>

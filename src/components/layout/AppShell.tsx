@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import { Sidebar } from './Sidebar'
 import { TopBar } from './TopBar'
+import { CompletionToast } from '../shared/CompletionToast'
 
 const MD_BREAKPOINT = 768
 
@@ -84,6 +85,7 @@ export function AppShell() {
           <Outlet />
         </main>
       </div>
+      <CompletionToast />
     </div>
   )
 }
