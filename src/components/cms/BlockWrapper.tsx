@@ -12,6 +12,8 @@ interface BlockWrapperProps {
   onMoveDown: () => void
   onDuplicate: () => void
   children: React.ReactNode
+  /** dnd-kit drag handle listeners/attributes — makes the grip icon a real handle */
+  dragHandleProps?: Record<string, unknown>
 }
 
 export function BlockWrapper({
@@ -23,6 +25,7 @@ export function BlockWrapper({
   onMoveDown,
   onDuplicate,
   children,
+  dragHandleProps,
 }: BlockWrapperProps) {
   const [collapsed, setCollapsed] = useState(false)
   const meta = BLOCK_CATALOG.find((b) => b.type === block.type)
@@ -32,7 +35,13 @@ export function BlockWrapper({
     <div className="group relative bg-via-card rounded-xl border border-via-border hover:border-via-orange/40 transition-colors">
       {/* Block header */}
       <div className="flex items-center gap-2 px-3 py-2 border-b border-via-border bg-via-bg-subtle/50 rounded-t-xl">
-        <GripVertical className="w-4 h-4 text-via-text-light cursor-grab shrink-0" />
+        <span
+          {...(dragHandleProps ?? {})}
+          className="touch-none cursor-grab active:cursor-grabbing"
+          title="Drag to reorder"
+        >
+          <GripVertical className="w-4 h-4 text-via-text-light shrink-0" />
+        </span>
         <Icon className="w-4 h-4 text-via-orange shrink-0" />
         <span className="text-xs font-semibold text-via-navy uppercase tracking-wide flex-1">
           {meta?.label ?? block.type}

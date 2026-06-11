@@ -40,7 +40,7 @@ export function InlineImage({
       <div className="rounded-lg overflow-hidden border border-via-border bg-[#e8eaee]">
         {!error ? (
           <img
-            src={`${import.meta.env.BASE_URL}images/${src}`}
+            src={src.startsWith('http') ? src : `${import.meta.env.BASE_URL}images/${src}`}
             alt={alt}
             loading="lazy"
             onError={() => setError(true)}

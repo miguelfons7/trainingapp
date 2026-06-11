@@ -144,3 +144,8 @@ const ICON_MAP: Record<string, LucideIcon> = {
 export function resolveIcon(name: string): LucideIcon {
   return ICON_MAP[name] ?? HelpCircle
 }
+
+/** All icon names available to CMS content — used by the IconPicker */
+export const ICON_NAMES = Object.keys(ICON_MAP)
+
+export { ICON_MAP }

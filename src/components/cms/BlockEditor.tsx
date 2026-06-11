@@ -1,5 +1,22 @@
-import { useState, useCallback, useRef, useEffect } from 'react'
-import { Save, Send, Eye, Code, Pencil, Undo2, ClipboardCheck } from 'lucide-react'
+import { useState, useCallback, useRef, useEffect, lazy, Suspense } from 'react'
+import { Save, Send, Eye, Code, Pencil, Undo2, ClipboardCheck, Loader2 } from 'lucide-react'
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  KeyboardSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from '@dnd-kit/core'
+import {
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+  useSortable,
+  arrayMove,
+} from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
 import type { PageContent, ContentBlock, BlockType, SectionedQuizData } from '../../types/blocks'
 import { createDefaultBlock } from './blockDefaults'
 import { BlockPalette } from './BlockPalette'
@@ -8,6 +25,51 @@ import { BlockRenderer } from './BlockRenderer'
 import { BLOCK_EDITORS } from './editors'
 import { QuizEditor } from './editors/QuizEditor'
 import { QuizBlock } from '../interactive/QuizBlock'
+import { IconPicker } from './IconPicker'
+import { ColorPicker } from './ColorPicker'
+
+// Monaco is heavy — load it only when code mode is opened
+const MonacoEditor = lazy(() => import('@monaco-editor/react'))
+
+/** dnd-kit sortable wrapper — provides the drag handle to BlockWrapper */
+function SortableBlock({
+  block,
+  children,
+  ...wrapperProps
+}: {
+  block: ContentBlock
+  isFirst: boolean
+  isLast: boolean
+  onDelete: () => void
+  onMoveUp: () => void
+  onMoveDown: () => void
+  onDuplicate: () => void
+  children: React.ReactNode
+}) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
+    useSortable({ id: block.id })
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={{
+        transform: CSS.Transform.toString(transform),
+        transition,
+        opacity: isDragging ? 0.6 : 1,
+        zIndex: isDragging ? 20 : undefined,
+        position: 'relative' as const,
+      }}
+    >
+      <BlockWrapper
+        block={block}
+        {...wrapperProps}
+        dragHandleProps={{ ...attributes, ...listeners }}
+      >
+        {children}
+      </BlockWrapper>
+    </div>
+  )
+}
 
 interface BlockEditorProps {
   initialContent: PageContent
@@ -125,6 +187,28 @@ export function BlockEditor({
       ...prev,
       section: { ...prev.section, [field]: value },
     }))
+  }
+
+  // ── Drag-and-drop reordering ────────────────────────────
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 4 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
+  )
+
+  function handleDragEnd(event: DragEndEvent) {
+    const { active, over } = event
+    if (!over || active.id === over.id) return
+    updateContent((prev) => {
+      const blocks = [...prev.blocks].sort((a, b) => a.order - b.order)
+      const oldIndex = blocks.findIndex((b) => b.id === active.id)
+      const newIndex = blocks.findIndex((b) => b.id === over.id)
+      if (oldIndex < 0 || newIndex < 0) return prev
+      const reordered = arrayMove(blocks, oldIndex, newIndex).map((b, i) => ({
+        ...b,
+        order: i,
+      }))
+      return { ...prev, blocks: reordered }
+    })
   }
 
   // ── Save / Publish ──────────────────────────────────────
@@ -263,54 +347,60 @@ export function BlockEditor({
               </div>
               <div>
                 <label className="block text-xs font-medium text-via-text mb-1.5">Accent Color</label>
-                <input
-                  type="text"
+                <ColorPicker
                   value={content.section.accentColor}
-                  onChange={(e) => updateSection('accentColor', e.target.value)}
-                  placeholder="e.g. border-teal-500"
-                  className="w-full px-3 py-2.5 rounded-lg border border-via-border bg-white text-sm text-via-text focus:outline-none focus:ring-2 focus:ring-via-orange/30 focus:border-via-orange"
+                  onChange={(borderClass) => updateSection('accentColor', borderClass)}
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-via-text mb-1.5">Icon Name</label>
-                <input
-                  type="text"
+                <label className="block text-xs font-medium text-via-text mb-1.5">Icon</label>
+                <IconPicker
                   value={content.section.icon}
-                  onChange={(e) => updateSection('icon', e.target.value)}
-                  placeholder="e.g. BookOpen"
-                  className="w-full px-3 py-2.5 rounded-lg border border-via-border bg-white text-sm text-via-text focus:outline-none focus:ring-2 focus:ring-via-orange/30 focus:border-via-orange"
+                  onChange={(icon) => updateSection('icon', icon ?? 'BookOpen')}
+                  allowNone={false}
                 />
               </div>
             </div>
           </div>
 
-          {/* Blocks */}
-          <div className="space-y-3">
-            {sortedBlocks.map((block, idx) => {
-              const Editor = BLOCK_EDITORS[block.type as keyof typeof BLOCK_EDITORS]
-              return (
-                <BlockWrapper
-                  key={block.id}
-                  block={block}
-                  isFirst={idx === 0}
-                  isLast={idx === sortedBlocks.length - 1}
-                  onDelete={() => deleteBlock(block.id)}
-                  onMoveUp={() => moveBlock(block.id, 'up')}
-                  onMoveDown={() => moveBlock(block.id, 'down')}
-                  onDuplicate={() => duplicateBlock(block.id)}
-                >
-                  {Editor ? (
-                    <Editor
+          {/* Blocks — drag the grip handle to reorder, or use the arrows */}
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+          >
+            <SortableContext
+              items={sortedBlocks.map((b) => b.id)}
+              strategy={verticalListSortingStrategy}
+            >
+              <div className="space-y-3">
+                {sortedBlocks.map((block, idx) => {
+                  const Editor = BLOCK_EDITORS[block.type as keyof typeof BLOCK_EDITORS]
+                  return (
+                    <SortableBlock
+                      key={block.id}
                       block={block}
-                      onChange={(updated: ContentBlock) => updateBlock(block.id, updated)}
-                    />
-                  ) : (
-                    <p className="text-sm text-via-text-light">No editor for block type: {block.type}</p>
-                  )}
-                </BlockWrapper>
-              )
-            })}
-          </div>
+                      isFirst={idx === 0}
+                      isLast={idx === sortedBlocks.length - 1}
+                      onDelete={() => deleteBlock(block.id)}
+                      onMoveUp={() => moveBlock(block.id, 'up')}
+                      onMoveDown={() => moveBlock(block.id, 'down')}
+                      onDuplicate={() => duplicateBlock(block.id)}
+                    >
+                      {Editor ? (
+                        <Editor
+                          block={block}
+                          onChange={(updated: ContentBlock) => updateBlock(block.id, updated)}
+                        />
+                      ) : (
+                        <p className="text-sm text-via-text-light">No editor for block type: {block.type}</p>
+                      )}
+                    </SortableBlock>
+                  )
+                })}
+              </div>
+            </SortableContext>
+          </DndContext>
 
           {/* Quiz Data Editor (shown when quizData exists) */}
           {content.quizData && (
@@ -357,29 +447,47 @@ export function BlockEditor({
                 Reset
               </button>
             </div>
-            <textarea
-              value={codeValue}
-              onChange={(e) => handleCodeChange(e.target.value)}
-              spellCheck={false}
-              className="w-full h-[600px] px-4 py-3 font-mono text-xs bg-[#1e1e1e] text-[#d4d4d4] focus:outline-none resize-none caret-white"
-              style={{ tabSize: 2 }}
-            />
+            <Suspense
+              fallback={
+                <div className="h-[600px] flex items-center justify-center bg-[#1e1e1e]">
+                  <Loader2 className="w-6 h-6 text-white/60 animate-spin" />
+                </div>
+              }
+            >
+              <MonacoEditor
+                height="600px"
+                language="json"
+                theme="vs-dark"
+                value={codeValue}
+                onChange={(value) => handleCodeChange(value ?? '')}
+                options={{
+                  minimap: { enabled: false },
+                  fontSize: 12,
+                  tabSize: 2,
+                  wordWrap: 'on',
+                  scrollBeyondLastLine: false,
+                  automaticLayout: true,
+                }}
+              />
+            </Suspense>
           </div>
         </div>
       )}
 
-      {/* Preview Mode */}
+      {/* Preview Mode — renders on the same background/width learners see */}
       {mode === 'preview' && (
-        <div className="bg-white rounded-xl border border-via-border p-6">
-          <BlockRenderer content={content} />
-          {content.quizData && (
-            <div className="mt-6">
-              <QuizBlock
-                quizId="cms-preview"
-                cmsQuizData={content.quizData}
-              />
-            </div>
-          )}
+        <div className="bg-via-bg rounded-xl border border-via-border p-4 sm:p-8">
+          <div className="max-w-3xl mx-auto">
+            <BlockRenderer content={content} />
+            {content.quizData && (
+              <div className="mt-6">
+                <QuizBlock
+                  quizId="cms-preview"
+                  cmsQuizData={content.quizData}
+                />
+              </div>
+            )}
+          </div>
         </div>
       )}
     </div>

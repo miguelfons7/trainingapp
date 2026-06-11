@@ -1,4 +1,5 @@
 import type { ParagraphBlock } from '../../../types/blocks'
+import { RichTextEditor } from '../RichTextEditor'
 
 interface Props {
   block: ParagraphBlock
@@ -9,14 +10,13 @@ export function ParagraphEditor({ block, onChange }: Props) {
   return (
     <div>
       <label className="block text-xs font-medium text-via-text mb-1.5">Content</label>
-      <textarea
-        className="w-full px-3 py-2.5 rounded-lg border border-via-border bg-white text-sm text-via-text focus:outline-none focus:ring-2 focus:ring-via-orange/30 focus:border-via-orange resize-none"
-        rows={5}
+      <RichTextEditor
         value={block.data.content}
-        onChange={(e) =>
-          onChange({ ...block, data: { ...block.data, content: e.target.value } })
+        onChange={(html) =>
+          onChange({ ...block, data: { ...block.data, content: html } })
         }
         placeholder="Enter paragraph text..."
+        rows={5}
       />
     </div>
   )

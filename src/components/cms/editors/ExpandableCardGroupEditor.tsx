@@ -1,5 +1,7 @@
 import { Plus, Trash2 } from 'lucide-react'
 import type { ExpandableCardGroupBlock, ExpandableCardItem, BadgeColor } from '../../../types/blocks'
+import { RichTextEditor } from '../RichTextEditor'
+import { IconPicker } from '../IconPicker'
 
 interface Props {
   block: ExpandableCardGroupBlock
@@ -95,12 +97,11 @@ export function ExpandableCardGroupEditor({ block, onChange }: Props) {
 
             <div>
               <label className="block text-xs text-via-text-light mb-1">Content</label>
-              <textarea
-                className="w-full px-3 py-2.5 rounded-lg border border-via-border bg-white text-sm text-via-text focus:outline-none focus:ring-2 focus:ring-via-orange/30 focus:border-via-orange resize-none"
-                rows={3}
+              <RichTextEditor
                 value={card.content}
-                onChange={(e) => updateCard(i, { content: e.target.value })}
+                onChange={(html) => updateCard(i, { content: html })}
                 placeholder="Card content..."
+                rows={3}
               />
             </div>
 
@@ -141,16 +142,11 @@ export function ExpandableCardGroupEditor({ block, onChange }: Props) {
 
             <div>
               <label className="block text-xs text-via-text-light mb-1">
-                Icon <span className="text-via-text-light">(lucide name)</span>
+                Icon <span className="text-via-text-light">(optional)</span>
               </label>
-              <input
-                type="text"
-                className="w-full px-3 py-2.5 rounded-lg border border-via-border bg-white text-sm text-via-text focus:outline-none focus:ring-2 focus:ring-via-orange/30 focus:border-via-orange"
-                value={card.icon ?? ''}
-                onChange={(e) =>
-                  updateCard(i, { icon: e.target.value || undefined })
-                }
-                placeholder="e.g. BookOpen, Star"
+              <IconPicker
+                value={card.icon}
+                onChange={(icon) => updateCard(i, { icon })}
               />
             </div>
           </div>

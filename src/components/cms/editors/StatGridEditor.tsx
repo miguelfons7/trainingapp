@@ -1,5 +1,6 @@
 import { Plus, Trash2 } from 'lucide-react'
 import type { StatGridBlock } from '../../../types/blocks'
+import { IconPicker } from '../IconPicker'
 
 interface Props {
   block: StatGridBlock
@@ -59,12 +60,10 @@ export function StatGridEditor({ block, onChange }: Props) {
               <div className="flex-1 grid grid-cols-3 gap-2">
                 <div>
                   <label className="block text-xs text-via-text-light mb-1">Icon</label>
-                  <input
-                    type="text"
-                    className="w-full px-3 py-2.5 rounded-lg border border-via-border bg-white text-sm text-via-text focus:outline-none focus:ring-2 focus:ring-via-orange/30 focus:border-via-orange"
+                  <IconPicker
                     value={stat.icon}
-                    onChange={(e) => updateStat(i, 'icon', e.target.value)}
-                    placeholder="BarChart"
+                    onChange={(icon) => updateStat(i, 'icon', icon ?? 'BarChart')}
+                    allowNone={false}
                   />
                 </div>
                 <div>

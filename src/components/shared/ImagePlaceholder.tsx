@@ -30,7 +30,7 @@ export function ImagePlaceholder({
     <div className={`relative overflow-hidden rounded-xl ${imageError ? 'bg-via-bg-subtle' : 'bg-[#e8eaee]'} ${aspectClasses[aspectRatio]} ${className}`}>
       {!imageError ? (
         <img
-          src={`${import.meta.env.BASE_URL}images/${src}`}
+          src={src.startsWith('http') ? src : `${import.meta.env.BASE_URL}images/${src}`}
           alt={alt}
           loading="lazy"
           onError={() => setImageError(true)}

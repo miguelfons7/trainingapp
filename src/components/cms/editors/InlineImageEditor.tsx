@@ -1,4 +1,5 @@
 import type { InlineImageBlock } from '../../../types/blocks'
+import { ImageUpload } from '../ImageUpload'
 
 interface Props {
   block: InlineImageBlock
@@ -15,16 +16,8 @@ export function InlineImageEditor({ block, onChange }: Props) {
   return (
     <div className="space-y-3">
       <div>
-        <label className="block text-xs font-medium text-via-text mb-1.5">
-          Source <span className="text-via-text-light">(filename only)</span>
-        </label>
-        <input
-          type="text"
-          className="w-full px-3 py-2.5 rounded-lg border border-via-border bg-white text-sm text-via-text focus:outline-none focus:ring-2 focus:ring-via-orange/30 focus:border-via-orange"
-          value={d.src}
-          onChange={(e) => update({ src: e.target.value })}
-          placeholder="inline-example.jpg"
-        />
+        <label className="block text-xs font-medium text-via-text mb-1.5">Image</label>
+        <ImageUpload value={d.src} onChange={(src) => update({ src })} />
       </div>
       <div>
         <label className="block text-xs font-medium text-via-text mb-1.5">Alt Text</label>
