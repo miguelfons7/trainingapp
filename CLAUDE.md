@@ -69,6 +69,10 @@ supabase/
     008_issue_reports.sql <- issue_reports table + RLS + trigger
     009_time_spent.sql <- time_spent_seconds column on module_progress
     010_password_resets.sql <- password_resets table + RLS + SECURITY DEFINER reset functions
+    011_course_feedback.sql <- course_feedback table + RLS (post-quiz survey)
+    012_course_unlock_overrides.sql <- per-user course gating overrides
+    013_learning_activity.sql <- learning_activity events table
+    014_content_images_storage.sql <- content-images storage bucket + policies
 public/
   images/           <- All images (hero images, inline images, logos)
 .env.local          <- Supabase credentials (VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY)
@@ -99,6 +103,9 @@ public/
 | `module_content_versions` | Immutable version snapshots (created on publish) | `module_content_id` (FK), `content` (jsonb), `version`, `published_by`, `published_at` |
 | `construction_overrides` | Admin toggles for under-construction status | `entity_type` (course/module/program), `entity_id`, `is_active`, `message`, `updated_by` |
 | `password_resets` | Admin-generated password reset tokens | `user_id`, `token`, `expires_at`, `used_at`, `created_by` |
+| `course_feedback` | Post-quiz course feedback | `user_id`, `course_id`, `rating` (1-5), `relevance`, `difficulty`, `comment`, UNIQUE(user_id, course_id) |
+| `course_unlock_overrides` | Per-user exceptions to sequential course gating | `user_id`, `course_id`, `created_by`, UNIQUE(user_id, course_id) |
+| `learning_activity` | Activity events (streaks, Active Learners, failed quiz attempts) | `user_id`, `course_id`, `module_id`, `event`, `score` |
 
 ### Roles & Permissions
 
@@ -466,12 +473,20 @@ interface CourseModule {
 - **Admin user editing** — ManageUsers tab supports editing name and email inline (previously only role and team).
 - **Consumer migration complete** — All 15+ components that previously imported from `courses.ts`/`programs.ts` now use `useCourses()` hook from CoursesContext. CoursesProvider wraps ProgressProvider in App.tsx so ProgressContext can access course data dynamically.
 - **Password reset route has no auth guard** — `/reset-password` is public like `/login` and `/signup`. Don't wrap it in ProtectedRoute or add a user redirect, because users who forgot their password can't be authenticated. Migration 010. Admin generates token in ManageUsers (KeyRound icon) → modal shows copyable link → user visits link → sets new password. Token expires in 24h, single-use.
+- **Course-level sequential gating** — Courses unlock in program order (`program.courseIds`); a course is locked until all prior available courses are 100% complete. Logic in `src/hooks/useCourseLock.ts` (hook, not context — it needs ConstructionContext which sits below ProgressProvider). Enforced in CourseCard, CourseView, and ModuleView (direct URLs). Admins/leadership bypass. Per-user exceptions via `course_unlock_overrides` (migration 012), managed in Admin → Assign Courses → Unlock Overrides. Coming-soon/under-construction courses are skipped as prerequisites so they can't dam the sequence. Course order is edited in Content Hub → Programs (ordered list with ↑/↓).
+- **Quiz integrity** — MC options render in per-attempt shuffled order (answers stored by ORIGINAL index, so persistence/scoring are unaffected). In-progress answers persist to localStorage (`viacademy-quiz:{userId}:{quizId}`), restored on reload, cleared on submit. Failed quizzes get a "Try Again" button that reshuffles. `onComplete` fires ONLY on pass (a failed quiz must NOT complete the module — it would unlock the next course); `onAttempt` fires on every submission for activity logging. QuizBlock respects `cmsQuizData.passThreshold`.
+- **STAGING_PREVIEW must stay false** — The flag in ModuleView.tsx makes draft CMS content override hardcoded TSX. It MUST be false in deployed code or learners see works-in-progress. Review drafts via the CMS editor's Preview mode instead.
+- **Activity events** — `learning_activity` (migration 013) logs `module_started`, `module_completed`, `quiz_attempted` (incl. failures, with score). Powers the Home streak pill (`useLearningStreak`), and the Active Learners columns in UserProgressTable (current course, time this week, quiz tries w/ failures, streak, Stalled badge = incomplete + 5 days inactive).
+- **Engagement layer** — `celebrate()` (src/lib/celebrate.ts) + `CompletionToast` (mounted in AppShell) show a toast on first lesson completion. Home: streak pill, numbered path badges, "Up Next" ring on first unlocked-incomplete course, "Completed" pill at 100%, program-completion banner. Printable certificates at `/certificate/:courseId` (standalone route outside AppShell for clean printing; `program` variant for full program).
+- **CMS editors are self-service** — TipTap rich text (RichTextEditor.tsx) in paragraph/callout/expandable-card content; ImageUpload.tsx uploads to the `content-images` storage bucket (migration 014) and saves full URLs (InlineImage/ImagePlaceholder accept URLs or filenames); IconPicker offers only icons in `iconResolver.ts` (add new icons there first); ColorPicker for section accent; dnd-kit drag reordering wired in BlockEditor; code mode uses lazy-loaded Monaco.
+- **Code splitting** — All section components in ModuleView's contentMap are `React.lazy` chunks (see `lazySection` helper); admin pages are lazy in App.tsx. Keep new sections/admin pages lazy. Main chunk ~473KB.
+- **TSX→CMS conversion playbook** — Pilot: all 6 who-is-via lessons exist as CMS DRAFTS in module_content (converted from TSX, text verbatim). To convert a lesson: map TSX patterns to blocks (cards→content_card with children IDs, ExpandableCard→expandable_card_group, stats→stat_grid, FlowDiagram→flow_diagram, exercises→scenario_card/fill_in_blank/term_match), keep module IDs identical (progress data is keyed by them and unaffected), save as draft, review in editor Preview, publish only on visual parity. Known gaps: no timeline or org-chart block (approximate with flow_diagram/icon_card_grid), icon-annotated list rows become bullet lists.
 
 ## Pending Work
 
+- **who-is-via CMS pilot parity review** — All 6 lessons sit as drafts in module_content. Miguel reviews each in the CMS editor Preview vs the live TSX version, publishes only modules that look the same or better. Full TSX→CMS migration decision follows the pilot.
 - **Build AM Role Training course** (rough draft, same pattern as BDR)
 - **Build Ongoing Development course** (placeholder, covers continuous learning topics)
-- **Code splitting** — Bundle is >1.2MB; consider dynamic imports for course section components
-- **CMS enhancements** — Drag-and-drop block reordering (dnd-kit is installed but not yet wired into BlockEditor), Monaco editor integration (installed but code mode uses textarea), rich text editor for paragraph blocks (currently plain HTML strings)
-- **Color palette expansion** — Add tasteful, complementary colors beyond blue/orange for visual variety
-- **BlockRenderer robustness** — The renderer now handles field name variations (html/content, variant/style, string/numeric heading levels) but could benefit from a formal content normalization layer
+- **Google sign-in** (planned, deferred) — OAuth via Supabase; needs Google Cloud Console OAuth app + handle_new_user() trigger update for @viatrading.com auto-signup
+- **BlockRenderer robustness** — The renderer handles field name variations (html/content, variant/style, string/numeric heading levels) but could benefit from a formal content normalization layer
+- **Timeline + org-chart block types** — would close the two biggest TSX→CMS fidelity gaps found in the pilot

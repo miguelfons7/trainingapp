@@ -155,9 +155,10 @@ export function ModuleView() {
     user?.id,
   )
 
-  // STAGING MODE: when true, draft CMS content takes priority over hardcoded TSX
-  // Set to true on the staging branch, false on production (main)
-  const STAGING_PREVIEW = true
+  // STAGING MODE: when true, draft CMS content takes priority over hardcoded TSX.
+  // MUST stay false in deployed code — drafts are works-in-progress and must never
+  // show to learners. Use the CMS editor's Preview mode to review drafts instead.
+  const STAGING_PREVIEW = false
 
   const currentIndex = useMemo(() => {
     if (!course || !moduleId) return -1
