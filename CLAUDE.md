@@ -455,7 +455,7 @@ interface CourseModule {
 ## Common Pitfalls
 
 - **Unused imports cause build failure** — TypeScript strict mode. Clean imports before building.
-- **`moduleImageMap` controls hero display** — If a module ID isn't in the map, no hero renders. Removing an entry is how you hide a duplicate hero.
+- **`moduleImageMap` is the hero fallback, not the only source** — A published CMS section hero (`PageContent.section.heroImage = { src, alt }`, set in the CMS editor's Page Settings → Hero Image) overrides the map per module. ModuleView computes `cmsHero` (published only) then falls back to `moduleImageMap[moduleId]`. If a module ID isn't in the map AND has no CMS hero, no hero renders. So: removing a map entry hides a duplicate hero only if no CMS hero is set; admins can give CMS-only modules (am-role, bdr-workflow, how-via-is-organized) a hero without code. Uploads go to the `content-images` bucket as full URLs; ImagePlaceholder accepts URLs or bare filenames.
 - **`overflow-hidden` on parent** when using `InlineImage` with `float` — prevents layout overflow. But NEVER wrap the floated image itself in an `overflow-hidden` div: that creates a BFC that contains the float, so following text can't wrap around it. In CMS rendering, `overflow-hidden` lives on the content_card container, the inline_image renders bare, and a `clear-both` div closes each section (BlockRenderer).
 - **CMS list items render rich text** — NumberedListRenderer and TwoColumnListRenderer sanitize + `dangerouslySetInnerHTML` their items (like bullet_list). Plain-text rendering shows literal `<strong>` tags.
 - **ExpandableCard needs state** — Always pair with `useState<Set<string>>` and a `toggle` function.
