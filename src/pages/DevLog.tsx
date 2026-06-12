@@ -10,6 +10,16 @@ interface LogEntry {
 
 const changelog: LogEntry[] = [
   {
+    version: '1.1.0',
+    date: '2026-06-12',
+    title: 'CMS-Editable Module Hero Images',
+    changes: [
+      'Each module\'s hero banner can now be set or replaced from the CMS editor (Page Settings → Hero Image): upload an image or point to an existing file, no code change or redeploy needed.',
+      'A CMS hero overrides the built-in default when set; modules without one keep their existing image, so nothing changed for current lessons.',
+      'CMS-only modules that never had a banner (AM Role, the BDR workflow lessons, How Via Is Organized) can now get one straight from the editor.',
+    ],
+  },
+  {
     version: '1.0.1',
     date: '2026-06-12',
     title: 'Quality Pass: Formatting Fixes, Honest Placeholders, Dev Log Catch-Up',

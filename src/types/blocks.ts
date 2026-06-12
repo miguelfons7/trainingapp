@@ -30,6 +30,9 @@ export interface SectionWrapperData {
   subtitle: string
   accentColor: string     // e.g. "border-sky-500"
   icon: LucideIconName
+  /** Optional banner image at the top of the module. When set, it overrides the
+   *  hardcoded moduleImageMap hero in ModuleView. Leave unset to use the default. */
+  heroImage?: { src: string; alt: string }
 }
 
 // ─── Content Blocks ────────────────────────────────────────

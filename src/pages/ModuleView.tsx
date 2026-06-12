@@ -173,6 +173,15 @@ export function ModuleView() {
   // show to learners. Use the CMS editor's Preview mode to review drafts instead.
   const STAGING_PREVIEW = false
 
+  // Module hero: a published CMS section hero wins; otherwise the hardcoded map.
+  // This lets admins set/replace any module's banner from the CMS, while every
+  // existing hardcoded hero keeps working as the fallback.
+  const cmsHero =
+    (cmsIsPublished || STAGING_PREVIEW) && cmsContent?.section?.heroImage?.src
+      ? cmsContent.section.heroImage
+      : null
+  const moduleHero = cmsHero ?? (moduleId ? moduleImageMap[moduleId] : undefined)
+
   const currentIndex = useMemo(() => {
     if (!course || !moduleId) return -1
     return course.modules.findIndex((m) => m.id === moduleId)
@@ -321,12 +330,12 @@ export function ModuleView() {
       )}
 
       {/* Module hero image — keyed by module so navigation never flashes the previous image */}
-      {!(isModuleConstruction && !canBypass) && moduleId && moduleImageMap[moduleId] && (
+      {!(isModuleConstruction && !canBypass) && moduleHero && (
         <div className="mb-6">
           <ImagePlaceholder
             key={moduleId}
-            src={moduleImageMap[moduleId].src}
-            alt={moduleImageMap[moduleId].alt}
+            src={moduleHero.src}
+            alt={moduleHero.alt}
             aspectRatio="16:9"
             expandable
           />

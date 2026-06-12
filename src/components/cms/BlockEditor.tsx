@@ -27,6 +27,7 @@ import { QuizEditor } from './editors/QuizEditor'
 import { QuizBlock } from '../interactive/QuizBlock'
 import { IconPicker } from './IconPicker'
 import { ColorPicker } from './ColorPicker'
+import { ImageUpload } from './ImageUpload'
 
 // Monaco is heavy — load it only when code mode is opened
 const MonacoEditor = lazy(() => import('@monaco-editor/react'))
@@ -187,6 +188,22 @@ export function BlockEditor({
       ...prev,
       section: { ...prev.section, [field]: value },
     }))
+  }
+
+  // Merge a patch into the optional hero image. Clearing the src drops the
+  // whole field so the module falls back to the default moduleImageMap hero.
+  function updateSectionHero(patch: { src?: string; alt?: string }) {
+    updateContent((prev) => {
+      const current = prev.section.heroImage ?? { src: '', alt: '' }
+      const merged = { ...current, ...patch }
+      return {
+        ...prev,
+        section: {
+          ...prev.section,
+          heroImage: merged.src ? merged : undefined,
+        },
+      }
+    })
   }
 
   // ── Drag-and-drop reordering ────────────────────────────
@@ -360,6 +377,29 @@ export function BlockEditor({
                   allowNone={false}
                 />
               </div>
+            </div>
+
+            {/* Hero image — the banner at the top of the module page */}
+            <div className="mt-3 pt-3 border-t border-via-border">
+              <label className="block text-xs font-medium text-via-text mb-1.5">
+                Hero Image{' '}
+                <span className="font-normal text-via-text-light">
+                  (optional — the banner at the top of this module; leave empty to use the default)
+                </span>
+              </label>
+              <ImageUpload
+                value={content.section.heroImage?.src ?? ''}
+                onChange={(src) => updateSectionHero({ src })}
+              />
+              {content.section.heroImage?.src && (
+                <input
+                  type="text"
+                  value={content.section.heroImage?.alt ?? ''}
+                  onChange={(e) => updateSectionHero({ alt: e.target.value })}
+                  placeholder="Alt text (image description, shown if the image fails to load)"
+                  className="mt-2 w-full px-3 py-2.5 rounded-lg border border-via-border bg-white text-sm text-via-text focus:outline-none focus:ring-2 focus:ring-via-orange/30 focus:border-via-orange"
+                />
+              )}
             </div>
           </div>
 
