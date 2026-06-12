@@ -229,6 +229,16 @@ export interface DividerBlock extends BlockBase {
   }
 }
 
+export interface VideoEmbedBlock extends BlockBase {
+  type: 'video_embed'
+  data: {
+    /** Any YouTube URL form (watch, youtu.be, shorts, embed) */
+    url: string
+    title?: string
+    caption?: string
+  }
+}
+
 /** Standalone expandable card (not part of a group). Used in CMS code-mode content. */
 export interface ExpandableCardBlock extends BlockBase {
   type: 'expandable_card'
@@ -260,6 +270,7 @@ export type ContentBlock =
   | TermMatchBlock
   | AdditionalResourcesBlock
   | DividerBlock
+  | VideoEmbedBlock
 
 export type BlockType = ContentBlock['type']
 
@@ -318,6 +329,7 @@ export const BLOCK_CATALOG: BlockMeta[] = [
   // Media
   { type: 'inline_image', label: 'Image', icon: 'Image', category: 'media' },
   { type: 'hero_image', label: 'Hero Image', icon: 'ImageUp', category: 'media' },
+  { type: 'video_embed', label: 'Video (YouTube)', icon: 'Video', category: 'media' },
   // Accordion
   { type: 'expandable_card_group', label: 'Expandable Cards', icon: 'ChevronDown', category: 'accordion' },
   // Exercise

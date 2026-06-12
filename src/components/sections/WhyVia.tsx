@@ -101,6 +101,12 @@ export function WhyVia() {
             source: 'Via Trading Blog',
             description: 'How Via Trading earned 7 years of recognition on the Inc. 500 list of fastest-growing companies.',
           },
+          {
+            title: 'Via Trading on YouTube',
+            url: 'https://www.youtube.com/@Viatrading',
+            source: 'YouTube',
+            description: 'Warehouse tours, product walkthroughs, and buyer stories from the official Via Trading channel.',
+          },
         ]}
       />
 

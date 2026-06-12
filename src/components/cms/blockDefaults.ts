@@ -20,6 +20,7 @@ import type {
   TermMatchBlock,
   AdditionalResourcesBlock,
   DividerBlock,
+  VideoEmbedBlock,
 } from '../../types/blocks'
 
 function uid(): string {
@@ -253,5 +254,17 @@ export function createDefaultBlock(type: BlockType): ContentBlock {
         order: 0,
         data: { style: 'line', size: 'md' },
       } satisfies DividerBlock
+
+    case 'video_embed':
+      return {
+        id: uid(),
+        type: 'video_embed',
+        order: 0,
+        data: {
+          url: '',
+          title: '',
+          caption: '',
+        },
+      } satisfies VideoEmbedBlock
   }
 }

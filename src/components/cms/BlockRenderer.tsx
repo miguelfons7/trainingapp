@@ -35,6 +35,7 @@ import type {
   TermMatchBlock,
   AdditionalResourcesBlock,
   DividerBlock,
+  VideoEmbedBlock,
 } from '../../types/blocks'
 
 // ─── Helpers ──────────────────────────────────────────────
@@ -267,6 +268,7 @@ function HeroImageRenderer({ block }: { block: HeroImageBlock }) {
         src={block.data.src}
         alt={block.data.alt}
         aspectRatio={block.data.aspectRatio}
+        expandable
       />
     </div>
   )
@@ -372,6 +374,56 @@ function DividerRenderer({ block }: { block: DividerBlock }) {
   return <hr className={`border-t border-via-border ${spacing}`} />
 }
 
+/** Extract a YouTube video ID from any URL form (watch, youtu.be, shorts, embed) */
+function extractYouTubeId(url: string): string | null {
+  const match = url.match(
+    /(?:youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{11})/,
+  )
+  return match ? match[1] : null
+}
+
+function VideoEmbedRenderer({ block }: { block: VideoEmbedBlock }) {
+  const { url, title, caption } = block.data
+  const videoId = extractYouTubeId(url)
+
+  if (!videoId) {
+    // Non-YouTube URL — render a link card fallback
+    return (
+      <div className="bg-via-card rounded-xl border border-via-border p-4 mb-6">
+        <a
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-sm font-medium text-via-orange hover:underline"
+        >
+          ▶ {title || 'Watch video'}
+        </a>
+        {caption && <p className="text-xs text-via-text-light mt-1">{caption}</p>}
+      </div>
+    )
+  }
+
+  return (
+    <figure className="mb-6">
+      <div className="relative w-full aspect-video rounded-xl overflow-hidden border border-via-border bg-black">
+        <iframe
+          src={`https://www.youtube-nocookie.com/embed/${videoId}`}
+          title={title || 'Video'}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowFullScreen
+          loading="lazy"
+          className="absolute inset-0 w-full h-full"
+        />
+      </div>
+      {(title || caption) && (
+        <figcaption className="text-[11px] text-via-text-light mt-1.5 text-center italic">
+          {caption || title}
+        </figcaption>
+      )}
+    </figure>
+  )
+}
+
 // ─── Block Switch ─────────────────────────────────────────
 
 interface BlockSwitchProps {
@@ -419,6 +471,8 @@ function BlockSwitch({ block, blockMap }: BlockSwitchProps) {
       return <AdditionalResourcesRenderer block={block} />
     case 'divider':
       return <DividerRenderer block={block} />
+    case 'video_embed':
+      return <VideoEmbedRenderer block={block} />
     default:
       return null
   }

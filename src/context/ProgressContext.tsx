@@ -22,7 +22,13 @@ interface ProgressContextValue {
     courseId: string,
     moduleId: string,
   ) => 'not-started' | 'in-progress' | 'completed'
-  completeModule: (courseId: string, moduleId: string, score?: number) => void
+  completeModule: (
+    courseId: string,
+    moduleId: string,
+    score?: number,
+    /** Idle-aware active seconds; when provided, caps the recorded time */
+    activeSeconds?: number,
+  ) => void
   startModule: (courseId: string, moduleId: string) => void
   getCourseProgress: (courseId: string) => CourseProgressSummary
   getNextModule: (courseId: string) => string | null
@@ -123,7 +129,7 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
   )
 
   const completeModule = useCallback(
-    (courseId: string, moduleId: string, score?: number) => {
+    (courseId: string, moduleId: string, score?: number, activeSeconds?: number) => {
       const key = `${courseId}/${moduleId}`
       const now = new Date().toISOString()
       const existing = progress[key]
@@ -133,6 +139,14 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
       if (existing?.startedAt) {
         const elapsed = Math.round((Date.now() - new Date(existing.startedAt).getTime()) / 1000)
         timeSpentSeconds = elapsed > 0 && elapsed <= 86400 ? elapsed : undefined
+      }
+      // Idle-aware override: when active-time tracking provides a value, record
+      // the smaller of wall-clock and active time — open-but-idle windows don't count
+      if (activeSeconds !== undefined && activeSeconds > 0) {
+        timeSpentSeconds =
+          timeSpentSeconds !== undefined
+            ? Math.min(timeSpentSeconds, Math.round(activeSeconds))
+            : Math.round(activeSeconds)
       }
 
       // Optimistic update

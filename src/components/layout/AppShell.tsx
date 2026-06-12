@@ -3,10 +3,12 @@ import { Outlet, useLocation } from 'react-router-dom'
 import { Sidebar } from './Sidebar'
 import { TopBar } from './TopBar'
 import { CompletionToast } from '../shared/CompletionToast'
+import { useIdleLogout } from '../../hooks/useIdleLogout'
 
 const MD_BREAKPOINT = 768
 
 export function AppShell() {
+  useIdleLogout()
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [windowWidth, setWindowWidth] = useState(

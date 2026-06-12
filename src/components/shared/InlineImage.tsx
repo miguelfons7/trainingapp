@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { ImageIcon } from 'lucide-react'
+import { ImageLightbox } from './ImageLightbox'
 
 interface InlineImageProps {
   src: string
@@ -25,6 +26,11 @@ export function InlineImage({
   className = '',
 }: InlineImageProps) {
   const [error, setError] = useState(false)
+  const [expanded, setExpanded] = useState(false)
+
+  const resolvedSrc = src.startsWith('http')
+    ? src
+    : `${import.meta.env.BASE_URL}images/${src}`
 
   const floatClasses =
     float === 'left'
@@ -34,29 +40,49 @@ export function InlineImage({
         : 'mx-auto mb-4'
 
   return (
-    <figure
-      className={`${float !== 'none' ? floatClasses : 'mb-4'} ${float !== 'none' ? sizeClasses[size] : 'w-full max-w-sm mx-auto'} ${className}`}
-    >
-      <div className="rounded-lg overflow-hidden border border-via-border bg-[#e8eaee]">
-        {!error ? (
-          <img
-            src={src.startsWith('http') ? src : `${import.meta.env.BASE_URL}images/${src}`}
-            alt={alt}
-            loading="lazy"
-            onError={() => setError(true)}
-            className="w-full aspect-[4/3] object-cover"
-          />
-        ) : (
-          <div className="w-full aspect-[4/3] flex items-center justify-center">
-            <ImageIcon className="w-8 h-8 text-via-text-light" />
-          </div>
+    <>
+      <figure
+        className={`${float !== 'none' ? floatClasses : 'mb-4'} ${float !== 'none' ? sizeClasses[size] : 'w-full max-w-sm mx-auto'} ${className}`}
+      >
+        <div className="rounded-lg overflow-hidden border border-via-border bg-[#e8eaee]">
+          {!error ? (
+            <button
+              type="button"
+              onClick={() => setExpanded(true)}
+              className="block w-full cursor-zoom-in"
+              title="Click to enlarge"
+            >
+              {/* object-contain: never crop — wide screenshots, diagrams, and
+                  portraits letterbox inside the 4:3 frame instead of clipping */}
+              <img
+                src={resolvedSrc}
+                alt={alt}
+                loading="lazy"
+                onError={() => setError(true)}
+                className="w-full aspect-[4/3] object-contain"
+              />
+            </button>
+          ) : (
+            <div className="w-full aspect-[4/3] flex items-center justify-center">
+              <ImageIcon className="w-8 h-8 text-via-text-light" />
+            </div>
+          )}
+        </div>
+        {caption && (
+          <figcaption className="text-[11px] text-via-text-light mt-1 text-center italic leading-tight">
+            {caption}
+          </figcaption>
         )}
-      </div>
-      {caption && (
-        <figcaption className="text-[11px] text-via-text-light mt-1 text-center italic leading-tight">
-          {caption}
-        </figcaption>
+      </figure>
+
+      {expanded && !error && (
+        <ImageLightbox
+          src={resolvedSrc}
+          alt={alt}
+          caption={caption}
+          onClose={() => setExpanded(false)}
+        />
       )}
-    </figure>
+    </>
   )
 }

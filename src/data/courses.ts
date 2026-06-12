@@ -8,7 +8,7 @@ export const courses: Course[] = [
       'Learn the fundamentals of the liquidation industry: how it works, who the key players are, and why this sector continues to grow.',
     icon: 'Warehouse',
     estimatedTime: '~45 min',
-    imagePath: 'course-1-industry.png',
+    imagePath: 'course-1-industry.jpg',
     status: 'available',
     modules: [
       {
@@ -69,7 +69,7 @@ export const courses: Course[] = [
       'Discover Via Trading\'s story, mission, values, and what makes us the industry leader. Understand our platforms and competitive advantages.',
     icon: 'Building2',
     estimatedTime: '~40 min',
-    imagePath: 'course-2-via-trading.png',
+    imagePath: 'course-2-via-trading.jpg',
     status: 'available',
     modules: [
       {
@@ -301,7 +301,7 @@ export const courses: Course[] = [
       'Everything you need to know about the Business Development Representative role: your daily workflow, opening calls, the discovery framework, objection handling, HubSpot tools, and the follow-up accountability loop.',
     icon: 'Headphones',
     estimatedTime: '~60 min',
-    imagePath: 'course-5-bdr.png',
+    imagePath: 'course-5-bdr.jpg',
     status: 'available',
     modules: [
       {

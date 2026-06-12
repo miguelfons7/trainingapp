@@ -6,6 +6,7 @@ import { useCourses } from '../context/CoursesContext'
 import { useAuth } from '../context/AuthContext'
 import { useConstruction } from '../context/ConstructionContext'
 import { useCourseLock } from '../hooks/useCourseLock'
+import { useActiveSeconds, clearActiveSeconds } from '../hooks/useActiveSeconds'
 import { celebrate } from '../lib/celebrate'
 import { useModuleContent } from '../hooks/useModuleContent'
 import { BlockRenderer } from '../components/cms/BlockRenderer'
@@ -142,6 +143,18 @@ export function ModuleView() {
   const isModuleConstruction = moduleId ? isUnderConstruction('module', moduleId) : false
   const moduleConstructionMsg = moduleId ? getConstructionMessage('module', moduleId) : null
 
+  // Idle-aware time accumulation for honest time-spent stats
+  const { getActiveSeconds } = useActiveSeconds(user?.id, courseId, moduleId)
+
+  /** Complete a module recording only ACTIVE time, then clear the accumulator */
+  const completeWithActiveTime = useCallback(
+    (cId: string, mId: string, score?: number) => {
+      completeModule(cId, mId, score, getActiveSeconds())
+      clearActiveSeconds(user?.id, cId, mId)
+    },
+    [completeModule, getActiveSeconds, user?.id],
+  )
+
   // Sequential course gating — blocks direct module URLs in locked courses
   const { getCourseLock, overridesLoaded } = useCourseLock()
   const courseLock = courseId ? getCourseLock(courseId) : { locked: false }
@@ -235,9 +248,9 @@ export function ModuleView() {
     (score: number, total: number) => {
       if (!courseId || !moduleId) return
       const pct = Math.round((score / total) * 100)
-      completeModule(courseId, moduleId, pct)
+      completeWithActiveTime(courseId, moduleId, pct)
     },
-    [courseId, moduleId, completeModule],
+    [courseId, moduleId, completeWithActiveTime],
   )
 
   /** Called by QuizBlock on every submission (pass or fail) for activity logging */
@@ -303,13 +316,15 @@ export function ModuleView() {
         </div>
       )}
 
-      {/* Module hero image */}
+      {/* Module hero image — keyed by module so navigation never flashes the previous image */}
       {!(isModuleConstruction && !canBypass) && moduleId && moduleImageMap[moduleId] && (
         <div className="mb-6">
           <ImagePlaceholder
+            key={moduleId}
             src={moduleImageMap[moduleId].src}
             alt={moduleImageMap[moduleId].alt}
             aspectRatio="16:9"
+            expandable
           />
         </div>
       )}
@@ -394,7 +409,7 @@ export function ModuleView() {
                 if (getModuleStatus(courseId, moduleId) !== 'completed') {
                   celebrate(`"${currentModule.title}" completed!`)
                 }
-                completeModule(courseId, moduleId)
+                completeWithActiveTime(courseId, moduleId)
                 navigate(`/course/${courseId}/module/${nextModule.id}`)
               }}
               className="inline-flex items-center gap-2 px-6 py-3 bg-via-orange text-white font-semibold rounded-xl hover:bg-via-orange-light transition-colors cursor-pointer"
@@ -409,7 +424,7 @@ export function ModuleView() {
               if (getModuleStatus(courseId, moduleId) !== 'completed') {
                 celebrate(`"${currentModule.title}" completed!`)
               }
-              completeModule(courseId, moduleId)
+              completeWithActiveTime(courseId, moduleId)
               navigate(`/course/${courseId}`)
             }}
             className="inline-flex items-center gap-2 px-6 py-3 bg-via-navy text-white font-semibold rounded-xl hover:bg-via-navy/90 transition-colors cursor-pointer"

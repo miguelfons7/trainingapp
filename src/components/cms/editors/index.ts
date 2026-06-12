@@ -19,6 +19,7 @@ import { FillInBlankEditor } from './FillInBlankEditor'
 import { TermMatchEditor } from './TermMatchEditor'
 import { AdditionalResourcesEditor } from './AdditionalResourcesEditor'
 import { DividerEditor } from './DividerEditor'
+import { VideoEmbedEditor } from './VideoEmbedEditor'
 
 /**
  * Registry mapping each BlockType to its editor component.
@@ -47,6 +48,7 @@ export const BLOCK_EDITORS: Record<
   term_match: TermMatchEditor,
   additional_resources: AdditionalResourcesEditor,
   divider: DividerEditor,
+  video_embed: VideoEmbedEditor,
 }
 
 // Re-export individual editors for direct imports
@@ -68,3 +70,4 @@ export { FillInBlankEditor } from './FillInBlankEditor'
 export { TermMatchEditor } from './TermMatchEditor'
 export { AdditionalResourcesEditor } from './AdditionalResourcesEditor'
 export { DividerEditor } from './DividerEditor'
+export { VideoEmbedEditor } from './VideoEmbedEditor'
