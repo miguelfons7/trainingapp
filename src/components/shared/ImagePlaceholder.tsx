@@ -42,6 +42,18 @@ export function ImagePlaceholder({
       <div
         className={`relative overflow-hidden rounded-xl ${imageError ? 'bg-via-bg-subtle' : 'bg-[#e8eaee]'} ${aspectClasses[aspectRatio]} ${className} ${canExpand ? 'cursor-zoom-in' : ''}`}
         onClick={canExpand ? () => setExpanded(true) : undefined}
+        onKeyDown={
+          canExpand
+            ? (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault()
+                  setExpanded(true)
+                }
+              }
+            : undefined
+        }
+        role={canExpand ? 'button' : undefined}
+        tabIndex={canExpand ? 0 : undefined}
         title={canExpand ? 'Click to enlarge' : undefined}
       >
         {!imageError ? (

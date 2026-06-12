@@ -386,6 +386,17 @@ function VideoEmbedRenderer({ block }: { block: VideoEmbedBlock }) {
   const { url, title, caption } = block.data
   const videoId = extractYouTubeId(url)
 
+  // Empty/new block — show an authoring hint instead of a dead link
+  if (!url.trim()) {
+    return (
+      <div className="bg-via-bg-subtle rounded-xl border border-dashed border-via-border p-6 text-center mb-6">
+        <p className="text-sm text-via-text-light">
+          Paste a YouTube URL into this video block to embed it.
+        </p>
+      </div>
+    )
+  }
+
   if (!videoId) {
     // Non-YouTube URL — render a link card fallback
     return (

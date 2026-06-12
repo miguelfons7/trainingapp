@@ -2,18 +2,24 @@ import { Link } from 'react-router-dom'
 import { PlayCircle, CheckCircle2 } from 'lucide-react'
 import { useProgress } from '../../context/ProgressContext'
 import { useCourses } from '../../context/CoursesContext'
+import { useAuth } from '../../context/AuthContext'
 
 export function ContinueLearning() {
+  const { user } = useAuth()
   const { getCourseProgress, getNextModule } = useProgress()
-  const { courses } = useCourses()
+  const { courses, getProgramForUser } = useCourses()
 
-  // Find the first available course that has incomplete modules
-  const activeCourse = courses
-    .filter((c) => c.status === 'available')
-    .find((c) => {
-      const progress = getCourseProgress(c.id)
-      return progress.percentage < 100
-    })
+  // Scope to the user's assigned program, in program order — otherwise an
+  // AM-program user would be pointed at the BDR course (and vice versa)
+  const program = getProgramForUser(user?.programId)
+  const programCourses = (program?.courseIds ?? [])
+    .map((id) => courses.find((c) => c.id === id))
+    .filter((c): c is NonNullable<typeof c> => !!c && c.status === 'available')
+
+  // First course in THEIR program with incomplete modules
+  const activeCourse = programCourses.find(
+    (c) => getCourseProgress(c.id).percentage < 100,
+  )
 
   if (!activeCourse) {
     return (

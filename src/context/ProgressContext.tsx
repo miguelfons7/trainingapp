@@ -134,6 +134,18 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
       const now = new Date().toISOString()
       const existing = progress[key]
 
+      // Re-walking an already-completed lesson must NOT rewrite its record —
+      // it would clobber time_spent_seconds and completed_at with revisit data.
+      // (A quiz re-pass DOES update: score provided → record the new score,
+      // but the original time/completed_at are preserved below.)
+      if (existing?.status === 'completed' && score === undefined) {
+        return
+      }
+
+      // A quiz re-pass: update the score only, preserving the original
+      // time_spent_seconds and completed_at
+      const isRecompleteWithScore = existing?.status === 'completed'
+
       // Compute time spent from startedAt → now (cap at 24 hours)
       let timeSpentSeconds: number | undefined
       if (existing?.startedAt) {
@@ -157,28 +169,40 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
           courseId,
           status: 'completed',
           score,
-          completedAt: now,
+          completedAt: isRecompleteWithScore ? existing?.completedAt : now,
           startedAt: existing?.startedAt,
-          timeSpentSeconds,
+          timeSpentSeconds: isRecompleteWithScore
+            ? existing?.timeSpentSeconds
+            : timeSpentSeconds,
         },
       }))
 
       // Persist to Supabase — do NOT include started_at (it would overwrite the real start time)
       if (userId) {
+        // On a re-complete, omit completed_at/time_spent_seconds so the upsert
+        // leaves the original values untouched
+        const payload: {
+          user_id: string
+          course_id: string
+          module_id: string
+          status: 'completed'
+          score: number | null
+          completed_at?: string
+          time_spent_seconds?: number | null
+        } = {
+          user_id: userId,
+          course_id: courseId,
+          module_id: moduleId,
+          status: 'completed',
+          score: score ?? null,
+        }
+        if (!isRecompleteWithScore) {
+          payload.completed_at = now
+          payload.time_spent_seconds = timeSpentSeconds ?? null
+        }
         supabase
           .from('module_progress')
-          .upsert(
-            {
-              user_id: userId,
-              course_id: courseId,
-              module_id: moduleId,
-              status: 'completed',
-              score: score ?? null,
-              completed_at: now,
-              time_spent_seconds: timeSpentSeconds ?? null,
-            },
-            { onConflict: 'user_id,course_id,module_id' },
-          )
+          .upsert(payload, { onConflict: 'user_id,course_id,module_id' })
           .then(({ error }) => {
             if (error) console.error('Failed to save progress:', error.message)
           })

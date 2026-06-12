@@ -422,6 +422,17 @@ export function ModuleView() {
               <ChevronRight className="w-5 h-5" />
             </button>
           )
+        ) : isQuiz && !canBypass ? (
+          // Quiz is the last module: a completing "Back to Course" button here
+          // would let users finish the course without taking the quiz. The quiz
+          // itself marks completion (QuizBlock onComplete) — this is just a link.
+          <Link
+            to={`/course/${courseId}`}
+            className="inline-flex items-center gap-2 px-6 py-3 border border-via-border text-via-text font-semibold rounded-xl hover:bg-via-bg-subtle transition-colors"
+          >
+            Back to Course
+            <ChevronRight className="w-5 h-5" />
+          </Link>
         ) : (
           <button
             onClick={() => {

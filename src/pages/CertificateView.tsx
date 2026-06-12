@@ -25,12 +25,14 @@ export function CertificateView() {
   const [quizScore, setQuizScore] = useState<number | null>(null)
   const [loading, setLoading] = useState(true)
 
-  // Earned check — certificate only renders for actually-completed work
+  // Earned check — certificate only renders for actually-completed work.
+  // (Guard against an empty program: [].every() is vacuously true.)
+  const programAvailableCourses = (program?.courseIds ?? [])
+    .map((id) => courses.find((c) => c.id === id))
+    .filter((c): c is NonNullable<typeof c> => !!c && c.status === 'available')
   const earned = isProgram
-    ? (program?.courseIds ?? [])
-        .map((id) => courses.find((c) => c.id === id))
-        .filter((c) => c && c.status === 'available')
-        .every((c) => getCourseProgress(c!.id).percentage === 100)
+    ? programAvailableCourses.length > 0 &&
+      programAvailableCourses.every((c) => getCourseProgress(c.id).percentage === 100)
     : course
       ? getCourseProgress(course.id).percentage === 100
       : false
