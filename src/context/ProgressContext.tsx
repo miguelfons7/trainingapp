@@ -18,6 +18,10 @@ interface CourseProgressSummary {
 }
 
 interface ProgressContextValue {
+  /** True once the initial progress fetch for the current user has resolved.
+   *  Callers must wait for this before writing 'started' so a pre-load empty
+   *  map can't cause a completed row to be downgraded. */
+  progressLoaded: boolean
   getModuleStatus: (
     courseId: string,
     moduleId: string,
@@ -47,6 +51,9 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
   const userId = user?.id ?? ''
 
   const [progress, setProgress] = useState<Record<string, ModuleProgress>>({})
+  // False until the current user's progress has been fetched at least once.
+  // startModule must not run before this — see the load effect and ModuleView.
+  const [progressLoaded, setProgressLoaded] = useState(false)
 
   /** Fire-and-forget activity event for streaks + admin Active Learners view */
   const logActivity = useCallback(
@@ -80,41 +87,65 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
     [logActivity],
   )
 
-  // Load all progress from Supabase when user changes
+  // Load all progress from Supabase when user changes.
+  // Resilient by design: a transient failure must NOT leave progress empty,
+  // because an empty map lets startModule overwrite completed rows back to
+  // 'in-progress'. We retry on error and only flip progressLoaded after a
+  // successful fetch.
   useEffect(() => {
     if (!userId) {
       setProgress({})
+      setProgressLoaded(false)
       return
     }
 
-    supabase
-      .from('module_progress')
-      .select('*')
-      .eq('user_id', userId)
-      .then(({ data, error }) => {
-        if (error) {
-          console.error('Failed to load progress:', error.message)
-          return
+    let cancelled = false
+    setProgressLoaded(false)
+
+    const load = async (attempt: number): Promise<void> => {
+      const { data, error } = await supabase
+        .from('module_progress')
+        .select('*')
+        .eq('user_id', userId)
+
+      if (cancelled) return
+
+      if (error) {
+        console.error(
+          `Failed to load progress (attempt ${attempt}):`,
+          error.message,
+        )
+        // Retry with backoff before giving up; leave existing state untouched.
+        if (attempt < 4) {
+          setTimeout(() => {
+            if (!cancelled) load(attempt + 1)
+          }, 1000 * attempt)
         }
-        if (!data) {
-          setProgress({})
-          return
+        return
+      }
+
+      const map: Record<string, ModuleProgress> = {}
+      for (const row of data ?? []) {
+        const key = `${row.course_id}/${row.module_id}`
+        map[key] = {
+          moduleId: row.module_id,
+          courseId: row.course_id,
+          status: row.status as ModuleProgress['status'],
+          score: row.score ?? undefined,
+          completedAt: row.completed_at ?? undefined,
+          startedAt: row.started_at ?? undefined,
+          timeSpentSeconds: row.time_spent_seconds ?? undefined,
         }
-        const map: Record<string, ModuleProgress> = {}
-        for (const row of data) {
-          const key = `${row.course_id}/${row.module_id}`
-          map[key] = {
-            moduleId: row.module_id,
-            courseId: row.course_id,
-            status: row.status as ModuleProgress['status'],
-            score: row.score ?? undefined,
-            completedAt: row.completed_at ?? undefined,
-            startedAt: row.started_at ?? undefined,
-            timeSpentSeconds: row.time_spent_seconds ?? undefined,
-          }
-        }
-        setProgress(map)
-      })
+      }
+      setProgress(map)
+      setProgressLoaded(true)
+    }
+
+    load(1)
+
+    return () => {
+      cancelled = true
+    }
   }, [userId])
 
   const getModuleStatus = useCallback(
@@ -242,6 +273,10 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
         if (existing?.status === 'completed' || existing?.status === 'in-progress')
           return
 
+        // ignoreDuplicates → INSERT ... ON CONFLICT DO NOTHING. Marking a module
+        // 'started' must only ever create a first row; it must NEVER overwrite an
+        // existing row (a completed one would be downgraded to 'in-progress').
+        // This is the load-race guard's last line of defense.
         supabase
           .from('module_progress')
           .upsert(
@@ -252,7 +287,7 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
               status: 'in-progress',
               started_at: new Date().toISOString(),
             },
-            { onConflict: 'user_id,course_id,module_id' },
+            { onConflict: 'user_id,course_id,module_id', ignoreDuplicates: true },
           )
           .then(({ error }) => {
             if (error) console.error('Failed to save progress:', error.message)
@@ -316,6 +351,7 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
   return (
     <ProgressContext.Provider
       value={{
+        progressLoaded,
         getModuleStatus,
         completeModule,
         startModule,

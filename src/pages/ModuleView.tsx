@@ -133,7 +133,7 @@ export function ModuleView() {
     moduleId: string
   }>()
   const navigate = useNavigate()
-  const { startModule, completeModule, logQuizAttempt, getModuleStatus } = useProgress()
+  const { startModule, completeModule, logQuizAttempt, getModuleStatus, progressLoaded } = useProgress()
   const { user, isAdmin, isLeadership } = useAuth()
   const { isUnderConstruction, getConstructionMessage } = useConstruction()
   const { getCourseById } = useCourses()
@@ -197,11 +197,13 @@ export function ModuleView() {
   const isQuiz = isQuizModule
 
   useEffect(() => {
-    // Don't mark a module as started if its course is locked for this user
-    if (courseId && moduleId && currentModule && !isCourseLocked) {
+    // Wait for progress to load before marking 'started'. Acting on a not-yet-
+    // loaded (empty) map could overwrite a completed row back to in-progress.
+    // Also skip if the course is locked for this user.
+    if (progressLoaded && courseId && moduleId && currentModule && !isCourseLocked) {
       startModule(courseId, moduleId)
     }
-  }, [courseId, moduleId, currentModule, startModule, isCourseLocked])
+  }, [progressLoaded, courseId, moduleId, currentModule, startModule, isCourseLocked])
 
   if (!course || !currentModule || !courseId || !moduleId) {
     return (

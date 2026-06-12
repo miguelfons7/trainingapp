@@ -10,6 +10,17 @@ interface LogEntry {
 
 const changelog: LogEntry[] = [
   {
+    version: '1.1.1',
+    date: '2026-06-12',
+    title: 'Fix: Completed Modules Could Reset After an Idle Logout',
+    changes: [
+      'Fixed a bug where completing modules, getting auto-logged-out for inactivity, then logging back in could reset those modules to incomplete. Opening a module no longer overwrites an existing completion.',
+      'Recovered affected progress: completed modules that had been reset were restored from the activity history.',
+      'Progress now loads reliably after re-login (retries instead of showing an empty course on a slow connection).',
+      'Raised the inactivity auto-logout from 15 to 30 minutes.',
+    ],
+  },
+  {
     version: '1.1.0',
     date: '2026-06-12',
     title: 'CMS-Editable Module Hero Images',
