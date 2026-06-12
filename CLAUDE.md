@@ -399,6 +399,9 @@ These Tailwind classes are used consistently:
 - **Tone**: Teach the WHY behind techniques. Genuine curiosity over interrogation. Relationship-based over transactional.
 - **Via Trading specifics**: 250,000+ sq ft warehouse in Lynwood CA, 800 pallets/day, 10,000+ in stock, 129+ countries, 90%+ repeat buyer rate, open to public Mon-Fri
 - **Key frameworks**: 5-Step Consultative Method (Summarize->State Idea->Explain->Reinforce Benefits->Close), K.L.A.P.D.O.C. (objection handling), 30% Rule (you talk 30%, buyer 70%)
+- **Copy style (Miguel's standard)**: Minimal em dashes — at most one per module, zero is better. Restructure with periods, commas, colons instead. Hyphens in operational identifiers (`Must Close - KC`, `BDR - Handoff Rotation`, "14-day") are not em dashes and must stay verbatim.
+- **Imagery standards (Miguel's standard)**: People in photos should look happy and reflect the team's demographics (largely Latino). Images must be topic-relevant — tool lessons get the tool's logo or dashboard screenshots, not loosely related stock. Never close-up shots that read oddly (e.g., the rejected nail-filing photo). Floated inline images must have text wrapping around them.
+- **Version discipline**: Every user-visible deploy bumps `src/version.ts` (APP_VERSION — shown in Sidebar + Login footer) and adds a `DevLog.tsx` changelog entry. Patch for fixes, minor for features.
 
 ## TypeScript Types (key ones)
 
@@ -453,7 +456,8 @@ interface CourseModule {
 
 - **Unused imports cause build failure** — TypeScript strict mode. Clean imports before building.
 - **`moduleImageMap` controls hero display** — If a module ID isn't in the map, no hero renders. Removing an entry is how you hide a duplicate hero.
-- **`overflow-hidden` on parent** when using `InlineImage` with `float` — prevents layout overflow.
+- **`overflow-hidden` on parent** when using `InlineImage` with `float` — prevents layout overflow. But NEVER wrap the floated image itself in an `overflow-hidden` div: that creates a BFC that contains the float, so following text can't wrap around it. In CMS rendering, `overflow-hidden` lives on the content_card container, the inline_image renders bare, and a `clear-both` div closes each section (BlockRenderer).
+- **CMS list items render rich text** — NumberedListRenderer and TwoColumnListRenderer sanitize + `dangerouslySetInnerHTML` their items (like bullet_list). Plain-text rendering shows literal `<strong>` tags.
 - **ExpandableCard needs state** — Always pair with `useState<Set<string>>` and a `toggle` function.
 - **Course-5-bdr.png was a placeholder** — original was AI-generated 1.4MB, replaced with Pexels photo.
 - **Image src in InlineImage** is just the filename — the component prepends `import.meta.env.BASE_URL + "images/"`.
