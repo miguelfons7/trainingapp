@@ -10,6 +10,69 @@ interface LogEntry {
 
 const changelog: LogEntry[] = [
   {
+    version: '1.0.1',
+    date: '2026-06-12',
+    title: 'Quality Pass: Formatting Fixes, Honest Placeholders, Dev Log Catch-Up',
+    changes: [
+      'Numbered lists and two-column lists in CMS content now render bold/italic formatting instead of showing raw <strong> tags.',
+      'Text now wraps around floated inline images in CMS lessons (the image renderer was isolating floats, leaving empty gaps beside small images).',
+      'Missing images show their description in the placeholder so pending screenshots read as intentional, not broken.',
+      'Content pass: reduced em dashes, softened the sales-team emphasis in "How Via Is Organized", and replaced off-topic imagery in Tools & Systems.',
+      'Sidebar and login version badges now read from one source and were caught up from 0.13.4.',
+    ],
+  },
+  {
+    version: '1.0.0',
+    date: '2026-06-12',
+    title: 'VIAcademy 1.0: Role-Based Programs, AM Course, App-Wide Quality Pass',
+    changes: [
+      'Role-based programs: BDR and AM tracks share the five core courses, then split into their role course. Admins assign a user\'s program in Manage Users; everyone sees only their own program (admins see all).',
+      'New AM Role Training course (7 lessons + quiz): the deal pipeline (Consultation to Invoice Shipped, the recommendation tag, the 14-day rule), lead sources, the AM toolbox, the consultative first call, and growing accounts.',
+      'New "How Via Is Organized" lesson in Who Is Via Trading: the sales growth path, parallel branches, and every department.',
+      'Click any lesson image to zoom it full-screen; close with X, a click outside, or Escape.',
+      'Images no longer crop: wide screenshots and portraits fit their frame instead of being clipped.',
+      'Honest time tracking: time spent only counts while the tab is visible and active; idle sessions log out after 15 minutes.',
+      'Module navigation no longer flashes the previous lesson\'s hero image.',
+      'New YouTube video block in the CMS: paste a link, get an embedded player.',
+      'Course card photo upgrades, including real Via Trading warehouse and trade show photos.',
+      'Security and correctness fixes from the pre-release review, including a quiz bypass and a per-user program permission hole.',
+    ],
+  },
+  {
+    version: '0.16.0',
+    date: '2026-06-11',
+    title: 'BDR Operational Workflow + CMS Self-Service Editors',
+    changes: [
+      'Four new BDR operational modules: Working Your Leads (prospecting workspace + playbooks), Transfers & Meeting Booking (ask-first, BDR - Handoff Rotation, ERP assignment), Logging Tags & Follow-Up (qualified / Must Close - KC), and Your Numbers (KPIs, bonus, BDR Daily Report).',
+      'CMS upgrades: rich text toolbar (no more hand-typed HTML), image upload to storage, icon and color pickers, working drag-and-drop block reordering, Monaco code editor.',
+      'Course-level sequential gating with admin course ordering and per-user unlock overrides.',
+      'Quiz integrity: shuffled answer options per attempt, answers survive reloads, failed quizzes no longer complete the module, proper Try Again flow.',
+      'Engagement: completion toasts, learning streaks, numbered course path with Up Next highlight, printable certificates.',
+      'Active Learners admin view: current course, time this week, quiz attempts including failures, streaks, and Stalled badges.',
+      'Bundle code-split from 1.69MB to a 473KB main chunk; error boundary added.',
+      'All 6 Who Is Via lessons converted to CMS drafts for the migration pilot (pending parity review).',
+    ],
+  },
+  {
+    version: '0.15.0',
+    date: '2026-05-28',
+    title: 'Post-Quiz Course Feedback',
+    changes: [
+      'Learners rate each course after passing its quiz: 5-star rating, relevance, difficulty, and an optional comment. Never blocks progress.',
+      'New Feedback admin tab: stats bar, course filter, search, and expandable comment rows.',
+    ],
+  },
+  {
+    version: '0.14.0',
+    date: '2026-05-26',
+    title: 'Password Reset Without Email',
+    changes: [
+      'Admins generate single-use, 24-hour reset links from Manage Users (key icon) and share them directly.',
+      'New public /reset-password page validates the token and lets the user set a new password.',
+      'Login page hint: "Forgot your password? Contact your admin for a reset link."',
+    ],
+  },
+  {
     version: '0.13.4',
     date: '2026-05-18',
     title: 'Profile Banner Fix + Content Hub Form Labels + CMS Access',

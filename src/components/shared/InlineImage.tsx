@@ -63,8 +63,13 @@ export function InlineImage({
               />
             </button>
           ) : (
-            <div className="w-full aspect-[4/3] flex items-center justify-center">
+            // Missing image: show the alt text so the placeholder reads as
+            // intentional ("screenshot coming") instead of broken
+            <div className="w-full aspect-[4/3] flex flex-col items-center justify-center gap-2 px-3">
               <ImageIcon className="w-8 h-8 text-via-text-light" />
+              <span className="text-[10px] text-via-text-light text-center leading-tight">
+                {alt}
+              </span>
             </div>
           )}
         </div>

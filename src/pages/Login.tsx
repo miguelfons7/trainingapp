@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { GraduationCap, Mail, Lock, Loader2 } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
+import { APP_VERSION } from '../version'
 
 export function Login() {
   const { signIn } = useAuth()
@@ -152,7 +153,7 @@ export function Login() {
         </div>
 
         <p className="text-[10px] text-via-text-light/50 text-center mt-6">
-          Via Trading &middot; Internal Use Only &middot; v1.0.0
+          Via Trading &middot; Internal Use Only &middot; v{APP_VERSION}
         </p>
       </div>
     </div>

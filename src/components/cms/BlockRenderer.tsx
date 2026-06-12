@@ -119,7 +119,9 @@ function ContentCardRenderer({
     .sort((a, b) => a.order - b.order)
 
   return (
-    <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6">
+    // overflow-hidden contains floated inline images at the card boundary
+    // (text inside the card wraps around them; nothing spills past the border)
+    <div className="bg-via-card rounded-xl border border-via-border p-6 mb-6 overflow-hidden">
       {block.data.title && (
         <h3 className="text-sm font-semibold text-via-navy uppercase tracking-wide mb-3">
           {block.data.title}
@@ -180,7 +182,10 @@ function TwoColumnListRenderer({ block }: { block: TwoColumnListBlock }) {
           {leftItems.map((item, i) => (
             <li key={i} className="flex items-start gap-2.5">
               <span className={`w-1.5 h-1.5 rounded-full bg-${leftColor} mt-1.5 shrink-0`} />
-              <span className="text-sm text-via-text leading-relaxed">{item}</span>
+              <span
+                className="text-sm text-via-text leading-relaxed"
+                dangerouslySetInnerHTML={{ __html: sanitize(item) }}
+              />
             </li>
           ))}
         </ul>
@@ -193,7 +198,10 @@ function TwoColumnListRenderer({ block }: { block: TwoColumnListBlock }) {
           {rightItems.map((item, i) => (
             <li key={i} className="flex items-start gap-2.5">
               <span className={`w-1.5 h-1.5 rounded-full bg-${rightColor} mt-1.5 shrink-0`} />
-              <span className="text-sm text-via-text leading-relaxed">{item}</span>
+              <span
+                className="text-sm text-via-text leading-relaxed"
+                dangerouslySetInnerHTML={{ __html: sanitize(item) }}
+              />
             </li>
           ))}
         </ul>
@@ -210,7 +218,10 @@ function NumberedListRenderer({ block }: { block: NumberedListBlock }) {
           <span className="flex items-center justify-center w-6 h-6 rounded-full bg-via-orange text-white text-xs font-bold shrink-0 mt-0.5">
             {i + 1}
           </span>
-          <span className="text-sm text-via-text leading-relaxed">{item}</span>
+          <span
+            className="text-sm text-via-text leading-relaxed"
+            dangerouslySetInnerHTML={{ __html: sanitize(item) }}
+          />
         </li>
       ))}
     </ol>
@@ -248,16 +259,17 @@ function FlowDiagramRenderer({ block }: { block: FlowDiagramBlock }) {
 }
 
 function InlineImageRenderer({ block }: { block: InlineImageBlock }) {
+  // No wrapper div: a wrapper (especially overflow-hidden) creates a new
+  // formatting context that CONTAINS the float, so the following paragraphs
+  // can't wrap around the image. The float must live in the parent flow.
   return (
-    <div className="overflow-hidden mb-4">
-      <InlineImage
-        src={block.data.src}
-        alt={block.data.alt}
-        float={block.data.float}
-        size={block.data.size}
-        caption={block.data.caption}
-      />
-    </div>
+    <InlineImage
+      src={block.data.src}
+      alt={block.data.alt}
+      float={block.data.float}
+      size={block.data.size}
+      caption={block.data.caption}
+    />
   )
 }
 
@@ -526,6 +538,8 @@ export function BlockRenderer({ content }: BlockRendererProps) {
       {topLevelBlocks.map((block) => (
         <BlockSwitch key={block.id} block={block} blockMap={blockMap} />
       ))}
+      {/* a trailing floated image must not escape the section bottom */}
+      <div className="clear-both" />
     </SectionWrapper>
   )
 }

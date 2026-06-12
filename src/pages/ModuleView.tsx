@@ -120,8 +120,8 @@ const moduleImageMap: Record<string, { src: string; alt: string }> = {
   'bdr-follow-ups': { src: 'module-bdr-follow-ups.jpg', alt: 'Calendar and Checklist' },
   // Course 6 — Tools & Systems
   'erp-overview': { src: 'module-erp-overview.jpg', alt: 'Enterprise Resource Planning Dashboard' },
-  'hubspot-overview': { src: 'module-hubspot-overview.jpg', alt: 'CRM Dashboard and Analytics' },
-  'aircall-overview': { src: 'module-aircall-overview.jpg', alt: 'Professional Using Headset for Calls' },
+  'hubspot-overview': { src: 'module-hubspot-overview.png', alt: 'HubSpot' },
+  'aircall-overview': { src: 'module-aircall-overview.jpg', alt: 'Support agents taking calls on headsets' },
   'communication-tools': { src: 'module-communication-tools.jpg', alt: 'Team Collaboration and Messaging' },
   'social-outreach': { src: 'module-social-outreach.jpg', alt: 'Social Media Networking' },
   'ai-tools': { src: 'module-ai-tools.jpg', alt: 'AI Technology and Workflow Automation' },
