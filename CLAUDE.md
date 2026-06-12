@@ -360,12 +360,14 @@ git push origin main   # Deploy to Vercel (auto-deploys from main)
 | 3 | Product Knowledge | `product-knowledge` | Available | varies by retailer | 10 lessons + quiz |
 | 4 | Consultative Sales | `sales-philosophy` | Available | `border-teal-500` | 9 lessons + quiz |
 | 5 | Tools & Systems | `tools-systems` | Available | `border-violet-500` | 6 lessons + quiz (CMS-only, no TSX sections) |
-| 6 | BDR Role Training | `bdr-role` | Available | `border-sky-500` | 7 lessons + quiz |
+| 6 | BDR Role Training | `bdr-role` | Available | `border-sky-500` | 11 lessons + quiz (7 TSX + 4 CMS operational modules) |
 | 7 | Ongoing Development | `ongoing-development` | Coming Soon | — | — |
 
 **Program order:** Tools & Systems was moved before BDR Role in `managed_programs` so new hires learn the tools before their role-specific course. The BDR course references HubSpot, Aircall, and ERP — tools-systems gives them the foundation first.
 
 **Tools & Systems is CMS-only:** All 6 lesson modules + 1 quiz module are stored as CMS content in Supabase (`module_content` table). There are no hardcoded TSX section components. Content was authored in code mode using `PageContent` JSON with the block system. The BlockRenderer handles field name variations (`data.html`/`data.content`, `data.variant`/`data.style`, string/numeric heading levels).
+
+**BDR operational modules are CMS-only:** Four modules in bdr-role (`bdr-prospecting-workspace`, `bdr-handoff-paths`, `bdr-post-call`, `bdr-kpis-reporting`, sort 7-10, between bdr-tools-hubspot and bdr-follow-ups) are published CMS content covering the day-to-day workflow: prospecting workspace, playbooks, ask-first transfers, BDR - Handoff Rotation, Aircall tags (qualified → AM deal, Must Close - KC), ERP AM assignment, KPIs, and the BDR Daily Report. Source of truth: `Claude - Context\Training App\09_BDR_Role\BDR_OPERATIONAL_WORKFLOW.md`. Screenshot placeholders pending: bdr-prospecting-workspace.png, bdr-playbooks-list.png, bdr-meeting-scheduler.png, bdr-meeting-rotation-dropdown.png (drop into public/images or upload via CMS).
 
 **Planned but not yet in `courses.ts`:** AM Role Training (after BDR, covers AM-specific day-to-day)
 

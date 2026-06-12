@@ -92,6 +92,72 @@ export const bdrRoleQuiz: QuizQuestion[] = [
     explanation:
       'The buyer registered or took the call for a reason — something prompted their interest. Don\'t criticize their current supplier. Instead, frame Via Trading as a second source: "A lot of our buyers actually work with us alongside their main supplier, especially for categories or volumes their primary source can\'t always cover." Then continue discovery to understand the gap.',
   },
+  // ── Operational workflow questions (prospecting, handoffs, tags, KPIs) ──
+  {
+    id: 'bdr-cq-7',
+    question: 'What does tagging a call "qualified" in Aircall do?',
+    options: [
+      'It only adds a label for reporting — nothing else happens',
+      'It marks the lead as qualified, which automatically creates a deal for the AM once the contact is assigned to them',
+      'It immediately transfers the call to an available Account Manager',
+      'It sends the buyer a confirmation email with their AM\'s contact info',
+    ],
+    correctIndex: 1,
+    explanation:
+      'The "qualified" tag drives a real automation: it sets the lead as qualified, and once the contact is assigned to an AM, a deal is automatically created in their pipeline. Skip the tag and the deal never gets created — your work becomes invisible.',
+  },
+  {
+    id: 'bdr-cq-8',
+    question: 'You\'re about to live-transfer a qualified buyer to an Account Manager. What is the correct way to do it?',
+    options: [
+      'Transfer immediately so the buyer doesn\'t have to wait',
+      'Put the buyer on hold and walk over to the AM\'s desk to ask',
+      'Use Aircall\'s "ask first" feature to brief the AM on the lead and confirm they\'re available, then hit transfer',
+      'Send the AM a WhatsApp message and transfer once they reply',
+    ],
+    correctIndex: 2,
+    explanation:
+      '"Ask first" does two jobs at once: the AM gets a quick review of the lead before picking up, and you confirm they\'re actually available. Blind transfers risk dumping a ready-to-buy customer into a line that doesn\'t answer.',
+  },
+  {
+    id: 'bdr-cq-9',
+    question: 'When booking a handoff meeting for a buyer named Maria Lopez, how should it be set up?',
+    options: [
+      'Host: yourself · Title: "Maria Lopez meeting" · any meeting type',
+      'Host: the AM you like best · Title: "Intro call" · type Call',
+      'Host: Meeting rotation "BDR - Handoff Rotation" · Title: "Call - Maria Lopez" · meeting type verified (e.g., Call)',
+      'Host: Sales Director · Title: "Handoff" · type Walk-in',
+    ],
+    correctIndex: 2,
+    explanation:
+      'The BDR - Handoff Rotation auto-assigns an AM fairly — you don\'t hand-pick. The title convention is "Call - Buyer Name" (or "Walk-in - Buyer Name" for warehouse visits), and the meeting type must be checked so calendars and reporting stay clean.',
+  },
+  {
+    id: 'bdr-cq-10',
+    question: 'After handing off a qualified lead, why must you also assign the AM in the ERP (ViaOps)?',
+    options: [
+      'You don\'t — HubSpot syncs the assignment to the ERP automatically',
+      'Because HubSpot and the ERP are not fully two-way synced yet, so the ERP assignment is a required manual step',
+      'Only for international customers',
+      'Only when the order value is above $5,000',
+    ],
+    correctIndex: 1,
+    explanation:
+      'At the time of this training, these properties are not fully two-way synced between HubSpot and ViaOps. If you skip the manual ERP assignment, the AM may never see the customer on their list in the ERP. Every handoff includes this step.',
+  },
+  {
+    id: 'bdr-cq-11',
+    question: 'Which of these matches the daily KPI standards for BDRs?',
+    options: [
+      '10 calls/hour, 50 calls/day, 1 meeting/day, 30% of meetings held',
+      '25 calls/hour average, 200 calls/day minimum, 4 qualified meetings/day, 60%+ of booked meetings held',
+      '40 calls/hour, 300 calls/day, 10 meetings/day, 90% of meetings held',
+      'There are no specific targets — just stay busy',
+    ],
+    correctIndex: 1,
+    explanation:
+      'The standards: 25 calls/hour average, 200 calls/day minimum, 4 qualified meetings booked per day, 60%+ of booked meetings actually held, an 8.0+ Aircall score, and everything properly logged in the CRM/Aircall. Proper tracking is also what qualifies you for the bonus.',
+  },
 ]
 
 export const bdrRoleSectionedQuiz: SectionedQuiz = {
