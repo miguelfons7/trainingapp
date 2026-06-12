@@ -42,11 +42,15 @@ export function CourseView() {
 
         <div className="bg-via-card rounded-xl border border-via-border p-12 text-center">
           <Lock className="w-12 h-12 text-via-text-light mx-auto mb-4" />
-          <h1 className="text-2xl font-bold text-via-navy mb-2">Course Locked</h1>
+          <h1 className="text-2xl font-bold text-via-navy mb-2">
+            {lockInfo.notInProgram ? 'Not in Your Program' : 'Course Locked'}
+          </h1>
           <p className="text-sm text-via-text-light mb-6">
-            {lockInfo.blockedBy
-              ? `Complete "${lockInfo.blockedBy.title}" before starting this course.`
-              : 'Complete the previous courses in your program before starting this one.'}
+            {lockInfo.notInProgram
+              ? "This course isn't part of your training program. If you think it should be, ask your admin."
+              : lockInfo.blockedBy
+                ? `Complete "${lockInfo.blockedBy.title}" before starting this course.`
+                : 'Complete the previous courses in your program before starting this one.'}
           </p>
           {lockInfo.blockedBy && (
             <Link

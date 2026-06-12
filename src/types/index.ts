@@ -37,6 +37,8 @@ export interface User {
   avatar?: string
   role: 'user' | 'leadership' | 'admin'
   teamId?: string
+  /** Assigned training program (e.g. BDR vs AM); undefined = default program */
+  programId?: string
 }
 
 export interface ModuleProgress {

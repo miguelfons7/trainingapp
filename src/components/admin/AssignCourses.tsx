@@ -311,14 +311,16 @@ type CourseUserState = 'completed' | 'next' | 'locked' | 'override'
 
 function UnlockOverridesPanel({ profiles }: { profiles: Profile[] }) {
   const { user: currentUser } = useAuth()
-  const { courses, programs } = useCourses()
+  const { courses, getProgramForUser } = useCourses()
   const [selectedUserId, setSelectedUserId] = useState('')
   const [overrides, setOverrides] = useState<CourseUnlockOverrideRow[]>([])
   const [userProgress, setUserProgress] = useState<ModuleProgressRow[]>([])
   const [loadingUser, setLoadingUser] = useState(false)
   const [togglingId, setTogglingId] = useState<string | null>(null)
 
-  const program = programs[0]
+  // The override list follows the SELECTED user's assigned program
+  const selectedProfile = profiles.find((p) => p.id === selectedUserId)
+  const program = getProgramForUser(selectedProfile?.program_id ?? undefined)
   const programCourses = (program?.courseIds ?? [])
     .map((cid) => courses.find((c) => c.id === cid))
     .filter((c): c is Course => !!c && c.status === 'available')

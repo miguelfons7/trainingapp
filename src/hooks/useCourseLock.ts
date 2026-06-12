@@ -9,21 +9,25 @@ export interface CourseLockInfo {
   locked: boolean
   /** The first incomplete prerequisite course blocking access */
   blockedBy?: { id: string; title: string }
+  /** True when the course isn't part of the user's assigned program at all */
+  notInProgram?: boolean
 }
 
 /**
- * Course-level sequential gating. A course is locked until every earlier
- * gateable course in the program's courseIds order is 100% complete.
+ * Course-level sequential gating, scoped to the USER'S assigned program.
+ * A course is locked until every earlier gateable course in their program's
+ * courseIds order is 100% complete.
  *
  * - Admins/leadership always bypass.
  * - A per-user row in course_unlock_overrides unlocks that course.
+ * - A course outside the user's program is locked with notInProgram
+ *   (BDRs don't see the AM course and vice versa).
  * - Coming-soon and under-construction courses are skipped when computing
  *   prerequisites so they can never permanently dam the sequence.
- * - Courses not in any program are never locked.
  */
 export function useCourseLock() {
   const { user, isAdmin, isLeadership } = useAuth()
-  const { courses, programs } = useCourses()
+  const { courses, getProgramForUser } = useCourses()
   const { getCourseProgress } = useProgress()
   const { isUnderConstruction } = useConstruction()
 
@@ -58,9 +62,14 @@ export function useCourseLock() {
       if (canBypass) return { locked: false }
       if (overrides.has(courseId)) return { locked: false }
 
-      // Find the program containing this course
-      const program = programs.find((p) => p.courseIds.includes(courseId))
+      // Scope to the user's assigned program
+      const program = getProgramForUser(user?.programId)
       if (!program) return { locked: false }
+
+      // Courses outside the user's program are not theirs to take
+      if (!program.courseIds.includes(courseId)) {
+        return { locked: true, notInProgram: true }
+      }
 
       const position = program.courseIds.indexOf(courseId)
 
@@ -85,7 +94,7 @@ export function useCourseLock() {
 
       return { locked: false }
     },
-    [canBypass, overrides, programs, courses, isUnderConstruction, getCourseProgress],
+    [canBypass, overrides, getProgramForUser, user?.programId, courses, isUnderConstruction, getCourseProgress],
   )
 
   return { getCourseLock, overridesLoaded, refreshOverrides: fetchOverrides }

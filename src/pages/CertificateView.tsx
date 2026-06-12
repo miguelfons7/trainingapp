@@ -14,11 +14,11 @@ import { supabase } from '../lib/supabase'
 export function CertificateView() {
   const { courseId } = useParams<{ courseId: string }>()
   const { user } = useAuth()
-  const { courses, programs, getCourseById } = useCourses()
+  const { courses, getProgramForUser, getCourseById } = useCourses()
   const { getCourseProgress } = useProgress()
 
   const isProgram = courseId === 'program'
-  const program = programs[0]
+  const program = getProgramForUser(user?.programId)
   const course = !isProgram && courseId ? getCourseById(courseId) : undefined
 
   const [completionDate, setCompletionDate] = useState<string | null>(null)

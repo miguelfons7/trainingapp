@@ -224,11 +224,15 @@ export function ModuleView() {
         </Link>
         <div className="bg-via-card rounded-xl border border-via-border p-12 text-center">
           <LockIcon className="w-12 h-12 text-via-text-light mx-auto mb-4" />
-          <h1 className="text-2xl font-bold text-via-navy mb-2">Course Locked</h1>
+          <h1 className="text-2xl font-bold text-via-navy mb-2">
+            {courseLock.notInProgram ? 'Not in Your Program' : 'Course Locked'}
+          </h1>
           <p className="text-sm text-via-text-light mb-6">
-            {courseLock.blockedBy
-              ? `Complete "${courseLock.blockedBy.title}" before starting this course.`
-              : 'Complete the previous courses in your program first.'}
+            {courseLock.notInProgram
+              ? "This course isn't part of your training program. If you think it should be, ask your admin."
+              : courseLock.blockedBy
+                ? `Complete "${courseLock.blockedBy.title}" before starting this course.`
+                : 'Complete the previous courses in your program first.'}
           </p>
           {courseLock.blockedBy && (
             <Link

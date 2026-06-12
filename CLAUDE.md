@@ -73,6 +73,7 @@ supabase/
     012_course_unlock_overrides.sql <- per-user course gating overrides
     013_learning_activity.sql <- learning_activity events table
     014_content_images_storage.sql <- content-images storage bucket + policies
+    015_user_programs.sql <- profiles.program_id for per-user program assignment
 public/
   images/           <- All images (hero images, inline images, logos)
 .env.local          <- Supabase credentials (VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY)
@@ -361,9 +362,14 @@ git push origin main   # Deploy to Vercel (auto-deploys from main)
 | 4 | Consultative Sales | `sales-philosophy` | Available | `border-teal-500` | 9 lessons + quiz |
 | 5 | Tools & Systems | `tools-systems` | Available | `border-violet-500` | 6 lessons + quiz (CMS-only, no TSX sections) |
 | 6 | BDR Role Training | `bdr-role` | Available | `border-sky-500` | 11 lessons + quiz (7 TSX + 4 CMS operational modules) |
-| 7 | Ongoing Development | `ongoing-development` | Coming Soon | — | — |
+| 7 | AM Role Training | `am-role` | Available | `border-emerald-500` | 7 lessons + quiz (CMS-only, incl. CMS quizData) |
+| 8 | Ongoing Development | `ongoing-development` | Coming Soon | — | — |
 
-**Program order:** Tools & Systems was moved before BDR Role in `managed_programs` so new hires learn the tools before their role-specific course. The BDR course references HubSpot, Aircall, and ERP — tools-systems gives them the foundation first.
+**Role-based programs (per-user):** Two programs in `managed_programs`: **BDR Training Program** (id `new-am-training`, kept for compat; core 5 + bdr-role + ongoing-development) and **AM Training Program** (id `am-training`; core 5 + am-role + ongoing-development). `profiles.program_id` (migration 015) assigns a user's program — set in Admin → Manage Users (Program column). Null = default = first program (BDR). Home grid, gating (`useCourseLock`), ProgramCard, certificates, and the quiz "Continue to next course" button (now derived dynamically from the user's program in QuizBlock — the static nextCourseMap is gone) are all scoped to the user's program; courses outside it show "Not in Your Program" (admins/leadership see everything). A third legacy program `new-hire-bdr-onboarding` exists at sort 3 — possible duplicate, Miguel to review/delete via Content Hub.
+
+**who-is-via gained `how-via-is-organized`** (CMS, sort 6): sales growth path (linear framing — never a hierarchy), parallel branches (Support, Sales Ops), all departments, BARTTED one-liner. Source of truth: `Claude - Context\Training App\02_Via_Company_Profile\VIA_COMPANY_STRUCTURE.md`.
+
+**am-role is CMS-only** (like tools-systems), including the quiz (`quizData` in module_content). Source of truth: `Claude - Context\Training App\10_AM_Role\AM_OPERATIONAL_WORKFLOW.md` (deal stages, recommendation tag, 14-day rule, Must Close - KC, lead buckets, first-call-in-Aircall rule).
 
 **Tools & Systems is CMS-only:** All 6 lesson modules + 1 quiz module are stored as CMS content in Supabase (`module_content` table). There are no hardcoded TSX section components. Content was authored in code mode using `PageContent` JSON with the block system. The BlockRenderer handles field name variations (`data.html`/`data.content`, `data.variant`/`data.style`, string/numeric heading levels).
 
@@ -483,6 +489,9 @@ interface CourseModule {
 - **CMS editors are self-service** — TipTap rich text (RichTextEditor.tsx) in paragraph/callout/expandable-card content; ImageUpload.tsx uploads to the `content-images` storage bucket (migration 014) and saves full URLs (InlineImage/ImagePlaceholder accept URLs or filenames); IconPicker offers only icons in `iconResolver.ts` (add new icons there first); ColorPicker for section accent; dnd-kit drag reordering wired in BlockEditor; code mode uses lazy-loaded Monaco.
 - **Code splitting** — All section components in ModuleView's contentMap are `React.lazy` chunks (see `lazySection` helper); admin pages are lazy in App.tsx. Keep new sections/admin pages lazy. Main chunk ~473KB.
 - **TSX→CMS conversion playbook** — Pilot: all 6 who-is-via lessons exist as CMS DRAFTS in module_content (converted from TSX, text verbatim). To convert a lesson: map TSX patterns to blocks (cards→content_card with children IDs, ExpandableCard→expandable_card_group, stats→stat_grid, FlowDiagram→flow_diagram, exercises→scenario_card/fill_in_blank/term_match), keep module IDs identical (progress data is keyed by them and unaffected), save as draft, review in editor Preview, publish only on visual parity. Known gaps: no timeline or org-chart block (approximate with flow_diagram/icon_card_grid), icon-annotated list rows become bullet lists.
+- **Images never crop; everything zooms** — InlineImage uses `object-contain` inside a 4:3 frame (wide screenshots/portraits letterbox instead of clipping). InlineImage and module heroes open in `ImageLightbox` on click (X / backdrop / Escape closes). The hero in ModuleView is keyed by moduleId so navigation never flashes the previous image. CMS `hero_image` blocks are expandable too.
+- **Honest time tracking + idle logout** — `useActiveSeconds` accumulates only visible+active time (60s idle threshold, localStorage per module); `completeModule(..., activeSeconds)` records `min(wallClock, active)`. `useIdleLogout` (AppShell) signs users out after 15 idle minutes. Historical pre-existing time values remain inflated; only post-deploy completions are accurate.
+- **video_embed CMS block** — paste any YouTube URL (watch/youtu.be/shorts), renders a privacy-enhanced `youtube-nocookie` iframe with optional title/caption; non-YouTube URLs fall back to a link card. Via Trading channel: https://www.youtube.com/@Viatrading.
 
 ## Pending Work
 

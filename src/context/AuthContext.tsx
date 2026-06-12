@@ -42,6 +42,7 @@ async function fetchProfileAsUser(userId: string): Promise<User | null> {
     role: data.role as User['role'],
     avatar: data.avatar_url ?? undefined,
     teamId: data.team_id ?? undefined,
+    programId: data.program_id ?? undefined,
   }
 }
 

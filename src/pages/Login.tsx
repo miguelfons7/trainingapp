@@ -152,7 +152,7 @@ export function Login() {
         </div>
 
         <p className="text-[10px] text-via-text-light/50 text-center mt-6">
-          Via Trading &middot; Internal Use Only
+          Via Trading &middot; Internal Use Only &middot; v1.0.0
         </p>
       </div>
     </div>

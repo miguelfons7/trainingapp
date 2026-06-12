@@ -38,6 +38,7 @@ export interface Database {
           full_name: string
           role: UserRole
           team_id: string | null
+          program_id: string | null
           avatar_url: string | null
           invited_by: string | null
           created_at: string
@@ -49,6 +50,7 @@ export interface Database {
           full_name: string
           role?: UserRole
           team_id?: string | null
+          program_id?: string | null
           avatar_url?: string | null
           invited_by?: string | null
           created_at?: string
@@ -60,6 +62,7 @@ export interface Database {
           full_name?: string
           role?: UserRole
           team_id?: string | null
+          program_id?: string | null
           avatar_url?: string | null
           invited_by?: string | null
           created_at?: string

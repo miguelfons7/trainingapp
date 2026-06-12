@@ -12,6 +12,7 @@ import { bdrRoleSectionedQuiz } from '../../data/modules/bdr-role/courseQuiz'
 import { Confetti } from './Confetti'
 import { CourseFeedbackForm } from './CourseFeedbackForm'
 import { useAuth } from '../../context/AuthContext'
+import { useCourses } from '../../context/CoursesContext'
 
 interface QuizBlockProps {
   quizId: string
@@ -34,16 +35,6 @@ const sectionedQuizMap: Record<string, SectionedQuiz> = {
 }
 
 const PASS_THRESHOLD = 0.85
-
-/** Next course mapping for the "Continue to next course" button */
-const nextCourseMap: Record<string, { id: string; title: string }> = {
-  'industry-knowledge-check': { id: 'who-is-via', title: 'Who Is Via Trading' },
-  'via-knowledge-check': { id: 'product-knowledge', title: 'Product Knowledge' },
-  'product-knowledge-check': { id: 'sales-philosophy', title: 'Consultative Sales' },
-  'sales-philosophy-quiz': { id: 'tools-systems', title: 'Tools & Systems' },
-  'tools-systems-quiz': { id: 'bdr-role', title: 'BDR Role Training' },
-  'bdr-role-quiz': { id: 'am-role', title: 'AM Role Training' },
-}
 
 // ─────────────────────────────────────────
 // Utility
@@ -380,6 +371,7 @@ function FillInBlankSection({
 // ─────────────────────────────────────────
 export function QuizBlock({ quizId, courseId, onComplete, onAttempt, cmsQuizData }: QuizBlockProps) {
   const { user } = useAuth()
+  const { courses, getProgramForUser } = useCourses()
   // CMS quiz data takes priority over hardcoded data
   const hardcodedQuiz = sectionedQuizMap[quizId]
   const sectionedQuiz: SectionedQuiz | undefined = cmsQuizData
@@ -390,7 +382,24 @@ export function QuizBlock({ quizId, courseId, onComplete, onAttempt, cmsQuizData
         passThreshold: cmsQuizData.passThreshold,
       }
     : hardcodedQuiz
-  const nextCourse = cmsQuizData?.nextCourse ?? nextCourseMap[quizId]
+  // "Continue to next course": the next AVAILABLE course after this one in the
+  // USER'S assigned program (so BDR users flow to bdr-role, AM users to am-role).
+  // CMS quizData can still override explicitly. End of program → no button; the
+  // Home program-completion banner takes over.
+  const userProgram = getProgramForUser(user?.programId)
+  const programNextCourse = (() => {
+    if (!courseId || !userProgram) return undefined
+    const idx = userProgram.courseIds.indexOf(courseId)
+    if (idx === -1) return undefined
+    for (const nextId of userProgram.courseIds.slice(idx + 1)) {
+      const next = courses.find((c) => c.id === nextId)
+      if (next && next.status === 'available') {
+        return { id: next.id, title: next.title }
+      }
+    }
+    return undefined
+  })()
+  const nextCourse = cmsQuizData?.nextCourse ?? programNextCourse
 
   // Restore any in-progress attempt (saved so reloads don't wipe answers)
   const [savedState] = useState<SavedQuizState | null>(() =>

@@ -4,16 +4,23 @@ import { ProgressRing } from '../shared/ProgressRing'
 import { useProgress } from '../../context/ProgressContext'
 import { useConstruction } from '../../context/ConstructionContext'
 import { useCourses } from '../../context/CoursesContext'
+import { useAuth } from '../../context/AuthContext'
 
 export function ProgramCard() {
-  const { courses, getProgram } = useCourses()
-  const program = getProgram()
+  const { user } = useAuth()
+  const { courses, getProgramForUser } = useCourses()
+  const program = getProgramForUser(user?.programId)
   const { getCourseProgress } = useProgress()
   const { isUnderConstruction, getConstructionMessage } = useConstruction()
-  const isProgramConstruction = isUnderConstruction('program', program.id)
-  const programMsg = getConstructionMessage('program', program.id)
+  const isProgramConstruction = program ? isUnderConstruction('program', program.id) : false
+  const programMsg = program ? getConstructionMessage('program', program.id) : null
 
-  const availableCourses = courses.filter((c) => c.status === 'available')
+  if (!program) return null
+
+  // Only the courses in THIS user's program count toward its progress
+  const availableCourses = program.courseIds
+    .map((id) => courses.find((c) => c.id === id))
+    .filter((c): c is NonNullable<typeof c> => !!c && c.status === 'available')
 
   const courseProgresses = availableCourses.map((c) =>
     getCourseProgress(c.id),

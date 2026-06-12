@@ -13,11 +13,12 @@ import {
   CheckCircle2,
 } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
+import { useCourses } from '../../context/CoursesContext'
 import { supabase } from '../../lib/supabase'
 import type { Profile, Team } from '../../types/database'
 import type { UserRole } from '../../types/database'
 
-type SortKey = 'full_name' | 'email' | 'role' | 'team' | 'created_at'
+type SortKey = 'full_name' | 'email' | 'role' | 'team' | 'program' | 'created_at'
 type SortDir = 'asc' | 'desc'
 
 const roleBadgeStyles: Record<string, string> = {
@@ -35,6 +36,7 @@ const roleLabels: Record<string, string> = {
 export function ManageUsers() {
   const navigate = useNavigate()
   const { user: currentUser } = useAuth()
+  const { programs } = useCourses()
   const [users, setUsers] = useState<Profile[]>([])
   const [teams, setTeams] = useState<Team[]>([])
   const [loading, setLoading] = useState(true)
@@ -43,6 +45,7 @@ export function ManageUsers() {
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editRole, setEditRole] = useState<UserRole>('user')
   const [editTeamId, setEditTeamId] = useState<string | null>(null)
+  const [editProgramId, setEditProgramId] = useState<string | null>(null)
   const [editName, setEditName] = useState('')
   const [editEmail, setEditEmail] = useState('')
   const [saving, setSaving] = useState(false)
@@ -97,9 +100,15 @@ export function ManageUsers() {
     setEditingId(user.id)
     setEditRole(user.role)
     setEditTeamId(user.team_id)
+    setEditProgramId(user.program_id)
     setEditName(user.full_name)
     setEditEmail(user.email)
     setError('')
+  }
+
+  function getProgramName(programId: string | null): string {
+    if (!programId) return programs[0] ? `${programs[0].title} (default)` : '—'
+    return programs.find((p) => p.id === programId)?.title ?? '—'
   }
 
   function cancelEdit() {
@@ -116,6 +125,7 @@ export function ManageUsers() {
       .update({
         role: editRole,
         team_id: editTeamId,
+        program_id: editProgramId,
         full_name: editName,
         email: editEmail,
       })
@@ -129,7 +139,9 @@ export function ManageUsers() {
 
     setUsers((prev) =>
       prev.map((u) =>
-        u.id === userId ? { ...u, role: editRole, team_id: editTeamId, full_name: editName, email: editEmail } : u,
+        u.id === userId
+          ? { ...u, role: editRole, team_id: editTeamId, program_id: editProgramId, full_name: editName, email: editEmail }
+          : u,
       ),
     )
     setEditingId(null)
@@ -207,6 +219,8 @@ export function ManageUsers() {
         return a.role.localeCompare(b.role) * mul
       case 'team':
         return getTeamName(a.team_id).localeCompare(getTeamName(b.team_id)) * mul
+      case 'program':
+        return getProgramName(a.program_id).localeCompare(getProgramName(b.program_id)) * mul
       case 'created_at':
         return (
           new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
@@ -237,6 +251,7 @@ export function ManageUsers() {
     { key: 'email', label: 'Email', className: 'hidden lg:table-cell' },
     { key: 'role', label: 'Role' },
     { key: 'team', label: 'Team', className: 'hidden md:table-cell' },
+    { key: 'program', label: 'Program', className: 'hidden lg:table-cell' },
     { key: 'created_at', label: 'Joined', className: 'hidden md:table-cell' },
   ]
 
@@ -401,6 +416,32 @@ export function ManageUsers() {
                       ) : (
                         <span className="text-sm">
                           {getTeamName(user.team_id)}
+                        </span>
+                      )}
+                    </td>
+
+                    {/* Program */}
+                    <td className="px-4 py-3 text-via-text hidden lg:table-cell">
+                      {isEditing ? (
+                        <select
+                          value={editProgramId ?? ''}
+                          onChange={(e) => {
+                            e.stopPropagation()
+                            setEditProgramId(e.target.value || null)
+                          }}
+                          onClick={(e) => e.stopPropagation()}
+                          className="rounded-lg border border-via-orange bg-white px-2 py-1 text-xs text-via-text focus:outline-none focus:ring-2 focus:ring-via-orange/40"
+                        >
+                          <option value="">Default (first program)</option>
+                          {programs.map((p) => (
+                            <option key={p.id} value={p.id}>
+                              {p.title}
+                            </option>
+                          ))}
+                        </select>
+                      ) : (
+                        <span className="text-xs text-via-text-light">
+                          {getProgramName(user.program_id)}
                         </span>
                       )}
                     </td>

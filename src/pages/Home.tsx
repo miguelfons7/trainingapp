@@ -12,18 +12,26 @@ import { ProgramCard } from '../components/home/ProgramCard'
 import { CourseCard } from '../components/home/CourseCard'
 
 export function Home() {
-  const { user } = useAuth()
+  const { user, isAdmin, isLeadership } = useAuth()
   const { items, isAcknowledged } = useCompliance()
   const { getCourseProgress } = useProgress()
-  const { courses, programs } = useCourses()
+  const { courses, getProgramForUser } = useCourses()
   const { getCourseLock } = useCourseLock()
   const streak = useLearningStreak()
 
   const firstName = user?.name?.split(' ')[0] ?? 'Learner'
+  const canSeeAll = isAdmin || isLeadership
 
-  // Order the course grid by program sequence; courses outside the program go last
-  const programOrder = programs[0]?.courseIds ?? []
-  const orderedCourses = [...courses].sort((a, b) => {
+  // The user's assigned program drives ordering and visibility
+  const userProgram = getProgramForUser(user?.programId)
+  const programOrder = userProgram?.courseIds ?? []
+
+  // Regular users see only their program's courses; admins/leadership see
+  // everything (program courses first, the rest after)
+  const visibleCourses = canSeeAll
+    ? courses
+    : courses.filter((c) => programOrder.includes(c.id))
+  const orderedCourses = [...visibleCourses].sort((a, b) => {
     const ai = programOrder.indexOf(a.id)
     const bi = programOrder.indexOf(b.id)
     return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi)

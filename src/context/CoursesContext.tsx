@@ -13,6 +13,8 @@ interface CoursesContextValue {
   loading: boolean
   getCourseById: (id: string) => Course | undefined
   getProgram: () => Program
+  /** Resolve a user's assigned program; null/unknown falls back to the first program */
+  getProgramForUser: (programId?: string) => Program | undefined
   // CRUD methods for admin
   createCourse: (course: Omit<Course, 'modules'>) => Promise<void>
   updateCourse: (id: string, updates: Partial<Omit<Course, 'modules'>>) => Promise<void>
@@ -154,6 +156,12 @@ export function CoursesProvider({ children }: { children: ReactNode }) {
   )
 
   const getProgram = useCallback(() => programs[0], [programs])
+
+  const getProgramForUser = useCallback(
+    (programId?: string) =>
+      (programId ? programs.find((p) => p.id === programId) : undefined) ?? programs[0],
+    [programs],
+  )
 
   // ----- CRUD: Courses -----
 
@@ -370,6 +378,7 @@ export function CoursesProvider({ children }: { children: ReactNode }) {
         loading,
         getCourseById,
         getProgram,
+        getProgramForUser,
         createCourse,
         updateCourse,
         deleteCourse,
