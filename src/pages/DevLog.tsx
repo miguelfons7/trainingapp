@@ -10,6 +10,15 @@ interface LogEntry {
 
 const changelog: LogEntry[] = [
   {
+    version: '1.1.2',
+    date: '2026-06-12',
+    title: 'Fix: Quiz Could Mark a Passing Score as Failed',
+    changes: [
+      'Fixed the Tools & Systems quiz showing "failed" on a passing score — even a perfect score was being rejected. The pass threshold was read as a raw percentage instead of a fraction, making the bar impossible to clear.',
+      'The pass calculation is now resilient to that data issue, and the quiz header shows the real percentage needed to pass.',
+    ],
+  },
+  {
     version: '1.1.1',
     date: '2026-06-12',
     title: 'Fix: Completed Modules Could Reset After an Idle Logout',

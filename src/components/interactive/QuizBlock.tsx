@@ -488,7 +488,12 @@ export function QuizBlock({ quizId, courseId, onComplete, onAttempt, cmsQuizData
   const termMatchPairs = sectionedQuiz.termMatch
   const totalItems =
     termMatchPairs.length + mcQuestions.length + fibItems.length
-  const passCount = Math.ceil(totalItems * (sectionedQuiz.passThreshold ?? PASS_THRESHOLD))
+  // Pass threshold is a fraction (0–1). Guard against quiz data that stored it
+  // as a whole-number percentage (e.g. 85 instead of 0.85) — otherwise passCount
+  // becomes unreachable and even a perfect score is marked failed.
+  const rawThreshold = sectionedQuiz.passThreshold ?? PASS_THRESHOLD
+  const passThreshold = rawThreshold > 1 ? rawThreshold / 100 : rawThreshold
+  const passCount = Math.ceil(totalItems * passThreshold)
 
   // --- MC helpers ---
   function handleMcSelect(questionId: string, optionIndex: number) {
@@ -547,7 +552,7 @@ export function QuizBlock({ quizId, courseId, onComplete, onAttempt, cmsQuizData
           <div>
             <h2 className="text-xl font-bold text-via-navy">Course Final Exam</h2>
             <p className="text-sm text-via-text-light">
-              {totalItems} items &middot; {passCount} correct to pass ({Math.round(PASS_THRESHOLD * 100)}%)
+              {totalItems} items &middot; {passCount} correct to pass ({Math.round(passThreshold * 100)}%)
             </p>
           </div>
         </div>

@@ -232,7 +232,7 @@ export async function createBlankQuizContent(
       termMatch: [],
       multipleChoice: [],
       fillInBlank: [],
-      passThreshold: 85,
+      passThreshold: 0.85,
     },
   }
 
