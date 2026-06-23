@@ -10,6 +10,15 @@ interface LogEntry {
 
 const changelog: LogEntry[] = [
   {
+    version: '1.2.1',
+    date: '2026-06-23',
+    title: 'Fix: Assign Courses Now Lists Real Programs',
+    changes: [
+      'The "Assign a Course" admin screen had a hardcoded program list, so newly created programs never appeared. It now lists your actual programs and assigns them to the selected users in bulk (writing real program assignments).',
+      'Labeled the dropdown clearly: programs control dashboard access; individual-course assignment is a tracking record.',
+    ],
+  },
+  {
     version: '1.2.0',
     date: '2026-06-16',
     title: 'Multiple Programs Per User + "My Progress" Timelines',

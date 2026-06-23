@@ -8,7 +8,7 @@ import type { Course } from '../../types'
 
 export function AssignCourses() {
   const { user } = useAuth()
-  const { courses } = useCourses()
+  const { courses, programs } = useCourses()
   const [profiles, setProfiles] = useState<Profile[]>([])
   const [assignments, setAssignments] = useState<(CourseAssignment & { userName: string; courseName: string })[]>([])
   const [loading, setLoading] = useState(true)
@@ -16,6 +16,7 @@ export function AssignCourses() {
   const [selectedUsers, setSelectedUsers] = useState<Set<string>>(new Set())
   const [showUserList, setShowUserList] = useState(false)
   const [saving, setSaving] = useState(false)
+  const [assignMsg, setAssignMsg] = useState('')
 
   const loadData = useCallback(async () => {
     const [profilesRes, assignmentsRes] = await Promise.all([
@@ -59,16 +60,40 @@ export function AssignCourses() {
   async function handleAssign() {
     if (!selectedCourse || selectedUsers.size === 0 || !user) return
 
-    const courseName =
-      selectedCourse.startsWith('program-')
-        ? selectedCourse === 'program-new-hire-bdr'
-          ? 'New Hire: BDR Program'
-          : 'New AM Training Program'
-        : courses.find((c) => c.id === selectedCourse)?.title
-
-    if (!courseName) return
-
     setSaving(true)
+    setAssignMsg('')
+
+    // Program assignment writes to user_programs — this is what actually scopes
+    // a user's dashboard (which courses they see). Bulk-assign to all selected users.
+    if (selectedCourse.startsWith('program:')) {
+      const programId = selectedCourse.slice('program:'.length)
+      const programTitle = programs.find((p) => p.id === programId)?.title ?? programId
+      const rows = [...selectedUsers].map((userId) => ({
+        user_id: userId,
+        program_id: programId,
+        assigned_by: user.id,
+      }))
+      const { error } = await supabase
+        .from('user_programs')
+        .upsert(rows, { onConflict: 'user_id,program_id', ignoreDuplicates: true })
+      setAssignMsg(
+        error
+          ? `Error: ${error.message}`
+          : `Assigned "${programTitle}" to ${selectedUsers.size} user${selectedUsers.size !== 1 ? 's' : ''}. They'll see it on their next sign-in.`,
+      )
+      setSelectedCourse('')
+      setSelectedUsers(new Set())
+      setShowUserList(false)
+      setSaving(false)
+      return
+    }
+
+    // Individual course assignment → course_assignments (tracking record)
+    const courseName = courses.find((c) => c.id === selectedCourse)?.title
+    if (!courseName) {
+      setSaving(false)
+      return
+    }
 
     const inserts = [...selectedUsers]
       .filter((userId) => {
@@ -173,11 +198,14 @@ export function AssignCourses() {
               className="w-full rounded-lg border border-via-border bg-white px-3 py-2.5 text-sm text-via-text focus:outline-none focus:ring-2 focus:ring-via-orange/40 focus:border-via-orange"
             >
               <option value="">Select a course or program...</option>
-              <optgroup label="Programs">
-                <option value="program-new-hire-bdr">New Hire: BDR Program</option>
-                <option value="program-new-am">New AM Training Program</option>
+              <optgroup label="Programs (controls dashboard access)">
+                {programs.map((p) => (
+                  <option key={p.id} value={`program:${p.id}`}>
+                    {p.title}
+                  </option>
+                ))}
               </optgroup>
-              <optgroup label="Individual Courses">
+              <optgroup label="Individual Courses (tracking only)">
                 {courses.map((c) => (
                   <option key={c.id} value={c.id}>
                     {c.title}
@@ -256,6 +284,11 @@ export function AssignCourses() {
           )}
           Assign Course
         </button>
+        {assignMsg && (
+          <p className={`mt-3 text-sm font-medium ${assignMsg.startsWith('Error') ? 'text-via-danger' : 'text-via-success'}`}>
+            {assignMsg}
+          </p>
+        )}
       </div>
 
       {/* Current assignments */}
