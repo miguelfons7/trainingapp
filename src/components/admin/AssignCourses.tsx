@@ -311,17 +311,19 @@ type CourseUserState = 'completed' | 'next' | 'locked' | 'override'
 
 function UnlockOverridesPanel({ profiles }: { profiles: Profile[] }) {
   const { user: currentUser } = useAuth()
-  const { courses, getProgramForUser } = useCourses()
+  const { courses, getProgramsForUser } = useCourses()
   const [selectedUserId, setSelectedUserId] = useState('')
   const [overrides, setOverrides] = useState<CourseUnlockOverrideRow[]>([])
   const [userProgress, setUserProgress] = useState<ModuleProgressRow[]>([])
+  const [selectedProgramIds, setSelectedProgramIds] = useState<string[]>([])
   const [loadingUser, setLoadingUser] = useState(false)
   const [togglingId, setTogglingId] = useState<string | null>(null)
 
-  // The override list follows the SELECTED user's assigned program
-  const selectedProfile = profiles.find((p) => p.id === selectedUserId)
-  const program = getProgramForUser(selectedProfile?.program_id ?? undefined)
-  const programCourses = (program?.courseIds ?? [])
+  // The override list follows the SELECTED user's assigned programs (union, deduped)
+  const seenCourse = new Set<string>()
+  const programCourses = getProgramsForUser(selectedProgramIds)
+    .flatMap((p) => p.courseIds)
+    .filter((cid) => (seenCourse.has(cid) ? false : (seenCourse.add(cid), true)))
     .map((cid) => courses.find((c) => c.id === cid))
     .filter((c): c is Course => !!c && c.status === 'available')
 
@@ -330,6 +332,7 @@ function UnlockOverridesPanel({ profiles }: { profiles: Profile[] }) {
     if (!selectedUserId) {
       setOverrides([])
       setUserProgress([])
+      setSelectedProgramIds([])
       return
     }
     let cancelled = false
@@ -337,11 +340,13 @@ function UnlockOverridesPanel({ profiles }: { profiles: Profile[] }) {
     Promise.all([
       supabase.from('course_unlock_overrides').select('*').eq('user_id', selectedUserId),
       supabase.from('module_progress').select('*').eq('user_id', selectedUserId),
+      supabase.from('user_programs').select('program_id').eq('user_id', selectedUserId),
     ])
-      .then(([overridesRes, progressRes]) => {
+      .then(([overridesRes, progressRes, programsRes]) => {
         if (cancelled) return
         setOverrides(overridesRes.data ?? [])
         setUserProgress(progressRes.data ?? [])
+        setSelectedProgramIds((programsRes.data ?? []).map((r) => r.program_id))
         setLoadingUser(false)
       })
       .catch((err) => {

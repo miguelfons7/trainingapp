@@ -1,4 +1,4 @@
-import { Award, CheckCircle, FileCheck, Flame, Printer } from 'lucide-react'
+import { Award, BookOpen, CheckCircle, FileCheck, Flame, Printer } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useCompliance } from '../context/ComplianceContext'
@@ -8,54 +8,28 @@ import { useCourseLock } from '../hooks/useCourseLock'
 import { useLearningStreak } from '../hooks/useLearningStreak'
 import { ComplianceBanner } from '../components/home/ComplianceBanner'
 import { ContinueLearning } from '../components/home/ContinueLearning'
-import { ProgramCard } from '../components/home/ProgramCard'
+import { ProgressTimeline } from '../components/home/ProgressTimeline'
 import { CourseCard } from '../components/home/CourseCard'
 
 export function Home() {
   const { user, isAdmin, isLeadership } = useAuth()
   const { items, isAcknowledged } = useCompliance()
   const { getCourseProgress } = useProgress()
-  const { courses, getProgramForUser } = useCourses()
+  const { courses, getProgramsForUser } = useCourses()
   const { getCourseLock } = useCourseLock()
   const streak = useLearningStreak()
 
   const firstName = user?.name?.split(' ')[0] ?? 'Learner'
   const canSeeAll = isAdmin || isLeadership
 
-  // The user's assigned program drives ordering and visibility
-  const userProgram = getProgramForUser(user?.programId)
-  const programOrder = userProgram?.courseIds ?? []
+  // The user's assigned programs (many-to-many). Empty = nothing assigned yet.
+  const userPrograms = getProgramsForUser(user?.programIds)
 
-  // Regular users see only their program's courses; admins/leadership see
-  // everything (program courses first, the rest after)
-  const visibleCourses = canSeeAll
-    ? courses
-    : courses.filter((c) => programOrder.includes(c.id))
-  const orderedCourses = [...visibleCourses].sort((a, b) => {
-    const ai = programOrder.indexOf(a.id)
-    const bi = programOrder.indexOf(b.id)
-    return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi)
-  })
-
-  // "Up Next": the first available course that's unlocked but not yet complete
-  const upNextId = orderedCourses.find(
-    (c) =>
-      c.status === 'available' &&
-      !getCourseLock(c.id).locked &&
-      getCourseProgress(c.id).percentage < 100,
-  )?.id
-
-  // Program complete when every available program course is at 100%
-  const programCourses = programOrder
-    .map((id) => courses.find((c) => c.id === id))
-    .filter((c) => c && c.status === 'available')
-  const programComplete =
-    programCourses.length > 0 &&
-    programCourses.every((c) => getCourseProgress(c!.id).percentage === 100)
-
-  // Build certificates from completed courses + acknowledged compliance items
+  // Certificates: completed courses, scoped to the user's programs (admins see all)
+  const programCourseIds = new Set(userPrograms.flatMap((p) => p.courseIds))
   const completedCourses = courses
     .filter((c) => c.status === 'available')
+    .filter((c) => canSeeAll || programCourseIds.has(c.id))
     .filter((c) => getCourseProgress(c.id).percentage === 100)
   const acknowledgedItems = items.filter((item) => isAcknowledged(item.id))
 
@@ -68,7 +42,7 @@ export function Home() {
             Welcome back, {firstName}
           </h1>
           <p className="mt-1 text-sm text-via-text-light">
-            Pick up where you left off or explore new courses below.
+            Pick up where you left off and track your progress below.
           </p>
         </div>
         {streak >= 2 && (
@@ -79,39 +53,30 @@ export function Home() {
         )}
       </div>
 
-      {/* Program completion banner */}
-      {programComplete && (
-        <div className="bg-gradient-to-r from-via-navy to-indigo-900 rounded-xl p-6 flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
-          <div className="w-12 h-12 rounded-full bg-white/15 flex items-center justify-center shrink-0">
-            <Award className="w-6 h-6 text-amber-300" />
-          </div>
-          <div className="flex-1">
-            <p className="text-lg font-bold text-white">Training Program Complete!</p>
-            <p className="text-sm text-white/80">
-              You've finished every course in your program. Outstanding work.
-            </p>
-          </div>
-          <Link
-            to="/certificate/program"
-            className="shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-white text-via-navy text-sm font-bold hover:bg-white/90 transition-colors"
-          >
-            <Printer className="w-4 h-4" />
-            View Certificate
-          </Link>
-        </div>
-      )}
-
       {/* Compliance banner */}
       <ComplianceBanner />
 
-      {/* Continue learning */}
+      {/* Continue learning (null when no program assigned) */}
       <ContinueLearning />
 
-      {/* Program overview */}
-      <section>
-        <h2 className="mb-4 text-lg font-bold text-via-navy">Your Program</h2>
-        <ProgramCard />
-      </section>
+      {/* No program assigned — regular users */}
+      {!canSeeAll && userPrograms.length === 0 && (
+        <div className="bg-via-card rounded-xl border border-via-border p-8 text-center">
+          <BookOpen className="w-10 h-10 text-via-text-light mx-auto mb-3" />
+          <h2 className="text-lg font-bold text-via-navy mb-1">
+            No training program assigned yet
+          </h2>
+          <p className="text-sm text-via-text-light">
+            You haven't been assigned to a training program. Please contact your
+            admin to get started.
+          </p>
+        </div>
+      )}
+
+      {/* My Progress — one timeline per assigned program */}
+      {userPrograms.map((program) => (
+        <ProgressTimeline key={program.id} program={program} />
+      ))}
 
       {/* My Certificates */}
       <section>
@@ -171,25 +136,26 @@ export function Home() {
         )}
       </section>
 
-      {/* Courses grid */}
-      <section>
-        <h2 className="mb-4 text-lg font-bold text-via-navy">Courses</h2>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {orderedCourses.map((course, index) => {
-            const programIdx = programOrder.indexOf(course.id)
-            return (
+      {/* Admin/leadership: every course, regardless of program */}
+      {canSeeAll && (
+        <section>
+          <h2 className="mb-1 text-lg font-bold text-via-navy">All Courses</h2>
+          <p className="mb-4 text-xs text-via-text-light">
+            Admin view — every course in the catalog. Learners only see the
+            programs assigned to them.
+          </p>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {courses.map((course, index) => (
               <CourseCard
                 key={course.id}
                 course={course}
                 index={index}
                 lockInfo={getCourseLock(course.id)}
-                pathPosition={programIdx >= 0 ? programIdx + 1 : undefined}
-                isUpNext={course.id === upNextId}
               />
-            )
-          })}
-        </div>
-      </section>
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   )
 }

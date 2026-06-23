@@ -31,6 +31,27 @@ export interface Database {
         }
         Relationships: []
       }
+      user_programs: {
+        Row: {
+          user_id: string
+          program_id: string
+          assigned_at: string
+          assigned_by: string | null
+        }
+        Insert: {
+          user_id: string
+          program_id: string
+          assigned_at?: string
+          assigned_by?: string | null
+        }
+        Update: {
+          user_id?: string
+          program_id?: string
+          assigned_at?: string
+          assigned_by?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           id: string

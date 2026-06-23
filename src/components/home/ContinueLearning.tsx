@@ -7,19 +7,25 @@ import { useAuth } from '../../context/AuthContext'
 export function ContinueLearning() {
   const { user } = useAuth()
   const { getCourseProgress, getNextModule } = useProgress()
-  const { courses, getProgramForUser } = useCourses()
+  const { courses, getProgramsForUser } = useCourses()
 
-  // Scope to the user's assigned program, in program order — otherwise an
-  // AM-program user would be pointed at the BDR course (and vice versa)
-  const program = getProgramForUser(user?.programId)
-  const programCourses = (program?.courseIds ?? [])
+  // Scope to the user's assigned programs (deduped union, in program/course
+  // order) — otherwise an AM-program user would be pointed at the BDR course.
+  const userPrograms = getProgramsForUser(user?.programIds)
+  const seen = new Set<string>()
+  const programCourses = userPrograms
+    .flatMap((p) => p.courseIds)
+    .filter((id) => (seen.has(id) ? false : (seen.add(id), true)))
     .map((id) => courses.find((c) => c.id === id))
     .filter((c): c is NonNullable<typeof c> => !!c && c.status === 'available')
 
-  // First course in THEIR program with incomplete modules
+  // First course across THEIR programs with incomplete modules
   const activeCourse = programCourses.find(
     (c) => getCourseProgress(c.id).percentage < 100,
   )
+
+  // No program assigned, or nothing to continue — let Home handle the empty state
+  if (userPrograms.length === 0) return null
 
   if (!activeCourse) {
     return (

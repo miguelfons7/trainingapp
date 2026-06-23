@@ -35,6 +35,22 @@ async function fetchProfileAsUser(userId: string): Promise<User | null> {
 
   if (error || !data) return null
 
+  // Assigned programs (many-to-many). Empty array = no program assigned yet.
+  // If the user_programs table isn't available yet (e.g. migration not run) or
+  // the query errors, fall back to the legacy single program_id so users aren't
+  // stranded during the migration window.
+  const { data: programRows, error: programError } = await supabase
+    .from('user_programs')
+    .select('program_id')
+    .eq('user_id', userId)
+
+  const programIds =
+    programError || !programRows
+      ? data.program_id
+        ? [data.program_id]
+        : []
+      : programRows.map((r) => r.program_id)
+
   return {
     id: data.id,
     email: data.email,
@@ -43,6 +59,7 @@ async function fetchProfileAsUser(userId: string): Promise<User | null> {
     avatar: data.avatar_url ?? undefined,
     teamId: data.team_id ?? undefined,
     programId: data.program_id ?? undefined,
+    programIds,
   }
 }
 

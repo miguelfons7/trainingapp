@@ -10,6 +10,18 @@ interface LogEntry {
 
 const changelog: LogEntry[] = [
   {
+    version: '1.2.0',
+    date: '2026-06-16',
+    title: 'Multiple Programs Per User + "My Progress" Timelines',
+    changes: [
+      'Users can now be assigned multiple training programs. Manage Users has a multi-select to assign or remove programs per person, and new users start with NONE until you assign one (no more auto-defaulting to a program).',
+      'Home is now a "My Progress" timeline grouped by program: each assigned program shows its courses as an ordered path (completed, current, up next, locked).',
+      'Certificates are per program: a learner earns one for each program they complete.',
+      'Admins and leadership get a separate "All Courses" section so the catalog view is never confused with what a learner sees.',
+      'Course gating, the "continue learning" card, and the next-course button all respect the full set of a user\'s assigned programs.',
+    ],
+  },
+  {
     version: '1.1.2',
     date: '2026-06-12',
     title: 'Fix: Quiz Could Mark a Passing Score as Failed',

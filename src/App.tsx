@@ -67,6 +67,14 @@ function AppRoutes() {
       <Route path="/reset-password" element={<ResetPassword />} />
       {/* Standalone (no AppShell chrome) so printing is clean */}
       <Route
+        path="/certificate/program/:programId"
+        element={
+          <ProtectedRoute>
+            <CertificateView />
+          </ProtectedRoute>
+        }
+      />
+      <Route
         path="/certificate/:courseId"
         element={
           <ProtectedRoute>

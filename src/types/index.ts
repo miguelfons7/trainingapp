@@ -37,8 +37,10 @@ export interface User {
   avatar?: string
   role: 'user' | 'leadership' | 'admin'
   teamId?: string
-  /** Assigned training program (e.g. BDR vs AM); undefined = default program */
+  /** @deprecated single-program field; use programIds. Kept for back-compat. */
   programId?: string
+  /** Assigned training programs (many-to-many via user_programs). Empty = none assigned. */
+  programIds?: string[]
 }
 
 export interface ModuleProgress {

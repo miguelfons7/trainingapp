@@ -371,7 +371,7 @@ function FillInBlankSection({
 // ─────────────────────────────────────────
 export function QuizBlock({ quizId, courseId, onComplete, onAttempt, cmsQuizData }: QuizBlockProps) {
   const { user } = useAuth()
-  const { courses, getProgramForUser } = useCourses()
+  const { courses, getProgramsForUser } = useCourses()
   // CMS quiz data takes priority over hardcoded data
   const hardcodedQuiz = sectionedQuizMap[quizId]
   const sectionedQuiz: SectionedQuiz | undefined = cmsQuizData
@@ -386,15 +386,19 @@ export function QuizBlock({ quizId, courseId, onComplete, onAttempt, cmsQuizData
   // USER'S assigned program (so BDR users flow to bdr-role, AM users to am-role).
   // CMS quizData can still override explicitly. End of program → no button; the
   // Home program-completion banner takes over.
-  const userProgram = getProgramForUser(user?.programId)
+  const userPrograms = getProgramsForUser(user?.programIds)
   const programNextCourse = (() => {
-    if (!courseId || !userProgram) return undefined
-    const idx = userProgram.courseIds.indexOf(courseId)
-    if (idx === -1) return undefined
-    for (const nextId of userProgram.courseIds.slice(idx + 1)) {
-      const next = courses.find((c) => c.id === nextId)
-      if (next && next.status === 'available') {
-        return { id: next.id, title: next.title }
+    if (!courseId) return undefined
+    // Find the program (among the user's) that contains this course, then the
+    // next available course within it.
+    for (const program of userPrograms) {
+      const idx = program.courseIds.indexOf(courseId)
+      if (idx === -1) continue
+      for (const nextId of program.courseIds.slice(idx + 1)) {
+        const next = courses.find((c) => c.id === nextId)
+        if (next && next.status === 'available') {
+          return { id: next.id, title: next.title }
+        }
       }
     }
     return undefined

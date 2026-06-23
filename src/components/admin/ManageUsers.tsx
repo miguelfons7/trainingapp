@@ -38,6 +38,8 @@ export function ManageUsers() {
   const { user: currentUser } = useAuth()
   const { programs } = useCourses()
   const [users, setUsers] = useState<Profile[]>([])
+  // userId -> assigned program ids (many-to-many via user_programs)
+  const [userPrograms, setUserPrograms] = useState<Record<string, string[]>>({})
   const [teams, setTeams] = useState<Team[]>([])
   const [loading, setLoading] = useState(true)
   const [sortKey, setSortKey] = useState<SortKey>('full_name')
@@ -45,7 +47,7 @@ export function ManageUsers() {
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editRole, setEditRole] = useState<UserRole>('user')
   const [editTeamId, setEditTeamId] = useState<string | null>(null)
-  const [editProgramId, setEditProgramId] = useState<string | null>(null)
+  const [editProgramIds, setEditProgramIds] = useState<string[]>([])
   const [editName, setEditName] = useState('')
   const [editEmail, setEditEmail] = useState('')
   const [saving, setSaving] = useState(false)
@@ -59,13 +61,21 @@ export function ManageUsers() {
   const [copied, setCopied] = useState(false)
 
   const loadData = useCallback(async () => {
-    const [usersRes, teamsRes] = await Promise.all([
+    const [usersRes, teamsRes, programsRes] = await Promise.all([
       supabase.from('profiles').select('*').order('full_name'),
       supabase.from('teams').select('*').order('name'),
+      supabase.from('user_programs').select('user_id, program_id'),
     ])
 
     if (usersRes.data) setUsers(usersRes.data)
     if (teamsRes.data) setTeams(teamsRes.data)
+    if (programsRes.data) {
+      const map: Record<string, string[]> = {}
+      for (const row of programsRes.data) {
+        ;(map[row.user_id] ??= []).push(row.program_id)
+      }
+      setUserPrograms(map)
+    }
     setLoading(false)
   }, [])
 
@@ -100,15 +110,18 @@ export function ManageUsers() {
     setEditingId(user.id)
     setEditRole(user.role)
     setEditTeamId(user.team_id)
-    setEditProgramId(user.program_id)
+    setEditProgramIds(userPrograms[user.id] ?? [])
     setEditName(user.full_name)
     setEditEmail(user.email)
     setError('')
   }
 
-  function getProgramName(programId: string | null): string {
-    if (!programId) return programs[0] ? `${programs[0].title} (default)` : '—'
-    return programs.find((p) => p.id === programId)?.title ?? '—'
+  function getProgramLabel(userId: string): string {
+    const ids = userPrograms[userId] ?? []
+    if (ids.length === 0) return 'None'
+    return ids
+      .map((id) => programs.find((p) => p.id === id)?.title ?? id)
+      .join(', ')
   }
 
   function cancelEdit() {
@@ -125,7 +138,6 @@ export function ManageUsers() {
       .update({
         role: editRole,
         team_id: editTeamId,
-        program_id: editProgramId,
         full_name: editName,
         email: editEmail,
       })
@@ -137,10 +149,43 @@ export function ManageUsers() {
       return
     }
 
+    // Diff program assignments against the user_programs join table
+    const current = userPrograms[userId] ?? []
+    const toAdd = editProgramIds.filter((id) => !current.includes(id))
+    const toRemove = current.filter((id) => !editProgramIds.includes(id))
+
+    if (toAdd.length > 0) {
+      const { error: addErr } = await supabase.from('user_programs').insert(
+        toAdd.map((program_id) => ({
+          user_id: userId,
+          program_id,
+          assigned_by: currentUser?.id ?? null,
+        })),
+      )
+      if (addErr) {
+        setError(addErr.message)
+        setSaving(false)
+        return
+      }
+    }
+    if (toRemove.length > 0) {
+      const { error: rmErr } = await supabase
+        .from('user_programs')
+        .delete()
+        .eq('user_id', userId)
+        .in('program_id', toRemove)
+      if (rmErr) {
+        setError(rmErr.message)
+        setSaving(false)
+        return
+      }
+    }
+
+    setUserPrograms((prev) => ({ ...prev, [userId]: [...editProgramIds] }))
     setUsers((prev) =>
       prev.map((u) =>
         u.id === userId
-          ? { ...u, role: editRole, team_id: editTeamId, program_id: editProgramId, full_name: editName, email: editEmail }
+          ? { ...u, role: editRole, team_id: editTeamId, full_name: editName, email: editEmail }
           : u,
       ),
     )
@@ -220,7 +265,7 @@ export function ManageUsers() {
       case 'team':
         return getTeamName(a.team_id).localeCompare(getTeamName(b.team_id)) * mul
       case 'program':
-        return getProgramName(a.program_id).localeCompare(getProgramName(b.program_id)) * mul
+        return getProgramLabel(a.id).localeCompare(getProgramLabel(b.id)) * mul
       case 'created_at':
         return (
           new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
@@ -423,25 +468,41 @@ export function ManageUsers() {
                     {/* Program */}
                     <td className="px-4 py-3 text-via-text hidden lg:table-cell">
                       {isEditing ? (
-                        <select
-                          value={editProgramId ?? ''}
-                          onChange={(e) => {
-                            e.stopPropagation()
-                            setEditProgramId(e.target.value || null)
-                          }}
+                        <div
+                          className="flex flex-col gap-1"
                           onClick={(e) => e.stopPropagation()}
-                          className="rounded-lg border border-via-orange bg-white px-2 py-1 text-xs text-via-text focus:outline-none focus:ring-2 focus:ring-via-orange/40"
                         >
-                          <option value="">Default (first program)</option>
-                          {programs.map((p) => (
-                            <option key={p.id} value={p.id}>
-                              {p.title}
-                            </option>
-                          ))}
-                        </select>
+                          {programs.length === 0 && (
+                            <span className="text-xs text-via-text-light">No programs exist</span>
+                          )}
+                          {programs.map((p) => {
+                            const checked = editProgramIds.includes(p.id)
+                            return (
+                              <label
+                                key={p.id}
+                                className="flex items-center gap-1.5 text-xs text-via-text cursor-pointer whitespace-nowrap"
+                              >
+                                <input
+                                  type="checkbox"
+                                  checked={checked}
+                                  onChange={(e) => {
+                                    e.stopPropagation()
+                                    setEditProgramIds((prev) =>
+                                      e.target.checked
+                                        ? [...prev, p.id]
+                                        : prev.filter((id) => id !== p.id),
+                                    )
+                                  }}
+                                  className="rounded border-via-border text-via-orange focus:ring-via-orange/40"
+                                />
+                                {p.title}
+                              </label>
+                            )
+                          })}
+                        </div>
                       ) : (
                         <span className="text-xs text-via-text-light">
-                          {getProgramName(user.program_id)}
+                          {getProgramLabel(user.id)}
                         </span>
                       )}
                     </td>

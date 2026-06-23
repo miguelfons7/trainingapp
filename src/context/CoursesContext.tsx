@@ -13,8 +13,8 @@ interface CoursesContextValue {
   loading: boolean
   getCourseById: (id: string) => Course | undefined
   getProgram: () => Program
-  /** Resolve a user's assigned program; null/unknown falls back to the first program */
-  getProgramForUser: (programId?: string) => Program | undefined
+  /** Resolve a user's assigned programs (many-to-many). Empty array = none assigned. */
+  getProgramsForUser: (programIds?: string[]) => Program[]
   // CRUD methods for admin
   createCourse: (course: Omit<Course, 'modules'>) => Promise<void>
   updateCourse: (id: string, updates: Partial<Omit<Course, 'modules'>>) => Promise<void>
@@ -157,9 +157,14 @@ export function CoursesProvider({ children }: { children: ReactNode }) {
 
   const getProgram = useCallback(() => programs[0], [programs])
 
-  const getProgramForUser = useCallback(
-    (programId?: string) =>
-      (programId ? programs.find((p) => p.id === programId) : undefined) ?? programs[0],
+  // Return the user's assigned programs, in display (sort) order. Empty when the
+  // user has no assignments — callers must handle the "no program" case rather
+  // than silently defaulting to one.
+  const getProgramsForUser = useCallback(
+    (programIds?: string[]) => {
+      const ids = new Set(programIds ?? [])
+      return programs.filter((p) => ids.has(p.id))
+    },
     [programs],
   )
 
@@ -378,7 +383,7 @@ export function CoursesProvider({ children }: { children: ReactNode }) {
         loading,
         getCourseById,
         getProgram,
-        getProgramForUser,
+        getProgramsForUser,
         createCourse,
         updateCourse,
         deleteCourse,

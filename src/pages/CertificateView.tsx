@@ -7,18 +7,19 @@ import { useProgress } from '../context/ProgressContext'
 import { supabase } from '../lib/supabase'
 
 /**
- * Print-friendly certificate page at /certificate/:courseId.
- * Use courseId "program" for the full-program certificate.
+ * Print-friendly certificate page.
+ * - /certificate/:courseId          → a single course's certificate
+ * - /certificate/program/:programId → a completed program's certificate
  * Rendered outside AppShell so printing has no app chrome.
  */
 export function CertificateView() {
-  const { courseId } = useParams<{ courseId: string }>()
+  const { courseId, programId } = useParams<{ courseId: string; programId: string }>()
   const { user } = useAuth()
-  const { courses, getProgramForUser, getCourseById } = useCourses()
+  const { courses, programs, getCourseById } = useCourses()
   const { getCourseProgress } = useProgress()
 
-  const isProgram = courseId === 'program'
-  const program = getProgramForUser(user?.programId)
+  const isProgram = !!programId
+  const program = programId ? programs.find((p) => p.id === programId) : undefined
   const course = !isProgram && courseId ? getCourseById(courseId) : undefined
 
   const [completionDate, setCompletionDate] = useState<string | null>(null)
@@ -52,8 +53,13 @@ export function CertificateView() {
       query = query.eq('course_id', courseId)
     }
     query.then(({ data }) => {
-      if (data && data.length > 0) {
-        const latest = data.reduce(
+      // For a program certificate, only this program's courses count toward the date
+      const rows =
+        isProgram && program
+          ? (data ?? []).filter((r) => program.courseIds.includes(r.course_id))
+          : (data ?? [])
+      if (rows.length > 0) {
+        const latest = rows.reduce(
           (max, r) => (r.completed_at && r.completed_at > max ? r.completed_at : max),
           '',
         )
@@ -61,14 +67,14 @@ export function CertificateView() {
         if (!isProgram && course) {
           const quizModule = course.modules.find((m) => m.contentType === 'quiz')
           if (quizModule) {
-            const row = data.find((r) => r.module_id === quizModule.id)
+            const row = rows.find((r) => r.module_id === quizModule.id)
             setQuizScore(row?.score ?? null)
           }
         }
       }
       setLoading(false)
     })
-  }, [user?.id, earned, isProgram, courseId, course])
+  }, [user?.id, earned, isProgram, courseId, course, program])
 
   if (loading) {
     return (

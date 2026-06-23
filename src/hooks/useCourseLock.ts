@@ -27,7 +27,7 @@ export interface CourseLockInfo {
  */
 export function useCourseLock() {
   const { user, isAdmin, isLeadership } = useAuth()
-  const { courses, getProgramForUser } = useCourses()
+  const { courses, getProgramsForUser } = useCourses()
   const { getCourseProgress } = useProgress()
   const { isUnderConstruction } = useConstruction()
 
@@ -62,39 +62,48 @@ export function useCourseLock() {
       if (canBypass) return { locked: false }
       if (overrides.has(courseId)) return { locked: false }
 
-      // Scope to the user's assigned program
-      const program = getProgramForUser(user?.programId)
-      if (!program) return { locked: false }
-
-      // Courses outside the user's program are not theirs to take
-      if (!program.courseIds.includes(courseId)) {
+      // Scope to the user's assigned programs (many-to-many)
+      const userPrograms = getProgramsForUser(user?.programIds)
+      if (userPrograms.length === 0) {
+        // No program assigned yet — nothing is theirs to take
         return { locked: true, notInProgram: true }
       }
 
-      const position = program.courseIds.indexOf(courseId)
-
-      // Every earlier gateable course must be 100% complete
-      for (let i = 0; i < position; i++) {
-        const prevId = program.courseIds[i]
-        const prevCourse = courses.find((c) => c.id === prevId)
-        // Skip prerequisites that can't actually be completed
-        if (!prevCourse) continue
-        if (prevCourse.status !== 'available') continue
-        if (isUnderConstruction('course', prevId)) continue
-
-        const progress = getCourseProgress(prevId)
-        if (progress.total === 0) continue // no modules — nothing to complete
-        if (progress.percentage < 100) {
-          return {
-            locked: true,
-            blockedBy: { id: prevCourse.id, title: prevCourse.title },
-          }
-        }
+      const containing = userPrograms.filter((p) => p.courseIds.includes(courseId))
+      if (containing.length === 0) {
+        return { locked: true, notInProgram: true }
       }
 
-      return { locked: false }
+      // Within one program, the first incomplete gateable course before this one
+      // (or null if this course is unlocked in that program).
+      const blockerInProgram = (courseIds: string[]) => {
+        const position = courseIds.indexOf(courseId)
+        for (let i = 0; i < position; i++) {
+          const prevId = courseIds[i]
+          const prevCourse = courses.find((c) => c.id === prevId)
+          if (!prevCourse) continue
+          if (prevCourse.status !== 'available') continue
+          if (isUnderConstruction('course', prevId)) continue
+          const progress = getCourseProgress(prevId)
+          if (progress.total === 0) continue // no modules — nothing to complete
+          if (progress.percentage < 100) {
+            return { id: prevCourse.id, title: prevCourse.title }
+          }
+        }
+        return null
+      }
+
+      // Unlocked if ANY of the user's programs grants it; otherwise report the
+      // first program's blocking prerequisite.
+      let firstBlocker: { id: string; title: string } | undefined
+      for (const program of containing) {
+        const blocker = blockerInProgram(program.courseIds)
+        if (!blocker) return { locked: false }
+        if (!firstBlocker) firstBlocker = blocker
+      }
+      return { locked: true, blockedBy: firstBlocker }
     },
-    [canBypass, overrides, getProgramForUser, user?.programId, courses, isUnderConstruction, getCourseProgress],
+    [canBypass, overrides, getProgramsForUser, user?.programIds, courses, isUnderConstruction, getCourseProgress],
   )
 
   return { getCourseLock, overridesLoaded, refreshOverrides: fetchOverrides }
