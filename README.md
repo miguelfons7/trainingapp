@@ -1,73 +1,33 @@
-# React + TypeScript + Vite
+# VIAcademy
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Internal training platform for **Via Trading Corporation** (wholesale liquidation). New sales hires
+complete role-based programs (BDR / AM) of courses → modules (lessons + a final quiz), earn certificates;
+admins manage users, content (a block-based CMS), and compliance.
 
-Currently, two official plugins are available:
+**Stack:** React 19 + TypeScript + Vite · Tailwind CSS v4 · react-router v7 · Supabase (Postgres + Auth +
+RLS + Storage) · deployed on Vercel.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Docs (read these first)
+- **[`docs/ENGINEERING_HANDBOOK.md`](docs/ENGINEERING_HANDBOOK.md)** — architecture, standards, workflows, runbooks, how to operate. Start here.
+- **[`docs/AUDIT_2026-06.md`](docs/AUDIT_2026-06.md)** — current findings + prioritized debt worklist.
+- **[`CLAUDE.md`](CLAUDE.md)** — the terse machine-facing spec (course / CMS / DB reference).
+- **[`docs/runbooks/`](docs/runbooks/)** — one-shot ops SQL (data repair, quiz-threshold fix).
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Run locally
+```bash
+npm install
+# create .env.local with:
+#   VITE_SUPABASE_URL=...
+#   VITE_SUPABASE_ANON_KEY=...
+npm run dev          # http://localhost:5173
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Build / deploy
+```bash
+npm run build        # tsc -b + vite build
 ```
+Production tracks `main`/`staging` → Vercel auto-deploys → https://trainingapp-sepia.vercel.app
+Releases: `npm version patch|minor` (bumps package.json, commits, tags) + a `src/pages/DevLog.tsx` entry, then `git push --follow-tags`. See the handbook's "Ship a change" for the full loop (and the note about the stale `deploy` default branch).
+
+## Backend
+Supabase project `xdogiyfqqpvwrvysexrt`. Schema is in `supabase/migrations/` (run 001→016 in order to bootstrap). **Note:** the course/program registry and CMS lesson content are seeded separately, *not* in the migrations — see the handbook's cold-restore section.

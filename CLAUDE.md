@@ -1,5 +1,7 @@
 # VIAcademy Training App — Development Guide
 
+> **Successor engineers / models: read [`docs/ENGINEERING_HANDBOOK.md`](docs/ENGINEERING_HANDBOOK.md) and [`docs/AUDIT_2026-06.md`](docs/AUDIT_2026-06.md) first.** They hold the current architecture, the hard standards (copy/imagery/version/RLS/correctness), the runbooks, the live debt worklist, and the cold-restore/backup plan. This file is the terse spec. A few sections below (the "13 tables" count, Bootstrap steps, and the migrations list) are known-stale as of the 2026-06 exit audit — the audit doc lists every exact correction. Code wins over docs; when you find drift, fix the doc.
+
 ## What This Is
 
 A React-based training platform for Via Trading Corporation (wholesale liquidation company). New sales hires complete courses covering industry knowledge, company background, product programs, consultative sales methodology, and role-specific training (BDR and AM tracks). Built by Miguel Fonseca (Sales Operations).
@@ -87,7 +89,7 @@ public/
 - **Anon Key**: Stored in `.env.local` as `VITE_SUPABASE_ANON_KEY`
 - `.env.local` is gitignored via `*.local` pattern
 
-### Database Schema (13 tables)
+### Database Schema (21 tables — the list below is missing managed_courses/modules/programs, issue_reports, user_programs; see audit)
 
 | Table | Purpose | Key Fields |
 |-------|---------|------------|
@@ -313,7 +315,7 @@ export function MyModule() {
 **`src/components/interactive/QuizBlock.tsx`** — Two things:
 
 1. Import the quiz data and add to `sectionedQuizMap`
-2. Add to `nextCourseMap` for the "Continue to next course" button
+2. (No longer needed) The "Continue to next course" button is derived automatically from the user's program order in QuizBlock (`programNextCourse`); the old static `nextCourseMap` was removed. CMS quizzes can override via `quizData.nextCourse`.
 
 **`src/data/courses.ts`** — Add or update the course entry:
 - Set `status: 'available'`
@@ -494,13 +496,13 @@ interface CourseModule {
 - **Code splitting** — All section components in ModuleView's contentMap are `React.lazy` chunks (see `lazySection` helper); admin pages are lazy in App.tsx. Keep new sections/admin pages lazy. Main chunk ~473KB.
 - **TSX→CMS conversion playbook** — Pilot: all 6 who-is-via lessons exist as CMS DRAFTS in module_content (converted from TSX, text verbatim). To convert a lesson: map TSX patterns to blocks (cards→content_card with children IDs, ExpandableCard→expandable_card_group, stats→stat_grid, FlowDiagram→flow_diagram, exercises→scenario_card/fill_in_blank/term_match), keep module IDs identical (progress data is keyed by them and unaffected), save as draft, review in editor Preview, publish only on visual parity. Known gaps: no timeline or org-chart block (approximate with flow_diagram/icon_card_grid), icon-annotated list rows become bullet lists.
 - **Images never crop; everything zooms** — InlineImage uses `object-contain` inside a 4:3 frame (wide screenshots/portraits letterbox instead of clipping). InlineImage and module heroes open in `ImageLightbox` on click (X / backdrop / Escape closes). The hero in ModuleView is keyed by moduleId so navigation never flashes the previous image. CMS `hero_image` blocks are expandable too.
-- **Honest time tracking + idle logout** — `useActiveSeconds` accumulates only visible+active time (60s idle threshold, localStorage per module); `completeModule(..., activeSeconds)` records `min(wallClock, active)`. `useIdleLogout` (AppShell) signs users out after 15 idle minutes. Historical pre-existing time values remain inflated; only post-deploy completions are accurate.
+- **Honest time tracking + idle logout** — `useActiveSeconds` accumulates only visible+active time (60s idle threshold, localStorage per module); `completeModule(..., activeSeconds)` records `min(wallClock, active)`. `useIdleLogout` (AppShell) signs users out after 30 idle minutes (raised from 15 in v1.1.1). Historical pre-existing time values remain inflated; only post-deploy completions are accurate.
 - **video_embed CMS block** — paste any YouTube URL (watch/youtu.be/shorts), renders a privacy-enhanced `youtube-nocookie` iframe with optional title/caption; non-YouTube URLs fall back to a link card. Via Trading channel: https://www.youtube.com/@Viatrading.
 
 ## Pending Work
 
 - **who-is-via CMS pilot parity review** — All 6 lessons sit as drafts in module_content. Miguel reviews each in the CMS editor Preview vs the live TSX version, publishes only modules that look the same or better. Full TSX→CMS migration decision follows the pilot.
-- **Build AM Role Training course** (rough draft, same pattern as BDR)
+- ~~Build AM Role Training course~~ (SHIPPED v1.0.0 — CMS-only, Available)
 - **Build Ongoing Development course** (placeholder, covers continuous learning topics)
 - **Google sign-in** (planned, deferred) — OAuth via Supabase; needs Google Cloud Console OAuth app + handle_new_user() trigger update for @viatrading.com auto-signup
 - **BlockRenderer robustness** — The renderer handles field name variations (html/content, variant/style, string/numeric heading levels) but could benefit from a formal content normalization layer
