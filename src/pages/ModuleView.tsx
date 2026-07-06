@@ -194,7 +194,12 @@ export function ModuleView() {
       ? course.modules[currentIndex + 1]
       : undefined
 
-  const isQuiz = isQuizModule
+  // A module is a quiz if its DB contentType says so (source of truth for
+  // CMS-authored courses like am-role) OR it's a legacy hardcoded quiz id.
+  // Deriving this from the id Set alone silently rendered DB-created quizzes as
+  // plain lessons with a completing button — letting learners finish (and earn
+  // the certificate) without taking the exam.
+  const isQuiz = isQuizModule || currentModule?.contentType === 'quiz'
 
   useEffect(() => {
     // Wait for progress to load before marking 'started'. Acting on a not-yet-

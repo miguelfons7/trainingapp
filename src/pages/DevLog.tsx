@@ -10,6 +10,15 @@ interface LogEntry {
 
 const changelog: LogEntry[] = [
   {
+    version: '1.2.2',
+    date: '2026-06-23',
+    title: 'Fix: AM Role Quiz Now Actually a Quiz',
+    changes: [
+      'Fixed a bug where a course whose quiz was created in the CMS (the AM Role final exam) showed the quiz module as a plain page with a "done" button — so it could be finished, and the program certificate earned, without taking the exam.',
+      'Quiz detection now reads the module\'s content type from the database instead of a hardcoded list, so any CMS-authored quiz renders correctly.',
+    ],
+  },
+  {
     version: '1.2.1',
     date: '2026-06-23',
     title: 'Fix: Assign Courses Now Lists Real Programs',
