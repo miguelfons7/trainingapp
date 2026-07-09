@@ -19,6 +19,8 @@ export interface CourseLockInfo {
  * courseIds order is 100% complete.
  *
  * - Admins/leadership always bypass.
+ * - A completed course is ALWAYS unlocked (you earned it — stays revisitable
+ *   even if it later drops out of your assigned program).
  * - A per-user row in course_unlock_overrides unlocks that course.
  * - A course outside the user's program is locked with notInProgram
  *   (BDRs don't see the AM course and vice versa).
@@ -60,6 +62,13 @@ export function useCourseLock() {
   const getCourseLock = useCallback(
     (courseId: string): CourseLockInfo => {
       if (canBypass) return { locked: false }
+
+      // A completed course is always revisitable, regardless of program
+      // membership or prerequisites. Without this, a course you finished gets
+      // stranded ("Not in Your Program"/locked) if your program assignment
+      // changes — which is exactly what broke when everyone was reassigned.
+      if (getCourseProgress(courseId).percentage === 100) return { locked: false }
+
       if (overrides.has(courseId)) return { locked: false }
 
       // Scope to the user's assigned programs (many-to-many)

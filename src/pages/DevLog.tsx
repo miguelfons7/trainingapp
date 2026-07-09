@@ -10,6 +10,15 @@ interface LogEntry {
 
 const changelog: LogEntry[] = [
   {
+    version: '1.2.3',
+    date: '2026-06-24',
+    title: 'Fix: Revisit Any Completed Course',
+    changes: [
+      'Completed courses are always reviewable again, even if they aren’t part of your currently assigned program — finishing a course no longer strands it behind a "Not in Your Program" lock.',
+      'Home now lists every course you’ve completed under "Completed Courses"; tap one to review the material, or use the printer icon for its certificate.',
+    ],
+  },
+  {
     version: '1.2.2',
     date: '2026-06-23',
     title: 'Fix: AM Role Quiz Now Actually a Quiz',

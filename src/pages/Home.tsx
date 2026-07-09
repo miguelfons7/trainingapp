@@ -25,11 +25,11 @@ export function Home() {
   // The user's assigned programs (many-to-many). Empty = nothing assigned yet.
   const userPrograms = getProgramsForUser(user?.programIds)
 
-  // Certificates: completed courses, scoped to the user's programs (admins see all)
-  const programCourseIds = new Set(userPrograms.flatMap((p) => p.courseIds))
+  // Every course the user has completed — NOT scoped to the current program, so a
+  // finished course is always reviewable even if it later drops out of their
+  // assigned program. Each links back into the course (revisit) + its certificate.
   const completedCourses = courses
     .filter((c) => c.status === 'available')
-    .filter((c) => canSeeAll || programCourseIds.has(c.id))
     .filter((c) => getCourseProgress(c.id).percentage === 100)
   const acknowledgedItems = items.filter((item) => isAcknowledged(item.id))
 
@@ -78,17 +78,20 @@ export function Home() {
         <ProgressTimeline key={program.id} program={program} />
       ))}
 
-      {/* My Certificates */}
+      {/* Completed Courses — revisit any finished course or print its certificate */}
       <section>
-        <h2 className="mb-4 text-lg font-bold text-via-navy flex items-center gap-2">
+        <h2 className="mb-1 text-lg font-bold text-via-navy flex items-center gap-2">
           <Award className="w-5 h-5 text-via-orange" />
-          My Certificates
+          Completed Courses
         </h2>
+        <p className="mb-4 text-xs text-via-text-light">
+          Go back and review any course you've finished, or print its certificate.
+        </p>
         {completedCourses.length === 0 && acknowledgedItems.length === 0 ? (
           <div className="bg-via-card rounded-xl border border-via-border p-8 text-center">
             <Award className="w-10 h-10 text-via-text-light mx-auto mb-3" />
             <p className="text-sm text-via-text-light">
-              Complete courses and sign compliance items to earn certificates here.
+              Complete courses and sign compliance items and they'll show up here.
             </p>
           </div>
         ) : (
@@ -96,17 +99,23 @@ export function Home() {
             {completedCourses.map((course) => (
               <div
                 key={course.id}
-                className="bg-via-card rounded-xl border border-via-border p-4 flex items-center gap-4"
+                className="bg-via-card rounded-xl border border-via-border p-4 flex items-center gap-3"
               >
-                <div className="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center shrink-0">
-                  <CheckCircle className="w-5 h-5 text-emerald-600" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-via-navy truncate">
-                    {course.title}
-                  </p>
-                  <p className="text-xs text-via-success font-medium">Course Completed</p>
-                </div>
+                <Link
+                  to={`/course/${course.id}`}
+                  className="group flex items-center gap-4 flex-1 min-w-0"
+                  title="Review this course"
+                >
+                  <div className="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center shrink-0">
+                    <CheckCircle className="w-5 h-5 text-emerald-600" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold text-via-navy truncate group-hover:text-via-orange transition-colors">
+                      {course.title}
+                    </p>
+                    <p className="text-xs text-via-success font-medium">Completed · tap to review</p>
+                  </div>
+                </Link>
                 <Link
                   to={`/certificate/${course.id}`}
                   className="shrink-0 p-2 rounded-lg hover:bg-via-bg-subtle text-via-text-light hover:text-via-navy transition-colors"
