@@ -67,7 +67,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
 
   const mainItems: NavItem[] = [
     { to: '/', icon: Home, label: 'Home', end: true },
-    { to: '/course/intro-to-industry', icon: BookOpen, label: 'My Courses', end: false },
+    { to: '/courses', icon: BookOpen, label: 'My Courses', end: true },
     { to: '/acknowledgements', icon: FileCheck, label: 'Acks', end: true, badge: pendingItems.length || undefined },
     { to: '/certificates', icon: Award, label: 'Certificates', end: true },
     { to: '/profile', icon: UserCircle, label: 'Profile', end: true },

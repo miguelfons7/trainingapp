@@ -10,6 +10,14 @@ interface LogEntry {
 
 const changelog: LogEntry[] = [
   {
+    version: '1.2.4',
+    date: '2026-06-24',
+    title: 'Fix: "My Courses" Shows Your Course Grid',
+    changes: [
+      'The "My Courses" sidebar link now opens a grid of the courses assigned to you, instead of jumping into a single course. Completed courses stay open for review, the active one is marked "Up Next", and locked ones show as locked.',
+    ],
+  },
+  {
     version: '1.2.3',
     date: '2026-06-24',
     title: 'Fix: Revisit Any Completed Course',

@@ -11,6 +11,7 @@ import { Login } from './pages/Login'
 import { Signup } from './pages/Signup'
 import { ResetPassword } from './pages/ResetPassword'
 import { Home } from './pages/Home'
+import { MyCourses } from './pages/MyCourses'
 import { CourseView } from './pages/CourseView'
 import { ModuleView } from './pages/ModuleView'
 import { Certificates } from './pages/Certificates'
@@ -91,6 +92,7 @@ function AppRoutes() {
         }
       >
         <Route index element={<Home />} />
+        <Route path="courses" element={<MyCourses />} />
         <Route path="course/:courseId" element={<CourseView />} />
         <Route path="course/:courseId/module/:moduleId" element={<ModuleView />} />
         <Route path="acknowledgements" element={<Acknowledgements />} />
