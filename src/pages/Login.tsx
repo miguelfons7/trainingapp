@@ -2,16 +2,35 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { GraduationCap, Mail, Lock, Loader2 } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
+import { initialOAuthError } from '../lib/oauthError'
 import { APP_VERSION } from '../version'
 
 export function Login() {
-  const { signIn } = useAuth()
+  const { signIn, signInWithGoogle } = useAuth()
   const navigate = useNavigate()
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  const [googleLoading, setGoogleLoading] = useState(false)
+  // Seeded from an OAuth failure returned in the redirect URL (cancel / wrong
+  // account), captured before the router stripped it. Kept separate from the
+  // form `error` so it renders next to the Google button, not the password form.
+  const [googleError, setGoogleError] = useState(initialOAuthError)
+
+  const handleGoogle = async () => {
+    setError('')
+    setGoogleError('')
+    setGoogleLoading(true)
+    const { error } = await signInWithGoogle()
+    // On success the browser redirects to Google, so we only reach here on
+    // failure to initiate — re-enable the button and show why.
+    if (error) {
+      setGoogleError(error)
+      setGoogleLoading(false)
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -28,6 +47,7 @@ export function Login() {
 
     setSubmitting(true)
     setError('')
+    setGoogleError('')
 
     const result = await signIn(trimmedEmail, password)
 
@@ -145,10 +165,40 @@ export function Login() {
             </button>
           </form>
 
+          {/* Divider */}
+          <div className="flex items-center gap-3 my-5">
+            <div className="h-px flex-1 bg-via-border" />
+            <span className="text-[10px] uppercase tracking-wide text-via-text-light/50">
+              or
+            </span>
+            <div className="h-px flex-1 bg-via-border" />
+          </div>
+
+          {/* Google */}
+          <button
+            type="button"
+            onClick={handleGoogle}
+            disabled={submitting || googleLoading}
+            className="w-full py-2.5 bg-white border border-via-border text-via-text text-sm font-medium rounded-lg hover:bg-via-bg-subtle transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2.5"
+          >
+            {googleLoading ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <GoogleIcon className="w-4 h-4" />
+            )}
+            Continue with Google
+          </button>
+
+          {googleError && (
+            <p className="text-xs text-via-danger font-medium mt-3 text-center">
+              {googleError}
+            </p>
+          )}
+
           <p className="text-[10px] text-via-text-light/60 text-center mt-4">
-            Accounts are created by invitation only.
+            Via Trading staff: use your @viatrading.com Google account.
             <br />
-            Contact your admin if you need access.
+            Trouble signing in? Contact your admin.
           </p>
         </div>
 
@@ -157,5 +207,29 @@ export function Login() {
         </p>
       </div>
     </div>
+  )
+}
+
+/** Google's four-color "G" mark (lucide ships no brand icons). */
+function GoogleIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" aria-hidden="true">
+      <path
+        fill="#4285F4"
+        d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.76h3.56c2.08-1.92 3.28-4.74 3.28-8.09Z"
+      />
+      <path
+        fill="#34A853"
+        d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.56-2.76c-.98.66-2.24 1.06-3.72 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84A11 11 0 0 0 12 23Z"
+      />
+      <path
+        fill="#FBBC05"
+        d="M5.84 14.11a6.6 6.6 0 0 1 0-4.22V7.05H2.18a11 11 0 0 0 0 9.9l3.66-2.84Z"
+      />
+      <path
+        fill="#EA4335"
+        d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.05l3.66 2.84C6.71 7.31 9.14 5.38 12 5.38Z"
+      />
+    </svg>
   )
 }

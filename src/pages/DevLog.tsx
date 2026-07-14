@@ -10,6 +10,16 @@ interface LogEntry {
 
 const changelog: LogEntry[] = [
   {
+    version: '1.3.0',
+    date: '2026-07-13',
+    title: 'Sign In With Google',
+    changes: [
+      'Via Trading staff can now sign in with their @viatrading.com Google account. A "Continue with Google" button on the login page takes you straight in, with no separate password to remember. Your existing training progress and certificates stay with your account.',
+      'Email and password sign-in still works exactly as before, for anyone who prefers it.',
+      'If a Google sign-in is cancelled, or uses an account that is not a @viatrading.com Workspace account, the login page now explains why instead of quietly returning you to the start.',
+    ],
+  },
+  {
     version: '1.2.4',
     date: '2026-06-24',
     title: 'Fix: "My Courses" Shows Your Course Grid',
