@@ -54,6 +54,16 @@ async function fetchProfileAsUser(userId: string): Promise<User | null> {
         : []
       : programRows.map((r) => r.program_id)
 
+  // Individually-assigned courses (course_assignments). Independent of programs:
+  // these grant the learner access to specific courses without a program. RLS
+  // scopes this to the user's own rows.
+  const { data: assignmentRows } = await supabase
+    .from('course_assignments')
+    .select('course_id')
+    .eq('user_id', userId)
+
+  const assignedCourseIds = (assignmentRows ?? []).map((r) => r.course_id)
+
   return {
     id: data.id,
     email: data.email,
@@ -63,6 +73,7 @@ async function fetchProfileAsUser(userId: string): Promise<User | null> {
     teamId: data.team_id ?? undefined,
     programId: data.program_id ?? undefined,
     programIds,
+    assignedCourseIds,
   }
 }
 

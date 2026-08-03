@@ -19,8 +19,15 @@ export function MyCourses() {
   const canSeeAll = isAdmin || isLeadership
   const userPrograms = getProgramsForUser(user?.programIds)
 
-  // A deduped union of the user's programs' courseIds, in program order.
-  const myCourseIds = [...new Set(userPrograms.flatMap((p) => p.courseIds))]
+  // A deduped union of the user's programs' courseIds (in program order),
+  // followed by any individually-assigned courses not already covered by a
+  // program (free-form assignment for non-program roles).
+  const myCourseIds = [
+    ...new Set([
+      ...userPrograms.flatMap((p) => p.courseIds),
+      ...(user?.assignedCourseIds ?? []),
+    ]),
+  ]
   const myCourses = canSeeAll
     ? courses
     : myCourseIds
@@ -46,15 +53,15 @@ export function MyCourses() {
         </p>
       </div>
 
-      {!canSeeAll && userPrograms.length === 0 ? (
+      {!canSeeAll && myCourses.length === 0 ? (
         <div className="bg-via-card rounded-xl border border-via-border p-8 text-center">
           <BookOpen className="w-10 h-10 text-via-text-light mx-auto mb-3" />
           <h2 className="text-lg font-bold text-via-navy mb-1">
-            No training program assigned yet
+            No courses assigned yet
           </h2>
           <p className="text-sm text-via-text-light">
-            You haven't been assigned to a training program. Please contact your
-            admin to get started.
+            You haven't been assigned any courses or a training program. Please
+            contact your admin to get started.
           </p>
         </div>
       ) : (

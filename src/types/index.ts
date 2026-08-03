@@ -41,6 +41,10 @@ export interface User {
   programId?: string
   /** Assigned training programs (many-to-many via user_programs). Empty = none assigned. */
   programIds?: string[]
+  /** Individually-assigned courses (course_assignments), independent of any program.
+   *  These appear for the learner and are unlocked (ungated) — used for ad-hoc
+   *  assignment to non-program roles (e.g. a LiquidateNow agent). */
+  assignedCourseIds?: string[]
 }
 
 export interface ModuleProgress {

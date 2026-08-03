@@ -71,6 +71,12 @@ export function useCourseLock() {
 
       if (overrides.has(courseId)) return { locked: false }
 
+      // Individually-assigned courses (course_assignments) are unlocked and
+      // ungated — an ad-hoc set has no prescribed order. This is what lets a
+      // non-program role (e.g. a LiquidateNow agent) be given specific courses
+      // without a program.
+      if (user?.assignedCourseIds?.includes(courseId)) return { locked: false }
+
       // Scope to the user's assigned programs (many-to-many)
       const userPrograms = getProgramsForUser(user?.programIds)
       if (userPrograms.length === 0) {
@@ -112,7 +118,7 @@ export function useCourseLock() {
       }
       return { locked: true, blockedBy: firstBlocker }
     },
-    [canBypass, overrides, getProgramsForUser, user?.programIds, courses, isUnderConstruction, getCourseProgress],
+    [canBypass, overrides, getProgramsForUser, user?.programIds, user?.assignedCourseIds, courses, isUnderConstruction, getCourseProgress],
   )
 
   return { getCourseLock, overridesLoaded, refreshOverrides: fetchOverrides }

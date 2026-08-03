@@ -10,8 +10,17 @@ interface LogEntry {
 
 const changelog: LogEntry[] = [
   {
+    version: '1.4.0',
+    date: '2026-08-03',
+    title: 'Assign Courses Without a Program',
+    changes: [
+      'You can now assign individual courses to someone without putting them in a full training program. In Admin → Assign Courses, pick from "Individual Courses" and those courses now actually appear for that person — under "My Courses" and a new "Assigned to You" section on their Home — unlocked and ready to take.',
+      'Built for non-program roles (like a LiquidateNow agent) who need a specific handful of courses instead of a whole track. Finishing an assigned course still earns its certificate.',
+    ],
+  },
+  {
     version: '1.3.0',
-    date: '2026-07-13',
+    date: '2026-08-03',
     title: 'Sign In With Google',
     changes: [
       'Via Trading staff can now sign in with their @viatrading.com Google account. A "Continue with Google" button on the login page takes you straight in, with no separate password to remember. Your existing training progress and certificates stay with your account.',

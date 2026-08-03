@@ -15,7 +15,7 @@ export function Home() {
   const { user, isAdmin, isLeadership } = useAuth()
   const { items, isAcknowledged } = useCompliance()
   const { getCourseProgress } = useProgress()
-  const { courses, getProgramsForUser } = useCourses()
+  const { courses, getProgramsForUser, getCourseById } = useCourses()
   const { getCourseLock } = useCourseLock()
   const streak = useLearningStreak()
 
@@ -24,6 +24,15 @@ export function Home() {
 
   // The user's assigned programs (many-to-many). Empty = nothing assigned yet.
   const userPrograms = getProgramsForUser(user?.programIds)
+
+  // Individually-assigned courses that aren't already covered by a program.
+  // Free-form assignment for non-program roles (e.g. a LiquidateNow agent):
+  // these show in their own "Assigned to You" section, unlocked.
+  const programCourseIds = new Set(userPrograms.flatMap((p) => p.courseIds))
+  const assignedOnlyCourses = [...new Set(user?.assignedCourseIds ?? [])]
+    .filter((id) => !programCourseIds.has(id))
+    .map((id) => getCourseById(id))
+    .filter((c): c is NonNullable<typeof c> => !!c && c.status === 'available')
 
   // Every course the user has completed — NOT scoped to the current program, so a
   // finished course is always reviewable even if it later drops out of their
@@ -59,16 +68,16 @@ export function Home() {
       {/* Continue learning (null when no program assigned) */}
       <ContinueLearning />
 
-      {/* No program assigned — regular users */}
-      {!canSeeAll && userPrograms.length === 0 && (
+      {/* Nothing assigned — regular users with no program AND no ad-hoc courses */}
+      {!canSeeAll && userPrograms.length === 0 && assignedOnlyCourses.length === 0 && (
         <div className="bg-via-card rounded-xl border border-via-border p-8 text-center">
           <BookOpen className="w-10 h-10 text-via-text-light mx-auto mb-3" />
           <h2 className="text-lg font-bold text-via-navy mb-1">
-            No training program assigned yet
+            No courses assigned yet
           </h2>
           <p className="text-sm text-via-text-light">
-            You haven't been assigned to a training program. Please contact your
-            admin to get started.
+            You haven't been assigned any courses or a training program. Please
+            contact your admin to get started.
           </p>
         </div>
       )}
@@ -77,6 +86,29 @@ export function Home() {
       {userPrograms.map((program) => (
         <ProgressTimeline key={program.id} program={program} />
       ))}
+
+      {/* Assigned to You — individually-assigned courses outside any program */}
+      {!canSeeAll && assignedOnlyCourses.length > 0 && (
+        <section>
+          <h2 className="mb-1 text-lg font-bold text-via-navy flex items-center gap-2">
+            <BookOpen className="w-5 h-5 text-via-orange" />
+            Assigned to You
+          </h2>
+          <p className="mb-4 text-xs text-via-text-light">
+            Courses assigned to you directly. Take them in any order.
+          </p>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {assignedOnlyCourses.map((course, index) => (
+              <CourseCard
+                key={course.id}
+                course={course}
+                index={index}
+                lockInfo={getCourseLock(course.id)}
+              />
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Completed Courses — revisit any finished course or print its certificate */}
       <section>
