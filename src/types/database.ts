@@ -199,6 +199,7 @@ export interface Database {
           accepted_at: string | null
           expires_at: string
           created_at: string
+          course_ids: string[]
         }
         Insert: {
           id?: string
@@ -210,6 +211,7 @@ export interface Database {
           accepted_at?: string | null
           expires_at?: string
           created_at?: string
+          course_ids?: string[]
         }
         Update: {
           id?: string
@@ -221,6 +223,7 @@ export interface Database {
           accepted_at?: string | null
           expires_at?: string
           created_at?: string
+          course_ids?: string[]
         }
         Relationships: [
           {

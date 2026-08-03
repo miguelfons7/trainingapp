@@ -9,9 +9,11 @@ import {
   XCircle,
   Copy,
   Check,
+  BookOpen,
 } from 'lucide-react'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../context/AuthContext'
+import { useCourses } from '../../context/CoursesContext'
 import type { UserRole } from '../../types/database'
 
 interface Team {
@@ -29,20 +31,35 @@ interface InvitationRow {
   accepted_at: string | null
   expires_at: string
   created_at: string
+  course_ids?: string[]
 }
 
 export function InviteUsers() {
   const { user } = useAuth()
+  const { courses } = useCourses()
   const [email, setEmail] = useState('')
   const [fullName, setFullName] = useState('')
   const [role, setRole] = useState<UserRole>('user')
   const [teamId, setTeamId] = useState('')
+  const [courseIds, setCourseIds] = useState<Set<string>>(new Set())
+  const [showCourseList, setShowCourseList] = useState(false)
   const [teams, setTeams] = useState<Team[]>([])
   const [invitations, setInvitations] = useState<InvitationRow[]>([])
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
   const [copiedId, setCopiedId] = useState<string | null>(null)
+
+  const assignableCourses = courses.filter((c) => c.status === 'available')
+
+  function toggleCourse(id: string) {
+    setCourseIds((prev) => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
+  }
 
   // Load teams and invitations
   const loadData = useCallback(async () => {
@@ -131,6 +148,7 @@ export function InviteUsers() {
         role,
         team_id: teamId || null,
         invited_by: user.id,
+        course_ids: [...courseIds],
       })
       .select()
       .single()
@@ -154,6 +172,8 @@ export function InviteUsers() {
     setFullName('')
     setRole('user')
     setTeamId('')
+    setCourseIds(new Set())
+    setShowCourseList(false)
     setSubmitting(false)
 
     // Refresh the list
@@ -285,6 +305,58 @@ export function InviteUsers() {
             </div>
           </div>
 
+          {/* Course pre-assignment (optional) */}
+          <div>
+            <label className="block text-sm font-semibold text-via-navy mb-1.5">
+              Assign Courses{' '}
+              <span className="font-normal text-via-text-light">(optional)</span>
+            </label>
+            <button
+              type="button"
+              onClick={() => setShowCourseList(!showCourseList)}
+              disabled={submitting}
+              className="w-full rounded-lg border border-via-border bg-white px-3 py-2.5 text-sm text-left focus:outline-none focus:ring-2 focus:ring-via-orange/40 focus:border-via-orange cursor-pointer disabled:opacity-50"
+            >
+              {courseIds.size === 0 ? (
+                <span className="text-via-text-light">
+                  Select courses to assign on signup...
+                </span>
+              ) : (
+                <span className="text-via-text font-medium">
+                  {courseIds.size} course{courseIds.size !== 1 ? 's' : ''} selected
+                </span>
+              )}
+            </button>
+            {showCourseList && (
+              <div className="mt-1 rounded-lg border border-via-border bg-white shadow-lg max-h-52 overflow-y-auto">
+                {assignableCourses.map((c) => (
+                  <label
+                    key={c.id}
+                    className="flex items-center gap-2.5 px-3 py-2 hover:bg-via-bg-subtle cursor-pointer text-sm"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={courseIds.has(c.id)}
+                      onChange={() => toggleCourse(c.id)}
+                      className="rounded border-via-border text-via-orange focus:ring-via-orange/40 accent-[#e8792b]"
+                    />
+                    <BookOpen className="w-4 h-4 text-via-text-light shrink-0" />
+                    <span className="text-via-text">{c.title}</span>
+                  </label>
+                ))}
+                {assignableCourses.length === 0 && (
+                  <p className="px-3 py-2 text-sm text-via-text-light">
+                    No courses available
+                  </p>
+                )}
+              </div>
+            )}
+            <p className="mt-1.5 text-xs text-via-text-light">
+              These courses appear for the new hire as soon as they sign in. For a
+              full training program, use Assign Courses after they join.
+            </p>
+          </div>
+
           {error && <p className="text-xs text-via-danger font-medium">{error}</p>}
           {success && (
             <p className="text-xs text-emerald-600 font-medium">{success}</p>
@@ -316,11 +388,12 @@ export function InviteUsers() {
           How invitations work
         </p>
         <ol className="text-sm text-amber-700 space-y-1 list-decimal list-inside">
-          <li>Create an invitation above — this generates a unique signup link.</li>
+          <li>Create an invitation above. This generates a unique signup link.</li>
           <li>Copy the link and share it with the new user (e.g. via email or Slack).</li>
           <li>
-            They visit the link, set a password, and their account is automatically
-            created with the correct role and team.
+            They open the link and either continue with their @viatrading.com
+            Google account or set a password. Their account is created with the
+            right role, team, and any courses you assigned.
           </li>
           <li>Invitations expire after 7 days.</li>
         </ol>

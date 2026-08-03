@@ -10,6 +10,15 @@ interface LogEntry {
 
 const changelog: LogEntry[] = [
   {
+    version: '1.5.0',
+    date: '2026-08-03',
+    title: 'Faster Onboarding: Google Signup + Assign Courses at Invite',
+    changes: [
+      'Invited staff can now finish signing up with "Continue with Google" instead of creating a password. The signup page leads with Google (pre-filling their @viatrading.com account) and keeps the password option as a fallback for anyone who wants it.',
+      'When you invite someone, you can now pre-assign them courses right on the invite form. Those courses are waiting for them the moment they first sign in, with no extra step after they join. Ideal for setting up a new hire in one go.',
+    ],
+  },
+  {
     version: '1.4.0',
     date: '2026-08-03',
     title: 'Assign Courses Without a Program',

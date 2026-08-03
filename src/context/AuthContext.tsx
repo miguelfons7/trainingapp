@@ -14,8 +14,9 @@ interface AuthContextValue {
   loading: boolean
   signIn: (email: string, password: string) => Promise<{ error?: string }>
   /** Start the Google OAuth redirect. Resolves with an error only if it fails
-   *  to initiate; on success the browser navigates to Google. */
-  signInWithGoogle: () => Promise<{ error?: string }>
+   *  to initiate; on success the browser navigates to Google. Pass emailHint
+   *  (e.g. an invited user's address) to pre-select that Google account. */
+  signInWithGoogle: (options?: { emailHint?: string }) => Promise<{ error?: string }>
   logout: () => Promise<void>
   isAdmin: boolean
   isLeadership: boolean
@@ -136,24 +137,32 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [],
   )
 
-  const signInWithGoogle = useCallback(async (): Promise<{
-    error?: string
-  }> => {
-    // Full-page redirect to Google. On success the browser navigates away, so
-    // this only returns when initiation fails. The OAuth return is handled by
-    // the existing onAuthStateChange -> authUserId -> fetchProfileAsUser flow.
-    // hd hints the @viatrading.com Workspace; the Internal consent screen is
-    // what actually enforces the domain restriction.
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: `${window.location.origin}/`,
-        queryParams: { hd: 'viatrading.com', prompt: 'select_account' },
-      },
-    })
-    if (error) return { error: error.message }
-    return {}
-  }, [])
+  const signInWithGoogle = useCallback(
+    async (options?: { emailHint?: string }): Promise<{ error?: string }> => {
+      // Full-page redirect to Google. On success the browser navigates away, so
+      // this only returns when initiation fails. The OAuth return is handled by
+      // the existing onAuthStateChange -> authUserId -> fetchProfileAsUser flow.
+      // hd hints the @viatrading.com Workspace; the Internal consent screen is
+      // what actually enforces the domain restriction. login_hint pre-selects an
+      // invited user's account so an invite + Google sign-in lands on the right one.
+      const queryParams: Record<string, string> = {
+        hd: 'viatrading.com',
+        prompt: 'select_account',
+      }
+      if (options?.emailHint) queryParams.login_hint = options.emailHint
+
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/`,
+          queryParams,
+        },
+      })
+      if (error) return { error: error.message }
+      return {}
+    },
+    [],
+  )
 
   const logout = useCallback(async () => {
     await supabase.auth.signOut()

@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import { useSearchParams, useNavigate, Link } from 'react-router-dom'
 import { GraduationCap, Lock, User, Loader2, CheckCircle2, XCircle } from 'lucide-react'
 import { supabase } from '../lib/supabase'
+import { useAuth } from '../context/AuthContext'
+import { GoogleIcon } from '../components/shared/GoogleIcon'
 
 type TokenStatus = 'loading' | 'valid' | 'expired' | 'not-found'
 
@@ -14,6 +16,7 @@ interface InvitationInfo {
 export function Signup() {
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
+  const { signInWithGoogle } = useAuth()
   const token = searchParams.get('token')
 
   const [tokenStatus, setTokenStatus] = useState<TokenStatus>('loading')
@@ -24,6 +27,22 @@ export function Signup() {
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [created, setCreated] = useState(false)
+  const [googleLoading, setGoogleLoading] = useState(false)
+  const [googleError, setGoogleError] = useState('')
+
+  async function handleGoogle() {
+    if (!invitation) return
+    setGoogleError('')
+    setGoogleLoading(true)
+    // login_hint pre-selects the invited @viatrading.com account. On success the
+    // browser redirects to Google; handle_new_user() then matches this email to
+    // the invitation and provisions role/team/courses — no password needed.
+    const { error } = await signInWithGoogle({ emailHint: invitation.email })
+    if (error) {
+      setGoogleError(error)
+      setGoogleLoading(false)
+    }
+  }
 
   // Validate the token on mount
   useEffect(() => {
@@ -247,6 +266,38 @@ export function Signup() {
               </p>
             </div>
           )}
+
+          {/* Google — fastest for @viatrading.com staff, no password to create */}
+          <button
+            type="button"
+            onClick={handleGoogle}
+            disabled={googleLoading || submitting}
+            className="w-full py-2.5 bg-white border border-via-border text-via-text text-sm font-medium rounded-lg hover:bg-via-bg-subtle transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2.5"
+          >
+            {googleLoading ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <GoogleIcon className="w-4 h-4" />
+            )}
+            Continue with Google
+          </button>
+          <p className="text-[11px] text-via-text-light/70 text-center mt-2">
+            Fastest for Via Trading staff. No password to create.
+          </p>
+          {googleError && (
+            <p className="text-xs text-via-danger font-medium text-center mt-2">
+              {googleError}
+            </p>
+          )}
+
+          {/* Divider */}
+          <div className="flex items-center gap-3 my-5">
+            <div className="h-px flex-1 bg-via-border" />
+            <span className="text-[10px] uppercase tracking-wide text-via-text-light/50">
+              or set a password
+            </span>
+            <div className="h-px flex-1 bg-via-border" />
+          </div>
 
           <form className="space-y-4" onSubmit={handleSubmit}>
             {/* Full name */}
