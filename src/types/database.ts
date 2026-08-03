@@ -64,6 +64,7 @@ export interface Database {
           invited_by: string | null
           created_at: string
           updated_at: string
+          archived_at: string | null
         }
         Insert: {
           id: string
@@ -76,6 +77,7 @@ export interface Database {
           invited_by?: string | null
           created_at?: string
           updated_at?: string
+          archived_at?: string | null
         }
         Update: {
           id?: string
@@ -88,6 +90,7 @@ export interface Database {
           invited_by?: string | null
           created_at?: string
           updated_at?: string
+          archived_at?: string | null
         }
         Relationships: [
           {
@@ -890,6 +893,10 @@ export interface Database {
       reset_password_with_token: {
         Args: { reset_token: string; new_password: string }
         Returns: { success: boolean; error?: string }
+      }
+      set_user_archived: {
+        Args: { target_user_id: string; p_archived: boolean }
+        Returns: undefined
       }
     }
   }

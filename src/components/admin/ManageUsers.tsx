@@ -11,6 +11,9 @@ import {
   KeyRound,
   Copy,
   CheckCircle2,
+  Archive,
+  ArchiveRestore,
+  AlertTriangle,
 } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 import { useCourses } from '../../context/CoursesContext'
@@ -53,6 +56,10 @@ export function ManageUsers() {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
   const [search, setSearch] = useState('')
+  const [view, setView] = useState<'active' | 'archived'>('active')
+  const [archiveTarget, setArchiveTarget] = useState<Profile | null>(null)
+  const [archiving, setArchiving] = useState(false)
+  const [restoringId, setRestoringId] = useState<string | null>(null)
 
   // Password reset state
   const [resetGenerating, setResetGenerating] = useState<string | null>(null)
@@ -243,15 +250,66 @@ export function ManageUsers() {
     }
   }
 
+  async function confirmArchive() {
+    if (!archiveTarget) return
+    setArchiving(true)
+    setError('')
+    const { error: rpcErr } = await supabase.rpc('set_user_archived', {
+      target_user_id: archiveTarget.id,
+      p_archived: true,
+    })
+    if (rpcErr) {
+      setError(rpcErr.message)
+      setArchiving(false)
+      return
+    }
+    setUsers((prev) =>
+      prev.map((u) =>
+        u.id === archiveTarget.id
+          ? { ...u, archived_at: new Date().toISOString() }
+          : u,
+      ),
+    )
+    setArchiving(false)
+    setArchiveTarget(null)
+  }
+
+  async function handleRestore(user: Profile) {
+    setRestoringId(user.id)
+    setError('')
+    const { error: rpcErr } = await supabase.rpc('set_user_archived', {
+      target_user_id: user.id,
+      p_archived: false,
+    })
+    if (rpcErr) {
+      setError(rpcErr.message)
+      setRestoringId(null)
+      return
+    }
+    setUsers((prev) =>
+      prev.map((u) => (u.id === user.id ? { ...u, archived_at: null } : u)),
+    )
+    setRestoringId(null)
+  }
+
+  const activeCount = useMemo(
+    () => users.filter((u) => !u.archived_at).length,
+    [users],
+  )
+  const archivedCount = users.length - activeCount
+
   const filtered = useMemo(() => {
-    if (!search.trim()) return users
+    const inView = users.filter((u) =>
+      view === 'active' ? !u.archived_at : !!u.archived_at,
+    )
+    if (!search.trim()) return inView
     const q = search.toLowerCase()
-    return users.filter(
+    return inView.filter(
       (u) =>
         u.full_name.toLowerCase().includes(q) ||
         u.email.toLowerCase().includes(q),
     )
-  }, [users, search])
+  }, [users, view, search])
 
   const sorted = [...filtered].sort((a, b) => {
     const mul = sortDir === 'asc' ? 1 : -1
@@ -308,6 +366,27 @@ export function ManageUsers() {
         </p>
       )}
 
+      {/* Active / Archived toggle */}
+      <div className="inline-flex rounded-lg border border-via-border bg-via-bg-subtle p-0.5">
+        {(['active', 'archived'] as const).map((v) => (
+          <button
+            key={v}
+            type="button"
+            onClick={() => {
+              setView(v)
+              setEditingId(null)
+            }}
+            className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-colors cursor-pointer ${
+              view === v
+                ? 'bg-white text-via-navy shadow-sm'
+                : 'text-via-text-light hover:text-via-text'
+            }`}
+          >
+            {v === 'active' ? `Active (${activeCount})` : `Archived (${archivedCount})`}
+          </button>
+        ))}
+      </div>
+
       {/* Search bar */}
       <div className="relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-via-text-light" />
@@ -331,9 +410,8 @@ export function ManageUsers() {
       <div className="bg-via-card rounded-xl border border-via-border overflow-hidden">
         <div className="px-4 py-3 border-b border-via-border flex items-center justify-between">
           <p className="text-sm font-semibold text-via-navy">
-            {filtered.length === users.length
-              ? `${users.length} user${users.length !== 1 ? 's' : ''}`
-              : `${filtered.length} of ${users.length} users`}
+            {filtered.length} {view === 'active' ? 'active' : 'archived'} user
+            {filtered.length !== 1 ? 's' : ''}
           </p>
           <p className="text-xs text-via-text-light">
             Click a row to view profile
@@ -542,6 +620,21 @@ export function ManageUsers() {
                               <X className="w-4 h-4" />
                             </button>
                           </>
+                        ) : view === 'archived' ? (
+                          <button
+                            type="button"
+                            onClick={() => handleRestore(user)}
+                            disabled={restoringId === user.id}
+                            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-via-navy text-white text-xs font-semibold hover:bg-via-navy-light transition-colors cursor-pointer disabled:opacity-40"
+                            title="Restore user"
+                          >
+                            {restoringId === user.id ? (
+                              <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                            ) : (
+                              <ArchiveRestore className="w-3.5 h-3.5" />
+                            )}
+                            Restore
+                          </button>
                         ) : (
                           <>
                             <button
@@ -565,6 +658,16 @@ export function ManageUsers() {
                                 <KeyRound className="w-4 h-4" />
                               )}
                             </button>
+                            {user.id !== currentUser?.id && (
+                              <button
+                                type="button"
+                                onClick={() => setArchiveTarget(user)}
+                                className="p-1.5 rounded-lg hover:bg-red-50 text-via-text-light hover:text-via-danger transition-colors cursor-pointer"
+                                title="Archive user"
+                              >
+                                <Archive className="w-4 h-4" />
+                              </button>
+                            )}
                           </>
                         )}
                       </div>
@@ -634,6 +737,57 @@ export function ManageUsers() {
                 className="px-4 py-2 rounded-lg border border-via-border text-xs font-medium text-via-text hover:bg-via-bg-subtle transition-colors cursor-pointer"
               >
                 Done
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Archive confirmation modal */}
+      {archiveTarget && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          <div className="bg-via-card rounded-2xl border border-via-border p-6 shadow-xl w-full max-w-md mx-4">
+            <div className="flex items-center gap-2.5 mb-4">
+              <div className="w-9 h-9 rounded-full bg-red-100 flex items-center justify-center shrink-0">
+                <AlertTriangle className="w-5 h-5 text-via-danger" />
+              </div>
+              <h3 className="text-sm font-semibold text-via-navy">
+                Archive this user?
+              </h3>
+            </div>
+
+            <p className="text-xs text-via-text-light mb-4 leading-relaxed">
+              <strong className="text-via-navy">{archiveTarget.full_name}</strong>{' '}
+              will be signed out and blocked from signing in, and moved to the
+              Archived list. All of their training history is kept, and you can
+              restore them anytime.
+            </p>
+
+            {error && (
+              <p className="text-xs text-via-danger font-medium mb-3">{error}</p>
+            )}
+
+            <div className="flex justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => setArchiveTarget(null)}
+                disabled={archiving}
+                className="px-4 py-2 rounded-lg border border-via-border text-xs font-medium text-via-text hover:bg-via-bg-subtle transition-colors cursor-pointer disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={confirmArchive}
+                disabled={archiving}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-via-danger text-white text-xs font-semibold hover:bg-via-danger/90 transition-colors cursor-pointer disabled:opacity-50"
+              >
+                {archiving ? (
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                ) : (
+                  <Archive className="w-3.5 h-3.5" />
+                )}
+                Archive User
               </button>
             </div>
           </div>

@@ -39,6 +39,11 @@ async function fetchProfileAsUser(userId: string): Promise<User | null> {
 
   if (error || !data) return null
 
+  // Archived (offboarded) users can't use the app. The auth-layer ban blocks
+  // new logins; this immediately closes out any still-live session on the next
+  // profile fetch. Treated like "no profile" -> routed back to /login.
+  if (data.archived_at) return null
+
   // Assigned programs (many-to-many). Empty array = no program assigned yet.
   // If the user_programs table isn't available yet (e.g. migration not run) or
   // the query errors, fall back to the legacy single program_id so users aren't

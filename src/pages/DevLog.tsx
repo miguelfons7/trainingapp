@@ -10,6 +10,15 @@ interface LogEntry {
 
 const changelog: LogEntry[] = [
   {
+    version: '1.6.0',
+    date: '2026-08-03',
+    title: 'Archive Former Users',
+    changes: [
+      'Admins can now archive users who no longer work here. Manage Users has an Active / Archived toggle: archiving someone signs them out, blocks them from signing back in, and moves them to the Archived list, while keeping all of their training history intact.',
+      'Archiving is fully reversible. Restore anyone from the Archived list at any time. You cannot archive your own account.',
+    ],
+  },
+  {
     version: '1.5.0',
     date: '2026-08-03',
     title: 'Faster Onboarding: Google Signup + Assign Courses at Invite',
