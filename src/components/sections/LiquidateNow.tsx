@@ -35,7 +35,15 @@ export function LiquidateNow() {
           <strong>LiquidateNow.com</strong> is a consignment-based liquidation platform operated under the Via Trading Corporation umbrella. It exists to help businesses liquidate their excess, returned, or unwanted merchandise without having to sell it at a steep upfront discount to a liquidator.
         </p>
         <p className="text-sm text-via-text leading-relaxed">
-          Instead of Via Trading purchasing the inventory outright (which is how the traditional wholesale model works), LiquidateNow allows vendors to list their merchandise and set their own pricing expectations. LiquidateNow then markets that inventory to Via Trading's massive network of business owners around the world. When the goods sell, the vendor gets paid. It is a more flexible option for companies that want more control over how their inventory is priced and sold.
+          Instead of Via Trading purchasing the inventory outright (which is how the traditional wholesale model works), vendors consign their merchandise to LiquidateNow. The LN team researches the goods and proposes the recovery it believes it can achieve at liquidation-market prices, then markets that inventory to Via Trading's massive network of business owners around the world. When the goods sell, the vendor gets paid. No sale, no fee.
+        </p>
+      </div>
+
+      {/* Terminology */}
+      <div className="bg-blue-50 rounded-lg border border-blue-200 p-4 mb-6">
+        <p className="text-sm text-blue-700 font-medium mb-1">Two sides, two vocabularies</p>
+        <p className="text-sm text-blue-700">
+          On the LiquidateNow side, the businesses we sell FOR are <strong>vendors</strong> (or <strong>clients</strong> once they sign). On the Via side, the people who purchase FROM us are <strong>buyers</strong> (or <strong>customers</strong>). Some businesses are both, and the word follows the relationship.
         </p>
       </div>
 
@@ -69,7 +77,7 @@ export function LiquidateNow() {
             <div>
               <p className="text-sm font-medium text-via-navy">LiquidateNow Markets It</p>
               <p className="text-xs text-via-text-light mt-0.5">
-                This is where Via Trading's buyer network becomes the key advantage. LiquidateNow puts the inventory in front of 42,000+ business owners across 129+ countries using Via Trading's marketing platform, email campaigns, and direct Account Manager outreach.
+                This is where Via Trading's buyer network becomes the key advantage. LiquidateNow puts the inventory in front of 60,000+ business owners across 160 countries using Via Trading's marketing platform, email campaigns, and direct Account Manager outreach.
               </p>
             </div>
           </div>
@@ -93,10 +101,10 @@ export function LiquidateNow() {
           Why LiquidateNow Matters
         </h3>
         <p className="text-sm text-via-text leading-relaxed mb-3">
-          Traditional liquidation typically works one way: a liquidator buys everything at a deep discount and the retailer moves on. That model works well in many cases, and it is the foundation of Via Trading's wholesale business. But not every company wants to sell at rock-bottom prices. Some vendors have merchandise that holds more value and they want more say in how it is priced.
+          Traditional liquidation typically works one way: a liquidator buys everything at a deep discount and the retailer moves on. That model works well in many cases, and it is the foundation of Via Trading's wholesale business. But not every opportunity fits direct purchase: one-off situations, unusual categories, or goods that need a buyer found rather than a check written.
         </p>
         <p className="text-sm text-via-text leading-relaxed">
-          LiquidateNow gives those vendors an alternative. By tapping into Via Trading's existing buyer network and marketing infrastructure, vendors get access to a massive audience without having to build their own sales channel. It is a win for the vendor (better pricing) and a win for business owners (more inventory to choose from).
+          LiquidateNow gives those vendors a service instead. By tapping into Via Trading's existing buyer network and marketing infrastructure, vendors reach a massive audience without building their own sales channel, and they pay a commission only when their goods actually sell. It is a win for the vendor (a fair recovery, handled for them) and a win for business owners (more inventory to choose from).
         </p>
       </div>
 
@@ -104,7 +112,7 @@ export function LiquidateNow() {
       <div className="bg-via-orange/10 rounded-lg border border-via-orange/30 p-4 mb-8">
         <p className="text-sm text-orange-700 font-medium mb-1">Powered by Via Trading</p>
         <p className="text-sm text-orange-700">
-          LiquidateNow would not exist without Via Trading's wholesale liquidation business. The buyer network, marketing platform, and industry relationships that Via Trading built over 20+ years are what make LiquidateNow possible. Everything is connected.
+          LiquidateNow would not exist without Via Trading's wholesale liquidation business. The buyer network, marketing platform, and industry relationships that Via Trading built over 23+ years are what make LiquidateNow possible. Everything is connected.
         </p>
       </div>
 

@@ -210,6 +210,32 @@ export function ModuleView() {
     }
   }, [progressLoaded, courseId, moduleId, currentModule, startModule, isCourseLocked])
 
+  // NOTE: every hook must live above the early returns below. A CMS-only
+  // course on a cold page load renders "Module not found" first (managed
+  // courses still loading), then re-renders with the full tree; any hook
+  // declared after these returns changes the hook count between those two
+  // renders and crashes with React #310.
+
+  /** Called by QuizBlock only when the quiz is PASSED */
+  const handleQuizComplete = useCallback(
+    (score: number, total: number) => {
+      if (!courseId || !moduleId) return
+      const pct = Math.round((score / total) * 100)
+      completeWithActiveTime(courseId, moduleId, pct)
+    },
+    [courseId, moduleId, completeWithActiveTime],
+  )
+
+  /** Called by QuizBlock on every submission (pass or fail) for activity logging */
+  const handleQuizAttempt = useCallback(
+    (score: number, total: number) => {
+      if (!courseId || !moduleId) return
+      const pct = Math.round((score / total) * 100)
+      logQuizAttempt(courseId, moduleId, pct)
+    },
+    [courseId, moduleId, logQuizAttempt],
+  )
+
   if (!course || !currentModule || !courseId || !moduleId) {
     return (
       <div className="max-w-3xl mx-auto py-10 px-4">
@@ -262,26 +288,6 @@ export function ModuleView() {
       </div>
     )
   }
-
-  /** Called by QuizBlock only when the quiz is PASSED */
-  const handleQuizComplete = useCallback(
-    (score: number, total: number) => {
-      if (!courseId || !moduleId) return
-      const pct = Math.round((score / total) * 100)
-      completeWithActiveTime(courseId, moduleId, pct)
-    },
-    [courseId, moduleId, completeWithActiveTime],
-  )
-
-  /** Called by QuizBlock on every submission (pass or fail) for activity logging */
-  const handleQuizAttempt = useCallback(
-    (score: number, total: number) => {
-      if (!courseId || !moduleId) return
-      const pct = Math.round((score / total) * 100)
-      logQuizAttempt(courseId, moduleId, pct)
-    },
-    [courseId, moduleId, logQuizAttempt],
-  )
 
   // Determine which content to render
   const ContentComponent = contentMap[moduleId]

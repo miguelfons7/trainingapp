@@ -10,6 +10,16 @@ interface LogEntry {
 
 const changelog: LogEntry[] = [
   {
+    version: '1.7.0',
+    date: '2026-08-03',
+    title: 'New Course: Intro to LiquidateNow',
+    changes: [
+      'A new course for LiquidateNow team members: what the consignment service is, who our vendors are and what they are going through, where deals come from and which ones fit, the four selling options, the full journey from inquiry to Monday payout, and the honest pricing mindset. Six lessons plus a knowledge check, built entirely in the CMS.',
+      'The LiquidateNow lesson in Who Is Via Trading got a truth pass: Via researches and proposes the recovery (vendors do not set their own pricing), refreshed stats, and a note on the vendor vs. buyer vocabulary.',
+      'Fixed a crash when opening a module of a CMS-built course directly by URL (the page could error out with "Something went wrong" while course data was still loading).',
+    ],
+  },
+  {
     version: '1.6.0',
     date: '2026-08-03',
     title: 'Archive Former Users',
