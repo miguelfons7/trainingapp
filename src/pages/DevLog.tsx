@@ -10,6 +10,14 @@ interface LogEntry {
 
 const changelog: LogEntry[] = [
   {
+    version: '1.7.1',
+    date: '2026-08-03',
+    title: 'Stay Signed In Longer',
+    changes: [
+      'The app now signs you out after 2 hours of inactivity instead of 30 minutes, so longer work sessions (like editing course content) no longer log you out mid-task.',
+    ],
+  },
+  {
     version: '1.7.0',
     date: '2026-08-03',
     title: 'New Course: Intro to LiquidateNow',

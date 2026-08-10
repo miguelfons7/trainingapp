@@ -1,13 +1,13 @@
 import { useEffect, useRef } from 'react'
 import { useAuth } from '../context/AuthContext'
 
-const IDLE_LOGOUT_MS = 30 * 60 * 1000 // 30 minutes
+const IDLE_LOGOUT_MS = 2 * 60 * 60 * 1000 // 2 hours
 const CHECK_INTERVAL_MS = 30_000
 
 const ACTIVITY_EVENTS = ['mousemove', 'keydown', 'mousedown', 'scroll', 'touchstart'] as const
 
 /**
- * Signs the user out after 30 minutes of inactivity. Keeps abandoned open
+ * Signs the user out after 2 hours of inactivity. Keeps abandoned open
  * windows from sitting logged-in forever (and from polluting engagement data).
  * Mounted once in AppShell.
  */
